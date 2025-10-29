@@ -16,24 +16,24 @@ namespace AutoCareDiray.Service
             _httpClient = http;
         }
 
-        public async Task<string> AuthorizationApiAsync(string login,string password)
+        public async Task<AuthResponse> AuthorizationApiAsync(string login,string password)
         {
-            var userAuth = new UserAuthorization
+            try
             {
-                Login = login,
-                Password = password
-            };
-            var response = await _httpClient.PostAsJsonAsync("api/User/login", userAuth);
+                var userAuth = new UserAuthorization
+                {
+                    Login = login,
+                    Password = password
+                };
+                var response = await _httpClient.PostAsJsonAsync("api/User/login", userAuth);
+                var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+                if (result == null) return new AuthResponse();
 
-            if (response.IsSuccessStatusCode)
-            {
-                // Ваш API возвращает { Message = "Успешный вход" }
-                var result = await response.Content.ReadFromJsonAsync<string>();
                 return result;
             }
-            else
+            catch (Exception ex)
             {
-                return "No";
+                throw;
             }
         }
 
