@@ -10,5 +10,6 @@ namespace AutoCareDiray.Service
     public interface IApiService
     {
         Task<AuthResponse> AuthorizationApiAsync(string login, string password);
+        Task<AuthResponse> CreateUserApiAsync(UserDTO user);
     }
 }

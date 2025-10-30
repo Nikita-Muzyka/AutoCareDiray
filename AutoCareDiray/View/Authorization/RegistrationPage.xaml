@@ -4,19 +4,59 @@
              x:Class="AutoCareDiray.View.RegistrationPage"
              Title="RegistrationPage">
 
-    <Grid>
+    <Grid RowSpacing="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Entry Grid.Row="1"
                Text="{Binding NickName}"
-               >
-            
+               Placeholder="NickName"
+               WidthRequest="200"
+               HeightRequest="10">
         </Entry>
+        <Entry Grid.Row="2"
+               Text="{Binding Email}"
+               Placeholder="Email"
+               WidthRequest="200"
+               HeightRequest="10">
+        </Entry>
+        <Entry Grid.Row="3"
+               Text="{Binding Login}"
+               Placeholder="Login"
+               WidthRequest="200"
+               HeightRequest="10">
+        </Entry>
+        <Entry Grid.Row="4"
+               Text="{Binding Password}"
+               Placeholder="Password"
+               WidthRequest="200"
+               HeightRequest="10">
+        </Entry>
+        
+        <Button Grid.Row="5" 
+                Text="Создать"
+                WidthRequest="150"
+                HeightRequest="10"
+                Command="{Binding CreateUserDTOCommand}">
+        </Button>
+        <Button Grid.Row="6" 
+                Text="Назад"
+                WidthRequest="150"
+                HeightRequest="10"
+                Command="{Binding CloseModalViewCommand}">
+        </Button>
+
+        <Label Grid.Row="7"  
+               Text="{Binding Text}">
+            
+        </Label>
     </Grid>
 </ContentPage>

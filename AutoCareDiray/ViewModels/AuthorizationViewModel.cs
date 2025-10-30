@@ -43,6 +43,14 @@ namespace AutoCareDiray.ViewModels
             {
                 Text = ex.Message;
             }
+            if ( _authResponse is not null)
+            {
+                if(_authResponse.Success == true)
+                {
+                    await Shell.Current.Navigation.PopModalAsync();
+                    await Shell.Current.Navigation.PushAsync(new MainPage());
+                }
+            }
         }
         [RelayCommand]
         public async void Registration()
