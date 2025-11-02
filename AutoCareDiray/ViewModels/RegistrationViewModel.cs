@@ -37,7 +37,7 @@ namespace AutoCareDiray.ViewModels
         }
 
         public bool HasErrors => _userValidation.HasErrors;
-        public string LoginError => _userValidation.GetErrors(LoginError) as string;
+        public string LoginError => _userValidation.GetErrors("Login") as string;
 
 
         [RelayCommand]

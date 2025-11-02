@@ -11,6 +11,7 @@ namespace AutoCareDiray.Models
     public class UserValidation : INotifyDataErrorInfo
     {
         string propertyLogin = "Login";
+        string propertyNickName = "NickName";
         public bool HasErrors => _errors.Any();
         bool INotifyDataErrorInfo.HasErrors => HasErrors;
 
@@ -20,25 +21,39 @@ namespace AutoCareDiray.Models
         public IEnumerable GetErrors(string? propertyName)
         {
             if(string.IsNullOrEmpty(propertyName)) return _errors.Values.SelectMany(errors => errors);
-            return _errors.ContainsKey(propertyName) ? _errors[propertyName] : Enumerable.Empty<string>();
+            return _errors.ContainsKey(propertyName) ? _errors[propertyName].FirstOrDefault() : Enumerable.Empty<string>();
         }
-       
+
+        public void ValidationNickName(string nickname)
+        {
+            ErrorsClear(propertyLogin);
+
+            if (!string.IsNullOrWhiteSpace(nickname))
+            {
+                if (nickname.Length < 20)
+                {
+                    OnErrorsChange(propertyLogin);
+                }
+                else ErrorsAdd(propertyLogin, "Login - должен содержать не больше 20 символов");
+            }
+            else ErrorsAdd(propertyLogin, "Login - Обязателен к заполнению ");
+        }
         public void ValidationLogin(string login)
         {
-            ErrorsClear(nameof(propertyLogin));
+            ErrorsClear(propertyLogin);
 
             if (!string.IsNullOrWhiteSpace(login))
             {
                 if (login.Length < 20)
                 {
-                    OnErrorsChange(nameof(propertyLogin));
+                    OnErrorsChange(propertyLogin);
                 }
-                else ErrorsAdd(nameof(propertyLogin), "Nickname - должен содержать не больше 20 символов");
+                else ErrorsAdd(propertyLogin, "Login - должен содержать не больше 20 символов");
             }
-            else ErrorsAdd(nameof(propertyLogin), "Nickname - Обязателен к заполнению ");
+            else ErrorsAdd(propertyLogin, "Login - Обязателен к заполнению ");
         }
 
-       void OnErrorsChange(string propertyName)
+        void OnErrorsChange(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
@@ -53,7 +68,7 @@ namespace AutoCareDiray.Models
         void ErrorsAdd(string propertyName,string value)
         {
             _errors.Add(propertyName,new List<string> {value});
-            OnErrorsChange(nameof(propertyLogin));
+            OnErrorsChange(propertyLogin);
         }
     }
 }
