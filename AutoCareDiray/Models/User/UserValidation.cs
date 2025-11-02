@@ -10,33 +10,55 @@ namespace AutoCareDiray.Models
 {
     public class UserValidation : INotifyDataErrorInfo
     {
-        string propertyLogin = "Login";
         string propertyNickName = "NickName";
+        string propertyEmail = "Email";
+        string propertyLogin = "Login";
+        string propertyPassword = "Password";
         public bool HasErrors => _errors.Any();
         bool INotifyDataErrorInfo.HasErrors => HasErrors;
 
         Dictionary<string, List<string>> _errors = new();
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
+        //Возвращает ошибку нужному свойству
         public IEnumerable GetErrors(string? propertyName)
         {
             if(string.IsNullOrEmpty(propertyName)) return _errors.Values.SelectMany(errors => errors);
             return _errors.ContainsKey(propertyName) ? _errors[propertyName].FirstOrDefault() : Enumerable.Empty<string>();
         }
-
+        public void ValidationAll(string nickname,string email,string login,string password)
+        {
+            ValidationNickName(nickname);
+            ValidationEmail(email);
+            ValidationLogin(login);
+            ValidationPassword(password);
+        }
         public void ValidationNickName(string nickname)
         {
-            ErrorsClear(propertyLogin);
+            ErrorsClear(propertyNickName);
 
             if (!string.IsNullOrWhiteSpace(nickname))
             {
                 if (nickname.Length < 20)
                 {
-                    OnErrorsChange(propertyLogin);
+                    OnErrorsChange(propertyNickName);
                 }
-                else ErrorsAdd(propertyLogin, "Login - должен содержать не больше 20 символов");
+                else ErrorsAdd(propertyNickName, "NickName - должен содержать не больше 20 символов");
             }
-            else ErrorsAdd(propertyLogin, "Login - Обязателен к заполнению ");
+            else ErrorsAdd(propertyNickName, "NickName - Обязателен к заполнению ");
+        }
+        public void ValidationEmail(string email)
+        {
+            ErrorsClear(propertyEmail);
+
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                if (email.Length < 40)
+                {
+                    
+                }
+                else ErrorsAdd(propertyEmail, "Email - должен содержать не больше 20 символов");
+            }
         }
         public void ValidationLogin(string login)
         {
@@ -51,6 +73,27 @@ namespace AutoCareDiray.Models
                 else ErrorsAdd(propertyLogin, "Login - должен содержать не больше 20 символов");
             }
             else ErrorsAdd(propertyLogin, "Login - Обязателен к заполнению ");
+        }
+        public void ValidationPassword(string password)
+        {
+            ErrorsClear(propertyPassword);
+
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                if (password.Length < 30)
+                {
+                    if (password.Any(char.IsNumber) && 
+                        password.Any(char.IsLetter) && 
+                        password.Any(char.IsUpper) && 
+                        password.Any(char.IsSymbol)
+                        )
+                    {
+                        OnErrorsChange(propertyPassword);
+                    }
+                }
+                else ErrorsAdd(propertyPassword, "Password - должен содержать не больше 20 символов");
+            }
+            else ErrorsAdd(propertyPassword, "Password - Обязателен к заполнению ");
         }
 
         void OnErrorsChange(string propertyName)

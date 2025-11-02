@@ -27,7 +27,6 @@ namespace AutoCareDiray.Service
                 };
                 var response = await _httpClient.PostAsJsonAsync("api/User/login", userAuth);
                 var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
-                if (result == null) return new AuthResponse();
 
                 return result;
             }
@@ -39,11 +38,16 @@ namespace AutoCareDiray.Service
 
         public async Task<AuthResponse> CreateUserApiAsync(UserDTO user)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/User/register", user);
-            var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
-            if(result == null) return new AuthResponse();
-
-            return result;
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/User/register", user);
+                var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
     }

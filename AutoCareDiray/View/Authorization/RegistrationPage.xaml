@@ -19,12 +19,33 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
+        <Label Grid.Row="0" 
+        Text="{Binding Message}"
+        HorizontalOptions="Center"
+        VerticalOptions="End">
+        </Label>
+
+        <!--NickName-->
+        <Label Grid.Row="1" 
+               Text="{Binding NickNameError}"
+               TextColor="Red"
+               HorizontalOptions="Center"
+               IsVisible="{Binding HasErrors}">
+        </Label>
         <Entry Grid.Row="2"
                Text="{Binding NickName}"
                Placeholder="NickName"
                WidthRequest="200"
                HeightRequest="10">
         </Entry>
+        
+        <!--Email-->
+        <Label Grid.Row="3" 
+               Text="{Binding EmailError}"
+               TextColor="Red"
+               HorizontalOptions="Center"
+               IsVisible="{Binding HasErrors}">
+        </Label>
         <Entry Grid.Row="4"
                Text="{Binding Email}"
                Placeholder="Email"
@@ -45,6 +66,14 @@
                WidthRequest="200"
                HeightRequest="10">
         </Entry>
+
+        <!--Password-->
+        <Label Grid.Row="7" 
+                Text="{Binding PasswordError}"
+                TextColor="Red"
+                HorizontalOptions="Center"
+                IsVisible="{Binding HasErrors}">
+        </Label>
         <Entry Grid.Row="8"
                Text="{Binding Password}"
                Placeholder="Password"
@@ -52,10 +81,13 @@
                HeightRequest="10">
         </Entry>
          
+        
+        <!--Buttons-->
         <Button Grid.Row="9" 
                 Text="Создать"
                 WidthRequest="150"
                 HeightRequest="10"
+                IsEnabled="{Binding IsValid}"
                 Command="{Binding CreateUserDTOCommand}">
         </Button>
         <Button Grid.Row="10" 

@@ -21,7 +21,7 @@ namespace AutoCareDiray.Models
             Password = password;
             Login = login;
         }
-        public UserDTO(string nickName, string login, string password) : this(nickName,"", login,password)
+        public UserDTO()
         {
         }
     }
