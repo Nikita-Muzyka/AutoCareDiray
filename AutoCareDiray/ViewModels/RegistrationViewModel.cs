@@ -8,40 +8,42 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using AutoCareDiray.Models.User;
+using AutoCareDiray.Models;
 
 namespace AutoCareDiray.ViewModels
 {
     partial class RegistrationViewModel : ObservableObject
     {
         private readonly IApiService _apiService;
-        public RegistrationViewModel(IApiService api) 
-        {
-            _apiService = api;
-        }
+        UserValidation _userValidation = new();
 
         [ObservableProperty]
         public string nickName;
+
         [ObservableProperty]
-        public string email;
+        public string? email;
+
         [ObservableProperty]
         public string login;
+        
         [ObservableProperty]
         public string password;
 
-        [ObservableProperty]
-        public string text;
+
+        public RegistrationViewModel(IApiService api)
+        {
+            _apiService = api;
+            _userValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI();
+        }
+
+        public bool HasErrors => _userValidation.HasErrors;
+        public string LoginError => _userValidation.GetErrors(LoginError) as string;
+
 
         [RelayCommand]
         public async void CreateUserDTO()
         {
-            var userDTO = UserValidation.Validation(NickName, Email, Login, Password);
-            if (userDTO is null) text = "Не удачно";
-            else
-            {
-                var response = await _apiService.CreateUserApiAsync(userDTO);
-            }
-
+            
             await Shell.Current.Navigation.PopModalAsync();
             await Shell.Current.Navigation.PushAsync(new MainPage());
         }
@@ -49,6 +51,17 @@ namespace AutoCareDiray.ViewModels
         public async void CloseModalView()
         {
             await Shell.Current.Navigation.PopModalAsync();
+        }
+
+        partial void OnLoginChanged(string value)
+        {
+            _userValidation.ValidationLogin(value);
+        }
+
+        void OnErrorsChangedUI()
+        {
+            OnPropertyChanged(nameof(HasErrors));
+            OnPropertyChanged(nameof(LoginError));
         }
     }
 }

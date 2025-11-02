@@ -14,49 +14,56 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Entry Grid.Row="1"
+        <Entry Grid.Row="2"
                Text="{Binding NickName}"
                Placeholder="NickName"
                WidthRequest="200"
                HeightRequest="10">
         </Entry>
-        <Entry Grid.Row="2"
+        <Entry Grid.Row="4"
                Text="{Binding Email}"
                Placeholder="Email"
                WidthRequest="200"
                HeightRequest="10">
         </Entry>
-        <Entry Grid.Row="3"
+        
+        <!--Login-->
+        <Label Grid.Row="5" 
+               Text="{Binding LoginError}"
+               TextColor="Red"
+               HorizontalOptions="Center"
+               IsVisible="{Binding HasErrors}">
+        </Label>
+        <Entry Grid.Row="6"
                Text="{Binding Login}"
                Placeholder="Login"
                WidthRequest="200"
                HeightRequest="10">
         </Entry>
-        <Entry Grid.Row="4"
+        <Entry Grid.Row="8"
                Text="{Binding Password}"
                Placeholder="Password"
                WidthRequest="200"
                HeightRequest="10">
         </Entry>
-        
-        <Button Grid.Row="5" 
+         
+        <Button Grid.Row="9" 
                 Text="Создать"
                 WidthRequest="150"
                 HeightRequest="10"
                 Command="{Binding CreateUserDTOCommand}">
         </Button>
-        <Button Grid.Row="6" 
+        <Button Grid.Row="10" 
                 Text="Назад"
                 WidthRequest="150"
                 HeightRequest="10"
                 Command="{Binding CloseModalViewCommand}">
         </Button>
 
-        <Label Grid.Row="7"  
-               Text="{Binding Text}">
-            
-        </Label>
     </Grid>
 </ContentPage>

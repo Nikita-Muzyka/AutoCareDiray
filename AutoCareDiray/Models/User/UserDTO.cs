@@ -9,12 +9,10 @@ namespace AutoCareDiray.Models
     public class UserDTO
     {
         public string NickName { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
         public string Password { get; set; }
         public string Login { get; set; }
 
-
-        public UserDTO() { }
 
         public UserDTO(string nickName, string email, string password, string login)
         {
@@ -22,6 +20,9 @@ namespace AutoCareDiray.Models
             Email = email;
             Password = password;
             Login = login;
+        }
+        public UserDTO(string nickName, string login, string password) : this(nickName,"", login,password)
+        {
         }
     }
 }
