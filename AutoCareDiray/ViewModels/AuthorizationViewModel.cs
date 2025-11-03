@@ -45,17 +45,25 @@ namespace AutoCareDiray.ViewModels
             }
             if ( _authResponse is not null)
             {
-                if(_authResponse.Success == true)
+                if (_authResponse.Success == true)
                 {
+                    await PreferencesSetUser(_authResponse);
                     await Shell.Current.Navigation.PopModalAsync();
                     await Shell.Current.Navigation.PushAsync(new MainPage());
                 }
+                else Text = _authResponse.Message;
             }
         }
         [RelayCommand]
         public async void Registration()
         {
             await Shell.Current.Navigation.PushModalAsync(new RegistrationPage(_apiService));
+        }
+
+        async Task PreferencesSetUser(AuthResponse authResponse)
+        {
+            Preferences.Set("NickName", authResponse.NickName);
+            Preferences.Set("Email", authResponse.Email);
         }
     }
 }

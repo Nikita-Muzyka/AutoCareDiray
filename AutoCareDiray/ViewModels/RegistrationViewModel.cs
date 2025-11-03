@@ -109,11 +109,18 @@ namespace AutoCareDiray.ViewModels
                 if (_authResponse.Success == true)
                 {
                     IsValid = false;
+                    await PreferencesSetUser(_authResponse);
                     await Task.Delay(2000);
                     await Shell.Current.Navigation.PopModalAsync();
                     await Shell.Current.Navigation.PushAsync(new MainPage());
                 }
             }
+        }
+
+        async Task PreferencesSetUser(AuthResponse authResponse)
+        {
+            Preferences.Set ("NickName", authResponse.NickName);
+            Preferences.Set("Email", authResponse.Email);
         }
     }
 }
