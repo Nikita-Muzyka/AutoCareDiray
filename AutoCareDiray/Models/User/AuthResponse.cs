@@ -9,8 +9,16 @@ namespace AutoCareDiray.Models
 {
     public class AuthResponse
     {
-        public bool Success { get; set; }
-        public string Message { get; set; }
-        public UserDTO UserDTO { get; set; }
+        public bool? Success { get; set; }
+        public string? Message { get; set; }
+        public UserDTO? UserDTO { get; set; }
+
+        public AuthResponse() { }
+
+        public AuthResponse(bool success,string message)
+        {
+            Success = success;
+            Message = message;
+        }
     }
 }

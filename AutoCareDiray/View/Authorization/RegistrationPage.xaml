@@ -34,7 +34,7 @@
         </Label>
         <Entry Grid.Row="2"
                Text="{Binding NickName}"
-               Placeholder="NickName"
+               Placeholder="NickName (Обязательно)"
                WidthRequest="200"
                HeightRequest="10">
         </Entry>
@@ -62,7 +62,7 @@
         </Label>
         <Entry Grid.Row="6"
                Text="{Binding Login}"
-               Placeholder="Login"
+               Placeholder="Login (Обязательно)"
                WidthRequest="200"
                HeightRequest="10">
         </Entry>
@@ -76,7 +76,7 @@
         </Label>
         <Entry Grid.Row="8"
                Text="{Binding Password}"
-               Placeholder="Password"
+               Placeholder="Password (Обязательно)"
                WidthRequest="200"
                HeightRequest="10">
         </Entry>

@@ -98,16 +98,18 @@ namespace AutoCareDiray.ViewModels
             try
             {
                 _authResponse = await _apiService.CreateUserApiAsync(userDTO);
-                message = _authResponse.Message;
+                Message = _authResponse.Message;
             }
             catch (Exception ex)
             {
-                message = ex.Message;
+                Message = ex.Message;
             }
             if (_authResponse is not null)
             {
                 if (_authResponse.Success == true)
                 {
+                    IsValid = false;
+                    await Task.Delay(2000);
                     await Shell.Current.Navigation.PopModalAsync();
                     await Shell.Current.Navigation.PushAsync(new MainPage());
                 }
