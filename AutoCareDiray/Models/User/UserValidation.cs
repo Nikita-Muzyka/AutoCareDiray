@@ -66,11 +66,11 @@ namespace AutoCareDiray.Models
 
             if (!string.IsNullOrWhiteSpace(login))
             {
-                if (login.Length < 20)
+                if (login.Length < 20 && login.Length < 4)
                 {
                     OnErrorsChange(propertyLogin);
                 }
-                else ErrorsAdd(propertyLogin, "Login - должен содержать не больше 20 символов");
+                else ErrorsAdd(propertyLogin, "Login - должен содержать не больше 20 символов и не меньше 4");
             }
             else ErrorsAdd(propertyLogin, "Login - Обязателен к заполнению ");
         }
@@ -90,6 +90,7 @@ namespace AutoCareDiray.Models
                     {
                         OnErrorsChange(propertyPassword);
                     }
+                    else ErrorsAdd(propertyPassword, "Password - Должен иметь Одну заглавную букву,одну цифру,один символ (@,#,$,%,^,&,* и тд)");
                 }
                 else ErrorsAdd(propertyPassword, "Password - должен содержать не больше 20 символов");
             }
