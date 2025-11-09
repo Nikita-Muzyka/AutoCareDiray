@@ -3,10 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.CreateCarsPage"
              Title="CreateCarsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--Profil-->
+        <StackLayout>
+            <Label Grid.Row="0"
+                   HorizontalOptions="End"
+                   Margin="5,5,10,5"
+                   Text="profil"/>
+        </StackLayout>
+
+        <!--Create Car-->
+        <StackLayout Grid.Row="1"
+                     HorizontalOptions="Start">
+            <Border Background="White"
+                    HeightRequest="100"
+                    WidthRequest="150">
+                <Button BackgroundColor="Aqua"
+                        HeightRequest="20"
+                        WidthRequest="20"
+                        CornerRadius="30"
+                        HorizontalOptions="End"
+                        VerticalOptions="End">
+                </Button>
+            </Border>
+        </StackLayout>
+    </Grid>
 </ContentPage>
