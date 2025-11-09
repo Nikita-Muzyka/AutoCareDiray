@@ -16,24 +16,48 @@ namespace AutoCareDiray.Service
             _httpClient = http;
         }
 
-        public async Task<string> AuthorizationApiAsync(string login,string password)
+        public async Task<AuthResponse> AuthorizationApiAsync(string login,string password)
         {
-            var userAuth = new UserAuthorization
+            try
             {
-                Login = login,
-                Password = password
-            };
-            var response = await _httpClient.PostAsJsonAsync("api/User/login", userAuth);
+                var userAuth = new UserAuthorization
+                {
+                    Login = login,
+                    Password = password
+                };
+                var response = await _httpClient.PostAsJsonAsync("api/User/login", userAuth);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+                    return result;
+                }
+                else return new AuthResponse { Message = responseContent, Success = false };
 
-            if (response.IsSuccessStatusCode)
-            {
-                // Ваш API возвращает { Message = "Успешный вход" }
-                var result = await response.Content.ReadFromJsonAsync<string>();
-                return result;
             }
-            else
+            catch (Exception ex)
             {
-                return "No";
+                throw;
+            }
+        }
+
+        public async Task<AuthResponse> CreateUserApiAsync(UserDTO user)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/User/register", user);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+                    return result;
+                }
+                else return new AuthResponse { Message = responseContent, Success = false };
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
 
