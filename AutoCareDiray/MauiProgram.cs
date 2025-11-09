@@ -20,7 +20,6 @@ namespace AutoCareDiray
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // Если вам нужен только HttpClient без сервиса
             builder.Services.AddSingleton(new HttpClient
             {
                 BaseAddress = new Uri("http://localhost:5286/"),
@@ -30,6 +29,8 @@ namespace AutoCareDiray
             builder.Services.AddScoped<IApiService, ApiService>();
             builder.Services.AddTransient<AuthorizationPage>();
             builder.Services.AddTransient<AuthorizationViewModel>();
+            builder.Services.AddTransient<CreateCarsViewModal>();
+            builder.Services.AddTransient<CreateCarsPage>();
 
             // Регистрация сервиса
 

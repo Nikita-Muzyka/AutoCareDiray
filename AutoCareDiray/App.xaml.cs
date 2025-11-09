@@ -20,7 +20,7 @@ namespace AutoCareDiray
                 //await Shell.Current.Navigation.PushModalAsync(authPage);
                 await Shell.Current.GoToAsync("//CreateCarsPage");
             };
-
+            
             return window;
         }
     }

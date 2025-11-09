@@ -9,7 +9,10 @@
     <ShellContent
         Title="Cars"
         ContentTemplate="{DataTemplate local:CreateCarsPage}"
-        Route="CreateCarsPage" />
-
-
+        Route="CreateCarsPage"/>
+    
+    <ShellContent
+     Title="UserSettings"
+     ContentTemplate="{DataTemplate local:UserSettingsPage}"
+     Route="UserSettingsPage"/>
 </Shell>

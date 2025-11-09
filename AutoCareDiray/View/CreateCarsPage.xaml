@@ -11,12 +11,13 @@
 
         <!--Profil-->
         <StackLayout>
-            <Label Grid.Row="0"
-                   HorizontalOptions="End"
-                   Margin="5,5,10,5"
-                   Text="profil"/>
+            <Button HeightRequest="10"
+                    WidthRequest="100"
+                    HorizontalOptions="End"
+                    Text="Profil"
+                    Command="{Binding UserSettingsGoCommand}">
+            </Button>
         </StackLayout>
-
         <!--Create Car-->
         <StackLayout Grid.Row="1"
                      HorizontalOptions="Start">
