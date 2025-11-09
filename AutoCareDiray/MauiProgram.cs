@@ -27,7 +27,7 @@ namespace AutoCareDiray
                 Timeout = TimeSpan.FromSeconds(30)
             });
 
-            builder.Services.AddTransient<IApiService, ApiService>();
+            builder.Services.AddScoped<IApiService, ApiService>();
             builder.Services.AddTransient<AuthorizationPage>();
             builder.Services.AddTransient<AuthorizationViewModel>();
 
