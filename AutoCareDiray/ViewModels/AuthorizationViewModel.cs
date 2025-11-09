@@ -47,9 +47,9 @@ namespace AutoCareDiray.ViewModels
             {
                 if (_authResponse.Success == true)
                 {
-                    await PreferencesSetUser(_authResponse);
+                    PreferencesSetUser(_authResponse);
                     await Shell.Current.Navigation.PopModalAsync();
-                    await Shell.Current.Navigation.PushAsync(new MainPage());
+                    await Shell.Current.GoToAsync("//CreateCarsPage");
                 }
                 else Text = _authResponse.Message;
             }
@@ -60,7 +60,7 @@ namespace AutoCareDiray.ViewModels
             await Shell.Current.Navigation.PushModalAsync(new RegistrationPage(_apiService));
         }
 
-        async Task PreferencesSetUser(AuthResponse authResponse)
+        void PreferencesSetUser(AuthResponse authResponse)
         {
             Preferences.Set("NickName", authResponse.NickName);
             Preferences.Set("Email", authResponse.Email);
