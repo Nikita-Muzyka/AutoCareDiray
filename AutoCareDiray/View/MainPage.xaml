@@ -25,7 +25,7 @@
 
             </ListView>
             <Button Text="Создать Авто"
-                 Command="{Binding CreateAutoCommand}"/>
+                 Command="{Binding CreateCarCommand}"/>
         </StackLayout>
     </Grid>
 </ContentPage>
