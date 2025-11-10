@@ -49,7 +49,7 @@ namespace AutoCareDiray.ViewModels
                 {
                     PreferencesSetUser(_authResponse);
                     await Shell.Current.Navigation.PopModalAsync();
-                    await Shell.Current.GoToAsync("//CreateCarsPage");
+                    await Shell.Current.GoToAsync("//MainPage");
                 }
                 else Text = _authResponse.Message;
             }

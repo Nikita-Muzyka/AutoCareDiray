@@ -3,35 +3,5 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.CreateCarsPage"
              Title="CreateCarsPage">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!--Profil-->
-        <StackLayout>
-            <Button HeightRequest="10"
-                    WidthRequest="100"
-                    HorizontalOptions="End"
-                    Text="Profil"
-                    Command="{Binding UserSettingsGoCommand}">
-            </Button>
-        </StackLayout>
-        <!--Create Car-->
-        <StackLayout Grid.Row="1"
-                     HorizontalOptions="Start">
-            <Border Background="White"
-                    HeightRequest="100"
-                    WidthRequest="150">
-                <Button BackgroundColor="Aqua"
-                        HeightRequest="20"
-                        WidthRequest="20"
-                        CornerRadius="30"
-                        HorizontalOptions="End"
-                        VerticalOptions="End">
-                </Button>
-            </Border>
-        </StackLayout>
-    </Grid>
+   
 </ContentPage>

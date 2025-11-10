@@ -29,8 +29,8 @@ namespace AutoCareDiray
             builder.Services.AddScoped<IApiService, ApiService>();
             builder.Services.AddTransient<AuthorizationPage>();
             builder.Services.AddTransient<AuthorizationViewModel>();
-            builder.Services.AddTransient<CreateCarsViewModal>();
-            builder.Services.AddTransient<CreateCarsPage>();
+            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<MainPageViewModal>();
             builder.Services.AddTransient<UserSettingsViewModal>();
             builder.Services.AddTransient<UserSettingsPage>();
 

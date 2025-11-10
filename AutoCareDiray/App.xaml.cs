@@ -18,7 +18,7 @@ namespace AutoCareDiray
                 bool check = Preferences.Get("is_login", false);
                 if (check)
                 {
-                    await Shell.Current.GoToAsync("//CreateCarsPage");
+                    await Shell.Current.GoToAsync("//MainPage");
                 }
                 else
                 {

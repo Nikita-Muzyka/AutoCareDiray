@@ -1,11 +1,12 @@
+using AutoCareDiray.Service;
 using AutoCareDiray.ViewModels;
 namespace AutoCareDiray.View;
 
 public partial class CreateCarsPage : ContentPage
 {
-	public CreateCarsPage(CreateCarsViewModal CreateCarsVM)
+	public CreateCarsPage(IApiService apiService)
 	{
 		InitializeComponent();
-		BindingContext = CreateCarsVM;
+		BindingContext = new CreateCarsViewModal(apiService);
 	}
 }

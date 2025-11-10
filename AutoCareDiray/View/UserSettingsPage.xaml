@@ -4,6 +4,7 @@
              x:Class="AutoCareDiray.View.UserSettingsPage"
              Title="UserSettingsPage">
     <StackLayout>
+        <Label Text="Изменение данных временно отключено Но Выход с аккаунт работает" TextColor="Red"/>
         <Label Text="NickName"/>
         <Entry IsEnabled="False" Text="{Binding NickName}"/>
         <Button Text="Изменить"/>
@@ -14,7 +15,7 @@
 
         <Button Text="Сохранить изменения"/>
 
-        <Button Text="Выйти с профиля"
+        <Button Text="Выйти с профиля (Работает)"
                 Command="{Binding ExitProfilCommand}"
                 BackgroundColor="Red"/>
     </StackLayout>

@@ -112,7 +112,7 @@ namespace AutoCareDiray.ViewModels
                     await PreferencesSetUser(_authResponse);
                     await Task.Delay(2000);
                     await Shell.Current.Navigation.PopModalAsync();
-                    await Shell.Current.GoToAsync("//CreateCarsPage");
+                    await Shell.Current.GoToAsync("//MainPage");
                 }
             }
         }

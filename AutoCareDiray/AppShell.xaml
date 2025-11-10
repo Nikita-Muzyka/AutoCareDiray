@@ -7,9 +7,9 @@
     Title="AutoCareDiray">
 
     <ShellContent
-        Title="Cars"
-        ContentTemplate="{DataTemplate local:CreateCarsPage}"
-        Route="CreateCarsPage"/>
-    
-    
+     Title="Главная"
+     ContentTemplate="{DataTemplate local:MainPage}"
+     Route="MainPage"/>
+
+
 </Shell>
