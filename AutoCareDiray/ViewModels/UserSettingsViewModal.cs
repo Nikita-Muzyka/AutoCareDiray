@@ -32,6 +32,7 @@ namespace AutoCareDiray.ViewModels
         {
             Preferences.Remove("NickName");
             Preferences.Remove("Email");
+            Preferences.Remove("is_login");
 
             var authPage = Application.Current.Handler.MauiContext.Services.GetService<AuthorizationPage>();
             await Shell.Current.Navigation.PushModalAsync(authPage);

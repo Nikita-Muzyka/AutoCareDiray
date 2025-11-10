@@ -15,9 +15,16 @@ namespace AutoCareDiray
 
             window.Created += async (s, e) =>
             {
-                //var authPage = Handler.MauiContext.Services.GetService<AuthorizationPage>();
-                //await Shell.Current.Navigation.PushModalAsync(authPage);
-                await Shell.Current.GoToAsync("//CreateCarsPage");
+                bool check = Preferences.Get("is_login", false);
+                if (check)
+                {
+                    await Shell.Current.GoToAsync("//CreateCarsPage");
+                }
+                else
+                {
+                    var authPage = Handler.MauiContext.Services.GetService<AuthorizationPage>();
+                    await Shell.Current.Navigation.PushModalAsync(authPage);
+                }
             };
             
             return window;

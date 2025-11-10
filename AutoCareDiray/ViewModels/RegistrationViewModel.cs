@@ -121,6 +121,7 @@ namespace AutoCareDiray.ViewModels
         {
             Preferences.Set ("NickName", authResponse.NickName);
             Preferences.Set("Email", authResponse.Email);
+            Preferences.Set("is_login", true);
         }
     }
 }
