@@ -21,7 +21,7 @@ namespace AutoCareDiray.ViewModels
         [RelayCommand]
         public async void UserSettingsGo()
         {
-            await Shell.Current.GoToAsync("//UserSettingsPage");
+            await Shell.Current.Navigation.PushAsync(new UserSettingsPage(_apiService));
         }
     }
 }

@@ -11,8 +11,5 @@
         ContentTemplate="{DataTemplate local:CreateCarsPage}"
         Route="CreateCarsPage"/>
     
-    <ShellContent
-     Title="UserSettings"
-     ContentTemplate="{DataTemplate local:UserSettingsPage}"
-     Route="UserSettingsPage"/>
+    
 </Shell>

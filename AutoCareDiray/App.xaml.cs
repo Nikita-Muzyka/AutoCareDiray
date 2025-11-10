@@ -15,7 +15,6 @@ namespace AutoCareDiray
 
             window.Created += async (s, e) =>
             {
-                // Показываем модальное окно авторизации
                 //var authPage = Handler.MauiContext.Services.GetService<AuthorizationPage>();
                 //await Shell.Current.Navigation.PushModalAsync(authPage);
                 await Shell.Current.GoToAsync("//CreateCarsPage");

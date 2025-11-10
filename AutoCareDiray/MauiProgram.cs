@@ -31,6 +31,8 @@ namespace AutoCareDiray
             builder.Services.AddTransient<AuthorizationViewModel>();
             builder.Services.AddTransient<CreateCarsViewModal>();
             builder.Services.AddTransient<CreateCarsPage>();
+            builder.Services.AddTransient<UserSettingsViewModal>();
+            builder.Services.AddTransient<UserSettingsPage>();
 
             // Регистрация сервиса
 

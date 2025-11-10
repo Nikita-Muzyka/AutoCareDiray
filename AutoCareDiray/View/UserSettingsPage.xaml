@@ -4,6 +4,18 @@
              x:Class="AutoCareDiray.View.UserSettingsPage"
              Title="UserSettingsPage">
     <StackLayout>
+        <Label Text="NickName"/>
+        <Entry IsEnabled="False" Text="{Binding NickName}"/>
+        <Button Text="Изменить"/>
         
+        <Label Text="Email"/>
+        <Entry IsEnabled="False" Text="{Binding Email}"/>
+        <Button Text="Изменить"/>
+
+        <Button Text="Сохранить изменения"/>
+
+        <Button Text="Выйти с профиля"
+                Command="{Binding ExitProfilCommand}"
+                BackgroundColor="Red"/>
     </StackLayout>
 </ContentPage>
