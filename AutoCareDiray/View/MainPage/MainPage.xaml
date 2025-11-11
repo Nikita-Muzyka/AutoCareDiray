@@ -18,14 +18,5 @@
                  Command="{Binding UserSettingsGoCommand}">
             </Button>
         </StackLayout>
-        <!--Create Car-->
-        <StackLayout Grid.Row="1"
-                  HorizontalOptions="Start">
-            <ListView>
-
-            </ListView>
-            <Button Text="Создать Авто"
-                 Command="{Binding CreateCarCommand}"/>
-        </StackLayout>
     </Grid>
 </ContentPage>

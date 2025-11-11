@@ -21,10 +21,5 @@ namespace AutoCareDiray.ViewModels
         {
             await Shell.Current.Navigation.PushAsync(new UserSettingsPage(_apiService));
         }
-        [RelayCommand]
-        public async void CreateCar()
-        {
-            await Shell.Current.Navigation.PushAsync(new CreateCarsPage(_apiService),true);
-        }
     }
 }
