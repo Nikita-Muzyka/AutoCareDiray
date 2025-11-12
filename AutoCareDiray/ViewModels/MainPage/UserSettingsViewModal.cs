@@ -38,5 +38,13 @@ namespace AutoCareDiray.ViewModels
             await Shell.Current.Navigation.PushModalAsync(authPage);
 
         }
+        public async void DeleteProfil()
+        {
+            Preferences.Remove("NickName");
+            Preferences.Remove("Email");
+            Preferences.Remove("is_login");
+
+
+        }
     }
 }

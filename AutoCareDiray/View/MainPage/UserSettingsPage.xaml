@@ -18,5 +18,10 @@
         <Button Text="Выйти с профиля (Работает)"
                 Command="{Binding ExitProfilCommand}"
                 BackgroundColor="Red"/>
+
+        <Label Text="Удаление профиля приведет к неизбежной потери всех данных аккаунта"/>
+        <Button Text="Удалить профиль (Работает)"
+        Command="{Binding DeleteProfilCommand}"
+        BackgroundColor="Red"/>
     </StackLayout>
 </ContentPage>

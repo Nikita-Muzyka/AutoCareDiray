@@ -4,5 +4,5 @@
              x:Class="AutoCareDiray.View.CreateCarsPage"
              Title="CreateCarsPage">
 
-    <Label Text="111"/>
+    <Label Text=""/>
 </ContentPage>
