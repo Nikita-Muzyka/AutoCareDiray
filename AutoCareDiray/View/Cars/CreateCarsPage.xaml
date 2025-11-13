@@ -4,5 +4,42 @@
              x:Class="AutoCareDiray.View.CreateCarsPage"
              Title="CreateCarsPage">
 
-    <Label Text=""/>
+    <!--<StackLayout>
+        <Label Text="Выберите марку автомобиля" 
+                           FontSize="16" 
+                           FontAttributes="Bold"/>
+
+        <CollectionView ItemsSource="{Binding Brands}"
+                                   SelectionMode="Single"
+                                   SelectedItem="{Binding BrandSelected}">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                            Span="4"
+                                            HorizontalItemSpacing="4"
+                                            VerticalItemSpacing="1"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border HeightRequest="25" 
+                                       Padding="5">
+                        <Label Text="{Binding .}" 
+                                           FontSize="10"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           HorizontalTextAlignment="Center"/>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>-->
+    <StackLayout>
+        <Entry Text="{Binding BrandSelect}" Placeholder="Brand"/>
+        <Entry Text="{Binding ModelSelect}" Placeholder="марка"/>
+        <Entry Text="{Binding YearSelect}" Placeholder="Year"/>
+        <Entry Text="{Binding VinCode}" Placeholder="vin"/>
+        <Entry Text="{Binding Mileage}" Placeholder="Mileage"/>
+        <Entry Text="{Binding TranBox}" Placeholder="Box"/>
+        <Entry Text="{Binding EngineType}" Placeholder="Engine"/>
+    </StackLayout>
 </ContentPage>

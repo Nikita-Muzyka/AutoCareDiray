@@ -8,12 +8,18 @@ using AutoCareDiray.Service;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.Input;
 using AutoCareDiray.View;
+using AutoCareDiray.Models;
 
 namespace AutoCareDiray.ViewModels
 {
     public partial class CreateCarsViewModal : ObservableObject
     {
         private readonly IApiService _apiService;
+
+        //[ObservableProperty]
+        //public string[] brands = CarBrands.Brands;
+        //[ObservableProperty]
+        //public string brandSelected;
         public CreateCarsViewModal(IApiService apiService) 
         {
             _apiService = apiService;
