@@ -5,10 +5,15 @@
              Title="UserSettingsPage">
     <StackLayout>
         <Label Text="Изменение данных временно отключено Но Выход с аккаунт работает" TextColor="Red"/>
+        
         <Label Text="NickName"/>
         <Entry IsEnabled="False" Text="{Binding NickName}"/>
         <Button Text="Изменить"/>
-        
+
+        <Label Text="User_id"/>
+        <Entry IsEnabled="False" Text="{Binding User_id}"/>
+        <Button Text="Изменить"/>
+
         <Label Text="Email"/>
         <Entry IsEnabled="False" Text="{Binding Email}"/>
         <Button Text="Изменить"/>

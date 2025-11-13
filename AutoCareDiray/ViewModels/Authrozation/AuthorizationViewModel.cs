@@ -16,7 +16,7 @@ namespace AutoCareDiray.ViewModels
     public partial class AuthorizationViewModel : ObservableObject
     {
         private readonly IApiService _apiService;
-        private AuthResponse _authResponse;
+        private UserResponse _userResponse;
         public AuthorizationViewModel(IApiService apiService) 
         {
             _apiService = apiService;
@@ -36,22 +36,22 @@ namespace AutoCareDiray.ViewModels
             try
             {
                 Text = "Начал авторизацию";
-                _authResponse = await _apiService.AuthorizationApiAsync(login, password);
-                Text = _authResponse.Message;
+                _userResponse = await _apiService.AuthorizationApiAsync(login, password);
+                Text = _userResponse.Message;
             }
             catch (Exception ex)
             {
                 Text = ex.Message;
             }
-            if ( _authResponse is not null)
+            if (_userResponse is not null)
             {
-                if (_authResponse.Success == true)
+                if (_userResponse.Success == true)
                 {
-                    PreferencesSetUser(_authResponse);
+                    PreferencesSetUser(_userResponse);
                     await Shell.Current.Navigation.PopModalAsync();
                     await Shell.Current.GoToAsync("//MainPage");
                 }
-                else Text = _authResponse.Message;
+                else Text = _userResponse.Message;
             }
         }
         [RelayCommand]
@@ -60,10 +60,11 @@ namespace AutoCareDiray.ViewModels
             await Shell.Current.Navigation.PushModalAsync(new RegistrationPage(_apiService));
         }
 
-        void PreferencesSetUser(AuthResponse authResponse)
+        void PreferencesSetUser(UserResponse userResponse)
         {
-            Preferences.Set("NickName", authResponse.NickName);
-            Preferences.Set("Email", authResponse.Email);
+            Preferences.Set("User_id", userResponse.User_id.ToString());
+            Preferences.Set("NickName", userResponse.NickName);
+            Preferences.Set("Email", userResponse.Email);
             Preferences.Set("is_login", true);
         }
     }

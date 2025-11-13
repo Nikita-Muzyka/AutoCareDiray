@@ -16,7 +16,8 @@ namespace AutoCareDiray.Service
             _httpClient = http;
         }
 
-        public async Task<AuthResponse> AuthorizationApiAsync(string login,string password)
+        //HTTP POST Authoriztion
+        public async Task<UserResponse> AuthorizationApiAsync(string login,string password)
         {
             try
             {
@@ -29,10 +30,10 @@ namespace AutoCareDiray.Service
                 var responseContent = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+                    var result = await response.Content.ReadFromJsonAsync<UserResponse>();
                     return result;
                 }
-                else return new AuthResponse { Message = responseContent, Success = false };
+                else return new UserResponse { Message = responseContent, Success = false };
 
             }
             catch (Exception ex)
@@ -41,7 +42,8 @@ namespace AutoCareDiray.Service
             }
         }
 
-        public async Task<AuthResponse> CreateUserApiAsync(UserDTO user)
+        // HTTP POST Create User
+        public async Task<UserResponse> CreateUserApiAsync(UserDTO user)
         {
             try
             {
@@ -50,14 +52,32 @@ namespace AutoCareDiray.Service
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+                    var result = await response.Content.ReadFromJsonAsync<UserResponse>();
                     return result;
                 }
-                else return new AuthResponse { Message = responseContent, Success = false };
+                else return new UserResponse { Message = responseContent, Success = false };
             }
             catch (Exception ex)
             {
                 throw;
+            }
+        }
+
+        // HTTP Delete  User
+        public async Task<UserResponse> DeleteUserApiAsync(int User_id)
+        {
+            var response = await _httpClient.DeleteAsync($"api/User/delete/{User_id}");
+            var userResponse = new UserResponse
+            {
+                Message = "Пользователь удален",
+                Success = true,
+            };
+            if (response.IsSuccessStatusCode) return userResponse;
+            else
+            {
+                userResponse.Success = false;
+                userResponse.Message = "Пользователь не найден";
+                return userResponse;
             }
         }
 

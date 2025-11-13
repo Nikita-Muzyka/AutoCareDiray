@@ -9,9 +9,8 @@ namespace AutoCareDiray.Service
 {
     public interface IApiService
     {
-        Task<AuthResponse> AuthorizationApiAsync(string login, string password);
-        Task<AuthResponse> CreateUserApiAsync(UserDTO user);
-
-        Task DeleteUserApiAsync(UserDTO user);
+        Task<UserResponse> AuthorizationApiAsync(string login, string password);
+        Task<UserResponse> CreateUserApiAsync(UserDTO user);
+        Task<UserResponse> DeleteUserApiAsync(int User_id);
     }
 }
