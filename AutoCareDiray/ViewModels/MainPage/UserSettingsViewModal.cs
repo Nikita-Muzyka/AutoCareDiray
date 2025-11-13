@@ -1,4 +1,5 @@
-﻿using AutoCareDiray.Service;
+﻿using AutoCareDiray.Models;
+using AutoCareDiray.Service;
 using AutoCareDiray.View;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -48,8 +49,8 @@ namespace AutoCareDiray.ViewModels
             var UserIdString = Preferences.Get("User_id", null);
             if (int.TryParse(UserIdString, out var UserId))
             {
-                var response = _apiService.DeleteUserApiAsync(UserId).GetAwaiter().GetResult();
-                if (response)
+                var response = await _apiService.DeleteUserApiAsync(UserId);
+                if (response.Success == true)
                 {
                     Preferences.Remove("User_Id");
                     Preferences.Remove("NickName");

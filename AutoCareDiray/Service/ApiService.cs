@@ -64,11 +64,21 @@ namespace AutoCareDiray.Service
         }
 
         // HTTP Delete  User
-        public async Task<bool> DeleteUserApiAsync(int User_id)
+        public async Task<UserResponse> DeleteUserApiAsync(int User_id)
         {
             var response = await _httpClient.DeleteAsync($"api/User/delete/{User_id}");
-            if (response.IsSuccessStatusCode) return true;
-            else return false;
+            var userResponse = new UserResponse
+            {
+                Message = "Пользователь удален",
+                Success = true,
+            };
+            if (response.IsSuccessStatusCode) return userResponse;
+            else
+            {
+                userResponse.Success = false;
+                userResponse.Message = "Пользователь не найден";
+                return userResponse;
+            }
         }
 
     }

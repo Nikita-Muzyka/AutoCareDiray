@@ -11,7 +11,6 @@ namespace AutoCareDiray.Service
     {
         Task<UserResponse> AuthorizationApiAsync(string login, string password);
         Task<UserResponse> CreateUserApiAsync(UserDTO user);
-
-        Task<bool> DeleteUserApiAsync(int User_id);
+        Task<UserResponse> DeleteUserApiAsync(int User_id);
     }
 }
