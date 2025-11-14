@@ -112,7 +112,7 @@ namespace AutoCareDiray.Models
         void ErrorsAdd(string propertyName,string value)
         {
             _errors.Add(propertyName,new List<string> {value});
-            OnErrorsChange(propertyLogin);
+            OnErrorsChange(propertyName);
         }
     }
 }

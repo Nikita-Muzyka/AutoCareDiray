@@ -39,7 +39,10 @@
         <Entry Text="{Binding YearSelect}" Placeholder="Year"/>
         <Entry Text="{Binding VinCode}" Placeholder="vin"/>
         <Entry Text="{Binding Mileage}" Placeholder="Mileage"/>
-        <Entry Text="{Binding TranBox}" Placeholder="Box"/>
-        <Entry Text="{Binding EngineType}" Placeholder="Engine"/>
+        <Entry Text="{Binding TransmissionBoxSelected}" Placeholder="Box"/>
+        <Entry Text="{Binding EngineTypeSelected}" Placeholder="Engine"/>
+        <Entry Text="{Binding YearPurchaseSelected}" Placeholder="Year of purchase"/>
+
+        <Button Text="Create" Command="{Binding CreateCarCommand}"/>
     </StackLayout>
 </ContentPage>

@@ -18,11 +18,31 @@ namespace AutoCareDiray.ViewModels
 
         //[ObservableProperty]
         //public string[] brands = CarBrands.Brands;
-        //[ObservableProperty]
-        //public string brandSelected;
+
+        [ObservableProperty]
+        public string brandSelected;
+        [ObservableProperty]
+        public string modelSelected;
+        [ObservableProperty]
+        public string yearSelected;
+        [ObservableProperty]
+        public string vinCode;
+        [ObservableProperty]
+        public string mileage;
+        [ObservableProperty]
+        public string transmissionBoxSelected;
+        [ObservableProperty]
+        public string engineTypeSelected;
+        [ObservableProperty]
+        public string yearPuchaseSelected;
         public CreateCarsViewModal(IApiService apiService) 
         {
             _apiService = apiService;
+        }
+
+        public async void CreateCar()
+        {
+
         }
     }
 }
