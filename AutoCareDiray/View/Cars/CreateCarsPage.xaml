@@ -37,7 +37,9 @@
         <Entry Text="{Binding BrandSelect}" Placeholder="Brand"/>
         <Entry Text="{Binding ModelSelect}" Placeholder="марка"/>
         <Entry Text="{Binding YearSelect}" Placeholder="Year"/>
-        <Entry Text="{Binding VinCode}" Placeholder="vin"/>
+        <Label Text="{Binding VnCodeError}" BackgroundColor="Red"/>
+        <Entry Text="{Binding VnCode}" Placeholder="vin"/>
+        <Label Text="{Binding MileageError}" BackgroundColor="Red"/>
         <Entry Text="{Binding Mileage}" Placeholder="Mileage"/>
         <Entry Text="{Binding TransmissionBoxSelected}" Placeholder="Box"/>
         <Entry Text="{Binding EngineTypeSelected}" Placeholder="Engine"/>

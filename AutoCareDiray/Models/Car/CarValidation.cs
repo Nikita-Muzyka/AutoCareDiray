@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace AutoCareDiray.Models.Car
 
         public void ValidationAll(string VinCode, string Mileage)
         {
-            ValidationVinCode(VinCode);
+            ValidationVinCode(VinCode); 
             ValidationMileage(Mileage);
         }
         public void ValidationVinCode(string VinCode)
@@ -33,17 +34,19 @@ namespace AutoCareDiray.Models.Car
             ErrorsClear(propertyVinCode);
             if (string.IsNullOrWhiteSpace(VinCode) == false)
             {
-                if (VinCode.Length < 17) ;
-                else ErrorsAdd(propertyVinCode, "Vin Code не должен содержать больше 17 знаков");
+                if (VinCode.Length == 17) ;
+                else ErrorsAdd(propertyVinCode, "Vin Code должен сожержать 17 знаков");
             }
             else ErrorsAdd(propertyVinCode, "Поле обязательно к заполнению");
         }
         public void ValidationMileage(string Mileage)
         {
             ErrorsClear(propertyMileage);
-            if (string.IsNullOrWhiteSpace(Mileage) == false
-                && Mileage.Any(char.IsNumber) == true
-                && Mileage.Any(char.IsLetter) == true) ;
+            if (string.IsNullOrWhiteSpace(Mileage) == false)
+            {
+                if (Mileage.Any(char.IsNumber) == true && Mileage.Any(char.IsLetter) == false) ;
+                else ErrorsAdd(propertyMileage, "Поле должно содержать только цифры");
+            }
 
             else ErrorsAdd(propertyMileage, "Поле обязательно к заполнению");
         }
