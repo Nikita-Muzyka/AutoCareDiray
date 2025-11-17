@@ -81,6 +81,16 @@ namespace AutoCareDiray.Service
             }
         }
 
+
+        // HTTP Create Car
+        public async Task<CarResponse> CreateCarApiAsync(Car car)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"api/Car/create", car);
+            var result = await response.Content.ReadFromJsonAsync<CarResponse>();
+
+            return result;
+        }
+
     }
 }
 

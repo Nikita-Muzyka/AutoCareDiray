@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoCareDiray.Models.Car
+namespace AutoCareDiray.Models
 {
     public class CarValidation : INotifyDataErrorInfo
     {
@@ -34,7 +34,7 @@ namespace AutoCareDiray.Models.Car
             ErrorsClear(propertyVinCode);
             if (string.IsNullOrWhiteSpace(VinCode) == false)
             {
-                if (VinCode.Length == 17) ;
+                if (VinCode.Length == 17) OnErrorsChanged(propertyVinCode); 
                 else ErrorsAdd(propertyVinCode, "Vin Code должен сожержать 17 знаков");
             }
             else ErrorsAdd(propertyVinCode, "Поле обязательно к заполнению");
@@ -44,7 +44,7 @@ namespace AutoCareDiray.Models.Car
             ErrorsClear(propertyMileage);
             if (string.IsNullOrWhiteSpace(Mileage) == false)
             {
-                if (Mileage.Any(char.IsNumber) == true && Mileage.Any(char.IsLetter) == false) ;
+                if (Mileage.Any(char.IsNumber) == true && Mileage.Any(char.IsLetter) == false) OnErrorsChanged(propertyMileage);
                 else ErrorsAdd(propertyMileage, "Поле должно содержать только цифры");
             }
 

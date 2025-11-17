@@ -1,6 +1,7 @@
 ﻿using AutoCareDiray.Service; // Ваши сервисы
 using AutoCareDiray.View;
 using AutoCareDiray.ViewModels;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.DependencyInjection; // Добавьте эту строку
 using Microsoft.Extensions.Logging;
 
@@ -14,6 +15,7 @@ namespace AutoCareDiray
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                 .UseMauiCommunityToolkit() // ← Добавьте эту строку!
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -23,7 +25,7 @@ namespace AutoCareDiray
             builder.Services.AddSingleton(new HttpClient
             {
                 BaseAddress = new Uri("http://localhost:5286/"),
-                Timeout = TimeSpan.FromSeconds(30)
+                Timeout = TimeSpan.FromSeconds(500)
             });
 
             builder.Services.AddScoped<IApiService, ApiService>();

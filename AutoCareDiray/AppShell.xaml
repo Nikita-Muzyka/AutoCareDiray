@@ -11,11 +11,6 @@
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}"/>
         </Tab>
 
-        <Tab Title="CreateCars"
-             Route="CreateCars">
-            <ShellContent ContentTemplate="{DataTemplate local:CreateCarsPage}"/>
-        </Tab>
-
         <Tab Title="Авто"
              Route="ListCars">
             <ShellContent ContentTemplate="{DataTemplate local:ListCars}"/>
