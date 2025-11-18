@@ -6,7 +6,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
@@ -16,10 +16,23 @@
 
         <StackLayout Grid.Row="0"
                      Grid.Column="0">
-            <ListView ItemsSource="{Binding Car}">
+            <ListView ItemsSource="{Binding Cars}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        
+                        <ViewCell>
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding Car_id}" 
+                               FontSize="16" 
+                               TextColor="Black"/>
+                                <!-- Добавьте другие свойства Car -->
+                                <Label Text="{Binding Model}" 
+                               FontSize="14" 
+                               TextColor="Gray"/>
+                                <Label Text="{Binding Brand}" 
+                               FontSize="14" 
+                               TextColor="Gray"/>
+                            </StackLayout>
+                        </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -29,6 +42,7 @@
                      Grid.Column="1">
             <Button Text="Create Car"
                     Command="{Binding GoCreateCarCommand}"/>
+            <Label Text="{Binding Errors}"/>
         </StackLayout>
     </Grid>
 </ContentPage>

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -87,6 +88,17 @@ namespace AutoCareDiray.Service
         {
             var response = await _httpClient.PostAsJsonAsync($"api/Car/create", car);
             var result = await response.Content.ReadFromJsonAsync<CarResponse>();
+
+            return result;
+        }
+
+        // HTTP Get Cars
+        public async Task<List<Car>> GetCarByUserIdApiAsync()
+        {
+            var user_id = Preferences.Get("User_id", 0);
+            var response = await _httpClient.GetAsync($"api/Car/get/{user_id}");
+
+            var result = await response.Content.ReadFromJsonAsync<List<Car>>();
 
             return result;
         }

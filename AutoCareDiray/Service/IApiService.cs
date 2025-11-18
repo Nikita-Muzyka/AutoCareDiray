@@ -15,5 +15,6 @@ namespace AutoCareDiray.Service
 
 
         Task<CarResponse> CreateCarApiAsync(Car car);
+        Task<List<Car>> GetCarByUserIdApiAsync();
     }
 }

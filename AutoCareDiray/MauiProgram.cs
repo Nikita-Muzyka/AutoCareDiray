@@ -22,10 +22,21 @@ namespace AutoCareDiray
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+#if ANDROID && DEBUG
+            string baseAddress = "http://192.168.0.104:5286/";
+            TimeSpan time = TimeSpan.FromSeconds(500);
+#elif DEBUG
+            string baseAddress = "http://localhost:5286/";
+            TimeSpan time = TimeSpan.FromSeconds(500);
+#else
+        string baseAddress = "2";
+        TimeSpan.FromSeconds(30);
+#endif
+
             builder.Services.AddSingleton(new HttpClient
             {
-                BaseAddress = new Uri("http://localhost:5286/"),
-                Timeout = TimeSpan.FromSeconds(500)
+                BaseAddress = new Uri(baseAddress),
+                Timeout = time
             });
 
             builder.Services.AddScoped<IApiService, ApiService>();

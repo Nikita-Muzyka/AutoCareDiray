@@ -9,6 +9,7 @@ namespace AutoCareDiray.Models
     public class Car
     {
         public int User_id { get; set; }
+        public int? Car_id { get; set; }
 
         public string Brand { get; set; }
         public string Model { get; set; }
