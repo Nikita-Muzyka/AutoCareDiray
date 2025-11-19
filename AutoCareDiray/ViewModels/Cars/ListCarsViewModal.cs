@@ -19,8 +19,11 @@ namespace AutoCareDiray.ViewModels.Cars
 
         [ObservableProperty]
         public ObservableCollection<Car> cars;
+
         [ObservableProperty]
         public string errors;
+        [ObservableProperty]
+        public Car selectedCar;
         public ListCarsViewModal(IApiService apiService)
         {
             _apiService = apiService;
@@ -32,6 +35,15 @@ namespace AutoCareDiray.ViewModels.Cars
         public async void GoCreateCar()
         {
             await Shell.Current.Navigation.PushAsync(new CreateCarsPage(_apiService));
+        }
+        [RelayCommand]
+        public async void GoCarCard()
+        {
+            if (SelectedCar is null)
+            {
+                Errors = "Ошибка";
+            }
+            else await Shell.Current.Navigation.PushAsync(new CarCardPage(selectedCar,_apiService));
         }
         async void LoadCars()
         {

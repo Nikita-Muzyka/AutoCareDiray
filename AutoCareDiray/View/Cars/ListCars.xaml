@@ -16,7 +16,8 @@
 
         <StackLayout Grid.Row="0"
                      Grid.Column="0">
-            <ListView ItemsSource="{Binding Cars}">
+            <ListView ItemsSource="{Binding Cars}"
+                      SelectedItem="{Binding SelectedCar}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -42,6 +43,9 @@
                      Grid.Column="1">
             <Button Text="Create Car"
                     Command="{Binding GoCreateCarCommand}"/>
+
+            <Button Text="Select"
+                    Command="{Binding GoCarCardCommand}"/>
             <Label Text="{Binding Errors}"/>
         </StackLayout>
     </Grid>

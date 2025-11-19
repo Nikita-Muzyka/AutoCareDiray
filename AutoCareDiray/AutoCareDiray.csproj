@@ -72,6 +72,9 @@
 	  <MauiXaml Update="View\Authorization\RegistrationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\Cars\CarCardPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\Cars\CreateCarsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

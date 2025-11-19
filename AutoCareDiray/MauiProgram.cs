@@ -22,8 +22,9 @@ namespace AutoCareDiray
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+
 #if ANDROID && DEBUG
-            string baseAddress = "http://192.168.0.104:5286/";
+            string baseAddress = "http://192.168.0.105:5286/";
             TimeSpan time = TimeSpan.FromSeconds(500);
 #elif DEBUG
             string baseAddress = "http://localhost:5286/";
@@ -38,6 +39,7 @@ namespace AutoCareDiray
                 BaseAddress = new Uri(baseAddress),
                 Timeout = time
             });
+
 
             builder.Services.AddScoped<IApiService, ApiService>();
             builder.Services.AddTransient<AuthorizationPage>();
