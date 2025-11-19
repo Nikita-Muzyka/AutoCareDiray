@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.View.UserSettingsPage"
+             Title="UserSettingsPage">
+    <StackLayout>
+        <Label Text="Изменение данных временно отключено Но Выход с аккаунт работает" TextColor="Red"/>
+        
+        <Label Text="NickName"/>
+        <Entry IsEnabled="False" Text="{Binding NickName}"/>
+        <Button Text="Изменить"/>
+
+        <Label Text="User_id"/>
+        <Entry IsEnabled="False" Text="{Binding User_id}"/>
+        <Button Text="Изменить"/>
+
+        <Label Text="Email"/>
+        <Entry IsEnabled="False" Text="{Binding Email}"/>
+        <Button Text="Изменить"/>
+
+        <Button Text="Сохранить изменения"/>
+
+        <Button Text="Выйти с профиля (Работает)"
+                Command="{Binding ExitProfilCommand}"
+                BackgroundColor="Red"/>
+
+        <Label Text="Удаление профиля приведет к неизбежной потери всех данных аккаунта"/>
+        <Button Text="Удалить профиль (Работает)"
+        Command="{Binding DeleteProfilCommand}"
+        BackgroundColor="Red"/>
+    </StackLayout>
+</ContentPage>

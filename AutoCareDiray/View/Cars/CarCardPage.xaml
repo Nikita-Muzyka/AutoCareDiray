@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.View.CarCardPage"
+             Title="CarCardPage">
+    <StackLayout>
+        <Label Text="Model"/>
+        <Label Text="{Binding Car.Model}"/>
+        <Label Text="Brand"/>
+        <Label Text="{Binding Car.Brand}"/>
+        <Label Text="Car_id"/>
+        <Label Text="{Binding Car.Car_id}"/>
+        <Label Text="Year"/>
+        <Label Text="{Binding Car.Year}"/>
+        <Label Text="Vin"/>
+        <Label Text="{Binding Car.Vin}"/>
+
+        <Label Text="Mileage"/>
+        <Label Text="{Binding Car.Current_mileage}"/>
+        <Label Text="year purchase"/>
+        <Label Text="{Binding Car.Year_purchase}"/>
+
+        <Label Text="Transmission box"/>
+        <Label Text="{Binding Car.Transmission_box}"/>
+        <Label Text="Engine type"/>
+        <Label Text="{Binding Car.Engine_type}"/>
+
+        <Button Text="Create Mint"/>
+    </StackLayout>
+</ContentPage>

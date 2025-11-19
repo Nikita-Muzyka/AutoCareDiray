@@ -5,11 +5,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:AutoCareDiray.View"
     Title="AutoCareDiray">
+    <TabBar>
+        <Tab Title="Главная"
+             Route="MainPage">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}"/>
+        </Tab>
 
-    <ShellContent
-        Title="Cars"
-        ContentTemplate="{DataTemplate local:CreateCarsPage}"
-        Route="CreateCarsPage" />
+        <Tab Title="Авто"
+             Route="ListCars">
+            <ShellContent ContentTemplate="{DataTemplate local:ListCars}"/>
+        </Tab>
+    </TabBar>
 
 
 </Shell>

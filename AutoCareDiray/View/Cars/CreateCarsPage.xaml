@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
+             x:Class="AutoCareDiray.View.CreateCarsPage"
+             Title="CreateCarsPage">
+
+    <!--<toolkit:Expander>
+        <toolkit:Expander.Header>
+            <Label Text="🚗 Выберите марку автомобиля" 
+                   FontSize="16" 
+                   FontAttributes="Bold"/>
+        </toolkit:Expander.Header>
+        <CollectionView ItemsSource="{Binding Brands}"
+             SelectionMode="Single"
+             SelectedItem="{Binding BrandSelected}">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                     Span="4"
+                     HorizontalItemSpacing="4"
+                     VerticalItemSpacing="1"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border HeightRequest="25" 
+                 Padding="5">
+                        <Label Text="{Binding .}" 
+                    FontSize="10"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    HorizontalTextAlignment="Center"/>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </toolkit:Expander>-->
+
+    <StackLayout>
+        <Entry Text="{Binding BrandSelected}" Placeholder="Brands"/>
+        <Entry Text="{Binding ModelSelected}" Placeholder="марка"/>
+        <Entry Text="{Binding YearSelected}" Placeholder="Year"/>
+        <Label Text="{Binding VnCodeError}" BackgroundColor="Red"/>
+        <Entry Text="{Binding VnCode}" Placeholder="vin"/>
+        <Label Text="{Binding MileageError}" BackgroundColor="Red"/>
+        <Entry Text="{Binding Mileage}" Placeholder="Mileage"/>
+        <Entry Text="{Binding TransmissionBoxSelected}" Placeholder="Box"/>
+        <Entry Text="{Binding EngineTypeSelected}" Placeholder="Engine"/>
+        <Entry Text="{Binding YearPurchaseSelected}" Placeholder="Year of purchase"/>
+
+        <Button Text="Create" Command="{Binding CreateCarCommand}"/>
+        <Label Text="{Binding ErrorsAll}" BackgroundColor="Red"/>
+    </StackLayout>
+</ContentPage>

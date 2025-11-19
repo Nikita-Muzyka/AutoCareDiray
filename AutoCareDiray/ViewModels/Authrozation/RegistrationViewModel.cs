@@ -17,7 +17,7 @@ namespace AutoCareDiray.ViewModels
     {
         private readonly IApiService _apiService;
         UserValidation _userValidation = new();
-        AuthResponse _authResponse;
+        UserResponse _userResponse;
 
         [ObservableProperty]
         public string message;
@@ -97,30 +97,32 @@ namespace AutoCareDiray.ViewModels
             UserDTO userDTO = new UserDTO(NickName, Email, Login, Password);
             try
             {
-                _authResponse = await _apiService.CreateUserApiAsync(userDTO);
-                Message = _authResponse.Message;
+                _userResponse = await _apiService.CreateUserApiAsync(userDTO);
+                Message = _userResponse.Message;
             }
             catch (Exception ex)
             {
                 Message = ex.Message;
             }
-            if (_authResponse is not null)
+            if (_userResponse is not null)
             {
-                if (_authResponse.Success == true)
+                if (_userResponse.Success == true)
                 {
                     IsValid = false;
-                    await PreferencesSetUser(_authResponse);
+                    await PreferencesSetUser(_userResponse);
                     await Task.Delay(2000);
                     await Shell.Current.Navigation.PopModalAsync();
-                    await Shell.Current.GoToAsync("//CreateCarsPage");
+                    await Shell.Current.GoToAsync("//MainPage");
                 }
             }
         }
 
-        async Task PreferencesSetUser(AuthResponse authResponse)
+        async Task PreferencesSetUser(UserResponse userResponse)
         {
-            Preferences.Set ("NickName", authResponse.NickName);
-            Preferences.Set("Email", authResponse.Email);
+            Preferences.Set("User_id", userResponse.User_id.ToString());
+            Preferences.Set ("NickName", userResponse.NickName);
+            Preferences.Set("Email", userResponse.Email);
+            Preferences.Set("is_login", true);
         }
     }
 }
