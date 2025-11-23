@@ -1,49 +1,171 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AutoCareDiray.View.AuthorizationPage"
-             Title="AuthorizationPage">
+             x:Class="AutoCareDiray.View.AuthorizationPage">
 
     <Grid RowSpacing="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="250"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Entry Grid.Row="1"
+        <Image Source="main_icon_app.png"
+               Grid.Row="0"/>
+
+        <Label Grid.Row="1" 
+               Text="AutoCare Diray"
+               FontSize="40"
                HorizontalOptions="Center"
-               Placeholder="Login" 
-               WidthRequest="200"
-               Text="{Binding Login}"/>
+               TextColor="#E53935"
+               FontFamily="RubikBold"/>
 
-            <Entry Grid.Row="2"
-                   HorizontalOptions="Center"
-                   WidthRequest="200"
-                   Placeholder="Password" 
-                   Text="{Binding Password}"/>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="3" 
-                        Text="Log in"
-                        HorizontalOptions="Center"
-                        WidthRequest="150"
-                        FontSize="12"
-                        Command="{Binding LogInCommand}"/>
+            <!--Login-->
+            <Border Grid.Row="0"
+                    Grid.Column="1"
+                    Background="Transparent"
+                    StrokeThickness="0">
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center">
 
-                <Button Grid.Row="4" 
-                        Text="Зарегестрироваться"
-                        HorizontalOptions="Center"
-                        WidthRequest="150"
-                        FontSize="12"
-                        Command="{Binding RegistrationCommand}"/>
+                    <Entry Grid.Row="2"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Placeholder="Login" 
+                WidthRequest="200"
+                Text="{Binding Login}"
+                Style="{DynamicResource EntryAuth}"/>
 
-                          <Label Grid.Row="5"
+                    <Label Text="📩"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"/>
+                </StackLayout>
+            </Border>
+
+            <!--Password-->
+            <Border Grid.Row="1"
+                    Grid.Column="1"
+                    Background="Transparent"
+                    StrokeThickness="0">
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center">
+
+                    <Entry Grid.Row="3"
                            HorizontalOptions="Center"
-                           Text="{Binding Text}"/>
+                           WidthRequest="200"
+                           Placeholder="Password" 
+                           Text="{Binding Password}"
+                           Style="{DynamicResource EntryAuth}"
+                           IsPassword="{Binding IsPassword}"/>
 
+                    <Label Text="🔒"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </StackLayout>
+            </Border>
+
+            <!--Is Password-->
+            <Border Grid.Row="2"
+                    Grid.Column="1"
+                    Background="Transparent"
+                    StrokeThickness="0">
+                
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center"
+                             WidthRequest="150"
+                             Margin="0,0,50,0">
+
+                    <Label Text="Показать пароль"
+                 HorizontalOptions="Center"
+                 VerticalOptions="Center"
+                 FontSize="12"
+                 Margin="0,0,5,0"
+                 Style="{StaticResource LabelTextCustom}"/>
+
+                    <Switch Grid.Row="4"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center"
+                  IsToggled="{Binding IsTogglePasswordSwitch}"
+                  Style="{StaticResource SwitchCustom}">
+
+                    </Switch>
+                </StackLayout>
+            </Border>
+
+            <!--Запомнить пользователя-->
+            <Border Grid.Row="3"
+                    Grid.Column="1"
+                    Background="Transparent"
+                    StrokeThickness="0">
+                
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             WidthRequest="200">
+
+                    <Label Text="Запомнить пользователя?"
+              HorizontalOptions="Center"
+              VerticalOptions="Center"
+              FontSize="12"
+              Margin="0,0,5,0"
+              Style="{StaticResource LabelTextCustom}"/>
+
+                    <Switch Grid.Row="4"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               IsToggled="{Binding IsToggleSwitch}"
+               Style="{StaticResource SwitchCustom}"></Switch>
+                </StackLayout>
+            </Border>
+
+            <!--Кнопки-->
+            <Border Grid.Row="4"
+                    Grid.Column="1"
+                    Background="Transparent"
+                    StrokeThickness="0">
+                <StackLayout HorizontalOptions="Center"
+                             VerticalOptions="Center">
+
+                    <Button Text="Log in"
+                     WidthRequest="200"
+                     HorizontalOptions="Center"
+                     Command="{Binding LogInCommand}"
+                     Style="{StaticResource ButtonCustom}"
+                     Margin="0,0,0,10"/>
+
+                    <Button Text="Зарегестрироваться"
+                     HorizontalOptions="Center"
+                     WidthRequest="200"
+                     Command="{Binding RegistrationCommand}"
+                     Style="{StaticResource ButtonCustom}"
+                     Margin="0,0,0,5"/>
+
+                    <Label HorizontalOptions="Center"
+                    Text="{Binding Text}"
+                    Style="{StaticResource LabelAuthResponse}"/>
+
+                </StackLayout>
+            </Border>
+
+        </Grid>
     </Grid>
 </ContentPage>
 

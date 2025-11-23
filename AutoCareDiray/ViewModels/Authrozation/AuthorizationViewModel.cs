@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AutoCareDiray.Models;
 using System.Runtime.CompilerServices;
 using AutoCareDiray.View;
+using AutoCareDiray.Models.Authorization;
 
 namespace AutoCareDiray.ViewModels
 {
@@ -28,30 +29,45 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string password;
         [ObservableProperty]
-        public string text; // информация о результате
+        public string text;
+        [ObservableProperty]
+        public bool isToggleSwitch;
+        [ObservableProperty]
+        public bool isPassword = true;
+        [ObservableProperty]
+        public bool isTogglePasswordSwitch;
 
         [RelayCommand]
         public async void LogIn()
         {
             try
             {
-                Text = "Начал авторизацию";
-                _userResponse = await _apiService.AuthorizationApiAsync(login, password);
-                Text = _userResponse.Message;
+                bool start = AuthorizationValidation.AuthValidation(Login, Password);
+                if (start)
+                {
+                    Text = "";
+                    _userResponse = await _apiService.AuthorizationApiAsync(login, password);
+                    Text = _userResponse.Message;
+                    if (_userResponse is not null)
+                    {
+                        if (_userResponse.Success == true)
+                        {
+                            PreferencesSetUser(_userResponse);
+                            await Shell.Current.Navigation.PopModalAsync();
+                            await Shell.Current.GoToAsync("//MainPage");
+                        }
+                        else Text = _userResponse.Message;
+                    }
+                }
+                else Text = "Пароль и Логин не могут быть пустыми";
+            }
+            catch (HttpRequestException ex)
+            {
+                Text = "Соединение не установлено проверте подключение к интернету или сервер не доступен ";
             }
             catch (Exception ex)
             {
                 Text = ex.Message;
-            }
-            if (_userResponse is not null)
-            {
-                if (_userResponse.Success == true)
-                {
-                    PreferencesSetUser(_userResponse);
-                    await Shell.Current.Navigation.PopModalAsync();
-                    await Shell.Current.GoToAsync("//MainPage");
-                }
-                else Text = _userResponse.Message;
             }
         }
         [RelayCommand]
@@ -65,7 +81,12 @@ namespace AutoCareDiray.ViewModels
             Preferences.Set("User_id", userResponse.User_id.ToString());
             Preferences.Set("NickName", userResponse.NickName);
             Preferences.Set("Email", userResponse.Email);
-            Preferences.Set("is_login", true);
+            if(IsToggleSwitch) Preferences.Set("is_login", true);
+        }
+
+        partial void OnIsTogglePasswordSwitchChanged(bool value)
+        {
+            IsPassword = !IsTogglePasswordSwitch;
         }
     }
 }

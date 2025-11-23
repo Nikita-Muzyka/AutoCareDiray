@@ -28,13 +28,8 @@ namespace AutoCareDiray.Service
                     Password = password
                 };
                 var response = await _httpClient.PostAsJsonAsync("api/User/login", userAuth);
-                var responseContent = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadFromJsonAsync<UserResponse>();
-                    return result;
-                }
-                else return new UserResponse { Message = responseContent, Success = false };
+                var result = await response.Content.ReadFromJsonAsync<UserResponse>();
+                return result;
 
             }
             catch (Exception ex)

@@ -14,7 +14,7 @@ namespace AutoCareDiray.Models
         public string Login { get; set; }
 
 
-        public UserDTO(string nickName, string email, string password, string login)
+        public UserDTO(string nickName, string email, string login, string password)
         {
             NickName = nickName;
             Email = email;

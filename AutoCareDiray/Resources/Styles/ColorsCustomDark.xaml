@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="AutoCareDiray.Resources.Styles.ColorsCustomDark">
+
+    <!--===== ОСНОВНЫЕ ЦВЕТА =====-->
+    <Color x:Key="PrimaryRed">#E53935</Color>
+    <!--Красный тот же!-->
+    <Color x:Key="PrimaryWhite">#121212</Color>
+    <!--Темный фон-->
+    <Color x:Key="PrimaryBlack">#FFFFFF</Color>
+    <!--Белый текст-->
+
+    <!--===== ФОН И ПОВЕРХНОСТИ =====-->
+    <Color x:Key="Background">#121212</Color>
+    <!--Темный фон-->
+    <Color x:Key="Surface">#1E1E1E</Color>
+    <!--Темные поверхности-->
+    <Color x:Key="CardBackground">#1E1E1E</Color>
+    <!--Темные карточки-->
+    <Color x:Key="CardBorder">#2D2D2D</Color>
+    <!--Темные границы-->
+
+    <!--===== ТЕКСТ =====-->
+    <Color x:Key="TextPrimary">#FFFFFF</Color>
+    <!--Белый текст-->
+    <Color x:Key="TextSecondary">#B0B0B0</Color>
+    <!--Серый текст-->
+    <Color x:Key="TextDisabled">#666666</Color>
+    <!--Неактивный текст-->
+    <Color x:Key="TextOnPrimary">#FFFFFF</Color>
+    <!--Текст на красном-->
+
+    <!--===== КНОПКИ =====-->
+    <Color x:Key="ButtonPrimary">#E53935</Color>
+    <Color x:Key="ButtonPrimaryPressed">#D32F2F</Color>
+    <Color x:Key="ButtonSecondary">#2D2D2D</Color>
+    <!--Темные кнопки-->
+    <Color x:Key="ButtonTextPrimary">#FFFFFF</Color>
+    <Color x:Key="ButtonTextSecondary">#E53935</Color>
+
+    <!--===== ПОЛЯ ВВОДА =====-->
+    <Color x:Key="InputBackground">#1E1E1E</Color>
+    <!--Темный фон полей-->
+    <Color x:Key="InputBorder">#404040</Color>
+    <!--Темные границы-->
+    <Color x:Key="InputBorderFocused">#E53935</Color>
+    <Color x:Key="InputPlaceholder">#666666</Color>
+
+    <!--===== НАВИГАЦИЯ =====-->
+    <Color x:Key="NavigationBar">#E53935</Color>
+    <Color x:Key="NavigationText">#FFFFFF</Color>
+    <Color x:Key="TabBar">#1E1E1E</Color>
+    <!--Темная панель-->
+    <Color x:Key="TabSelected">#E53935</Color>
+    <Color x:Key="TabUnselected">#666666</Color>
+
+    <!--===== СТАТУСЫ АВТО =====-->
+    <Color x:Key="StatusCompleted">#4CAF50</Color>
+    <Color x:Key="StatusPending">#FF9800</Color>
+    <Color x:Key="StatusOverdue">#F44336</Color>
+
+</ResourceDictionary>
