@@ -53,6 +53,25 @@ namespace AutoCareDiray.Service
             }
         }
 
+        // HTTP POST Create User
+        public async Task<UserResponse> CheckUserLoginAsync(string login)
+        {
+            try
+            {
+                var user = new UserDTO
+                {
+                    Login = login
+                };
+                var response = await _httpClient.PostAsJsonAsync("api/User/checkLogin", user);
+                var result = await response.Content.ReadFromJsonAsync<UserResponse>();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         // HTTP Delete  User
         public async Task<UserResponse> DeleteUserApiAsync(int User_id)
         {

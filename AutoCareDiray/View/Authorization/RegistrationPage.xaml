@@ -46,8 +46,7 @@
                 <!-- NickName -->
                 <Border Style="{StaticResource BorderForEntryAuth}"
                         HorizontalOptions="Center"
-                        VerticalOptions="Center"
-                        WidthRequest="200">
+                        VerticalOptions="Center">
                     <StackLayout>
                         <Label Text="{Binding NickNameError}"
                                IsVisible="{Binding HasErrors}"

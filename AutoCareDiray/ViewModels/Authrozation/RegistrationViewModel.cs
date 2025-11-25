@@ -16,8 +16,9 @@ namespace AutoCareDiray.ViewModels
     partial class RegistrationViewModel : ObservableObject
     {
         private readonly IApiService _apiService;
-        UserValidation _userValidation = new();
+        UserValidation _userValidation;
         UserResponse _userResponse;
+        CancellationTokenSource _debounce;
 
         [ObservableProperty]
         public string message;
@@ -40,6 +41,7 @@ namespace AutoCareDiray.ViewModels
         public RegistrationViewModel(IApiService api)
         {
             _apiService = api;
+            _userValidation = new UserValidation(_apiService);
             _userValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI();
         }
 
@@ -75,7 +77,7 @@ namespace AutoCareDiray.ViewModels
         }
         partial void OnLoginChanged(string value)
         {
-            _userValidation.ValidationLogin(value);
+           DebounceSearch(value);
         }
         partial void OnPasswordChanged(string value)
         {
@@ -120,6 +122,22 @@ namespace AutoCareDiray.ViewModels
             Preferences.Set("User_id", userResponse.User_id.ToString());
             Preferences.Set ("NickName", userResponse.NickName);
             Preferences.Set("Email", userResponse.Email);
+        }
+
+        async void DebounceSearch(string value)
+        {
+            try
+            {
+                _debounce?.Cancel();
+                _debounce = new CancellationTokenSource();
+
+                await Task.Delay(1500, _debounce.Token);
+                _userValidation.ValidationLogin(value);
+            }
+            catch (TaskCanceledException ex)
+            {
+
+            }
         }
     }
 }
