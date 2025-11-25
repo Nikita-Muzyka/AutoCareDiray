@@ -54,7 +54,6 @@ namespace AutoCareDiray.ViewModels
         public async void CreateUserDTO()
         {
             _userValidation.ValidationAll(NickName, Email, Login, Password);
-            IsValid = !HasErrors;
             if (IsValid)
             {
                 RegistrationApi();
@@ -110,9 +109,8 @@ namespace AutoCareDiray.ViewModels
                 {
                     IsValid = false;
                     await PreferencesSetUser(_userResponse);
-                    await Task.Delay(2000);
                     await Shell.Current.Navigation.PopModalAsync();
-                    await Shell.Current.GoToAsync("//MainPage");
+                    await Shell.Current.GoToAsync("//AuthorizationPage");
                 }
             }
         }
@@ -122,7 +120,6 @@ namespace AutoCareDiray.ViewModels
             Preferences.Set("User_id", userResponse.User_id.ToString());
             Preferences.Set ("NickName", userResponse.NickName);
             Preferences.Set("Email", userResponse.Email);
-            Preferences.Set("is_login", true);
         }
     }
 }

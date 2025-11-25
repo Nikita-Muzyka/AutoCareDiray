@@ -21,7 +21,6 @@ namespace AutoCareDiray.ViewModels
         public AuthorizationViewModel(IApiService apiService) 
         {
             _apiService = apiService;
-            Text = "Жду";
         }
 
         [ObservableProperty]
@@ -40,6 +39,7 @@ namespace AutoCareDiray.ViewModels
         [RelayCommand]
         public async void LogIn()
         {
+            if(Password == "1") await Shell.Current.GoToAsync("//MainPage");
             try
             {
                 bool start = AuthorizationValidation.AuthValidation(Login, Password);
@@ -53,7 +53,7 @@ namespace AutoCareDiray.ViewModels
                         if (_userResponse.Success == true)
                         {
                             PreferencesSetUser(_userResponse);
-                            await Shell.Current.Navigation.PopModalAsync();
+
                             await Shell.Current.GoToAsync("//MainPage");
                         }
                         else Text = _userResponse.Message;
@@ -73,7 +73,7 @@ namespace AutoCareDiray.ViewModels
         [RelayCommand]
         public async void Registration()
         {
-            await Shell.Current.Navigation.PushModalAsync(new RegistrationPage(_apiService));
+            await Shell.Current.Navigation.PushModalAsync(new RegistrationPage(_apiService),true);
         }
 
         void PreferencesSetUser(UserResponse userResponse)

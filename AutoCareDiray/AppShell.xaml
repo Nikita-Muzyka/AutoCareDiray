@@ -10,7 +10,7 @@
          Route="AuthorizationPage">
         <ShellContent ContentTemplate="{DataTemplate local:AuthorizationPage}"/>
     </Tab>
-    
+
     <TabBar>
         <Tab Title="Главная"
              Route="MainPage">

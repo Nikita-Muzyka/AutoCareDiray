@@ -8,8 +8,11 @@
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource InputPlaceholder}, Dark={StaticResource InputPlaceholder}}" />
-        <Setter Property="MinimumHeightRequest" Value="44"/>
-        <Setter Property="MinimumWidthRequest" Value="44"/>
+        <Setter Property="MinimumHeightRequest" Value="40"/>
+        <Setter Property="MinimumWidthRequest" Value="40"/>
+        <Setter Property="WidthRequest" Value="180"/>
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -24,17 +27,27 @@
         </Setter>
     </Style>
 
+    <!--бордер для обложки entryAuth-->
+    <Style TargetType="Border" x:Key="BorderForEntryAuth">
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource InputBorder}, Dark={StaticResource InputBorder}}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 20"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="WidthRequest" Value="220"/>
+    </Style>
 
-    <Style TargetType="Button" x:Key="ButtonCustom">
+
+    <Style TargetType="Button" x:Key="ButtonAuth">
         <Setter Property="TextColor" Value="{StaticResource TextOnPrimary}"/>
         <Setter Property="BackgroundColor" Value="{StaticResource PrimaryRed}" />
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderWidth" Value="0"/>
         <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="Padding" Value="5,5"/>
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="MinimumHeightRequest" Value="30"/>
-        <Setter Property="MinimumWidthRequest" Value="30"/>
+        <Setter Property="MinimumWidthRequest" Value="200"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -54,6 +67,9 @@
     <Style TargetType="Label" x:Key="LabelTextCustom">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBlack}, Dark={StaticResource PrimaryWhite}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="WidthRequest" Value="200" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -72,6 +88,8 @@
     <Style TargetType="Label" x:Key="LabelAuthResponse">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource StatusOverdue}, Dark={StaticResource StatusOverdue}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -117,5 +135,5 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-    
+
 </ResourceDictionary>

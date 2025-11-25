@@ -44,14 +44,8 @@ namespace AutoCareDiray.Service
             try
             {
                 var response = await _httpClient.PostAsJsonAsync("api/User/register", user);
-                var responseContent = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadFromJsonAsync<UserResponse>();
-                    return result;
-                }
-                else return new UserResponse { Message = responseContent, Success = false };
+                var result = await response.Content.ReadFromJsonAsync<UserResponse>();
+                return result;
             }
             catch (Exception ex)
             {
