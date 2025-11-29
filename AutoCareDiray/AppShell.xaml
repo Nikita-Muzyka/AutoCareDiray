@@ -7,15 +7,24 @@
     Title="AutoCareDiray"
     Style="{StaticResource CustomTabBar}">
 
-    <Tab Title="Авторизация"
-         Route="AuthorizationPage">
-        <ShellContent ContentTemplate="{DataTemplate local:AuthorizationPage}"/>
+
+
+    <Tab>
+        <ShellContent 
+         Route="AuthorizationPage"
+         ContentTemplate="{DataTemplate local:AuthorizationPage}"/>
     </Tab>
 
-    <TabBar>
+
+    <TabBar Route="Main">
         <Tab Title="Главная"
              Route="MainPage">
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}"/>
+        </Tab>
+
+        <Tab Title="Главная"
+             Route="UserSettings">
+            <ShellContent ContentTemplate="{DataTemplate local:UserSettingsPage}"/>
         </Tab>
 
         <Tab Title="Авто"

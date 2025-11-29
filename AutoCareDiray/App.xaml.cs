@@ -1,4 +1,5 @@
-﻿using AutoCareDiray.View;
+﻿using AutoCareDiray.Resources.Styles;
+using AutoCareDiray.View;
 namespace AutoCareDiray
 {
     public partial class App : Application
@@ -8,7 +9,25 @@ namespace AutoCareDiray
             InitializeComponent();
             Application.Current.UserAppTheme = AppTheme.Light;
         }
-        
+
+        //public void SetTheme(AppTheme theme)
+        //{
+        //    var themeDict = (ResourceDictionary)Application.Current.Resources["ThemeDictionary"];
+        //    themeDict.MergedDictionaries.Clear();
+
+
+        //    if (theme == AppTheme.Dark)
+        //    {
+        //        Resources.MergedDictionaries.Add(new Resources.Styles.ColorsCustomDark());
+        //    }
+        //    else
+        //    {
+        //        Resources.MergedDictionaries.Add(new Resources.Styles.ColorsCustomLight());
+        //    }
+
+        //    // Принудительно устанавливаем тему MAUI
+        //    Application.Current.UserAppTheme = theme;
+        //}
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
@@ -16,11 +35,11 @@ namespace AutoCareDiray
 
             window.Created += async (s, e) =>
             {
-                //await Shell.Current.GoToAsync("//MainPage");
+               
                 bool check = Preferences.Get("is_login", false);
                 if (check)
                 {
-                    await Shell.Current.GoToAsync("//MainPage");
+                    await Shell.Current.GoToAsync("//Main");
                 }
                 else
                 {

@@ -12,14 +12,11 @@ namespace AutoCareDiray.ViewModels
     public partial class MainPageViewModal
     {
         private readonly IApiService _apiService;
-        public MainPageViewModal(IApiService apiService)
+        private readonly IDialogService _dialogService;
+        public MainPageViewModal(IApiService apiService,IDialogService dialogService)
         {
             _apiService = apiService;
-        }
-        [RelayCommand]
-        public async void UserSettingsGo()
-        {
-            await Shell.Current.Navigation.PushAsync(new UserSettingsPage(_apiService));
+            _dialogService = dialogService;
         }
     }
 }

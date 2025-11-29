@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AutoCareDiray.View.RegistrationPage">
+             x:Class="AutoCareDiray.View.RegistrationPage"
+             Style="{StaticResource CustomPage}">
 
     <ScrollView>
         <Grid HorizontalOptions="Center"
@@ -44,7 +45,7 @@
                                  WidthRequest="300">
 
                 <!-- NickName -->
-                <Border Style="{StaticResource BorderForEntryAuth}"
+                <Border Style="{StaticResource BorderForEntryCustom}"
                         HorizontalOptions="Center"
                         VerticalOptions="Center">
                     <StackLayout>
@@ -53,12 +54,12 @@
                                Style="{StaticResource LabelAuthResponse}"/>
                         <Entry Text="{Binding NickName}"
                                Placeholder="NickName (Обязательно)"
-                               Style="{StaticResource EntryAuth}"/>
+                               Style="{StaticResource EntryCustom}"/>
                     </StackLayout>
                 </Border>
 
                 <!-- Email -->
-                <Border Style="{StaticResource BorderForEntryAuth}"
+                <Border Style="{StaticResource BorderForEntryCustom}"
                         HorizontalOptions="Center"
                         VerticalOptions="Center">
                     <StackLayout>
@@ -67,12 +68,12 @@
                                IsVisible="{Binding HasErrors}"/>
                         <Entry Text="{Binding Email}"
                                Placeholder="Email"
-                               Style="{StaticResource EntryAuth}"/>
+                               Style="{StaticResource EntryCustom}"/>
                     </StackLayout>
                 </Border>
 
                 <!-- Login -->
-                <Border Style="{StaticResource BorderForEntryAuth}"
+                <Border Style="{StaticResource BorderForEntryCustom}"
                         HorizontalOptions="Center"
                         VerticalOptions="Center">
                     <StackLayout>
@@ -81,12 +82,12 @@
                                IsVisible="{Binding HasErrors}"/>
                         <Entry Text="{Binding Login}"
                                Placeholder="Login (Обязательно)"
-                               Style="{StaticResource EntryAuth}"/>
+                               Style="{StaticResource EntryCustom}"/>
                     </StackLayout>
                 </Border>
 
                 <!-- Password -->
-                <Border Style="{StaticResource BorderForEntryAuth}"
+                <Border Style="{StaticResource BorderForEntryCustom}"
                         HorizontalOptions="Center"
                         VerticalOptions="Center">
                     <StackLayout>
@@ -95,7 +96,7 @@
                                IsVisible="{Binding HasErrors}"/>
                         <Entry Text="{Binding Password}"
                                Placeholder="Password (Обязательно)"
-                               Style="{StaticResource EntryAuth}"/>
+                               Style="{StaticResource EntryCustom}"/>
                     </StackLayout>
                 </Border>
             </VerticalStackLayout>
@@ -115,12 +116,12 @@
                 <Button Text="Создать"
                         IsEnabled="{Binding IsValidButton}"
                         Command="{Binding CreateUserDTOCommand}"
-                        Style="{StaticResource ButtonAuth}"
+                        Style="{StaticResource ButtonCustom}"
                         HorizontalOptions="Fill"/>
 
                 <Button Text="Назад"
                         Command="{Binding CloseModalViewCommand}"
-                        Style="{StaticResource ButtonAuth}"
+                        Style="{StaticResource ButtonCustom}"
                         HorizontalOptions="Fill"/>
             </VerticalStackLayout>
 

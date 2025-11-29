@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.Resources.Styles.StylesCustom">
 
-    <Style TargetType="Entry" x:Key="EntryAuth">
+    <Style TargetType="Entry" x:Key="EntryCustom">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBlack}, Dark={StaticResource PrimaryWhite}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontSize" Value="14" />
@@ -28,7 +28,7 @@
     </Style>
 
     <!--бордер для обложки entryAuth-->
-    <Style TargetType="Border" x:Key="BorderForEntryAuth">
+    <Style TargetType="Border" x:Key="BorderForEntryCustom">
         <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource InputBorder}, Dark={StaticResource InputBorder}}" />
         <Setter Property="StrokeShape" Value="RoundRectangle 20"/>
         <Setter Property="StrokeThickness" Value="1"/>
@@ -36,9 +36,9 @@
     </Style>
 
 
-    <Style TargetType="Button" x:Key="ButtonAuth">
-        <Setter Property="TextColor" Value="{StaticResource TextOnPrimary}"/>
-        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryRed}" />
+    <Style TargetType="Button" x:Key="ButtonCustom">
+        <Setter Property="TextColor" Value="{StaticResource ButtonTextPrimary}"/>
+        <Setter Property="BackgroundColor" Value="{StaticResource ButtonPrimary}" />
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderWidth" Value="0"/>
         <Setter Property="CornerRadius" Value="20"/>
@@ -47,7 +47,7 @@
         <Setter Property="Padding" Value="5,5"/>
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="MinimumHeightRequest" Value="30"/>
-        <Setter Property="MinimumWidthRequest" Value="200"/>
+        <Setter Property="MinimumWidthRequest" Value="30"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -55,7 +55,35 @@
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
                             <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
-                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ButtonSecondary}, Dark={StaticResource ButtonSecondary}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="ButtonCustomWarning">
+        <Setter Property="TextColor" Value="{StaticResource ButtonTextSecondary}"/>
+        <Setter Property="BackgroundColor" Value="{StaticResource ButtonSecondary}" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="BorderWidth" Value="0"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Padding" Value="5,5"/>
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="MinimumHeightRequest" Value="30"/>
+        <Setter Property="MinimumWidthRequest" Value="30"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ButtonSecondary}, Dark={StaticResource ButtonSecondary}}" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="PointerOver" />
@@ -67,7 +95,6 @@
     <Style TargetType="Label" x:Key="LabelTextCustom">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBlack}, Dark={StaticResource PrimaryWhite}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="WidthRequest" Value="200" />
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
@@ -97,7 +124,7 @@
                     <VisualState x:Name="Normal" />
                     <VisualState x:Name="Disabled">
                         <VisualState.Setters>
-                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimary}}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
@@ -137,8 +164,23 @@
     </Style>
 
     <Style TargetType="Shell" x:Key="CustomTabBar">
-        <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource PrimaryRed}, Dark={StaticResource PrimaryRed}}"/>
-        <Setter Property="Shell.TabBarBackgroundColor"  Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource Background}}"/>
-</Style>
+        <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryWhite}, Dark={StaticResource PrimaryBlack}}" />
+        <Setter Property="Shell.ForegroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource SecondaryDarkText}}" />
+        <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource PrimaryRed}, Dark={StaticResource PrimaryRed}}" />
+        <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
+        <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
+        <Setter Property="Shell.NavBarHasShadow" Value="False" />
+        <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Light={StaticResource TabBar}, Dark={StaticResource TabBar}}" />
+        <Setter Property="Shell.TabBarForegroundColor" Value="{AppThemeBinding Light={StaticResource Magenta}, Dark={StaticResource White}}" />
+        <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource PrimaryRed}, Dark={StaticResource PrimaryRed}}" />
+        <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource PrimaryBlack}, Dark={StaticResource PrimaryWhite}}" />
+    </Style>
+
+
+
+    <Style TargetType="Page" ApplyToDerivedTypes="True" x:Key="CustomPage">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryWhite}, Dark={StaticResource PrimaryBlack}}" />
+    </Style>
 
 </ResourceDictionary>

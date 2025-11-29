@@ -2,31 +2,75 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.UserSettingsPage"
-             Title="UserSettingsPage">
-    <StackLayout>
-        <Label Text="Изменение данных временно отключено Но Выход с аккаунт работает" TextColor="Red"/>
+             Style="{StaticResource CustomPage}">
+    
+    <VerticalStackLayout HeightRequest="600"
+                         WidthRequest="250"
+                         Spacing="10">
         
-        <Label Text="NickName"/>
-        <Entry IsEnabled="False" Text="{Binding NickName}"/>
-        <Button Text="Изменить"/>
+        <Label Text="User Id"
+               Style="{StaticResource LabelTextCustom}"/>
+        
+        <Border Style="{StaticResource BorderForEntryCustom}">
+            <Grid ColumnDefinitions="*, Auto"
+                  VerticalOptions="Center">
 
-        <Label Text="User_id"/>
-        <Entry IsEnabled="False" Text="{Binding User_id}"/>
-        <Button Text="Изменить"/>
+                <Entry Text="{Binding User_id}"
+                       Style="{StaticResource EntryCustom}"
+                       Margin="10,0,0,0"/>
+                
+            </Grid>
+        </Border>
 
-        <Label Text="Email"/>
-        <Entry IsEnabled="False" Text="{Binding Email}"/>
-        <Button Text="Изменить"/>
 
-        <Button Text="Сохранить изменения"/>
+        <Label Text="NickName"
+               Style="{StaticResource LabelTextCustom}"/>
+        
+        <Border Style="{StaticResource BorderForEntryCustom}">
+            <Grid ColumnDefinitions="*, Auto"
+                  VerticalOptions="Center">
 
-        <Button Text="Выйти с профиля (Работает)"
-                Command="{Binding ExitProfilCommand}"
-                BackgroundColor="Red"/>
+                <Entry Text="{Binding NickName}"
+                 Style="{StaticResource EntryCustom}"
+                 Margin="10,0,0,0"/>
+            </Grid>
+        </Border>
 
-        <Label Text="Удаление профиля приведет к неизбежной потери всех данных аккаунта"/>
-        <Button Text="Удалить профиль (Работает)"
+        <Label Text="Email"
+       Style="{StaticResource LabelTextCustom}"/>
+        <Border Style="{StaticResource BorderForEntryCustom}">
+            <Grid ColumnDefinitions="*, Auto"
+                  VerticalOptions="Center">
+
+                <Entry Text="{Binding Email}"
+                       Style="{StaticResource EntryCustom}"
+                       Margin="10,0,0,0"/>
+
+                <!--<Label Grid.Column="1"
+          Text="🔒"
+          FontSize="16"
+          HeightRequest="30"
+          WidthRequest="30"
+          VerticalOptions="Center"
+          Margin="10,0,0,0"/>-->
+            </Grid>
+        </Border>
+
+        <Button Text="Сохранить изменения"
+                Style="{StaticResource ButtonCustom}"
+                WidthRequest="250"/>
+
+        <VerticalStackLayout Margin="0,10,0,0"
+                             Spacing="5">
+            <Button Text="Выйти с профиля"
+        Command="{Binding ExitProfilCommand}"
+        Style="{StaticResource ButtonCustomWarning}"
+        WidthRequest="250"/>
+
+            <Button Text="Удалить профиль"
         Command="{Binding DeleteProfilCommand}"
-        BackgroundColor="Red"/>
-    </StackLayout>
+        Style="{StaticResource ButtonCustomWarning}"
+        WidthRequest="250"/>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
 </ContentPage>

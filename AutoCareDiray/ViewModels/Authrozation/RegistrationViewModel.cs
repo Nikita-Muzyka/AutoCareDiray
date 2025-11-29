@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -61,7 +60,7 @@ namespace AutoCareDiray.ViewModels
         [RelayCommand]
         public async void CloseModalView()
         {
-            await Shell.Current.Navigation.PopModalAsync();
+            await Shell.Current.GoToAsync("..");
         }
 
         
@@ -104,9 +103,11 @@ namespace AutoCareDiray.ViewModels
             {
                 if (_userResponse.Success == true)
                 {
+                    Message = "Пользователь создан";
+                    Thread.Sleep(1000);
                     await PreferencesSetUser(_userResponse);
                     await Shell.Current.Navigation.PopModalAsync();
-                    await Shell.Current.GoToAsync("//AuthorizationPage");
+                    await Shell.Current.GoToAsync("..");
                 }
             }
         }
