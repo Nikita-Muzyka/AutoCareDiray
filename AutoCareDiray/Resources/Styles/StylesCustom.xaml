@@ -136,4 +136,9 @@
         </Setter>
     </Style>
 
+    <Style TargetType="Shell" x:Key="CustomTabBar">
+        <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource PrimaryRed}, Dark={StaticResource PrimaryRed}}"/>
+        <Setter Property="Shell.TabBarBackgroundColor"  Value="{AppThemeBinding Light={StaticResource Background}, Dark={StaticResource Background}}"/>
+</Style>
+
 </ResourceDictionary>

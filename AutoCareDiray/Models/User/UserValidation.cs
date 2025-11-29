@@ -16,10 +16,10 @@ namespace AutoCareDiray.Models
         {
             _apiService = apiService;
         }
-        string propertyNickName = "NickName";
-        string propertyEmail = "Email";
-        string propertyLogin = "Login";
-        string propertyPassword = "Password";
+        string propertyNickName = "NickNameError";
+        string propertyEmail = "EmailError";
+        string propertyLogin = "LoginError";
+        string propertyPassword = "PasswordError";
         public bool HasErrors => _errors.Any();
         bool INotifyDataErrorInfo.HasErrors => HasErrors;
 
@@ -72,7 +72,7 @@ namespace AutoCareDiray.Models
 
             if (!string.IsNullOrWhiteSpace(login))
             {
-                if (login.Length < 20 && login.Length > 4)
+                if (login.Length < 20 && login.Length >= 4)
                 {
                     try
                     {

@@ -113,15 +113,15 @@
                        HorizontalTextAlignment="Center"/>
 
                 <Button Text="Создать"
-                        IsEnabled="{Binding IsValid}"
+                        IsEnabled="{Binding IsValidButton}"
                         Command="{Binding CreateUserDTOCommand}"
                         Style="{StaticResource ButtonAuth}"
-                        HorizontalOptions="FillAndExpand"/>
+                        HorizontalOptions="Fill"/>
 
                 <Button Text="Назад"
                         Command="{Binding CloseModalViewCommand}"
                         Style="{StaticResource ButtonAuth}"
-                        HorizontalOptions="FillAndExpand"/>
+                        HorizontalOptions="Fill"/>
             </VerticalStackLayout>
 
         </Grid>

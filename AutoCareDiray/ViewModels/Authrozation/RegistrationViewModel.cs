@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -22,9 +23,7 @@ namespace AutoCareDiray.ViewModels
 
         [ObservableProperty]
         public string message;
-        [ObservableProperty]
-        public bool isValid = true;
-
+        
         [ObservableProperty]
         public string nickName;
 
@@ -37,29 +36,27 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string password;
 
-
         public RegistrationViewModel(IApiService api)
         {
             _apiService = api;
             _userValidation = new UserValidation(_apiService);
-            _userValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI();
+            _userValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
         }
 
         public bool HasErrors => _userValidation.HasErrors;
-        public string NickNameError => _userValidation.GetErrors("NickName") as string;
-        public string EmailError => _userValidation.GetErrors("Email") as string;
-        public string LoginError => _userValidation.GetErrors("Login") as string;
-        public string PasswordError => _userValidation.GetErrors("Password") as string;
+        public bool IsValidButton => !_userValidation.HasErrors;
+        public string NickNameError => _userValidation.GetErrors("NickNameError") as string;
+        public string EmailError => _userValidation.GetErrors("EmailError") as string;
+        public string LoginError => _userValidation.GetErrors("LoginError") as string;
+        public string PasswordError => _userValidation.GetErrors("PasswordError") as string;
 
 
         [RelayCommand]
         public async void CreateUserDTO()
         {
             _userValidation.ValidationAll(NickName, Email, Login, Password);
-            if (IsValid)
-            {
-                RegistrationApi();
-            }
+            if (HasErrors) ;
+            else RegistrationApi();
         }
         [RelayCommand]
         public async void CloseModalView()
@@ -67,6 +64,7 @@ namespace AutoCareDiray.ViewModels
             await Shell.Current.Navigation.PopModalAsync();
         }
 
+        
         partial void OnNickNameChanged(string value)
         {
             _userValidation.ValidationNickName(value);
@@ -83,14 +81,11 @@ namespace AutoCareDiray.ViewModels
         {
             _userValidation.ValidationPassword(value);
         }
-
-        void OnErrorsChangedUI()
+        void OnErrorsChangedUI(DataErrorsChangedEventArgs e)
         {
             OnPropertyChanged(nameof(HasErrors));
-            OnPropertyChanged(nameof(NickNameError));
-            OnPropertyChanged(nameof(EmailError));
-            OnPropertyChanged(nameof(LoginError));
-            OnPropertyChanged(nameof(PasswordError));
+            OnPropertyChanged(nameof(IsValidButton));
+            OnPropertyChanged(e.PropertyName);
         }
 
         public async void RegistrationApi()
@@ -109,7 +104,6 @@ namespace AutoCareDiray.ViewModels
             {
                 if (_userResponse.Success == true)
                 {
-                    IsValid = false;
                     await PreferencesSetUser(_userResponse);
                     await Shell.Current.Navigation.PopModalAsync();
                     await Shell.Current.GoToAsync("//AuthorizationPage");
@@ -131,7 +125,7 @@ namespace AutoCareDiray.ViewModels
                 _debounce?.Cancel();
                 _debounce = new CancellationTokenSource();
 
-                await Task.Delay(1500, _debounce.Token);
+                await Task.Delay(1000, _debounce.Token);
                 _userValidation.ValidationLogin(value);
             }
             catch (TaskCanceledException ex)
