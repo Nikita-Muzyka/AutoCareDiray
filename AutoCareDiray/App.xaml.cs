@@ -9,6 +9,7 @@ namespace AutoCareDiray
             InitializeComponent();
             Application.Current.UserAppTheme = AppTheme.Light;
         }
+        
 
         //public void SetTheme(AppTheme theme)
         //{
