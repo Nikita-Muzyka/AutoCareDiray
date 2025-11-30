@@ -59,6 +59,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Resources\Fonts\FontsStyle.xaml.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Remove="Resources\Fonts\FontsStyle.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiFont Include="Resources\Styles\FontsStyle.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiFont>
+	  <MauiFont Include="Resources\Styles\FontsStyle.xaml.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
@@ -66,6 +81,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiFont Update="Resources\Fonts\Rubik-Black.ttf">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </MauiFont>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Resources\Styles\ColorsCustomDark.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\ColorsCustomLight.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\StylesCustom.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\Authorization\AuthorizationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -87,10 +117,6 @@
 	  <MauiXaml Update="View\MainPage\UserSettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Resources\Icon\Icon Users\" />
 	</ItemGroup>
 
 	<ItemGroup>

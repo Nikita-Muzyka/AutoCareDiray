@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.Resources.Fonts.FontsStyle">
+
+    <x:String x:Key="RubikBold">RubikBold</x:String>
+    <x:String x:Key="RubikRegular">RubikRegular</x:String>
+    
+</ResourceDictionary>

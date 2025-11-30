@@ -1,101 +1,129 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AutoCareDiray.View.RegistrationPage"
-             Title="RegistrationPage">
+             x:Class="AutoCareDiray.View.RegistrationPage">
 
-    <Grid RowSpacing="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
+    <ScrollView>
+        <Grid HorizontalOptions="Center"
+              VerticalOptions="Center"
+              RowSpacing="20"
+              Padding="20">
 
-        <Label Grid.Row="0" 
-        Text="{Binding Message}"
-        HorizontalOptions="Center"
-        VerticalOptions="End">
-        </Label>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="250"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <!--NickName-->
-        <Label Grid.Row="1" 
-               Text="{Binding NickNameError}"
-               TextColor="Red"
-               HorizontalOptions="Center"
-               IsVisible="{Binding HasErrors}">
-        </Label>
-        <Entry Grid.Row="2"
-               Text="{Binding NickName}"
-               Placeholder="NickName (Обязательно)"
-               WidthRequest="200"
-               HeightRequest="10">
-        </Entry>
-        
-        <!--Email-->
-        <Label Grid.Row="3" 
-               Text="{Binding EmailError}"
-               TextColor="Red"
-               HorizontalOptions="Center"
-               IsVisible="{Binding HasErrors}">
-        </Label>
-        <Entry Grid.Row="4"
-               Text="{Binding Email}"
-               Placeholder="Email"
-               WidthRequest="200"
-               HeightRequest="10">
-        </Entry>
-        
-        <!--Login-->
-        <Label Grid.Row="5" 
-               Text="{Binding LoginError}"
-               TextColor="Red"
-               HorizontalOptions="Center"
-               IsVisible="{Binding HasErrors}">
-        </Label>
-        <Entry Grid.Row="6"
-               Text="{Binding Login}"
-               Placeholder="Login (Обязательно)"
-               WidthRequest="200"
-               HeightRequest="10">
-        </Entry>
+            <!-- Header Section -->
+            <VerticalStackLayout Grid.Row="0"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="10">
 
-        <!--Password-->
-        <Label Grid.Row="7" 
-                Text="{Binding PasswordError}"
-                TextColor="Red"
-                HorizontalOptions="Center"
-                IsVisible="{Binding HasErrors}">
-        </Label>
-        <Entry Grid.Row="8"
-               Text="{Binding Password}"
-               Placeholder="Password (Обязательно)"
-               WidthRequest="200"
-               HeightRequest="10">
-        </Entry>
-         
-        
-        <!--Buttons-->
-        <Button Grid.Row="9" 
-                Text="Создать"
-                WidthRequest="150"
-                HeightRequest="10"
-                IsEnabled="{Binding IsValid}"
-                Command="{Binding CreateUserDTOCommand}">
-        </Button>
-        <Button Grid.Row="10" 
-                Text="Назад"
-                WidthRequest="150"
-                HeightRequest="10"
-                Command="{Binding CloseModalViewCommand}">
-        </Button>
+                <Image Source="main_image_app.png"
+                       HeightRequest="200"
+                       Aspect="AspectFit"
+                       Grid.Row="0"/>
 
-    </Grid>
+                <Label Text="Регистрация"
+                       Grid.Row="1"
+                       FontSize="40"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       TextColor="#E53935"
+                       FontFamily="RubikBold"/>
+            </VerticalStackLayout>
+
+            <!-- Form Section -->
+            <VerticalStackLayout Grid.Row="2"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="15"
+                                 WidthRequest="300">
+
+                <!-- NickName -->
+                <Border Style="{StaticResource BorderForEntryAuth}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                    <StackLayout>
+                        <Label Text="{Binding NickNameError}"
+                               IsVisible="{Binding HasErrors}"
+                               Style="{StaticResource LabelAuthResponse}"/>
+                        <Entry Text="{Binding NickName}"
+                               Placeholder="NickName (Обязательно)"
+                               Style="{StaticResource EntryAuth}"/>
+                    </StackLayout>
+                </Border>
+
+                <!-- Email -->
+                <Border Style="{StaticResource BorderForEntryAuth}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                    <StackLayout>
+                        <Label Text="{Binding EmailError}"
+                               Style="{StaticResource LabelAuthResponse}"
+                               IsVisible="{Binding HasErrors}"/>
+                        <Entry Text="{Binding Email}"
+                               Placeholder="Email"
+                               Style="{StaticResource EntryAuth}"/>
+                    </StackLayout>
+                </Border>
+
+                <!-- Login -->
+                <Border Style="{StaticResource BorderForEntryAuth}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                    <StackLayout>
+                        <Label Text="{Binding LoginError}"
+                               Style="{StaticResource LabelAuthResponse}"
+                               IsVisible="{Binding HasErrors}"/>
+                        <Entry Text="{Binding Login}"
+                               Placeholder="Login (Обязательно)"
+                               Style="{StaticResource EntryAuth}"/>
+                    </StackLayout>
+                </Border>
+
+                <!-- Password -->
+                <Border Style="{StaticResource BorderForEntryAuth}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                    <StackLayout>
+                        <Label Text="{Binding PasswordError}"
+                               Style="{StaticResource LabelAuthResponse}"
+                               IsVisible="{Binding HasErrors}"/>
+                        <Entry Text="{Binding Password}"
+                               Placeholder="Password (Обязательно)"
+                               Style="{StaticResource EntryAuth}"/>
+                    </StackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+            <!-- Buttons Section -->
+            <VerticalStackLayout Grid.Row="3"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="10"
+                                 WidthRequest="300">
+
+                <Label Text="{Binding Message}"
+                       Style="{StaticResource LabelAuthResponse}"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"/>
+
+                <Button Text="Создать"
+                        IsEnabled="{Binding IsValidButton}"
+                        Command="{Binding CreateUserDTOCommand}"
+                        Style="{StaticResource ButtonAuth}"
+                        HorizontalOptions="Fill"/>
+
+                <Button Text="Назад"
+                        Command="{Binding CloseModalViewCommand}"
+                        Style="{StaticResource ButtonAuth}"
+                        HorizontalOptions="Fill"/>
+            </VerticalStackLayout>
+
+        </Grid>
+    </ScrollView>
 </ContentPage>

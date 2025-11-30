@@ -20,6 +20,9 @@ namespace AutoCareDiray
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+
+                    fonts.AddFont("Rubik-Regular.ttf", "RubikRegular");
+                    fonts.AddFont("Rubik-Bold.ttf", "RubikBold");
                 });
 
 

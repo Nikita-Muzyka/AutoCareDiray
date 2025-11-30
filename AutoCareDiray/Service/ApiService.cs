@@ -28,13 +28,8 @@ namespace AutoCareDiray.Service
                     Password = password
                 };
                 var response = await _httpClient.PostAsJsonAsync("api/User/login", userAuth);
-                var responseContent = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadFromJsonAsync<UserResponse>();
-                    return result;
-                }
-                else return new UserResponse { Message = responseContent, Success = false };
+                var result = await response.Content.ReadFromJsonAsync<UserResponse>();
+                return result;
 
             }
             catch (Exception ex)
@@ -49,14 +44,27 @@ namespace AutoCareDiray.Service
             try
             {
                 var response = await _httpClient.PostAsJsonAsync("api/User/register", user);
-                var responseContent = await response.Content.ReadAsStringAsync();
+                var result = await response.Content.ReadFromJsonAsync<UserResponse>();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
-                if (response.IsSuccessStatusCode)
+        // HTTP POST Create User
+        public async Task<UserResponse> CheckUserLoginAsync(string login)
+        {
+            try
+            {
+                var user = new UserDTO
                 {
-                    var result = await response.Content.ReadFromJsonAsync<UserResponse>();
-                    return result;
-                }
-                else return new UserResponse { Message = responseContent, Success = false };
+                    Login = login
+                };
+                var response = await _httpClient.PostAsJsonAsync("api/User/checkLogin", user);
+                var result = await response.Content.ReadFromJsonAsync<UserResponse>();
+                return result;
             }
             catch (Exception ex)
             {

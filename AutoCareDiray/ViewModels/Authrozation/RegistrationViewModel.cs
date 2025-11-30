@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -16,14 +17,13 @@ namespace AutoCareDiray.ViewModels
     partial class RegistrationViewModel : ObservableObject
     {
         private readonly IApiService _apiService;
-        UserValidation _userValidation = new();
+        UserValidation _userValidation;
         UserResponse _userResponse;
+        CancellationTokenSource _debounce;
 
         [ObservableProperty]
         public string message;
-        [ObservableProperty]
-        public bool isValid = true;
-
+        
         [ObservableProperty]
         public string nickName;
 
@@ -36,29 +36,27 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string password;
 
-
         public RegistrationViewModel(IApiService api)
         {
             _apiService = api;
-            _userValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI();
+            _userValidation = new UserValidation(_apiService);
+            _userValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
         }
 
         public bool HasErrors => _userValidation.HasErrors;
-        public string NickNameError => _userValidation.GetErrors("NickName") as string;
-        public string EmailError => _userValidation.GetErrors("Email") as string;
-        public string LoginError => _userValidation.GetErrors("Login") as string;
-        public string PasswordError => _userValidation.GetErrors("Password") as string;
+        public bool IsValidButton => !_userValidation.HasErrors;
+        public string NickNameError => _userValidation.GetErrors("NickNameError") as string;
+        public string EmailError => _userValidation.GetErrors("EmailError") as string;
+        public string LoginError => _userValidation.GetErrors("LoginError") as string;
+        public string PasswordError => _userValidation.GetErrors("PasswordError") as string;
 
 
         [RelayCommand]
         public async void CreateUserDTO()
         {
             _userValidation.ValidationAll(NickName, Email, Login, Password);
-            IsValid = !HasErrors;
-            if (IsValid)
-            {
-                RegistrationApi();
-            }
+            if (HasErrors) ;
+            else RegistrationApi();
         }
         [RelayCommand]
         public async void CloseModalView()
@@ -66,6 +64,7 @@ namespace AutoCareDiray.ViewModels
             await Shell.Current.Navigation.PopModalAsync();
         }
 
+        
         partial void OnNickNameChanged(string value)
         {
             _userValidation.ValidationNickName(value);
@@ -76,20 +75,17 @@ namespace AutoCareDiray.ViewModels
         }
         partial void OnLoginChanged(string value)
         {
-            _userValidation.ValidationLogin(value);
+           DebounceSearch(value);
         }
         partial void OnPasswordChanged(string value)
         {
             _userValidation.ValidationPassword(value);
         }
-
-        void OnErrorsChangedUI()
+        void OnErrorsChangedUI(DataErrorsChangedEventArgs e)
         {
             OnPropertyChanged(nameof(HasErrors));
-            OnPropertyChanged(nameof(NickNameError));
-            OnPropertyChanged(nameof(EmailError));
-            OnPropertyChanged(nameof(LoginError));
-            OnPropertyChanged(nameof(PasswordError));
+            OnPropertyChanged(nameof(IsValidButton));
+            OnPropertyChanged(e.PropertyName);
         }
 
         public async void RegistrationApi()
@@ -108,11 +104,9 @@ namespace AutoCareDiray.ViewModels
             {
                 if (_userResponse.Success == true)
                 {
-                    IsValid = false;
                     await PreferencesSetUser(_userResponse);
-                    await Task.Delay(2000);
                     await Shell.Current.Navigation.PopModalAsync();
-                    await Shell.Current.GoToAsync("//MainPage");
+                    await Shell.Current.GoToAsync("//AuthorizationPage");
                 }
             }
         }
@@ -122,7 +116,22 @@ namespace AutoCareDiray.ViewModels
             Preferences.Set("User_id", userResponse.User_id.ToString());
             Preferences.Set ("NickName", userResponse.NickName);
             Preferences.Set("Email", userResponse.Email);
-            Preferences.Set("is_login", true);
+        }
+
+        async void DebounceSearch(string value)
+        {
+            try
+            {
+                _debounce?.Cancel();
+                _debounce = new CancellationTokenSource();
+
+                await Task.Delay(1000, _debounce.Token);
+                _userValidation.ValidationLogin(value);
+            }
+            catch (TaskCanceledException ex)
+            {
+
+            }
         }
     }
 }

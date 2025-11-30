@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoCareDiray.Service;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,10 +11,15 @@ namespace AutoCareDiray.Models
 {
     public class UserValidation : INotifyDataErrorInfo
     {
-        string propertyNickName = "NickName";
-        string propertyEmail = "Email";
-        string propertyLogin = "Login";
-        string propertyPassword = "Password";
+        private readonly IApiService _apiService;
+        public UserValidation(IApiService apiService) 
+        {
+            _apiService = apiService;
+        }
+        string propertyNickName = "NickNameError";
+        string propertyEmail = "EmailError";
+        string propertyLogin = "LoginError";
+        string propertyPassword = "PasswordError";
         public bool HasErrors => _errors.Any();
         bool INotifyDataErrorInfo.HasErrors => HasErrors;
 
@@ -60,15 +66,27 @@ namespace AutoCareDiray.Models
                 else ErrorsAdd(propertyEmail, "Email - должен содержать не больше 20 символов");
             }
         }
-        public void ValidationLogin(string login)
+        public async void ValidationLogin(string login)
         {
             ErrorsClear(propertyLogin);
 
             if (!string.IsNullOrWhiteSpace(login))
             {
-                if (login.Length < 20 && login.Length > 4)
+                if (login.Length < 20 && login.Length >= 4)
                 {
-                    OnErrorsChange(propertyLogin);
+                    try
+                    {
+                        var response = await _apiService.CheckUserLoginAsync(login);
+                        if (response.Success == true) OnErrorsChange(propertyLogin);
+                        else
+                        {
+                            ErrorsAdd(propertyLogin, response.Message);
+                        }
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        ErrorsAdd(propertyLogin, "Не удалось установить подключение, повторите попытку позже");
+                    }
                 }
                 else ErrorsAdd(propertyLogin, "Login - должен содержать не больше 20 символов и не меньше 4");
             }
