@@ -102,13 +102,12 @@ namespace AutoCareDiray.Models
                 {
                     if (password.Any(char.IsNumber) && 
                         password.Any(char.IsLetter) && 
-                        password.Any(char.IsUpper) && 
-                        password.Any(char.IsSymbol)
+                        password.Any(char.IsUpper) 
                         )
                     {
                         OnErrorsChange(propertyPassword);
                     }
-                    else ErrorsAdd(propertyPassword, "Password - Должен иметь Одну заглавную букву,одну цифру,один символ (+, $, ©, ^ и т. д.)");
+                    else ErrorsAdd(propertyPassword, "Password - Должен иметь Одну заглавную букву,одну цифру");
                 }
                 else ErrorsAdd(propertyPassword, "Password - должен содержать не больше 20 символов и не меньше 6");
             }

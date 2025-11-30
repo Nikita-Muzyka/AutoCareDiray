@@ -9,7 +9,7 @@ namespace AutoCareDiray.Models
     public class CarResponse
     {
         public string Message { get; set; }
-        public bool Succsec { get; set; }
+        public bool Success { get; set; }
 
         public int Car_id { get; set; }
         public int User_id { get; set; }

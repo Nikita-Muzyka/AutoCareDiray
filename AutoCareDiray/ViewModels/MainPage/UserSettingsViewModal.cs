@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace AutoCareDiray.ViewModels
     {
         private readonly IApiService _apiService;
         private readonly IDialogService _dialogService;
+        private UserValidation _userValidation;
 
         [ObservableProperty]
         public string nickName;
@@ -30,6 +32,7 @@ namespace AutoCareDiray.ViewModels
         {
             _apiService = apiService;
             _dialogService = dialogService;
+            _userValidation = new UserValidation(apiService);
             NickName = Preferences.Get("NickName","null");
             Email = Preferences.Get("Email", "null");
             User_id = Preferences.Get("User_id", "0");
@@ -46,16 +49,8 @@ namespace AutoCareDiray.ViewModels
                     Email = Email,
                     User_Id = result
                 };
-
-                try
-                {
-                    var response = await _apiService.UpdateUserApiAsync(user);
-                    TextError = response.Message;
-                }
-                catch (Exception ex)
-                {
-                    TextError = ex.ToString();
-                }
+                var response = await _apiService.UpdateUserApiAsync(user);
+                TextError = response.Message;
             }
         }
         [RelayCommand]
@@ -81,23 +76,17 @@ namespace AutoCareDiray.ViewModels
                 var UserIdString = Preferences.Get("User_id", null);
                 if (int.TryParse(UserIdString, out var UserId))
                 {
-                    try
+                    var response = await _apiService.DeleteUserApiAsync(UserId);
+                    if (response.Success == true)
                     {
-                        var response = await _apiService.DeleteUserApiAsync(UserId);
-                        if (response.Success == true)
-                        {
-                            Preferences.Remove("User_Id");
-                            Preferences.Remove("NickName");
-                            Preferences.Remove("Email");
-                            Preferences.Remove("is_login");
-                        }
+                        Preferences.Remove("User_Id");
+                        Preferences.Remove("NickName");
+                        Preferences.Remove("Email");
+                        Preferences.Remove("is_login");
 
                         await Shell.Current.GoToAsync("//AuthorizationPage");
                     }
-                    catch (Exception ex)
-                    {
-                        textError = ex.Message;
-                    }
+                    else TextError = response.Message;
                 }
             }
         }
