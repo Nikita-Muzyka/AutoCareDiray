@@ -72,21 +72,42 @@ namespace AutoCareDiray.Service
             }
         }
 
+        public async Task<UserResponse> UpdateUserApiAsync(UserDTO user)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"api/User/updateUser", user);
+                var result = await response.Content.ReadFromJsonAsync<UserResponse>();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         // HTTP Delete  User
         public async Task<UserResponse> DeleteUserApiAsync(int User_id)
         {
-            var response = await _httpClient.DeleteAsync($"api/User/delete/{User_id}");
-            var userResponse = new UserResponse
+            try
             {
-                Message = "Пользователь удален",
-                Success = true,
-            };
-            if (response.IsSuccessStatusCode) return userResponse;
-            else
+                var response = await _httpClient.DeleteAsync($"api/User/delete/{User_id}");
+                var userResponse = new UserResponse
+                {
+                    Message = "Пользователь удален",
+                    Success = true,
+                };
+                if (response.IsSuccessStatusCode) return userResponse;
+                else
+                {
+                    userResponse.Success = false;
+                    userResponse.Message = "Пользователь не найден";
+                    return userResponse;
+                }
+            }
+            catch (Exception e)
             {
-                userResponse.Success = false;
-                userResponse.Message = "Пользователь не найден";
-                return userResponse;
+                throw;
             }
         }
 

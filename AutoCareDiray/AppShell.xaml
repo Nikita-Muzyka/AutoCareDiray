@@ -22,14 +22,14 @@
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}"/>
         </Tab>
 
-        <Tab Title="Главная"
-             Route="UserSettings">
-            <ShellContent ContentTemplate="{DataTemplate local:UserSettingsPage}"/>
-        </Tab>
-
         <Tab Title="Авто"
              Route="ListCars">
             <ShellContent ContentTemplate="{DataTemplate local:ListCars}"/>
+        </Tab>
+
+        <Tab Title="Профиль"
+      Route="UserSettings">
+            <ShellContent ContentTemplate="{DataTemplate local:UserSettingsPage}"/>
         </Tab>
     </TabBar>
 </Shell>

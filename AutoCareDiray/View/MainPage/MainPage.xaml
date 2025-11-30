@@ -4,20 +4,6 @@
              x:Class="AutoCareDiray.View.MainPage"
              Style="{StaticResource CustomPage}">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!--Profil-->
-        <StackLayout>
-            <Button HeightRequest="10"
-                 WidthRequest="100"
-                 HorizontalOptions="End"
-                 Text="Profil"
-                 Command="{Binding UserSettingsGoCommand}">
-            </Button>
-            <Label Text="Временно пусто"/>
-        </StackLayout>
+        
     </Grid>
 </ContentPage>

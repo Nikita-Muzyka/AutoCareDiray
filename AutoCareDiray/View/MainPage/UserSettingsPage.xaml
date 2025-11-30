@@ -17,7 +17,8 @@
 
                 <Entry Text="{Binding User_id}"
                        Style="{StaticResource EntryCustom}"
-                       Margin="10,0,0,0"/>
+                       Margin="10,0,0,0"
+                       IsEnabled="False"/>
                 
             </Grid>
         </Border>
@@ -58,6 +59,7 @@
 
         <Button Text="Сохранить изменения"
                 Style="{StaticResource ButtonCustom}"
+                Command="{Binding SaveProfilCommand}"
                 WidthRequest="250"/>
 
         <VerticalStackLayout Margin="0,10,0,0"
@@ -71,6 +73,10 @@
         Command="{Binding DeleteProfilCommand}"
         Style="{StaticResource ButtonCustomWarning}"
         WidthRequest="250"/>
+
+            <Label Text="{Binding TextError}"
+                   Margin="0,10,0,0"
+                   Style="{StaticResource LabelAuthResponse}"/>
         </VerticalStackLayout>
     </VerticalStackLayout>
 </ContentPage>
