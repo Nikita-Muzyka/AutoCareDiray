@@ -2,31 +2,115 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.UserSettingsPage"
-             Title="UserSettingsPage">
-    <StackLayout>
-        <Label Text="Изменение данных временно отключено Но Выход с аккаунт работает" TextColor="Red"/>
-        
-        <Label Text="NickName"/>
-        <Entry IsEnabled="False" Text="{Binding NickName}"/>
-        <Button Text="Изменить"/>
+             Style="{StaticResource CustomPage}">
+    <ScrollView>
+        <VerticalStackLayout HeightRequest="600"
+                      WidthRequest="250"
+                      Spacing="10">
 
-        <Label Text="User_id"/>
-        <Entry IsEnabled="False" Text="{Binding User_id}"/>
-        <Button Text="Изменить"/>
+            <Label Text="User Id"
+            Style="{StaticResource LabelTextCustom}"/>
 
-        <Label Text="Email"/>
-        <Entry IsEnabled="False" Text="{Binding Email}"/>
-        <Button Text="Изменить"/>
+            <Border Style="{StaticResource BorderForEntryCustom}">
+                <Grid ColumnDefinitions="*, Auto"
+               VerticalOptions="Center">
 
-        <Button Text="Сохранить изменения"/>
+                    <Entry Text="{Binding User_id}"
+                    Style="{StaticResource EntryCustom}"
+                    Margin="10,0,0,0"
+                    IsEnabled="False"/>
 
-        <Button Text="Выйти с профиля (Работает)"
-                Command="{Binding ExitProfilCommand}"
-                BackgroundColor="Red"/>
+                </Grid>
+            </Border>
 
-        <Label Text="Удаление профиля приведет к неизбежной потери всех данных аккаунта"/>
-        <Button Text="Удалить профиль (Работает)"
-        Command="{Binding DeleteProfilCommand}"
-        BackgroundColor="Red"/>
-    </StackLayout>
+
+            <Label Text="NickName"
+            Style="{StaticResource LabelTextCustom}"/>
+
+            <Border Style="{StaticResource BorderForEntryCustom}">
+                <Grid ColumnDefinitions="*, Auto"
+               VerticalOptions="Center">
+
+                    <Entry Text="{Binding NickName}"
+              Style="{StaticResource EntryCustom}"
+              Margin="10,0,0,0"/>
+                </Grid>
+            </Border>
+
+            <Label Text="Email"
+    Style="{StaticResource LabelTextCustom}"/>
+            <Border Style="{StaticResource BorderForEntryCustom}">
+                <Grid ColumnDefinitions="*, Auto"
+               VerticalOptions="Center">
+
+                    <Entry Text="{Binding Email}"
+                    Style="{StaticResource EntryCustom}"
+                    Margin="10,0,0,0"/>
+
+                    <!--<Label Grid.Column="1"
+       Text="🔒"
+       FontSize="16"
+       HeightRequest="30"
+       WidthRequest="30"
+       VerticalOptions="Center"
+       Margin="10,0,0,0"/>-->
+                </Grid>
+            </Border>
+
+            <Button Text="Сохранить изменения"
+             Style="{StaticResource ButtonCustom}"
+             Command="{Binding SaveProfilCommand}"
+             WidthRequest="250"/>
+
+            <!--Изменить пароль--><!--
+            <Border Style="{StaticResource BorderForEntryCustom}"
+             Margin="0,40,0,0">
+                <Grid ColumnDefinitions="*, Auto"
+               VerticalOptions="Center">
+
+                    <Entry Text="{Binding OldPassword}"
+                    Style="{StaticResource EntryCustom}"
+                    Margin="10,0,0,0"
+                    Placeholder="Введите старый пароль"/>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource BorderForEntryCustom}">
+                <Grid ColumnDefinitions="*, Auto"
+          VerticalOptions="Center">
+
+                    <Entry Text="{Binding NewPassword}"
+         Style="{StaticResource EntryCustom}"
+         Margin="10,0,0,0"
+                    Placeholder="Введите новый пароль"/>
+                </Grid>
+            </Border>
+
+            <Label Text="{Binding PasswordErrors}"
+            Style="{StaticResource LabelAuthResponse}"/>
+
+            <Button Text="Изменить пароль (Не работает)"
+       Style="{StaticResource ButtonCustom}"
+       WidthRequest="250"/>-->
+
+
+            <!--Кнопки удалить и выйти-->
+            <VerticalStackLayout Margin="0,40,0,0"
+                          Spacing="5">
+                <Button Text="Выйти с профиля"
+     Command="{Binding ExitProfilCommand}"
+     Style="{StaticResource ButtonCustomWarning}"
+     WidthRequest="250"/>
+
+                <Button Text="Удалить профиль"
+     Command="{Binding DeleteProfilCommand}"
+     Style="{StaticResource ButtonCustomWarning}"
+     WidthRequest="250"/>
+
+                <Label Text="{Binding TextError}"
+                Margin="0,10,0,0"
+                Style="{StaticResource LabelAuthResponse}"/>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -45,6 +45,7 @@ namespace AutoCareDiray
 
 
             builder.Services.AddScoped<IApiService, ApiService>();
+            builder.Services.AddScoped<IDialogService,DialogService>();
             builder.Services.AddTransient<AuthorizationPage>();
             builder.Services.AddTransient<AuthorizationViewModel>();
             builder.Services.AddTransient<MainPage>();

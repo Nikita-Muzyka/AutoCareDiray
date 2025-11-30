@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -22,7 +21,7 @@ namespace AutoCareDiray.ViewModels
         CancellationTokenSource _debounce;
 
         [ObservableProperty]
-        public string message;
+        public string text;
         
         [ObservableProperty]
         public string nickName;
@@ -61,7 +60,7 @@ namespace AutoCareDiray.ViewModels
         [RelayCommand]
         public async void CloseModalView()
         {
-            await Shell.Current.Navigation.PopModalAsync();
+            await Shell.Current.GoToAsync("..");
         }
 
         
@@ -91,24 +90,17 @@ namespace AutoCareDiray.ViewModels
         public async void RegistrationApi()
         {
             UserDTO userDTO = new UserDTO(NickName, Email, Login, Password);
-            try
+
+            _userResponse = await _apiService.CreateUserApiAsync(userDTO);
+            if (_userResponse.Success == true)
             {
-                _userResponse = await _apiService.CreateUserApiAsync(userDTO);
-                Message = _userResponse.Message;
+                Text = _userResponse.Message;
+                Thread.Sleep(1000);
+                await PreferencesSetUser(_userResponse);
+                await Shell.Current.Navigation.PopModalAsync();
+                await Shell.Current.GoToAsync("..");
             }
-            catch (Exception ex)
-            {
-                Message = ex.Message;
-            }
-            if (_userResponse is not null)
-            {
-                if (_userResponse.Success == true)
-                {
-                    await PreferencesSetUser(_userResponse);
-                    await Shell.Current.Navigation.PopModalAsync();
-                    await Shell.Current.GoToAsync("//AuthorizationPage");
-                }
-            }
+            else Text = _userResponse.Message;
         }
 
         async Task PreferencesSetUser(UserResponse userResponse)

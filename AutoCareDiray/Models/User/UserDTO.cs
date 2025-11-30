@@ -8,6 +8,7 @@ namespace AutoCareDiray.Models
 {
     public class UserDTO
     {
+        public int User_Id { get; set; }
         public string NickName { get; set; }
         public string? Email { get; set; }
         public string Password { get; set; }

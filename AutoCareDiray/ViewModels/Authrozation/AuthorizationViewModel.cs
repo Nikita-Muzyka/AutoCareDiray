@@ -18,9 +18,11 @@ namespace AutoCareDiray.ViewModels
     {
         private readonly IApiService _apiService;
         private UserResponse _userResponse;
+        private RegistrationPage _registrationPage;
         public AuthorizationViewModel(IApiService apiService) 
         {
             _apiService = apiService;
+            _registrationPage = new RegistrationPage(apiService);
         }
 
         [ObservableProperty]
@@ -39,41 +41,28 @@ namespace AutoCareDiray.ViewModels
         [RelayCommand]
         public async void LogIn()
         {
-            if(Password == "1") await Shell.Current.GoToAsync("//MainPage");
-            try
-            {
-                bool start = AuthorizationValidation.AuthValidation(Login, Password);
-                if (start)
-                {
-                    Text = "";
-                    _userResponse = await _apiService.AuthorizationApiAsync(login, password);
-                    Text = _userResponse.Message;
-                    if (_userResponse is not null)
-                    {
-                        if (_userResponse.Success == true)
-                        {
-                            PreferencesSetUser(_userResponse);
+            if (Password == "1") await Shell.Current.GoToAsync("//Main");
 
-                            await Shell.Current.GoToAsync("//MainPage");
-                        }
-                        else Text = _userResponse.Message;
-                    }
+            bool start = AuthorizationValidation.AuthValidation(Login, Password);
+            if (start)
+            {
+                Text = "";
+                _userResponse = await _apiService.AuthorizationApiAsync(login, password);
+
+                if (_userResponse.Success == true)
+                {
+                    Text = _userResponse.Message;
+                    PreferencesSetUser(_userResponse);
+                    await Shell.Current.GoToAsync("//Main");
                 }
-                else Text = "Пароль и Логин не могут быть пустыми";
+                else Text = _userResponse.Message;
             }
-            catch (HttpRequestException ex)
-            {
-                Text = "Соединение не установлено проверте подключение к интернету или сервер не доступен ";
-            }
-            catch (Exception ex)
-            {
-                Text = ex.Message;
-            }
+            else Text = "Пароль и Логин не могут быть пустыми";
         }
         [RelayCommand]
         public async void Registration()
         {
-            await Shell.Current.Navigation.PushModalAsync(new RegistrationPage(_apiService),true);
+            await Shell.Current.Navigation.PushModalAsync(_registrationPage,true);
         }
 
         void PreferencesSetUser(UserResponse userResponse)

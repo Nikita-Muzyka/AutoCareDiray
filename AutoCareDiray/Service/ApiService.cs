@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AutoCareDiray.Service
 {
@@ -32,9 +33,23 @@ namespace AutoCareDiray.Service
                 return result;
 
             }
+            catch (HttpRequestException ex)
+            {
+                var result = new UserResponse
+                {
+                    Message = "Соединение не установлено проверте подключение к интернету или сервер не доступен ",
+                    Success = false
+                };
+                return result;
+            }
             catch (Exception ex)
             {
-                throw;
+                var result = new UserResponse
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+                return result;
             }
         }
 
@@ -47,9 +62,23 @@ namespace AutoCareDiray.Service
                 var result = await response.Content.ReadFromJsonAsync<UserResponse>();
                 return result;
             }
+            catch (HttpRequestException ex)
+            {
+                var result = new UserResponse
+                {
+                    Message = "Соединение не установлено проверте подключение к интернету или сервер не доступен ",
+                    Success = false
+                };
+                return result;
+            }
             catch (Exception ex)
             {
-                throw;
+                var result = new UserResponse
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+                return result;
             }
         }
 
@@ -66,27 +95,90 @@ namespace AutoCareDiray.Service
                 var result = await response.Content.ReadFromJsonAsync<UserResponse>();
                 return result;
             }
+            catch (HttpRequestException ex)
+            {
+                var result = new UserResponse
+                {
+                    Message = "Соединение не установлено проверте подключение к интернету или сервер не доступен ",
+                    Success = false
+                };
+                return result;
+            }
             catch (Exception ex)
             {
-                throw;
+                var result = new UserResponse
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+                return result;
+            }
+        }
+
+        public async Task<UserResponse> UpdateUserApiAsync(UserDTO user)
+        {
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync($"api/User/updateUser", user);
+                var result = await response.Content.ReadFromJsonAsync<UserResponse>();
+                return result;
+            }
+            catch (HttpRequestException ex)
+            {
+                var result = new UserResponse
+                {
+                    Message = "Соединение не установлено проверте подключение к интернету или сервер не доступен ",
+                    Success = false
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new UserResponse
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+                return result;
             }
         }
 
         // HTTP Delete  User
         public async Task<UserResponse> DeleteUserApiAsync(int User_id)
         {
-            var response = await _httpClient.DeleteAsync($"api/User/delete/{User_id}");
-            var userResponse = new UserResponse
+            try
             {
-                Message = "Пользователь удален",
-                Success = true,
-            };
-            if (response.IsSuccessStatusCode) return userResponse;
-            else
+                var response = await _httpClient.DeleteAsync($"api/User/delete/{User_id}");
+                var userResponse = new UserResponse
+                {
+                    Message = "Пользователь удален",
+                    Success = true,
+                };
+                if (response.IsSuccessStatusCode) return userResponse;
+                else
+                {
+                    userResponse.Success = false;
+                    userResponse.Message = "Пользователь не найден";
+                    return userResponse;
+                }
+            }
+            catch (HttpRequestException ex)
             {
-                userResponse.Success = false;
-                userResponse.Message = "Пользователь не найден";
-                return userResponse;
+                var result = new UserResponse
+                {
+                    Message = "Соединение не установлено проверте подключение к интернету или сервер не доступен ",
+                    Success = false
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new UserResponse
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+                return result;
             }
         }
 
@@ -94,21 +186,49 @@ namespace AutoCareDiray.Service
         // HTTP Create Car
         public async Task<CarResponse> CreateCarApiAsync(Car car)
         {
-            var response = await _httpClient.PostAsJsonAsync($"api/Car/create", car);
-            var result = await response.Content.ReadFromJsonAsync<CarResponse>();
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync($"api/Car/create", car);
+                var result = await response.Content.ReadFromJsonAsync<CarResponse>();
 
-            return result;
+                return result;
+            }
+            catch (HttpRequestException ex)
+            {
+                var result = new CarResponse
+                {
+                    Message = "Соединение не установлено проверте подключение к интернету или сервер не доступен ",
+                    Success = false
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new CarResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                };
+                return result;
+            }
         }
 
         // HTTP Get Cars
         public async Task<List<Car>> GetCarByUserIdApiAsync()
         {
-            var user_id = Preferences.Get("User_id", 0);
-            var response = await _httpClient.GetAsync($"api/Car/get/{user_id}");
+            try
+            {
+                var user_id = Preferences.Get("User_id", 0);
+                var response = await _httpClient.GetAsync($"api/Car/get/{user_id}");
 
-            var result = await response.Content.ReadFromJsonAsync<List<Car>>();
+                var result = await response.Content.ReadFromJsonAsync<List<Car>>();
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new List<Car>();
+            }
         }
 
     }

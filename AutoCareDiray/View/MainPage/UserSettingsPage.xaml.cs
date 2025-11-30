@@ -5,9 +5,9 @@ namespace AutoCareDiray.View;
 
 public partial class UserSettingsPage : ContentPage
 {
-	public UserSettingsPage(IApiService apiService)
+	public UserSettingsPage(IApiService apiService,IDialogService dialogService)
 	{
 		InitializeComponent();
-		BindingContext = new UserSettingsViewModal(apiService);
+		BindingContext = new UserSettingsViewModal(apiService,dialogService);
 	}
 }
