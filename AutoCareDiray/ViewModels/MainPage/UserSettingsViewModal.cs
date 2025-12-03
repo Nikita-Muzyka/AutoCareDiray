@@ -43,13 +43,9 @@ namespace AutoCareDiray.ViewModels
         {
             if(int.TryParse(User_id,out int result))
             {
-                var user = new UserDTO
-                {
-                    NickName = NickName,
-                    Email = Email,
-                    User_Id = result
-                };
-                var response = await _apiService.UpdateUserApiAsync(user);
+                var userRequest = new UserUpdateRequest(User_id,NickName,Email,"Null");
+
+                var response = await _apiService.UpdateUserApiAsync(userRequest);
                 TextError = response.Message;
             }
         }
