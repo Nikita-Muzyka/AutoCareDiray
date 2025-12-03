@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.View.CreateMaintenanse"
+             Title="CreateMaintenanse">
+    <VerticalStackLayout>
+        <Entry Text=""
+               Placeholder="Service date"/>
+
+        <Entry Text=""
+       Placeholder="mileage"/>
+
+        <Entry Text=""
+       Placeholder="Service type"/>
+
+        <Entry Text=""
+       Placeholder="description"/>
+
+        <Entry Text=""
+       Placeholder="cost"/>
+
+        <Entry Text=""
+ Placeholder="service centre"/>
+
+        <Button Text="Создать запись"
+                Command="{Binding CreateMaintenanseCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>

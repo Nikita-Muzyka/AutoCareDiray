@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
@@ -20,6 +21,7 @@ namespace AutoCareDiray.ViewModels
         private readonly IApiService _apiService;
         public CarValidation _carValidation;
         public CarResponse _carResponse;
+
         //[ObservableProperty]
         //public string[] brands = CarBrands.Brands;
         [ObservableProperty]
@@ -29,7 +31,7 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string yearSelected;
         [ObservableProperty]
-        public string vnCode;
+        public string vinCode;
         [ObservableProperty]
         public string mileage;
         [ObservableProperty]
@@ -42,18 +44,25 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string errorsAll;
 
-
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="apiService"></param>
         public CreateCarsViewModal(IApiService apiService) 
         {
             _apiService = apiService;
             _carValidation = new();
-            _carValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI();
+            _carValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
         }
 
+        // Получение ошибок
         public bool HasErrors => _carValidation.HasErrors;
         public string VnCodeError => _carValidation.GetErrors("VinCode") as string;
         public string MileageError => _carValidation.GetErrors("Mileage") as string;
 
+        /// <summary>
+        /// Конвертация данных для создания авто
+        /// </summary>
         Func<string, int> ConverFromInt = (property) =>
         {
             if (int.TryParse(property, out int result))
@@ -63,10 +72,11 @@ namespace AutoCareDiray.ViewModels
             else return 0;
         };
 
+
         [RelayCommand]
         public async void CreateCar()
         {
-            _carValidation.ValidationAll(VnCode, Mileage);
+            _carValidation.ValidationAll(VinCode, Mileage);
             if (!HasErrors)
             {
                 try
@@ -83,7 +93,8 @@ namespace AutoCareDiray.ViewModels
             }
         }
 
-        partial void OnVnCodeChanged(string value)
+        //методы Community Tool
+        partial void OnVinCodeChanged(string value)
         {
             _carValidation.ValidationVinCode(value);
         }
@@ -91,13 +102,21 @@ namespace AutoCareDiray.ViewModels
         {
             _carValidation.ValidationMileage(value);
         }
-        void OnErrorsChangedUI()
+
+        /// <summary>
+        /// Метод которые вызывает event 
+        /// </summary>
+        /// <param name="e"></param>
+        void OnErrorsChangedUI(DataErrorsChangedEventArgs e)
         {
             OnPropertyChanged(nameof(HasErrors));
-            OnPropertyChanged(nameof(VnCodeError));
-            OnPropertyChanged(nameof(MileageError));
+            OnPropertyChanged(e.PropertyName);
         }
 
+        /// <summary>
+        /// Создание авто
+        /// </summary>
+        /// <returns></returns>
         Car CreateClassCar()
         {
             int YearInt = ConverFromInt(YearSelected);
@@ -111,7 +130,7 @@ namespace AutoCareDiray.ViewModels
                     Brand = BrandSelected,
                     Model = ModelSelected,
                     Year = YearInt,
-                    Vin = VnCode,
+                    Vin = vinCode,
 
                     Current_mileage = MileageInt,
                     Year_purchase = YearPurchaseint,
