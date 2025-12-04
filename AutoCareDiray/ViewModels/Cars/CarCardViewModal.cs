@@ -26,7 +26,12 @@ namespace AutoCareDiray.ViewModels.Cars
         [RelayCommand]
         public async void CreateMaintenanse()
         {
-            await Shell.Current.Navigation.PushAsync(new CreateMaintenanse(_apiService));
+            await Shell.Current.Navigation.PushAsync(new CreateMaintenanse(_apiService,Car.Car_id));
+        }
+        [RelayCommand]
+        public async void GoBack()
+        {
+            await Shell.Current.GoToAsync("..");
         }
     }
 }

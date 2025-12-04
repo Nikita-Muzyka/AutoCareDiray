@@ -5,9 +5,9 @@ namespace AutoCareDiray.View;
 
 public partial class CreateMaintenanse : ContentPage
 {
-	public CreateMaintenanse(IApiService apiService)
+	public CreateMaintenanse(IApiService apiService,int car_id)
 	{
 		InitializeComponent();
-		BindingContext = new CreateMaintenanseViewModal(apiService);
+		BindingContext = new CreateMaintenanseViewModal(apiService,car_id);
 	}
 }

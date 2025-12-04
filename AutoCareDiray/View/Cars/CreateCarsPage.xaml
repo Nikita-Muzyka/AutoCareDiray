@@ -40,7 +40,7 @@
         <Entry Text="{Binding BrandSelected}" Placeholder="Brands"/>
         <Entry Text="{Binding ModelSelected}" Placeholder="марка"/>
         <Entry Text="{Binding YearSelected}" Placeholder="Year"/>
-        <Label Text="{Binding VnCodeError}" BackgroundColor="Red"/>
+        <Label Text="{Binding VinCodeError}" BackgroundColor="Red"/>
         <Entry Text="{Binding VinCode}" Placeholder="vin"/>
         <Label Text="{Binding MileageError}" BackgroundColor="Red"/>
         <Entry Text="{Binding Mileage}" Placeholder="Mileage"/>
@@ -49,6 +49,7 @@
         <Entry Text="{Binding YearPurchaseSelected}" Placeholder="Year of purchase"/>
 
         <Button Text="Create" Command="{Binding CreateCarCommand}"/>
+        <Button Text="Create" Command="{Binding BackGoCommand}"/>
         <Label Text="{Binding ErrorsAll}" BackgroundColor="Red"/>
     </StackLayout>
 </ContentPage>

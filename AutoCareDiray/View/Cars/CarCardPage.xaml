@@ -35,5 +35,8 @@
 
         <Button Text="Create Mint"
                 Command="{Binding CreateMaintenanseCommand}"/>
+
+        <Button Text="Назад"
+        Command="{Binding GoBackCommand}"/>
     </StackLayout>
 </ContentPage>

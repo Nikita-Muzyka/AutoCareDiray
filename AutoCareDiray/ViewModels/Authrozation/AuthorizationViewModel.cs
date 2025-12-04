@@ -40,7 +40,7 @@ namespace AutoCareDiray.ViewModels
         [RelayCommand]
         public async void LogIn()
         {
-            if (Password == "1") await Shell.Current.GoToAsync("//Main");
+            if (Password == "1") await Shell.Current.GoToAsync("//Main/MainPage");
 
             bool start = AuthorizationValidation.AuthValidation(Login, Password);
             if (start)
@@ -52,7 +52,7 @@ namespace AutoCareDiray.ViewModels
                 {
                     Text = response.Message;
                     PreferencesSetUser(response);
-                    await Shell.Current.GoToAsync("//Main");
+                    await Shell.Current.GoToAsync("//Main/MainPage");
                 }
                 else Text = response.Message;
             }

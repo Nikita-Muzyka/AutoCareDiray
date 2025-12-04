@@ -57,7 +57,7 @@ namespace AutoCareDiray.ViewModels
 
         // Получение ошибок
         public bool HasErrors => _carValidation.HasErrors;
-        public string VnCodeError => _carValidation.GetErrors("VinCode") as string;
+        public string VinCodeError => _carValidation.GetErrors("VinCode") as string;
         public string MileageError => _carValidation.GetErrors("Mileage") as string;
 
         /// <summary>
@@ -91,6 +91,12 @@ namespace AutoCareDiray.ViewModels
                     errorsAll = ex.Message;
                 }
             }
+        }
+
+        [RelayCommand]
+        public async void BackGo()
+        {
+            await Shell.Current.GoToAsync("..");
         }
 
         //методы Community Tool
