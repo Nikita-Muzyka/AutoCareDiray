@@ -20,7 +20,6 @@ namespace AutoCareDiray.ViewModels
     {
         private readonly IApiService _apiService;
         public CarValidation _carValidation;
-        public CarResponse _carResponse;
 
         //[ObservableProperty]
         //public string[] brands = CarBrands.Brands;

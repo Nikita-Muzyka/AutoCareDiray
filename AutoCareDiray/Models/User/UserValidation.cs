@@ -34,6 +34,7 @@ namespace AutoCareDiray.Models
         }
         public void ValidationAll(string nickname,string email,string login,string password)
         {
+            Thread.Sleep(5000);
             ValidationNickName(nickname);
             ValidationEmail(email);
             ValidationLogin(login);

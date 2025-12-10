@@ -1,4 +1,6 @@
 ﻿using AutoCareDiray.Models;
+using AutoCareDiray.Service.APIResponse.UserResponse;
+using AutoCareDiray.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +25,8 @@ namespace AutoCareDiray.Service
         {
             try
             {
-                var response = await _httpClient.PostAsJsonAsync("api/User/login", new UserAuthorization(login, password));
+                var userAuth = new UserAuthorization(login, password);
+                var response = await _httpClient.PostAsJsonAsync("api/User/login",userAuth);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     var result = await response.Content.ReadFromJsonAsync<GetUserResponse>();
@@ -157,50 +160,44 @@ namespace AutoCareDiray.Service
 
 
         // HTTP Create Car
-        public async Task<CarResponse> CreateCarApiAsync(Car car)
+        public async Task<ApiResponse> CreateCarApiAsync(Car car)
         {
             try
             {
                 var response = await _httpClient.PostAsJsonAsync($"api/Car/create", car);
-                var result = await response.Content.ReadFromJsonAsync<CarResponse>();
+                var result = await response.Content.ReadFromJsonAsync<GetCarResponse>();
 
                 return result;
             }
             catch (HttpRequestException ex)
             {
-                var result = new CarResponse
-                {
-                    Message = "Соединение не установлено проверте подключение к интернету или сервер не доступен ",
-                    Success = false
-                };
-                return result;
+                return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);
             }
             catch (Exception ex)
             {
-                var result = new CarResponse
-                {
-                    Success = false,
-                    Message = ex.Message,
-                };
-                return result;
+                return new ErrorsResponse("При создании авто произошла ошибка приложения", ex.Message);
             }
         }
 
         // HTTP Get Cars
-        public async Task<List<Car>> GetCarByUserIdApiAsync()
+        public async Task<ApiResponse> GetCarByUserIdApiAsync()
         {
             try
             {
                 var user_id = Preferences.Get("User_id", 0);
-                var response = await _httpClient.GetAsync($"api/Car/get/{user_id}");
+                var response = await _httpClient.GetAsync($"api/Car/getCars/{user_id}");
 
-                var result = await response.Content.ReadFromJsonAsync<List<Car>>();
+                var result = await response.Content.ReadFromJsonAsync<CarListResponse>();
 
                 return result;
             }
+            catch (HttpRequestException ex)
+            {
+                return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);
+            }
             catch (Exception ex)
             {
-                return new List<Car>();
+                return new ErrorsResponse("При поиске авто пользователя произошла ошибка приложения", ex.Message);
             }
         }
 

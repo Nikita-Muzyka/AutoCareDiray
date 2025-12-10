@@ -14,7 +14,7 @@ namespace AutoCareDiray.Service
         Task<ApiResponse> CheckUserLoginAsync(string login);
         Task<ApiResponse> UpdateUserApiAsync(UserUpdateRequest userRequest);
         Task<ApiResponse> DeleteUserApiAsync(int User_id);
-        Task<CarResponse> CreateCarApiAsync(Car car);
-        Task<List<Car>> GetCarByUserIdApiAsync();
+        Task<ApiResponse> CreateCarApiAsync(Car car);
+        Task<ApiResponse> GetCarByUserIdApiAsync();
     }
 }

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using AutoCareDiray.Services;
 
 namespace AutoCareDiray.ViewModels.Cars
 {
@@ -56,6 +57,7 @@ namespace AutoCareDiray.ViewModels.Cars
         /// </summary>
         async void LoadCars()
         {
+#if DEBUG
             var car = new Car
             {
                 Brand = "Chevrolet",
@@ -70,14 +72,15 @@ namespace AutoCareDiray.ViewModels.Cars
                 User_id = 1
             };
             Cars.Add(car);
-
+#endif
             try
             {
-                var cars = await _apiService.GetCarByUserIdApiAsync();
+                var response = await _apiService.GetCarByUserIdApiAsync();
+                var carsResponse = response as CarListResponse;
 
-                foreach (var carCollection in cars)
+                foreach (var addcar in carsResponse.cars)
                 {
-                    Cars.Add(carCollection);
+                    Cars.Add(car);
                 }
             }
             catch (Exception ex)
