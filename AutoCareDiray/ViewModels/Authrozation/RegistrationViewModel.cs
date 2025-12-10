@@ -1,5 +1,6 @@
 ﻿using AutoCareDiray.Models;
 using AutoCareDiray.Service;
+using AutoCareDiray.Service.APIResponse.UserResponse;
 using AutoCareDiray.View;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -17,7 +18,6 @@ namespace AutoCareDiray.ViewModels
     {
         private readonly IApiService _apiService;
         UserValidation _userValidation;
-        UserResponse _userResponse;
         CancellationTokenSource _debounce;
 
         [ObservableProperty]
@@ -91,21 +91,22 @@ namespace AutoCareDiray.ViewModels
         {
             UserDTO userDTO = new UserDTO(NickName, Email, Login, Password);
 
-            _userResponse = await _apiService.CreateUserApiAsync(userDTO);
-            if (_userResponse.Success == true)
+            var response = await _apiService.CreateUserApiAsync(userDTO);
+            if (response.Success == true)
             {
-                Text = _userResponse.Message;
+                Text = response.Message;
                 Thread.Sleep(1000);
-                await PreferencesSetUser(_userResponse);
+                await PreferencesSetUser(response);
                 await Shell.Current.Navigation.PopModalAsync();
                 await Shell.Current.GoToAsync("..");
             }
-            else Text = _userResponse.Message;
+            else Text = response.Message;
         }
 
-        async Task PreferencesSetUser(UserResponse userResponse)
+        async Task PreferencesSetUser(ApiResponse apiResponse)
         {
-            Preferences.Set("User_id", userResponse.User_id.ToString());
+            GetUserResponse? userResponse = apiResponse as GetUserResponse;
+            Preferences.Set("User_id", userResponse.User_Id.ToString());
             Preferences.Set ("NickName", userResponse.NickName);
             Preferences.Set("Email", userResponse.Email);
         }

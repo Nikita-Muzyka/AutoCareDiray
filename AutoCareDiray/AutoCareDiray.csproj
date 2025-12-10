@@ -111,6 +111,9 @@
 	  <MauiXaml Update="View\Cars\ListCars.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\Maintenanse\CreateMaintenanse.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\MainPage\MainPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -121,6 +124,10 @@
 
 	<ItemGroup>
 	  <MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="ViewModels\Maintenanse\" />
 	</ItemGroup>
 
 </Project>

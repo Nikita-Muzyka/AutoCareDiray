@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using AutoCareDiray.Services;
 
 namespace AutoCareDiray.ViewModels.Cars
 {
@@ -24,6 +25,11 @@ namespace AutoCareDiray.ViewModels.Cars
         public string errors;
         [ObservableProperty]
         public Car selectedCar;
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="apiService"></param>
         public ListCarsViewModal(IApiService apiService)
         {
             _apiService = apiService;
@@ -45,15 +51,36 @@ namespace AutoCareDiray.ViewModels.Cars
             }
             else await Shell.Current.Navigation.PushAsync(new CarCardPage(selectedCar,_apiService));
         }
+
+        /// <summary>
+        /// Загрузка авто с сервера
+        /// </summary>
         async void LoadCars()
         {
+#if DEBUG
+            var car = new Car
+            {
+                Brand = "Chevrolet",
+                Model = "Lachetti",
+                Year = 2211,
+                Year_purchase = 2221,
+                Car_id = 5555,
+                Current_mileage = 200000,
+                Engine_type = "Бензин",
+                Transmission_box = "Механическая",
+                Vin = "dawdawdadadadaw",
+                User_id = 1
+            };
+            Cars.Add(car);
+#endif
             try
             {
-                var cars = await _apiService.GetCarByUserIdApiAsync();
+                var response = await _apiService.GetCarByUserIdApiAsync();
+                var carsResponse = response as CarListResponse;
 
-                foreach (var carCollection in cars)
+                foreach (var addcar in carsResponse.cars)
                 {
-                    Cars.Add(carCollection);
+                    Cars.Add(car);
                 }
             }
             catch (Exception ex)

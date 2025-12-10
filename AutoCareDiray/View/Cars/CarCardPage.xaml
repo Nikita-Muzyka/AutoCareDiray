@@ -6,25 +6,37 @@
     <StackLayout>
         <Label Text="Model"/>
         <Label Text="{Binding Car.Model}"/>
-        <Label Text="Brand"/>
+        <Label Text="Brand"
+               Margin="0,20,0,0"/>
         <Label Text="{Binding Car.Brand}"/>
-        <Label Text="Car_id"/>
+        <Label Text="Car_id"
+               Margin="0,20,0,0"/>
         <Label Text="{Binding Car.Car_id}"/>
-        <Label Text="Year"/>
+        <Label Text="Year"
+               Margin="0,20,0,0"/>
         <Label Text="{Binding Car.Year}"/>
-        <Label Text="Vin"/>
+        <Label Text="Vin"
+               Margin="0,20,0,0"/>
         <Label Text="{Binding Car.Vin}"/>
 
-        <Label Text="Mileage"/>
+        <Label Text="Mileage"
+               Margin="0,20,0,0"/>
         <Label Text="{Binding Car.Current_mileage}"/>
-        <Label Text="year purchase"/>
+        <Label Text="year purchase"
+               Margin="0,20,0,0"/>
         <Label Text="{Binding Car.Year_purchase}"/>
 
-        <Label Text="Transmission box"/>
+        <Label Text="Transmission box"
+               Margin="0,20,0,0"/>
         <Label Text="{Binding Car.Transmission_box}"/>
-        <Label Text="Engine type"/>
+        <Label Text="Engine type"
+               Margin="0,20,0,0"/>
         <Label Text="{Binding Car.Engine_type}"/>
 
-        <Button Text="Create Mint"/>
+        <Button Text="Create Mint"
+                Command="{Binding CreateMaintenanseCommand}"/>
+
+        <Button Text="Назад"
+        Command="{Binding GoBackCommand}"/>
     </StackLayout>
 </ContentPage>
