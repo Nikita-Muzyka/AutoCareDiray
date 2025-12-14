@@ -4,9 +4,18 @@ namespace AutoCareDiray.View;
 
 public partial class RegistrationPage : ContentPage
 {
-	public RegistrationPage(IApiService apiService)
+	public RegistrationPage(RegistrationViewModel rvm)
 	{
 		InitializeComponent();
-		BindingContext = new RegistrationViewModel(apiService);
+		BindingContext = rvm;
 	}
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+		if(BindingContext is RegistrationViewModel rvm)
+		{
+			rvm.CancelToken();
+        }
+    }
 }

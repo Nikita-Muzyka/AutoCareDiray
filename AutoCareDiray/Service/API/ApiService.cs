@@ -21,12 +21,14 @@ namespace AutoCareDiray.Service
         }
 
         //HTTP POST Authoriztion
-        public async Task<ApiResponse> AuthorizationApiAsync(string login,string password)
+        public async Task<ApiResponse> AuthorizationApiAsync(string login,string password, CancellationToken token)
         {
             try
             {
+                token.ThrowIfCancellationRequested();
                 var userAuth = new UserAuthorization(login, password);
                 var response = await _httpClient.PostAsJsonAsync("api/User/login",userAuth);
+                token.ThrowIfCancellationRequested();
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     var result = await response.Content.ReadFromJsonAsync<GetUserResponse>();
@@ -38,6 +40,10 @@ namespace AutoCareDiray.Service
                     return result;
                 }
 
+            }
+            catch(OperationCanceledException)
+            {
+                throw;
             }
             catch (HttpRequestException ex)
             {
@@ -50,10 +56,11 @@ namespace AutoCareDiray.Service
         }
 
         // HTTP POST Create User
-        public async Task<ApiResponse> CreateUserApiAsync(UserDTO user)
+        public async Task<ApiResponse> CreateUserApiAsync(UserDTO user, CancellationToken token)
         {
             try
             {
+                token.ThrowIfCancellationRequested();
                 var response = await _httpClient.PostAsJsonAsync("api/User/register", user);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -62,10 +69,12 @@ namespace AutoCareDiray.Service
                 }
                 else
                 {
+                    token.ThrowIfCancellationRequested();
                     var result = await response.Content.ReadFromJsonAsync<ErrorsResponse>();
                     return result;
                 }
             }
+            catch (OperationCanceledException) { throw; }
             catch (HttpRequestException ex)
             {
                 return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);
@@ -77,11 +86,11 @@ namespace AutoCareDiray.Service
         }
 
         // HTTP POST Check LOgin
-        public async Task<ApiResponse> CheckUserLoginAsync(string login)
+        public async Task<ApiResponse> CheckUserLoginAsync(string login, CancellationToken token)
         {
             try
             {
-
+                token.ThrowIfCancellationRequested();
                 var response = await _httpClient.PostAsJsonAsync("api/User/checkLogin", new UserLoginRequest(login));
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -90,10 +99,12 @@ namespace AutoCareDiray.Service
                 }
                 else
                 {
+                    token.ThrowIfCancellationRequested();
                     var result = await response.Content.ReadFromJsonAsync<ErrorsResponse>();
                     return result;
                 }
             }
+            catch (OperationCanceledException) { throw; }
             catch (HttpRequestException ex)
             {
                 return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);
