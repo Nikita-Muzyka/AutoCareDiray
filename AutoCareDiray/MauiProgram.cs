@@ -48,6 +48,8 @@ namespace AutoCareDiray
             builder.Services.AddScoped<IDialogService,DialogService>();
             builder.Services.AddTransient<AuthorizationPage>();
             builder.Services.AddTransient<AuthorizationViewModel>();
+            builder.Services.AddTransient<RegistrationPage>();
+            builder.Services.AddTransient<RegistrationViewModel>();
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<MainPageViewModal>();
             builder.Services.AddTransient<UserSettingsViewModal>();

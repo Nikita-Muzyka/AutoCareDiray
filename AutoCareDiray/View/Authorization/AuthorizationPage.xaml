@@ -148,12 +148,12 @@
                 <Button Text="Войти"
                         Command="{Binding LogInCommand}"
                         Style="{StaticResource ButtonCustom}"
-                        HorizontalOptions="FillAndExpand"/>
+                        HorizontalOptions="Fill"/>
 
                 <Button Text="Зарегистрироваться"
                         Command="{Binding RegistrationCommand}"
                         Style="{StaticResource ButtonCustom}"
-                        HorizontalOptions="FillAndExpand"/>
+                        HorizontalOptions="Fill"/>
 
             </VerticalStackLayout>
 

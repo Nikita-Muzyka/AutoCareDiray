@@ -15,14 +15,14 @@ using AutoCareDiray.Service.APIResponse.UserResponse;
 namespace AutoCareDiray.ViewModels
 {
     
-    public partial class AuthorizationViewModel : ObservableObject
+    public partial class AuthorizationViewModel : BaseViewModel
     {
-        private readonly IApiService _apiService;
-        private RegistrationPage _registrationPage;
-        public AuthorizationViewModel(IApiService apiService) 
+        
+        private CancellationTokenSource _cts;
+        public AuthorizationViewModel(IApiService apiService,IDialogService dialog) :base(apiService,dialog)
         {
-            _apiService = apiService;
-            _registrationPage = new RegistrationPage(apiService);
+            
+            _cts = new CancellationTokenSource();
         }
 
         [ObservableProperty]
@@ -39,30 +39,38 @@ namespace AutoCareDiray.ViewModels
         public bool isTogglePasswordSwitch;
 
         [RelayCommand]
-        public async void LogIn()
+        public async Task LogInAsync()
         {
-            if (Password == "1") await Shell.Current.GoToAsync("//Main/MainPage");
-
-            bool start = AuthorizationValidation.AuthValidation(Login, Password);
-            if (start)
+            try
             {
-                Text = "";
-                var response = await _apiService.AuthorizationApiAsync(login, password);
+#if DEBUG 
+                if (Password == "1") await Shell.Current.GoToAsync("//Main/MainPage");
+#endif
 
-                if (response.Success == true)
+                bool start = AuthorizationValidation.AuthValidation(Login, Password);
+                if (start)
                 {
-                    Text = response.Message;
-                    PreferencesSetUser(response);
-                    await Shell.Current.GoToAsync("//Main/MainPage");
+                    Text = "";
+                    var response = await _apiService.AuthorizationApiAsync(login, password,_cts.Token);
+
+                    if (response.Success == true)
+                    {
+                        _cts.Token.ThrowIfCancellationRequested();  
+                        Text = response.Message;
+                        PreferencesSetUser(response);
+                        await Shell.Current.GoToAsync("//Main/MainPage");
+                    }
+                    else Text = response.Message;
                 }
-                else Text = response.Message;
+                else Text = "Пароль и Логин не могут быть пустыми";
             }
-            else Text = "Пароль и Логин не могут быть пустыми";
+            catch(OperationCanceledException) { }
+            catch (Exception ex) { }
         }
         [RelayCommand]
-        public async void Registration()
+        public async Task RegistrationAsync()
         {
-            await Shell.Current.Navigation.PushModalAsync(_registrationPage,true);
+            await Shell.Current.GoToAsync(nameof(RegistrationPage));
         }
 
         void PreferencesSetUser(ApiResponse ApiResponse)
@@ -77,6 +85,13 @@ namespace AutoCareDiray.ViewModels
         partial void OnIsTogglePasswordSwitchChanged(bool value)
         {
             IsPassword = !IsTogglePasswordSwitch;
+        }
+
+        public void CancelToken()
+        {
+            _cts?.Cancel();
+            _cts?.Dispose();
+            _cts = new CancellationTokenSource();
         }
     }
 }

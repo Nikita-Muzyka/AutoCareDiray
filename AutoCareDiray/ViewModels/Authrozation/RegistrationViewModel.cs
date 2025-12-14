@@ -14,11 +14,10 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace AutoCareDiray.ViewModels
 {
-    partial class RegistrationViewModel : ObservableObject
+    public partial class RegistrationViewModel : BaseViewModel
     {
-        private readonly IApiService _apiService;
         UserValidation _userValidation;
-        CancellationTokenSource _debounce;
+        CancellationTokenSource _cts;
 
         [ObservableProperty]
         public string text;
@@ -35,9 +34,8 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string password;
 
-        public RegistrationViewModel(IApiService api)
+        public RegistrationViewModel(IApiService apiService,IDialogService _dialogService) : base(apiService, _dialogService)
         {
-            _apiService = api;
             _userValidation = new UserValidation(_apiService);
             _userValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
         }
@@ -51,14 +49,22 @@ namespace AutoCareDiray.ViewModels
 
 
         [RelayCommand]
-        public async void CreateUserDTO()
+        public async Task CreateUserDTOAsync()
         {
-            _userValidation.ValidationAll(NickName, Email, Login, Password);
-            if (HasErrors) ;
-            else RegistrationApi();
+            try
+            {
+                _userValidation.ValidationAll(NickName, Email, Password);
+                await _userValidation.ValidationLoginAsync(Login, _cts.Token);
+
+                _cts.Token.ThrowIfCancellationRequested();
+
+                if (HasErrors) ;
+                else await RegistrationApiAsync();
+            }
+            catch (OperationCanceledException) { }
         }
         [RelayCommand]
-        public async void CloseModalView()
+        public async Task CloseModalViewAsync()
         {
             await Shell.Current.GoToAsync("..");
         }
@@ -74,7 +80,7 @@ namespace AutoCareDiray.ViewModels
         }
         partial void OnLoginChanged(string value)
         {
-           DebounceSearch(value);
+           _= DebounceSearchAsync(value);
         }
         partial void OnPasswordChanged(string value)
         {
@@ -87,23 +93,25 @@ namespace AutoCareDiray.ViewModels
             OnPropertyChanged(e.PropertyName);
         }
 
-        public async void RegistrationApi()
+        public async Task RegistrationApiAsync()
         {
-            UserDTO userDTO = new UserDTO(NickName, Email, Login, Password);
-
-            var response = await _apiService.CreateUserApiAsync(userDTO);
-            if (response.Success == true)
+            try
             {
-                Text = response.Message;
-                Thread.Sleep(1000);
-                await PreferencesSetUser(response);
-                await Shell.Current.Navigation.PopModalAsync();
-                await Shell.Current.GoToAsync("..");
+                UserDTO userDTO = new UserDTO(NickName, Email, Login, Password);
+                _cts.Token.ThrowIfCancellationRequested();
+                var response = await _apiService.CreateUserApiAsync(userDTO, _cts.Token);
+                if (response.Success == true)
+                {
+                    await _dialogService.ShowMessage(response.Message);
+                    PreferencesSetUser(response);
+                    await Shell.Current.GoToAsync("..");
+                }
+                else Text = response.Message;
             }
-            else Text = response.Message;
+            catch (OperationCanceledException) { }
         }
 
-        async Task PreferencesSetUser(ApiResponse apiResponse)
+         void PreferencesSetUser(ApiResponse apiResponse)
         {
             GetUserResponse? userResponse = apiResponse as GetUserResponse;
             Preferences.Set("User_id", userResponse.User_Id.ToString());
@@ -111,20 +119,24 @@ namespace AutoCareDiray.ViewModels
             Preferences.Set("Email", userResponse.Email);
         }
 
-        async void DebounceSearch(string value)
+        async  Task DebounceSearchAsync(string value)
         {
             try
             {
-                _debounce?.Cancel();
-                _debounce = new CancellationTokenSource();
+                _cts?.Cancel();
+                _cts = new CancellationTokenSource();
 
-                await Task.Delay(1000, _debounce.Token);
-                _userValidation.ValidationLogin(value);
+                await Task.Delay(1000, _cts.Token);
+                await _userValidation.ValidationLoginAsync(value,_cts.Token);
             }
-            catch (TaskCanceledException ex)
-            {
+            catch (TaskCanceledException) { }
+        }
 
-            }
+        public void CancelToken()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = new CancellationTokenSource();
         }
     }
 }

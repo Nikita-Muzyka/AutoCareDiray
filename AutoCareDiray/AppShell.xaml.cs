@@ -7,6 +7,7 @@ namespace AutoCareDiray
         public AppShell()
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
         }
     }
 }

@@ -9,5 +9,6 @@ namespace AutoCareDiray.Service
     public interface IDialogService
     {
         Task<bool> ShowConfirmationMessage(string message);
+        Task ShowMessage(string message);
     }
 }

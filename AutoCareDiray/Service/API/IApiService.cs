@@ -9,11 +9,14 @@ namespace AutoCareDiray.Service
 {
     public interface IApiService
     {
-        Task<ApiResponse> AuthorizationApiAsync(string login, string password);
-        Task<ApiResponse> CreateUserApiAsync(UserDTO user);
-        Task<ApiResponse> CheckUserLoginAsync(string login);
+        //User
+        Task<ApiResponse> AuthorizationApiAsync(string login, string password,CancellationToken token);
+        Task<ApiResponse> CreateUserApiAsync(UserDTO user,CancellationToken token);
+        Task<ApiResponse> CheckUserLoginAsync(string login,CancellationToken token);
         Task<ApiResponse> UpdateUserApiAsync(UserUpdateRequest userRequest);
         Task<ApiResponse> DeleteUserApiAsync(int User_id);
+
+        //Car
         Task<ApiResponse> CreateCarApiAsync(Car car);
         Task<ApiResponse> GetCarByUserIdApiAsync();
     }

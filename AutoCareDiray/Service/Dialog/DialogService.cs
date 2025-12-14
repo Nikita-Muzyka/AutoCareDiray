@@ -18,5 +18,9 @@ namespace AutoCareDiray.Service
 
             return result;
         }
+        public async Task ShowMessage(string message)
+        {
+            await Shell.Current.DisplayAlert("",message,"Ok");
+        }
     }
 }

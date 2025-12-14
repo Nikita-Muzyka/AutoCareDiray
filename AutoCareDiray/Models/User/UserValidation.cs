@@ -32,12 +32,10 @@ namespace AutoCareDiray.Models
             if(string.IsNullOrEmpty(propertyName)) return _errors.Values.SelectMany(errors => errors);
             return _errors.ContainsKey(propertyName) ? _errors[propertyName].FirstOrDefault() : Enumerable.Empty<string>();
         }
-        public void ValidationAll(string nickname,string email,string login,string password)
+        public void ValidationAll(string nickname,string email,string password)
         {
-            Thread.Sleep(5000);
             ValidationNickName(nickname);
             ValidationEmail(email);
-            ValidationLogin(login);
             ValidationPassword(password);
         }
         public void ValidationNickName(string nickname)
@@ -67,8 +65,9 @@ namespace AutoCareDiray.Models
                 else ErrorsAdd(propertyEmail, "Email - должен содержать не больше 20 символов");
             }
         }
-        public async void ValidationLogin(string login)
+        public async Task ValidationLoginAsync(string login,CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             ErrorsClear(propertyLogin);
 
             if (!string.IsNullOrWhiteSpace(login))
@@ -77,14 +76,20 @@ namespace AutoCareDiray.Models
                 {
                     try
                     {
-                        var response = await _apiService.CheckUserLoginAsync(login);
-                        if (response.Success == true) OnErrorsChange(propertyLogin);
+                        token.ThrowIfCancellationRequested();
+                        var response = await _apiService.CheckUserLoginAsync(login,token);
+                        token.ThrowIfCancellationRequested();
+                        if (response.Success == true)
+                        {
+                            OnErrorsChange(propertyLogin);
+                        }
                         else
                         {
                             ErrorsAdd(propertyLogin, response.Message);
                         }
                     }
-                    catch (HttpRequestException ex)
+                    catch (OperationCanceledException) { }
+                    catch (HttpRequestException)
                     {
                         ErrorsAdd(propertyLogin, "Не удалось установить подключение, повторите попытку позже");
                     }
