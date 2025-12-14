@@ -9,14 +9,11 @@ using AutoCareDiray.View;
 
 namespace AutoCareDiray.ViewModels
 {
-    public partial class MainPageViewModal
+    public partial class MainPageViewModal : BaseViewModel
     {
-        private readonly IApiService _apiService;
-        private readonly IDialogService _dialogService;
-        public MainPageViewModal(IApiService apiService,IDialogService dialogService)
+        public MainPageViewModal(IApiService apiService,IDialogService dialogService) : base(apiService,dialogService)
         {
-            _apiService = apiService;
-            _dialogService = dialogService;
+
         }
     }
 }

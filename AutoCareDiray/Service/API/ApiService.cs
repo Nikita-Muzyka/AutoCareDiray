@@ -116,10 +116,11 @@ namespace AutoCareDiray.Service
         }
 
         // PUT UPdate User
-        public async Task<ApiResponse> UpdateUserApiAsync(UserUpdateRequest userRequest)
+        public async Task<ApiResponse> UpdateUserApiAsync(UserUpdateRequest userRequest, CancellationToken token)
         {
             try
             {
+                token.ThrowIfCancellationRequested();
                 var response = await _httpClient.PutAsJsonAsync($"api/User/updateUser", userRequest);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -128,10 +129,12 @@ namespace AutoCareDiray.Service
                 }
                 else
                 {
+                    token.ThrowIfCancellationRequested();
                     var result = await response.Content.ReadFromJsonAsync<ErrorsResponse>();
                     return result;
                 }
             }
+            catch (OperationCanceledException) { throw; }
             catch (HttpRequestException ex)
             {
                 return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);
@@ -143,10 +146,11 @@ namespace AutoCareDiray.Service
         }
 
         // HTTP Delete  User
-        public async Task<ApiResponse> DeleteUserApiAsync(int User_id)
+        public async Task<ApiResponse> DeleteUserApiAsync(int User_id, CancellationToken token)
         {
             try
             {
+                token.ThrowIfCancellationRequested();
                 var response = await _httpClient.DeleteAsync($"api/User/delete/{User_id}");
                 if (response.StatusCode == HttpStatusCode.NoContent)
                 {
@@ -155,10 +159,12 @@ namespace AutoCareDiray.Service
                 }
                 else
                 {
+                    token.ThrowIfCancellationRequested();
                     var result = await response.Content.ReadFromJsonAsync<ErrorsResponse>();
                     return result;
                 }
             }
+            catch (OperationCanceledException) { throw; }
             catch (HttpRequestException ex)
             {
                 return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);
