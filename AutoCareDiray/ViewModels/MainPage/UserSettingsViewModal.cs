@@ -13,11 +13,10 @@ using System.Threading.Tasks;
 
 namespace AutoCareDiray.ViewModels
 {
-    public partial class UserSettingsViewModal : ObservableObject
+    public partial class UserSettingsViewModal : BaseViewModel
     {
-        private readonly IApiService _apiService;
-        private readonly IDialogService _dialogService;
         private UserValidation _userValidation;
+        private CancellationTokenSource _cts;
 
         [ObservableProperty]
         public string nickName;
@@ -28,63 +27,87 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string textError;
 
-        public UserSettingsViewModal(IApiService apiService, IDialogService dialogService) 
+        public UserSettingsViewModal(IApiService apiService, IDialogService dialogService) :base(apiService, dialogService)
         {
-            _apiService = apiService;
-            _dialogService = dialogService;
             _userValidation = new UserValidation(apiService);
-            NickName = Preferences.Get("NickName","null");
+            _cts = new CancellationTokenSource();
+        }
+
+        [RelayCommand]
+        public void LoadUserData()
+        {
+            NickName = Preferences.Get("NickName", "null");
             Email = Preferences.Get("Email", "null");
             User_id = Preferences.Get("User_id", "0");
         }
-
         [RelayCommand]
-        public async void SaveProfil()
+        public async Task SaveProfil()
         {
             if(int.TryParse(User_id,out int result))
             {
-                var userRequest = new UserUpdateRequest(result,NickName,Email,"Null");
-
-                var response = await _apiService.UpdateUserApiAsync(userRequest);
-                TextError = response.Message;
-            }
-        }
-        [RelayCommand]
-        public async void ExitProfil()
-        {
-            var result = await _dialogService.ShowConfirmationMessage("Вы точно хотите выйти с профиля?");
-            if (result == true)
-            {
-                Preferences.Remove("User_Id");
-                Preferences.Remove("NickName");
-                Preferences.Remove("Email");
-                Preferences.Remove("is_login");
-
-                await Shell.Current.GoToAsync("//AuthorizationPage");
-            }
-        }
-        [RelayCommand]
-        public async void DeleteProfil()
-        {
-            var result = await _dialogService.ShowConfirmationMessage("Вы точно хотите удалить пользователя?");
-            if (result == true)
-            {
-                var UserIdString = Preferences.Get("User_id", null);
-                if (int.TryParse(UserIdString, out var UserId))
+                try
                 {
-                    var response = await _apiService.DeleteUserApiAsync(UserId);
-                    if (response.Success == true)
-                    {
-                        Preferences.Remove("User_Id");
-                        Preferences.Remove("NickName");
-                        Preferences.Remove("Email");
-                        Preferences.Remove("is_login");
+                    var userRequest = new UserUpdateRequest(result, NickName, Email, "Null");
+                    _cts.Token.ThrowIfCancellationRequested();
+                    var response = await _apiService.UpdateUserApiAsync(userRequest, _cts.Token);
+                    await _dialogService.ShowMessage(response.Message);
+                }
+                catch (OperationCanceledException) { }
+            }
+        }
+        [RelayCommand]
+        public async Task ExitProfil()
+        {
+            try
+            {
+                var result = await _dialogService.ShowConfirmationMessage("Вы точно хотите выйти с профиля?");
+                _cts.Token.ThrowIfCancellationRequested();
+                if (result == true)
+                {
+                    Preferences.Remove("User_Id");
+                    Preferences.Remove("NickName");
+                    Preferences.Remove("Email");
+                    Preferences.Remove("is_login");
 
-                        await Shell.Current.GoToAsync("///AuthorizationPage");
-                    }
-                    else TextError = response.Message;
+                    await Shell.Current.GoToAsync("//AuthorizationPage");
                 }
             }
+            catch (OperationCanceledException) { }
+        }
+        [RelayCommand]
+        public async Task DeleteProfil()
+        {
+            try
+            {
+                var result = await _dialogService.ShowConfirmationMessage("Вы точно хотите удалить пользователя?");
+                _cts.Token.ThrowIfCancellationRequested();
+                if (result == true)
+                {
+                    var UserIdString = Preferences.Get("User_id", null);
+                    if (int.TryParse(UserIdString, out var UserId))
+                    {
+                        var response = await _apiService.DeleteUserApiAsync(UserId, _cts.Token);
+                        if (response.Success == true)
+                        {
+                            Preferences.Remove("User_Id");
+                            Preferences.Remove("NickName");
+                            Preferences.Remove("Email");
+                            Preferences.Remove("is_login");
+
+                            await Shell.Current.GoToAsync("///AuthorizationPage");
+                        }
+                        else await _dialogService.ShowMessage(response.Message);
+                    }
+                }
+            }
+            catch (OperationCanceledException) { }
+        }
+
+        public void CancelToken()
+        {
+                _cts.Cancel();
+                _cts.Dispose();
+                _cts = new CancellationTokenSource();
         }
     }
 }

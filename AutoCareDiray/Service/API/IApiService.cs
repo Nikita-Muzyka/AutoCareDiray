@@ -13,8 +13,8 @@ namespace AutoCareDiray.Service
         Task<ApiResponse> AuthorizationApiAsync(string login, string password,CancellationToken token);
         Task<ApiResponse> CreateUserApiAsync(UserDTO user,CancellationToken token);
         Task<ApiResponse> CheckUserLoginAsync(string login,CancellationToken token);
-        Task<ApiResponse> UpdateUserApiAsync(UserUpdateRequest userRequest);
-        Task<ApiResponse> DeleteUserApiAsync(int User_id);
+        Task<ApiResponse> UpdateUserApiAsync(UserUpdateRequest userRequest, CancellationToken token);
+        Task<ApiResponse> DeleteUserApiAsync(int User_id, CancellationToken token);
 
         //Car
         Task<ApiResponse> CreateCarApiAsync(Car car);
