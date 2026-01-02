@@ -1,5 +1,7 @@
 ﻿using AutoCareDiray.Models;
+using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service; // Ваши сервисы
+using AutoCareDiray.Service.ValidationService;
 using AutoCareDiray.View;
 using AutoCareDiray.View.Maintenanse;
 using AutoCareDiray.ViewModels;
@@ -48,7 +50,10 @@ namespace AutoCareDiray
             });
 
             builder.Services.AddScoped<IApiService, ApiService>();
-            builder.Services.AddScoped<IDialogService,DialogService>();
+            builder.Services.AddTransient<IDialogService,DialogService>();
+            builder.Services.AddTransient<IValidatorService, ValidatorService>();
+            builder.Services.AddTransient<UserValidation>();
+
             builder.Services.AddTransient<AuthorizationPage>();
             builder.Services.AddTransient<AuthorizationViewModel>();
             builder.Services.AddTransient<RegistrationPage>();

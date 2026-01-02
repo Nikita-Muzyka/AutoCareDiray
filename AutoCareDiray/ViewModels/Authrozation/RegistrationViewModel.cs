@@ -1,4 +1,5 @@
-﻿using AutoCareDiray.Models;
+﻿
+using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service;
 using AutoCareDiray.Service.APIResponse.UserResponse;
 using AutoCareDiray.View;
@@ -11,12 +12,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using AutoCareDiray.Models.User;
 
 namespace AutoCareDiray.ViewModels
 {
     public partial class RegistrationViewModel : BaseViewModel
     {
-        UserValidation _userValidation;
+        private readonly UserValidation _userValidation;
         CancellationTokenSource _cts;
 
         [ObservableProperty]
@@ -34,18 +36,19 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string password;
 
-        public RegistrationViewModel(IApiService apiService,IDialogService _dialogService) : base(apiService, _dialogService)
+        public RegistrationViewModel(IApiService apiService,IDialogService _dialogService,UserValidation validation) : base(apiService, _dialogService)
         {
-            _userValidation = new UserValidation(_apiService);
+            _userValidation = validation;
+            _cts = new CancellationTokenSource();
             _userValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
         }
 
         public bool HasErrors => _userValidation.HasErrors;
         public bool IsValidButton => !_userValidation.HasErrors;
-        public string NickNameError => _userValidation.GetErrors("NickNameError") as string;
-        public string EmailError => _userValidation.GetErrors("EmailError") as string;
-        public string LoginError => _userValidation.GetErrors("LoginError") as string;
-        public string PasswordError => _userValidation.GetErrors("PasswordError") as string;
+        public string NickNameError => _userValidation.GetErrors(nameof(NickNameError)) as string;
+        public string EmailError => _userValidation.GetErrors(nameof(EmailError)) as string;
+        public string LoginError => _userValidation.GetErrors(nameof(LoginError)) as string;
+        public string PasswordError => _userValidation.GetErrors(nameof(PasswordError)) as string;
 
 
         [RelayCommand]
@@ -97,7 +100,7 @@ namespace AutoCareDiray.ViewModels
         {
             try
             {
-                UserDTO userDTO = new UserDTO(NickName, Email, Login, Password);
+                UserDTO userDTO = new UserDTO(NickName.Trim(), Email.Trim(), Login.Trim(), Password);
                 _cts.Token.ThrowIfCancellationRequested();
                 var response = await _apiService.CreateUserApiAsync(userDTO, _cts.Token);
                 if (response.Success == true)
