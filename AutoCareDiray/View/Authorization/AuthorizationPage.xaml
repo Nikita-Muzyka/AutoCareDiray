@@ -148,6 +148,7 @@
                 <Button Text="Войти"
                         Command="{Binding LogInCommand}"
                         Style="{StaticResource ButtonCustom}"
+                        IsEnabled="{Binding IsEnableLogInButton}"
                         HorizontalOptions="Fill"/>
 
                 <Button Text="Зарегистрироваться"

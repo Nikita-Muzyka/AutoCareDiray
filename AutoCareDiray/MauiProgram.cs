@@ -37,7 +37,7 @@ namespace AutoCareDiray
             TimeSpan time = TimeSpan.FromSeconds(500);
 #elif DEBUG
             string baseAddress = "http://localhost:5286/";
-            TimeSpan time = TimeSpan.FromSeconds(500);
+            TimeSpan time = TimeSpan.FromSeconds(30);
 #else
         string baseAddress = "2";
         TimeSpan.FromSeconds(30);
