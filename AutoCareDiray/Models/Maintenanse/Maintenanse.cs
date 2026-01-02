@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace AutoCareDiray.Models
 {
-    public class Maintenanse
+    public class MaintenanseModel
     {
+        public int Maintenanse_Id { get; set; }
         public int Car_Id { get; set; }
         public DateTime ServiceDate { get; set; }
         public int Mileage { get; set; }
@@ -16,7 +17,7 @@ namespace AutoCareDiray.Models
         public int? Cost { get; set;}
         public string? ServiceCentre { get; set; }
 
-        public Maintenanse(int car_Id, DateTime serviceDate, int mileage, string serviceType, string description, int cost, string serviceCentre)
+        public MaintenanseModel(int car_Id, DateTime serviceDate, int mileage, string serviceType, string description, int cost, string serviceCentre)
         {
             Car_Id = car_Id;
             ServiceDate = serviceDate;

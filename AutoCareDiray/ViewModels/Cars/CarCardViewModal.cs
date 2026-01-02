@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoCareDiray.Models;
 using AutoCareDiray.Service;
 using AutoCareDiray.View;
+using AutoCareDiray.View.Maintenanse;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -29,6 +30,12 @@ namespace AutoCareDiray.ViewModels.Cars
                 ["Car"] = SelectedCar
             };
             await Shell.Current.GoToAsync(nameof(CreateMaintenanse), Car);
+        }
+        [RelayCommand]
+        public async void ListMaintenanse()
+        {
+            
+            await Shell.Current.GoToAsync(nameof(ListMaintenanseView));
         }
         [RelayCommand]
         public async void GoBack()
