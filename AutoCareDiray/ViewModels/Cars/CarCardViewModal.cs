@@ -11,22 +11,24 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AutoCareDiray.ViewModels.Cars
 {
-    public partial class CarCardViewModal : ObservableObject
+    [QueryProperty(nameof(SelectedCar),"SelCar")]
+    public partial class CarCardViewModal : BaseViewModel
     {
-        private readonly IApiService _apiService;
-
         [ObservableProperty]
-        Car car;
-        public CarCardViewModal(Car car, IApiService apiService)
+        public Car selectedCar;
+
+        public CarCardViewModal(IApiService apiService, IDialogService dialogService) : base(apiService, dialogService) 
         {
-            this.car = car;
-            _apiService = apiService;
         }
 
         [RelayCommand]
         public async void CreateMaintenanse()
         {
-            await Shell.Current.Navigation.PushAsync(new CreateMaintenanse(_apiService,Car.Car_id));
+            var Car = new Dictionary<string, object>()
+            {
+                ["Car"] = SelectedCar
+            };
+            await Shell.Current.GoToAsync(nameof(CreateMaintenanse), Car);
         }
         [RelayCommand]
         public async void GoBack()

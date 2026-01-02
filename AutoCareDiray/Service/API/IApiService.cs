@@ -17,7 +17,7 @@ namespace AutoCareDiray.Service
         Task<ApiResponse> DeleteUserApiAsync(int User_id, CancellationToken token);
 
         //Car
-        Task<ApiResponse> CreateCarApiAsync(Car car);
-        Task<ApiResponse> GetCarByUserIdApiAsync();
+        Task<ApiResponse> CreateCarApiAsync(Car car, CancellationToken token);
+        Task<ApiResponse> GetCarByUserIdApiAsync(CancellationToken token);
     }
 }
