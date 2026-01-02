@@ -49,7 +49,7 @@ namespace AutoCareDiray.ViewModels
             var mileage = int.Parse(Mileage);
             var cost = int.Parse(Cost);
 
-            var maintenanse = new Maintenanse(SelectedCar.Car_id, date, mileage, ServiceType, Description, cost, ServiceCentre);
+            var maintenanse = new MaintenanseModel(SelectedCar.Car_id, date, mileage, ServiceType, Description, cost, ServiceCentre);
             Text = "Запись создана";
         }
         [RelayCommand]

@@ -1,8 +1,10 @@
 ﻿using AutoCareDiray.Models;
 using AutoCareDiray.Service; // Ваши сервисы
 using AutoCareDiray.View;
+using AutoCareDiray.View.Maintenanse;
 using AutoCareDiray.ViewModels;
 using AutoCareDiray.ViewModels.Cars;
+using AutoCareDiray.ViewModels.Maintenanse;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.DependencyInjection; // Добавьте эту строку
 using Microsoft.Extensions.Logging;
@@ -63,6 +65,8 @@ namespace AutoCareDiray
             builder.Services.AddTransient<CreateCarsViewModal>();
             builder.Services.AddTransient<CreateMaintenanse>();
             builder.Services.AddTransient<CreateMaintenanseViewModal>();
+            builder.Services.AddTransient<ListMaintenanseView>();
+            builder.Services.AddTransient<ListMaintenanseViewModel>();
 
             // Регистрация сервиса
 
