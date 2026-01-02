@@ -177,15 +177,17 @@ namespace AutoCareDiray.Service
 
 
         // HTTP Create Car
-        public async Task<ApiResponse> CreateCarApiAsync(Car car)
+        public async Task<ApiResponse> CreateCarApiAsync(Car car, CancellationToken token)
         {
             try
             {
+                token.ThrowIfCancellationRequested();
                 var response = await _httpClient.PostAsJsonAsync($"api/Car/create", car);
                 var result = await response.Content.ReadFromJsonAsync<GetCarResponse>();
 
                 return result;
             }
+            catch (OperationCanceledException) { throw; }
             catch (HttpRequestException ex)
             {
                 return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);
@@ -197,17 +199,19 @@ namespace AutoCareDiray.Service
         }
 
         // HTTP Get Cars
-        public async Task<ApiResponse> GetCarByUserIdApiAsync()
+        public async Task<ApiResponse> GetCarByUserIdApiAsync(CancellationToken token)
         {
             try
             {
                 var user_id = Preferences.Get("User_id", 0);
                 var response = await _httpClient.GetAsync($"api/Car/getCars/{user_id}");
+                token.ThrowIfCancellationRequested();
 
                 var result = await response.Content.ReadFromJsonAsync<CarListResponse>();
-
+                token.ThrowIfCancellationRequested();
                 return result;
             }
+            catch (OperationCanceledException) { throw; }
             catch (HttpRequestException ex)
             {
                 return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);

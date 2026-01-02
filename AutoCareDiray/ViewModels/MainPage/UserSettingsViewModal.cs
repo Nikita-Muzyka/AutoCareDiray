@@ -15,7 +15,7 @@ namespace AutoCareDiray.ViewModels
 {
     public partial class UserSettingsViewModal : BaseViewModel
     {
-        private UserValidation _userValidation;
+
         private CancellationTokenSource _cts;
 
         [ObservableProperty]
@@ -29,7 +29,6 @@ namespace AutoCareDiray.ViewModels
 
         public UserSettingsViewModal(IApiService apiService, IDialogService dialogService) :base(apiService, dialogService)
         {
-            _userValidation = new UserValidation(apiService);
             _cts = new CancellationTokenSource();
         }
 

@@ -6,11 +6,27 @@ namespace AutoCareDiray.View;
 
 public partial class ListCars : ContentPage
 {
-	public ListCars(IApiService apiService)
+	public ListCars(ListCarsViewModal list)
 	{
 		InitializeComponent();
-		BindingContext = new ListCarsViewModal(apiService);
+		BindingContext = list;
 	}
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is ListCarsViewModal list)
+        {
+            list.LoadCarsCommand.Execute(null);
+        }
+    }
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        if(BindingContext is ListCarsViewModal list)
+        {
+            list.CancelToken();
+        }
+    }
     
 }

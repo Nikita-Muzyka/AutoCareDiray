@@ -14,9 +14,9 @@ using AutoCareDiray.Services;
 
 namespace AutoCareDiray.ViewModels.Cars
 {
-    public partial class ListCarsViewModal : ObservableObject
+    public partial class ListCarsViewModal : BaseViewModel
     {
-        private readonly IApiService _apiService;
+        private CancellationTokenSource _cts;
 
         [ObservableProperty]
         public ObservableCollection<Car> cars;
@@ -30,17 +30,19 @@ namespace AutoCareDiray.ViewModels.Cars
         /// Конструктор
         /// </summary>
         /// <param name="apiService"></param>
-        public ListCarsViewModal(IApiService apiService)
+        public ListCarsViewModal(IApiService apiService, IDialogService dialogService) : base(apiService,dialogService)
         {
-            _apiService = apiService;
             Cars = new ObservableCollection<Car>();
-            LoadCars();
+            _cts = new CancellationTokenSource();
+#if DEBUG
+            CreateCar();
+#endif
         }
 
         [RelayCommand]
         public async void GoCreateCar()
         {
-            await Shell.Current.Navigation.PushAsync(new CreateCarsPage(_apiService));
+            await Shell.Current.GoToAsync(nameof(CreateCarsPage));
         }
         [RelayCommand]
         public async void GoCarCard()
@@ -49,44 +51,66 @@ namespace AutoCareDiray.ViewModels.Cars
             {
                 Errors = "Ошибка";
             }
-            else await Shell.Current.Navigation.PushAsync(new CarCardPage(selectedCar,_apiService));
+            else 
+            {
+                var property = new Dictionary<string, object>()
+                {
+                    ["SelCar"] = SelectedCar
+                };
+                await Shell.Current.GoToAsync(nameof(CarCardPage),property);
+            } 
         }
 
+        [RelayCommand]
         /// <summary>
         /// Загрузка авто с сервера
         /// </summary>
-        async void LoadCars()
+        public async void LoadCars()
         {
-#if DEBUG
-            var car = new Car
-            {
-                Brand = "Chevrolet",
-                Model = "Lachetti",
-                Year = 2211,
-                Year_purchase = 2221,
-                Car_id = 5555,
-                Current_mileage = 200000,
-                Engine_type = "Бензин",
-                Transmission_box = "Механическая",
-                Vin = "dawdawdadadadaw",
-                User_id = 1
-            };
-            Cars.Add(car);
-#endif
+
             try
             {
-                var response = await _apiService.GetCarByUserIdApiAsync();
+                var response = await _apiService.GetCarByUserIdApiAsync(_cts.Token);
                 var carsResponse = response as CarListResponse;
 
-                foreach (var addcar in carsResponse.cars)
+                if(carsResponse != null)
                 {
-                    Cars.Add(car);
+                    foreach (var addcar in carsResponse.cars)
+                    {
+                        Cars.Add(addcar);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 errors = ex.Message;
             }
+        }
+        public void CancelToken()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = new CancellationTokenSource();
+        }
+
+
+        void CreateCar()
+        {
+
+                var car = new Car
+                {
+                    Brand = "Chevrolet",
+                    Model = "Lachetti",
+                    Year = 2211,
+                    Year_purchase = 2221,
+                    Car_id = 5555,
+                    Current_mileage = 200000,
+                    Engine_type = "Бензин",
+                    Transmission_box = "Механическая",
+                    Vin = "dawdawdadadadaw",
+                    User_id = 1
+                };
+                Cars.Add(car);
         }
     }
 }

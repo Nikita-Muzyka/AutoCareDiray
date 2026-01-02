@@ -6,9 +6,9 @@ namespace AutoCareDiray.View;
 
 public partial class CarCardPage : ContentPage
 {
-	public CarCardPage(Car car,IApiService apiService)
+	public CarCardPage(CarCardViewModal carCard)
 	{
 		InitializeComponent();
-		BindingContext = new CarCardViewModal(car, apiService);
+		BindingContext = carCard;
 	}
 }

@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 
 namespace AutoCareDiray.ViewModels
 {
-    public partial class CreateMaintenanseViewModal : ObservableObject
+    [QueryProperty(nameof(SelectedCar),"Car")]
+    public partial class CreateMaintenanseViewModal : BaseViewModel
     {
-        private readonly IApiService _apiService;
+        [ObservableProperty]
+        public Car selectedCar;
 
         [ObservableProperty]
         public string serviceDate;
@@ -35,11 +37,9 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string text;
 
-        int Car_Id { get; set; }
-        public CreateMaintenanseViewModal(IApiService apiService,int car_id)
+        public CreateMaintenanseViewModal(IApiService apiService, IDialogService dialogService) :base(apiService, dialogService)
         {
-            _apiService = apiService;
-            Car_Id = car_id;
+
         }
 
         [RelayCommand]
@@ -49,7 +49,7 @@ namespace AutoCareDiray.ViewModels
             var mileage = int.Parse(Mileage);
             var cost = int.Parse(Cost);
 
-            var maintenanse = new Maintenanse(Car_Id, date, mileage, ServiceType, Description, cost, ServiceCentre);
+            var maintenanse = new Maintenanse(SelectedCar.Car_id, date, mileage, ServiceType, Description, cost, ServiceCentre);
             Text = "Запись создана";
         }
         [RelayCommand]

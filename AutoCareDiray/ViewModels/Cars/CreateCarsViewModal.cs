@@ -16,10 +16,10 @@ using System.Threading.Tasks;
 
 namespace AutoCareDiray.ViewModels
 {
-    public partial class CreateCarsViewModal : ObservableObject
+    public partial class CreateCarsViewModal : BaseViewModel
     {
-        private readonly IApiService _apiService;
         public CarValidation _carValidation;
+        private CancellationTokenSource _cts;
 
         //[ObservableProperty]
         //public string[] brands = CarBrands.Brands;
@@ -43,15 +43,12 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string errorsAll;
 
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        /// <param name="apiService"></param>
-        public CreateCarsViewModal(IApiService apiService) 
+     
+        public CreateCarsViewModal(IApiService apiService,IDialogService dialogService) : base(apiService, dialogService)
         {
-            _apiService = apiService;
             _carValidation = new();
             _carValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
+            _cts = new CancellationTokenSource();
         }
 
         // Получение ошибок
@@ -81,7 +78,7 @@ namespace AutoCareDiray.ViewModels
                 try
                 {
                     var car = CreateClassCar();
-                    var response = await _apiService.CreateCarApiAsync(car);
+                    var response = await _apiService.CreateCarApiAsync(car,_cts.Token);
 
                     ErrorsAll = response.Message;
                 }
@@ -145,6 +142,12 @@ namespace AutoCareDiray.ViewModels
                 };
 
                 return car;
+        }
+        public void CancelToken()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = new CancellationTokenSource();
         }
     }
 }

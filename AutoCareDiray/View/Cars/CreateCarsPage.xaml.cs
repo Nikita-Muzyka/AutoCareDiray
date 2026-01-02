@@ -7,9 +7,18 @@ namespace AutoCareDiray.View;
 
 public partial class CreateCarsPage : ContentPage
 {
-	public CreateCarsPage(IApiService apiService)
+	public CreateCarsPage(CreateCarsViewModal createCar)
 	{
 		InitializeComponent();
-		BindingContext = new CreateCarsViewModal(apiService);
+		BindingContext = createCar;
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        if(BindingContext is CreateCarsViewModal createCar)
+        {
+            createCar.CancelToken();
+        }
     }
 }

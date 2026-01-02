@@ -1,6 +1,8 @@
-﻿using AutoCareDiray.Service; // Ваши сервисы
+﻿using AutoCareDiray.Models;
+using AutoCareDiray.Service; // Ваши сервисы
 using AutoCareDiray.View;
 using AutoCareDiray.ViewModels;
+using AutoCareDiray.ViewModels.Cars;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.DependencyInjection; // Добавьте эту строку
 using Microsoft.Extensions.Logging;
@@ -43,7 +45,6 @@ namespace AutoCareDiray
                 Timeout = time
             });
 
-
             builder.Services.AddScoped<IApiService, ApiService>();
             builder.Services.AddScoped<IDialogService,DialogService>();
             builder.Services.AddTransient<AuthorizationPage>();
@@ -54,6 +55,14 @@ namespace AutoCareDiray
             builder.Services.AddTransient<MainPageViewModal>();
             builder.Services.AddTransient<UserSettingsViewModal>();
             builder.Services.AddTransient<UserSettingsPage>();
+            builder.Services.AddTransient<ListCars>();
+            builder.Services.AddTransient<ListCarsViewModal>();
+            builder.Services.AddTransient<CarCardPage>();
+            builder.Services.AddTransient<CarCardViewModal>();
+            builder.Services.AddTransient<CreateCarsPage>();
+            builder.Services.AddTransient<CreateCarsViewModal>();
+            builder.Services.AddTransient<CreateMaintenanse>();
+            builder.Services.AddTransient<CreateMaintenanseViewModal>();
 
             // Регистрация сервиса
 
