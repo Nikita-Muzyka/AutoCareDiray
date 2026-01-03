@@ -8,7 +8,7 @@
     Style="{StaticResource CustomTabBar}">
 
 
-
+    
         <ShellContent 
          Route="AuthorizationPage"
          ContentTemplate="{DataTemplate local:AuthorizationPage}"/>

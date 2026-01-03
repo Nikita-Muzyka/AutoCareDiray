@@ -9,6 +9,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using AutoCareDiray.Models.User;
 
 namespace AutoCareDiray.Service
 {
@@ -28,6 +29,7 @@ namespace AutoCareDiray.Service
                 token.ThrowIfCancellationRequested();
                 var userAuth = new UserAuthorization(login, password);
                 var response = await _httpClient.PostAsJsonAsync("api/User/login",userAuth);
+               
                 token.ThrowIfCancellationRequested();
                 if (response.StatusCode == HttpStatusCode.OK)
                 {

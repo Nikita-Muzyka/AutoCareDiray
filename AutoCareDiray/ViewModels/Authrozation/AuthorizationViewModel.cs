@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AutoCareDiray.Models;
 using System.Runtime.CompilerServices;
 using AutoCareDiray.View;
 using AutoCareDiray.Service.APIResponse.UserResponse;
+using AutoCareDiray.Models.Validation;
 
 
 namespace AutoCareDiray.ViewModels
@@ -37,6 +37,8 @@ namespace AutoCareDiray.ViewModels
         public bool isPassword = true;
         [ObservableProperty]
         public bool isTogglePasswordSwitch;
+        [ObservableProperty]
+        public bool isEnableLogInButton = true;
 
         [RelayCommand]
         public async Task LogInAsync()
@@ -46,25 +48,30 @@ namespace AutoCareDiray.ViewModels
 #if DEBUG 
                 if (Password == "1") await Shell.Current.GoToAsync("//Main/MainPage");
 #endif
-
-                bool start = AuthorizationValidation.AuthValidation(Login, Password);
+                IsEnableLogInButton = false;
+                bool start = LightLogInValidator.AuthValidation(Login, Password);
                 if (start)
                 {
                     Text = "";
-                    var response = await _apiService.AuthorizationApiAsync(login, password,_cts.Token);
-
+                    var response = await _apiService.AuthorizationApiAsync(login, password, _cts.Token);
+                    IsEnableLogInButton = true;
                     if (response.Success == true)
                     {
-                        _cts.Token.ThrowIfCancellationRequested();  
+                        _cts.Token.ThrowIfCancellationRequested();
                         Text = response.Message;
                         PreferencesSetUser(response);
+
                         await Shell.Current.GoToAsync("//Main/MainPage");
                     }
                     else Text = response.Message;
                 }
-                else Text = "Пароль и Логин не могут быть пустыми";
+                else
+                {
+                    IsEnableLogInButton = true;
+                    Text = "Пароль и Логин не могут быть пустыми";
+                }
             }
-            catch(OperationCanceledException) { }
+            catch(OperationCanceledException) { IsEnableLogInButton = true; }
             catch (Exception ex) { }
         }
         [RelayCommand]
