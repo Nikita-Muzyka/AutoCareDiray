@@ -111,7 +111,7 @@
 	  <MauiXaml Update="View\Cars\ListCars.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Maintenanse\CreateMaintenanse.xaml">
+	  <MauiXaml Update="View\Maintenance (Заменить на C)\CreateMaintenanse.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\MainPage\MainPage.xaml">
@@ -120,7 +120,7 @@
 	  <MauiXaml Update="View\MainPage\UserSettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Maintenanse\ListMaintenanseView.xaml">
+	  <MauiXaml Update="View\Maintenance (Заменить на C)\ListMaintenanseView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

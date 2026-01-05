@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoCareDiray.Models
+namespace AutoCareDiray.Models.Validation
 {
     public class CarValidation : INotifyDataErrorInfo
     {
