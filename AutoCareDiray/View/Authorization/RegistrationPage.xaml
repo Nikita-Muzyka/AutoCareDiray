@@ -108,7 +108,7 @@
                                  Spacing="10"
                                  WidthRequest="300">
 
-                <Label Text="{Binding Text}"
+                <Label Text="{Binding StatusMessage}"
                        Style="{StaticResource LabelAuthResponse}"
                        HorizontalOptions="Center"
                        HorizontalTextAlignment="Center"/>

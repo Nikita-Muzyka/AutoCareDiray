@@ -22,19 +22,19 @@ namespace AutoCareDiray.ViewModels
         CancellationTokenSource _cts;
 
         [ObservableProperty]
-        public string text;
+        private string statusMessage;
         
         [ObservableProperty]
-        public string nickName;
+        private string nickName;
 
         [ObservableProperty]
-        public string? email;
+        private string? email;
 
         [ObservableProperty]
-        public string login;
+        private string login;
         
         [ObservableProperty]
-        public string password;
+        private string password;
 
         public RegistrationViewModel(IApiService apiService,IDialogService _dialogService,UserValidation validation) : base(apiService, _dialogService)
         {
@@ -61,8 +61,7 @@ namespace AutoCareDiray.ViewModels
 
                 _cts.Token.ThrowIfCancellationRequested();
 
-                if (HasErrors) ;
-                else await RegistrationApiAsync();
+                if (!HasErrors) await RegistrationApiAsync();
             }
             catch (OperationCanceledException) { }
         }
@@ -100,8 +99,7 @@ namespace AutoCareDiray.ViewModels
         {
             try
             {
-                UserDTO userDTO = new UserDTO(NickName.Trim(), Email.Trim(), Login.Trim(), Password);
-                _cts.Token.ThrowIfCancellationRequested();
+                UserDTO userDTO = new UserDTO(NickName, Email, Login, Password);
                 var response = await _apiService.CreateUserApiAsync(userDTO, _cts.Token);
                 if (response.Success == true)
                 {
@@ -109,7 +107,7 @@ namespace AutoCareDiray.ViewModels
                     PreferencesSetUser(response);
                     await Shell.Current.GoToAsync("..");
                 }
-                else Text = response.Message;
+                else StatusMessage = response.Message;
             }
             catch (OperationCanceledException) { }
         }
@@ -139,7 +137,6 @@ namespace AutoCareDiray.ViewModels
         {
             _cts.Cancel();
             _cts.Dispose();
-            _cts = new CancellationTokenSource();
         }
     }
 }
