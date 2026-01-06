@@ -21,24 +21,22 @@ namespace AutoCareDiray.ViewModels
         private CancellationTokenSource _cts;
         public AuthorizationViewModel(IApiService apiService,IDialogService dialog) :base(apiService,dialog)
         {
-            
-            _cts = new CancellationTokenSource();
         }
 
         [ObservableProperty]
-        public string login;
+        private string login;
         [ObservableProperty]
-        public string password;
+        private string password;
         [ObservableProperty]
-        public string text;
+        private string statusMessage = String.Empty;
         [ObservableProperty]
-        public bool isToggleSwitch;
+        private bool isToggleSwitchRemember;
         [ObservableProperty]
-        public bool isPassword = true;
+        private bool isPassword = true;
         [ObservableProperty]
-        public bool isTogglePasswordSwitch;
+        private bool isTogglePasswordSwitch;
         [ObservableProperty]
-        public bool isEnableLogInButton = true;
+        private bool isLoginButtonEnable = true;
 
         [RelayCommand]
         public async Task LogInAsync()
@@ -48,31 +46,31 @@ namespace AutoCareDiray.ViewModels
 #if DEBUG 
                 if (Password == "1") await Shell.Current.GoToAsync("//Main/MainPage");
 #endif
-                IsEnableLogInButton = false;
-                bool start = LightLogInValidator.AuthValidation(Login, Password);
-                if (start)
+                _cts = new CancellationTokenSource();
+                IsLoginButtonEnable = false;
+
+                if (LightLogInValidator.AuthValidation(Login, Password))
                 {
-                    Text = "";
-                    var response = await _apiService.AuthorizationApiAsync(login, password, _cts.Token);
-                    IsEnableLogInButton = true;
+                    var response = await _apiService.AuthorizationApiAsync(Login, Password, _cts.Token);
+                    IsLoginButtonEnable = true;
+
                     if (response.Success == true)
-                    {
-                        _cts.Token.ThrowIfCancellationRequested();
-                        Text = response.Message;
+                    {;
+                        StatusMessage = response.Message;
                         PreferencesSetUser(response);
 
                         await Shell.Current.GoToAsync("//Main/MainPage");
                     }
-                    else Text = response.Message;
+                    else StatusMessage = response.Message;
                 }
                 else
                 {
-                    IsEnableLogInButton = true;
-                    Text = "Пароль и Логин не могут быть пустыми";
+                    IsLoginButtonEnable = true;
+                    statusMessage = "Пароль и Логин не могут быть пустыми";
                 }
             }
-            catch(OperationCanceledException) { IsEnableLogInButton = true; }
-            catch (Exception ex) { }
+            catch(OperationCanceledException) { IsLoginButtonEnable = true; }
+            catch (Exception ex) { StatusMessage = ex.Message; }
         }
         [RelayCommand]
         public async Task RegistrationAsync()
@@ -80,13 +78,13 @@ namespace AutoCareDiray.ViewModels
             await Shell.Current.GoToAsync(nameof(RegistrationPage));
         }
 
-        void PreferencesSetUser(ApiResponse ApiResponse)
+        private void PreferencesSetUser(ApiResponse ApiResponse)
         {
             GetUserResponse? userResponse = ApiResponse as GetUserResponse;
             Preferences.Set("User_id", userResponse.User_Id.ToString());
             Preferences.Set("NickName", userResponse.NickName);
             Preferences.Set("Email", userResponse.Email);
-            if(IsToggleSwitch) Preferences.Set("is_login", true);
+            if(IsToggleSwitchRemember) Preferences.Set("is_login", true);
         }
 
         partial void OnIsTogglePasswordSwitchChanged(bool value)
@@ -98,7 +96,6 @@ namespace AutoCareDiray.ViewModels
         {
             _cts?.Cancel();
             _cts?.Dispose();
-            _cts = new CancellationTokenSource();
         }
     }
 }

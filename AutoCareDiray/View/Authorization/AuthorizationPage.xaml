@@ -14,7 +14,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="360"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>`
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
@@ -127,7 +127,7 @@
                                WidthRequest="100"
                                HeightRequest="15"/>
 
-                        <Switch IsToggled="{Binding IsToggleSwitch}"
+                        <Switch IsToggled="{Binding IsToggleSwitchRemember}"
                                 Style="{StaticResource SwitchCustom}"
                                 HorizontalOptions="Start"
                                 WidthRequest="45"
@@ -149,7 +149,7 @@
                 <Button Text="Войти"
                         Command="{Binding LogInCommand}"
                         Style="{StaticResource ButtonCustom}"
-                        IsEnabled="{Binding IsEnableLogInButton}"
+                        IsEnabled="{Binding IsLoginButtonEnable}"
                         HorizontalOptions="Fill"/>
 
                 <Button Text="Зарегистрироваться"
