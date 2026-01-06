@@ -44,6 +44,8 @@ namespace AutoCareDiray.ViewModels
             try
             {
 #if DEBUG 
+                Password.Trim();
+                Login.Trim();
                 if (Password == "1") await Shell.Current.GoToAsync("//Main/MainPage");
 #endif
                 _cts = new CancellationTokenSource();
@@ -66,7 +68,7 @@ namespace AutoCareDiray.ViewModels
                 else
                 {
                     IsLoginButtonEnable = true;
-                    statusMessage = "Пароль и Логин не могут быть пустыми";
+                    StatusMessage = "Пароль и Логин не могут быть пустыми";
                 }
             }
             catch(OperationCanceledException) { IsLoginButtonEnable = true; }

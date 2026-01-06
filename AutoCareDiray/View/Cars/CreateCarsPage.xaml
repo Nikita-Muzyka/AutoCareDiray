@@ -50,6 +50,6 @@
 
         <Button Text="Create" Command="{Binding CreateCarCommand}"/>
         <Button Text="Create" Command="{Binding BackGoCommand}"/>
-        <Label Text="{Binding ErrorsAll}" BackgroundColor="Red"/>
+        <Label Text="{Binding ErrorsMessage}" BackgroundColor="Red"/>
     </StackLayout>
 </ContentPage>

@@ -15,11 +15,9 @@ namespace AutoCareDiray.ViewModels.Cars
     [QueryProperty(nameof(SelectedCar),"SelCar")]
     public partial class CarCardViewModal : BaseViewModel
     {
-        [ObservableProperty]
-        public Car selectedCar;
-
         public CarCardViewModal(IApiService apiService, IDialogService dialogService) : base(apiService, dialogService) 
         {
+            
         }
 
         [RelayCommand]

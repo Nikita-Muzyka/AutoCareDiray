@@ -19,12 +19,12 @@ namespace AutoCareDiray.ViewModels.Cars
         private CancellationTokenSource _cts;
 
         [ObservableProperty]
-        public ObservableCollection<Car> cars;
+        private ObservableCollection<Car> cars;
 
         [ObservableProperty]
-        public string errors;
+        private string errors;
         [ObservableProperty]
-        public Car selectedCar;
+        private Car selectedCar;
 
         /// <summary>
         /// Конструктор
@@ -70,6 +70,7 @@ namespace AutoCareDiray.ViewModels.Cars
 
             try
             {
+                _cts = new CancellationTokenSource();
                 var response = await _apiService.GetCarByUserIdApiAsync(_cts.Token);
                 var carsResponse = response as CarListResponse;
 
@@ -83,14 +84,13 @@ namespace AutoCareDiray.ViewModels.Cars
             }
             catch (Exception ex)
             {
-                errors = ex.Message;
+                Errors = ex.Message;
             }
         }
         public void CancelToken()
         {
             _cts.Cancel();
             _cts.Dispose();
-            _cts = new CancellationTokenSource();
         }
 
 

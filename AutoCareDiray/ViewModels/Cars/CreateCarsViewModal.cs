@@ -19,30 +19,30 @@ namespace AutoCareDiray.ViewModels
 {
     public partial class CreateCarsViewModal : BaseViewModel
     {
-        public CarValidation _carValidation;
+        private CarValidation _carValidation;
         private CancellationTokenSource _cts;
 
         //[ObservableProperty]
         //public string[] brands = CarBrands.Brands;
         [ObservableProperty]
-        public string brandSelected;
+        private string brandSelected;
         [ObservableProperty]
-        public string modelSelected;
+        private string modelSelected;
         [ObservableProperty]
-        public string yearSelected;
+        private string yearSelected;
         [ObservableProperty]
-        public string vinCode;
+        private string vinCode;
         [ObservableProperty]
-        public string mileage;
+        private string mileage;
         [ObservableProperty]
-        public string transmissionBoxSelected;
+        private string transmissionBoxSelected;
         [ObservableProperty]
-        public string engineTypeSelected;
+        private string engineTypeSelected;
         [ObservableProperty]
-        public string yearPuchaseSelected;
+        private string yearPuchaseSelected;
 
         [ObservableProperty]
-        public string errorsAll;
+        private string errorsMessage;
 
      
         public CreateCarsViewModal(IApiService apiService,IDialogService dialogService) : base(apiService, dialogService)
@@ -81,11 +81,11 @@ namespace AutoCareDiray.ViewModels
                     var car = CreateClassCar();
                     var response = await _apiService.CreateCarApiAsync(car,_cts.Token);
 
-                    ErrorsAll = response.Message;
+                    ErrorsMessage = response.Message;
                 }
                 catch (Exception ex)
                 {
-                    errorsAll = ex.Message;
+                    ErrorsMessage = ex.Message;
                 }
             }
         }
