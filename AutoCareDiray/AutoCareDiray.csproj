@@ -93,7 +93,10 @@
 	  <MauiXaml Update="Resources\Styles\ColorsCustomLight.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Resources\Styles\StylesCustom.xaml">
+	  <MauiXaml Update="Resources\Styles\StylesCustomStandart.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\StylesCustom\Authorization\AuthorizationStyle.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Authorization\AuthorizationPage.xaml">
@@ -131,6 +134,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\Authorization\" />
+	  <Folder Include="Resources\Images\Authorization\" />
 	</ItemGroup>
 
 </Project>

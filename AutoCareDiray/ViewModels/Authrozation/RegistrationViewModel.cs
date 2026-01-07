@@ -137,6 +137,7 @@ namespace AutoCareDiray.ViewModels
         {
             _cts.Cancel();
             _cts.Dispose();
+            _cts = new CancellationTokenSource();
         }
     }
 }

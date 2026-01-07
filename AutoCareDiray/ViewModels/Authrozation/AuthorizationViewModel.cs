@@ -30,7 +30,7 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         private string statusMessage = String.Empty;
         [ObservableProperty]
-        private bool isToggleSwitchRemember;
+        private bool isToggleRemember;
         [ObservableProperty]
         private bool isPassword = true;
         [ObservableProperty]
@@ -79,6 +79,11 @@ namespace AutoCareDiray.ViewModels
         {
             await Shell.Current.GoToAsync(nameof(RegistrationPage));
         }
+        [RelayCommand]
+        public async Task ForgotPassword()
+        {
+            
+        }
 
         private void PreferencesSetUser(ApiResponse ApiResponse)
         {
@@ -86,7 +91,7 @@ namespace AutoCareDiray.ViewModels
             Preferences.Set("User_id", userResponse.User_Id.ToString());
             Preferences.Set("NickName", userResponse.NickName);
             Preferences.Set("Email", userResponse.Email);
-            if(IsToggleSwitchRemember) Preferences.Set("is_login", true);
+            if(IsToggleRemember) Preferences.Set("is_login", true);
         }
 
         partial void OnIsTogglePasswordSwitchChanged(bool value)

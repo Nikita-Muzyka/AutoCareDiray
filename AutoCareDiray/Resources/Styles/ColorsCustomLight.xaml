@@ -22,11 +22,14 @@
     <Color x:Key="TextOnPrimary">#FFFFFF</Color>
 
     <!-- ===== КНОПКИ ===== -->
-    <Color x:Key="ButtonPrimary">#E53935</Color>
+    <Color x:Key="ButtonPrimaryRed">#E53935</Color>
+    <Color x:Key="ButtonPrimaryGray">#E8E8E8</Color>
     <Color x:Key="ButtonPrimaryPressed">#D32F2F</Color>
     <Color x:Key="ButtonSecondary">#F5F5F5</Color>
-    <Color x:Key="ButtonTextPrimary">#FFFFFF</Color>
+    <Color x:Key="ButtonTextPrimaryWhite">#FFFFFF</Color>
+    <Color x:Key="ButtonTextPrimaryBlack">#000000</Color>
     <Color x:Key="ButtonTextSecondary">#E53935</Color>
+    <Color x:Key="ButtonTextGray">#757575</Color>
 
     <!-- ===== ПОЛЯ ВВОДА ===== -->
     <Color x:Key="InputBackground">#FFFFFF</Color>

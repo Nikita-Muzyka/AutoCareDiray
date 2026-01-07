@@ -32,15 +32,24 @@ namespace AutoCareDiray
                 });
 
 
-#if ANDROID && DEBUG
-            string baseAddress = "http://192.168.0.105:5286/";
-            TimeSpan time = TimeSpan.FromSeconds(500);
-#elif DEBUG
+            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
+            {
+#if ANDROID
+
+        handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
+#elif IOS
+                // Убираем рамку на iOS
+                handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#elif WINDOWS
+        // Убираем рамку на Windows
+        handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+#endif
+            });
+
+
+#if DEBUG
             string baseAddress = "http://localhost:5286/";
             TimeSpan time = TimeSpan.FromSeconds(30);
-#else
-        string baseAddress = "2";
-        TimeSpan.FromSeconds(30);
 #endif
 
             builder.Services.AddSingleton(new HttpClient

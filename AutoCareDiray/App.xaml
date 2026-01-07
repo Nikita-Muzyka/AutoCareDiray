@@ -11,7 +11,8 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <ResourceDictionary Source="/Resources/Styles/ColorsCustomLight.xaml"/>
                 <!--<ResourceDictionary Source="/Resources/Styles/ColorsCustomDark.xaml"/>-->
-                <ResourceDictionary Source="Resources/Styles/StylesCustom.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/StylesCustomStandart.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/StylesCustom/Authorization/AuthorizationStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
