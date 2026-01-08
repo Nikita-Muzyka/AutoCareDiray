@@ -47,10 +47,8 @@ namespace AutoCareDiray
             });
 
 
-#if DEBUG
             string baseAddress = "http://localhost:5286/";
             TimeSpan time = TimeSpan.FromSeconds(30);
-#endif
 
             builder.Services.AddSingleton(new HttpClient
             {

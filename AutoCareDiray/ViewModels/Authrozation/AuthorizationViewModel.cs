@@ -34,9 +34,9 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         private bool isPassword = true;
         [ObservableProperty]
-        private bool isTogglePasswordSwitch;
-        [ObservableProperty]
         private bool isLoginButtonEnable = true;
+        [ObservableProperty]
+        private bool isToggleImageButton = true;
 
         [RelayCommand]
         public async Task LogInAsync()
@@ -74,15 +74,23 @@ namespace AutoCareDiray.ViewModels
             catch(OperationCanceledException) { IsLoginButtonEnable = true; }
             catch (Exception ex) { StatusMessage = ex.Message; }
         }
+
         [RelayCommand]
         public async Task RegistrationAsync()
         {
             await Shell.Current.GoToAsync(nameof(RegistrationPage));
         }
         [RelayCommand]
-        public async Task ForgotPassword()
+        public async void ForgotPassword()
         {
             
+        }
+
+        [RelayCommand]
+        public void ShowPassword()
+        {
+            IsPassword = !IsPassword;
+            IsToggleImageButton = !IsToggleImageButton;
         }
 
         private void PreferencesSetUser(ApiResponse ApiResponse)
@@ -94,10 +102,10 @@ namespace AutoCareDiray.ViewModels
             if(IsToggleRemember) Preferences.Set("is_login", true);
         }
 
-        partial void OnIsTogglePasswordSwitchChanged(bool value)
-        {
-            IsPassword = !IsTogglePasswordSwitch;
-        }
+        //partial void OnIsTogglePasswordSwitchChanged(bool value)
+        //{
+        //    IsPassword = !IsTogglePasswordSwitch;
+        //}
 
         public void CancelToken()
         {

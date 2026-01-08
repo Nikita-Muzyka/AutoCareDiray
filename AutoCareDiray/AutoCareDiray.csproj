@@ -134,7 +134,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\Authorization\" />
-	  <Folder Include="Resources\Images\Authorization\" />
 	</ItemGroup>
 
 </Project>

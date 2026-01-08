@@ -32,4 +32,22 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
+
+    <!--Кнопка показать пароль/убрать пароль-->
+    <Style TargetType="ImageButton" x:Key="ButtonShowPassword">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="0"/>
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="MinimumHeightRequest" Value="30"/>
+        <Setter Property="MinimumWidthRequest" Value="30"/>
+        <Setter Property="Source" Value="eye_open.png"/>
+        <Style.Triggers>
+            <DataTrigger TargetType="ImageButton"
+                         Binding="{Binding IsToggleImageButton}"
+                         Value="false">
+                <Setter Property="Source" Value="eye_closed.png"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

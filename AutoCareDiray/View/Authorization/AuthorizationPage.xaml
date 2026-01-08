@@ -40,7 +40,7 @@
 
                 <!-- Поле login -->
                 <Border Style="{StaticResource BorderForEntryImput}">
-                    <Grid ColumnDefinitions="30, *">
+                    <Grid ColumnDefinitions="40, *">
                         <Image Grid.Column="0" 
                                HeightRequest="35" 
                                WidthRequest="40"
@@ -50,23 +50,33 @@
                         <Entry Grid.Column="1"
                                Style="{StaticResource EntryImput}"
                                Placeholder="Логин"
+                               HorizontalOptions="Start"
                                Text="{Binding Login}"/>
                     </Grid>
                 </Border>
 
                 <!-- Поле Password -->
                 <Border Style="{StaticResource BorderForEntryImput}">
-                    <Grid ColumnDefinitions="30, *">
+                    <Grid ColumnDefinitions="40, *, 40">
                         <Image Grid.Column="0" 
                                HeightRequest="40" 
                                WidthRequest="40"
                                HorizontalOptions="Start" 
                                Opacity="0.8"
                                Source="password_image.png"/>
+                        <ImageButton Grid.Column="2" 
+                                     Style="{StaticResource ButtonShowPassword}"
+                                     HeightRequest="40" 
+                                     WidthRequest="50"
+                                     HorizontalOptions="Center" 
+                                     Command="{Binding ShowPasswordCommand}"
+                                     Opacity="1"/>
                         <Entry Grid.Column="1" 
                                Style="{StaticResource EntryImput}"
                                Placeholder="Пароль"
-                               IsPassword="True"
+                               IsPassword="{Binding IsPassword}"
+                               WidthRequest="200"
+                               HorizontalOptions="Start"
                                Text="{Binding Password}"/>
                     </Grid>
                 </Border>
@@ -83,6 +93,7 @@
                                                Spacing="8"
                                                VerticalOptions="Center">
                             <CheckBox IsChecked="{Binding IsToggleRemember}"
+                                      Style="{StaticResource CheckBoxStandart}"
                                       WidthRequest="20"/>
                             <Label Text="Запомнить меня"
                                    VerticalOptions="Center"
@@ -114,6 +125,7 @@
                         WidthRequest="300"/>
 
                 <Button Text="Регистрация"
+                        Margin="0,10,0,0"
                         Style="{StaticResource ButtonCustomStandartWhite}"
                         Command="{Binding RegistrationCommand}"
                         HeightRequest="50"
