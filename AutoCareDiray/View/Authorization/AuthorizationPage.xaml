@@ -69,8 +69,8 @@
                                      HeightRequest="40" 
                                      WidthRequest="50"
                                      HorizontalOptions="Center" 
-                                     Command="{Binding ShowPasswordCommand}"
-                                     Opacity="1"/>
+                                     Opacity="0.5"
+                                     Command="{Binding ShowPasswordCommand}"/>
                         <Entry Grid.Column="1" 
                                Style="{StaticResource EntryImput}"
                                Placeholder="Пароль"

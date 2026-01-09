@@ -29,7 +29,8 @@ namespace AutoCareDiray.Service
                 token.ThrowIfCancellationRequested();
                 var userAuth = new UserAuthorization(login, password);
                 var response = await _httpClient.PostAsJsonAsync("api/User/login",userAuth,token);
-               
+                response.EnsureSuccessStatusCode();
+
                 token.ThrowIfCancellationRequested();
                 if (response.IsSuccessStatusCode)
                 {

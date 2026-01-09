@@ -50,10 +50,20 @@ namespace AutoCareDiray
             string baseAddress = "http://localhost:5286/";
             TimeSpan time = TimeSpan.FromSeconds(30);
 
-            builder.Services.AddSingleton(new HttpClient
+            builder.Services.AddSingleton<HttpClient>(sp =>
             {
-                BaseAddress = new Uri(baseAddress),
-                Timeout = time
+                var handler = new HttpClientHandler
+                {
+                    UseProxy = false
+                };
+
+                var client = new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(baseAddress),
+                    Timeout = new TimeSpan(time.Ticks)
+                };
+
+                return client;
             });
 
             builder.Services.AddScoped<IApiService, ApiService>();
