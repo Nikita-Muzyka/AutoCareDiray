@@ -3,6 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.Resources.Styles.StylesCustomStandart">
 
+
+    <!--Лого картинка программы-->
+    <Style TargetType="Image" x:Key="ImageLogoApp">
+        <Setter Property="HeightRequest" Value="300" />
+        <Setter Property="WidthRequest" Value="500" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Start" />
+        <Setter Property="Aspect" Value="AspectFill" />
+        <Setter Property="Source" Value="car_side_view.png" />
+    </Style>
+    
+    
     <Style TargetType="Entry" x:Key="EntryImput">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource PrimaryBlack}, Dark={DynamicResource PrimaryWhite}}" />
         <Setter Property="FontSize" Value="16" />

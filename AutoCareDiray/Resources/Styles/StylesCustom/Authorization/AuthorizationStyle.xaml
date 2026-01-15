@@ -6,7 +6,7 @@
 
     <!--Кнопка забыл пароль-->
     <Style TargetType="Button" x:Key="ButtonForgotPassword">
-        <Setter Property="TextColor" Value="{DynamicResource ButtonTextGray}"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource ButtonTextGray},Dark={DynamicResource ButtonTextGray}}"/>
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderWidth" Value="0"/>

@@ -15,6 +15,7 @@ namespace AutoCareDiray.Service
         Task<ApiResponse> CreateUserApiAsync(UserDTO user,CancellationToken token);
         Task<ApiResponse> CheckUserLoginAsync(string login,CancellationToken token);
         Task<ApiResponse> UpdateUserApiAsync(UserUpdateRequest userRequest, CancellationToken token);
+        Task<ApiResponse> UpdatePasswordApiAsync(UpdateUserPassword userRequest, CancellationToken token);
         Task<ApiResponse> DeleteUserApiAsync(int User_id, CancellationToken token);
 
         //Car

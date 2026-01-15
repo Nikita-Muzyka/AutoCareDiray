@@ -3,8 +3,10 @@ using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service; // Ваши сервисы
 using AutoCareDiray.Service.ValidationService;
 using AutoCareDiray.View;
+using AutoCareDiray.View.Authorization;
 using AutoCareDiray.View.Maintenanse;
 using AutoCareDiray.ViewModels;
+using AutoCareDiray.ViewModels.Authrozation;
 using AutoCareDiray.ViewModels.Cars;
 using AutoCareDiray.ViewModels.Maintenanse;
 using CommunityToolkit.Maui;
@@ -75,6 +77,8 @@ namespace AutoCareDiray
             builder.Services.AddTransient<AuthorizationViewModel>();
             builder.Services.AddTransient<RegistrationPage>();
             builder.Services.AddTransient<RegistrationViewModel>();
+            builder.Services.AddTransient<RecoverPasswordView>();
+            builder.Services.AddTransient<RecoverPasswordViewModels>();
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<MainPageViewModal>();
             builder.Services.AddTransient<UserSettingsViewModal>();

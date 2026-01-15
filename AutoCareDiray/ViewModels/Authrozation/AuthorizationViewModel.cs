@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using AutoCareDiray.View;
 using AutoCareDiray.Service.APIResponse.UserResponse;
 using AutoCareDiray.Models.Validation;
+using AutoCareDiray.View.Authorization;
 
 
 namespace AutoCareDiray.ViewModels
@@ -80,10 +81,11 @@ namespace AutoCareDiray.ViewModels
         {
             await Shell.Current.GoToAsync(nameof(RegistrationPage));
         }
+
         [RelayCommand]
-        public async void ForgotPassword()
+        public async void RecoverPassword()
         {
-            
+            await Shell.Current.GoToAsync(nameof(RecoverPasswordView));
         }
 
         [RelayCommand]
@@ -102,11 +104,7 @@ namespace AutoCareDiray.ViewModels
             if(IsToggleRemember) Preferences.Set("is_login", true);
         }
 
-        //partial void OnIsTogglePasswordSwitchChanged(bool value)
-        //{
-        //    IsPassword = !IsTogglePasswordSwitch;
-        //}
-
+       
         public void CancelToken()
         {
             _cts?.Cancel();

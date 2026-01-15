@@ -65,7 +65,7 @@ namespace AutoCareDiray.Service
             {
                 token.ThrowIfCancellationRequested();
                 var response = await _httpClient.PostAsJsonAsync("api/User/register", user);
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadFromJsonAsync<GetUserResponse>();
                     return result;
@@ -95,7 +95,7 @@ namespace AutoCareDiray.Service
             {
                 token.ThrowIfCancellationRequested();
                 var response = await _httpClient.PostAsJsonAsync("api/User/checkLogin", new UserLoginRequest(login));
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadFromJsonAsync<OperationResultResponse>();
                     return result;
@@ -125,14 +125,42 @@ namespace AutoCareDiray.Service
             {
                 token.ThrowIfCancellationRequested();
                 var response = await _httpClient.PutAsJsonAsync($"api/User/updateUser", userRequest);
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadFromJsonAsync<OperationResultResponse>();
                     return result;
                 }
                 else
                 {
-                    token.ThrowIfCancellationRequested();
+                    var result = await response.Content.ReadFromJsonAsync<ErrorsResponse>();
+                    return result;
+                }
+            }
+            catch (OperationCanceledException) { throw; }
+            catch (HttpRequestException ex)
+            {
+                return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorsResponse("При создании пользователя произошла ошибка приложения", ex.Message);
+            }
+        }
+
+        // PUT UPdate Password for User
+        public async Task<ApiResponse> UpdatePasswordApiAsync(UpdateUserPassword userRequest, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var response = await _httpClient.PutAsJsonAsync($"api/User/updateUser", userRequest);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<OperationResultResponse>();
+                    return result;
+                }
+                else
+                {
                     var result = await response.Content.ReadFromJsonAsync<ErrorsResponse>();
                     return result;
                 }

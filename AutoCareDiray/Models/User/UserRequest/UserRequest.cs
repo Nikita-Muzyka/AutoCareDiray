@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoCareDiray.Models.User
+namespace AutoCareDiray.Models
 {
     public abstract class UserRequest
     {

@@ -11,13 +11,8 @@
     <!-- ГЛАВНЫЙ КОНТЕЙНЕР: Grid занимает весь экран -->
     <Grid RowDefinitions="250,auto">
 
-        <!-- Машина -->
-        <Image Source="car_side_view.png"
-               HeightRequest="300"
-               WidthRequest="400"
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               Aspect="AspectFill"/>
+        <!-- LOGO -->
+        <Image Style="{StaticResource ImageLogoApp}"/>
         
         <ScrollView VerticalScrollBarVisibility="Never"
                     Grid.Row="1">
@@ -105,7 +100,7 @@
                         <Button Grid.Column="1"
                                 Text="Забыли пароль?"
                                 Style="{StaticResource ButtonForgotPassword}"
-                                Command="{Binding RegistrationCommand}"
+                                Command="{Binding RecoverPasswordCommand}"
                                 HorizontalOptions="End"
                                 HeightRequest="40"
                                 WidthRequest="120"/>
