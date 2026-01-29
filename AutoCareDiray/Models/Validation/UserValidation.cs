@@ -1,13 +1,8 @@
 ﻿using AutoCareDiray.Service;
 using AutoCareDiray.Service.ValidationService;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+using AutoCareDiray.Shared.DTOs.UserDTO;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace AutoCareDiray.Models.Validation
 {
@@ -99,7 +94,7 @@ namespace AutoCareDiray.Models.Validation
                         try
                         {
                             token.ThrowIfCancellationRequested();
-                            var response = await _apiService.CheckUserLoginAsync(login, token);
+                            var response = await _apiService.CheckUserLoginAsync(new UserLoginRequest(login), token);
                             token.ThrowIfCancellationRequested();
                             if (response.Success == true)
                             {
@@ -107,7 +102,7 @@ namespace AutoCareDiray.Models.Validation
                             }
                             else
                             {
-                                ErrorAdd(propertyLogin, response.Message);
+                                ErrorAdd(propertyLogin, response.ErrorMessage);
                             }
                         }
                         catch (OperationCanceledException) { }

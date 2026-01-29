@@ -137,6 +137,11 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\Authorization\" />
+	  <Folder Include="Models\User\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\AutoCareDiray.Shared\AutoCareDiray.Shared\AutoCareDiray.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

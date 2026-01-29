@@ -1,14 +1,10 @@
 ﻿using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service;
+using AutoCareDiray.Shared.DTOs.UserDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoCareDiray.Models;
+
 
 namespace AutoCareDiray.ViewModels.Authrozation
 {
@@ -50,12 +46,12 @@ namespace AutoCareDiray.ViewModels.Authrozation
             else
             {
                 _cts = new CancellationTokenSource();
-                var updatePassword = new UpdateUserPassword(Login,OldPassword,NewPassword);
-                var result = await _apiService.UpdatePasswordApiAsync(updatePassword,_cts.Token);
+                var updatePassword = new UpdatePassword(0,OldPassword,NewPassword);
+                var result = await _apiService.RecoverPasswordApiAsync(Login, updatePassword,_cts.Token);
 
                 if (result.Success)
                 {
-                    await _dialogService.ShowMessage(result.Message);
+                    await _dialogService.ShowMessage("Пароль обновлен");
                     Back();
                 }
             }

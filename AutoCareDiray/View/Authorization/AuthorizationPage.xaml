@@ -110,7 +110,8 @@
 
 
 
-
+                <Label Text="{Binding StatusMessage}"
+                       Style="{DynamicResource LabelAuthResponse}"/>
                 <!-- Кнопки -->
                 <Button Text="Войти"
                         Margin="0,10,0,0"

@@ -1,18 +1,12 @@
 ﻿
 using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service;
-using AutoCareDiray.Service.APIResponse.UserResponse;
-using AutoCareDiray.View;
+using AutoCareDiray.Shared.DTOs.UserDTO;
+using AutoCareDiray.Shared.Result;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-using AutoCareDiray.Models.User;
+
 
 namespace AutoCareDiray.ViewModels
 {
@@ -52,7 +46,7 @@ namespace AutoCareDiray.ViewModels
 
 
         [RelayCommand]
-        public async Task CreateUserDTOAsync()
+        public async Task RegistrationUserAsync()
         {
             try
             {
@@ -66,7 +60,7 @@ namespace AutoCareDiray.ViewModels
             catch (OperationCanceledException) { }
         }
         [RelayCommand]
-        public async Task CloseModalViewAsync()
+        public async Task Back()
         {
             await Shell.Current.GoToAsync("..");
         }
@@ -103,21 +97,21 @@ namespace AutoCareDiray.ViewModels
                 var response = await _apiService.CreateUserApiAsync(userDTO, _cts.Token);
                 if (response.Success == true)
                 {
-                    await _dialogService.ShowMessage(response.Message);
+                    await _dialogService.ShowMessage("Пользователь Создан");
                     PreferencesSetUser(response);
                     await Shell.Current.GoToAsync("..");
                 }
-                else StatusMessage = response.Message;
+                else StatusMessage = response.ErrorMessage;
             }
             catch (OperationCanceledException) { }
         }
 
-         void PreferencesSetUser(ApiResponse apiResponse)
+         void PreferencesSetUser(Result result)
         {
-            GetUserResponse? userResponse = apiResponse as GetUserResponse;
-            Preferences.Set("User_id", userResponse.User_Id.ToString());
-            Preferences.Set ("NickName", userResponse.NickName);
-            Preferences.Set("Email", userResponse.Email);
+            Result<UserDTO> resultUser = result as Result<UserDTO>;
+            Preferences.Set("User_id", resultUser.Data.User_id.ToString());
+            Preferences.Set ("NickName", resultUser.Data.NickName);
+            Preferences.Set("Email", resultUser.Data.Email);
         }
 
         async  Task DebounceSearchAsync(string value)

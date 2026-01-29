@@ -1,16 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using AutoCareDiray.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
 using AutoCareDiray.View;
-using AutoCareDiray.Service.APIResponse.UserResponse;
 using AutoCareDiray.Models.Validation;
 using AutoCareDiray.View.Authorization;
+using AutoCareDiray.Shared.Result;
+using AutoCareDiray.Shared.DTOs.UserDTO;
 
 
 namespace AutoCareDiray.ViewModels
@@ -58,13 +53,12 @@ namespace AutoCareDiray.ViewModels
                     IsLoginButtonEnable = true;
 
                     if (response.Success == true)
-                    {;
-                        StatusMessage = response.Message;
+                    {
                         PreferencesSetUser(response);
 
                         await Shell.Current.GoToAsync("//Main/MainPage");
                     }
-                    else StatusMessage = response.Message;
+                    else StatusMessage = response.ErrorMessage;
                 }
                 else
                 {
@@ -95,12 +89,12 @@ namespace AutoCareDiray.ViewModels
             IsToggleImageButton = !IsToggleImageButton;
         }
 
-        private void PreferencesSetUser(ApiResponse ApiResponse)
+        private void PreferencesSetUser(Result result)
         {
-            GetUserResponse? userResponse = ApiResponse as GetUserResponse;
-            Preferences.Set("User_id", userResponse.User_Id.ToString());
-            Preferences.Set("NickName", userResponse.NickName);
-            Preferences.Set("Email", userResponse.Email);
+            Result<UserDTO> resultUser = result as Result<UserDTO>;
+            Preferences.Set("User_id", resultUser.Data.User_id.ToString());
+            Preferences.Set("NickName", resultUser.Data.NickName);
+            Preferences.Set("Email", resultUser.Data.Email);
             if(IsToggleRemember) Preferences.Set("is_login", true);
         }
 
