@@ -78,6 +78,8 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10" />
+		<PackageReference Include="Shiny.BluetoothLE" Version="3.3.4" />
+		<PackageReference Include="Shiny.Hosting.Maui" Version="3.3.4" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -115,6 +117,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Cars\ListCars.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Diagnostics\DiagnosticsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Maintenance (Заменить на C)\CreateMaintenanse.xaml">

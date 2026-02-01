@@ -29,5 +29,9 @@
       Route="UserSettings">
             <ShellContent ContentTemplate="{DataTemplate local:UserSettingsPage}"/>
         </Tab>
+        <Tab Title="Диагностика"
+       Route="Diagnostics">
+            <ShellContent ContentTemplate="{DataTemplate local:DiagnosticsView}"/>
+        </Tab>
     </TabBar>
 </Shell>

@@ -8,10 +8,13 @@ using AutoCareDiray.View.Maintenanse;
 using AutoCareDiray.ViewModels;
 using AutoCareDiray.ViewModels.Authrozation;
 using AutoCareDiray.ViewModels.Cars;
+using AutoCareDiray.ViewModels.Diagnostics;
 using AutoCareDiray.ViewModels.Maintenanse;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.DependencyInjection; // Добавьте эту строку
 using Microsoft.Extensions.Logging;
+using Shiny;
+using Shiny.BluetoothLE;
 
 
 namespace AutoCareDiray
@@ -23,6 +26,7 @@ namespace AutoCareDiray
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseShiny()
                  .UseMauiCommunityToolkit() // ← Добавьте эту строку!
                 .ConfigureFonts(fonts =>
                 {
@@ -68,6 +72,8 @@ namespace AutoCareDiray
                 return client;
             });
 
+            builder.Services.AddBluetoothLE();
+
             builder.Services.AddScoped<IApiService, ApiService>();
             builder.Services.AddTransient<IDialogService,DialogService>();
             builder.Services.AddTransient<IValidatorService, ValidatorService>();
@@ -75,24 +81,36 @@ namespace AutoCareDiray
 
             builder.Services.AddTransient<AuthorizationPage>();
             builder.Services.AddTransient<AuthorizationViewModel>();
+
             builder.Services.AddTransient<RegistrationPage>();
             builder.Services.AddTransient<RegistrationViewModel>();
+
             builder.Services.AddTransient<RecoverPasswordView>();
             builder.Services.AddTransient<RecoverPasswordViewModels>();
+
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<MainPageViewModal>();
+
             builder.Services.AddTransient<UserSettingsViewModal>();
             builder.Services.AddTransient<UserSettingsPage>();
+
             builder.Services.AddTransient<ListCars>();
             builder.Services.AddTransient<ListCarsViewModal>();
+
             builder.Services.AddTransient<CarCardPage>();
             builder.Services.AddTransient<CarCardViewModal>();
+
             builder.Services.AddTransient<CreateCarsPage>();
             builder.Services.AddTransient<CreateCarsViewModal>();
+
             builder.Services.AddTransient<CreateMaintenanse>();
             builder.Services.AddTransient<CreateMaintenanseViewModal>();
+
             builder.Services.AddTransient<ListMaintenanseView>();
             builder.Services.AddTransient<ListMaintenanseViewModel>();
+
+            builder.Services.AddTransient<DiagnosticsView>();
+            builder.Services.AddTransient<DiagnosticsViewModel>();
 
             // Регистрация сервиса
 

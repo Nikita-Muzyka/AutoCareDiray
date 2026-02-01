@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.View.DiagnosticsView"
+             Title="DiagnosticsView">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Button Text="Сканировать BLE-устройства"
+             Command="{Binding ScanBLECommand}"/>
+
+            <Label Text="Найденные устройства:" FontAttributes="Bold" />
+
+            <CollectionView SelectionMode="Single"
+                     ItemsSource="{Binding Device}"
+                     SelectedItem="{Binding SelectedDevice}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Padding="10">
+                            <Label Text="{Binding Name}" FontSize="16" />
+                            <Label Text="{Binding Id}" FontSize="16" />
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="Ответ от OBD:" FontAttributes="Bold" />
+            <Label Text="{Binding StatusMessageDevice}" Padding="10" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
