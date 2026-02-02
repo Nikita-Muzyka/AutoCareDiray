@@ -10,12 +10,12 @@ namespace AutoCareDiray.ViewModels.Authrozation
 {
     public partial class RecoverPasswordViewModels : BaseViewModel
     {
-        private UserValidation _userValidation;
+        private RecoverValidation _recoverValidation;
         private CancellationTokenSource _cts;
-        public RecoverPasswordViewModels(IApiService apiService, IDialogService dialog,UserValidation validation) : base(apiService, dialog)
+        public RecoverPasswordViewModels(IApiService apiService, IDialogService dialog,RecoverValidation recoverValidation) : base(apiService, dialog)
         {
-            _userValidation = validation;
-            _userValidation.ErrorsChanged += (s,e) => OnErrorsChangedUI(e);
+            _recoverValidation = recoverValidation;
+            recoverValidation.ErrorsChanged += (s,e) => OnErrorsChangedUI(e);
         }
 
         [ObservableProperty]
@@ -31,29 +31,32 @@ namespace AutoCareDiray.ViewModels.Authrozation
         [ObservableProperty]
         private bool isToggleImageButton = true;
         [ObservableProperty]
-        private bool isEnableChangeButton = true;
+        private string statusMessage;
 
-        private string propertyPassword => _userValidation.propertyPassword;
-
-        private bool HasErrors => _userValidation.HasErrors;
-        public string PasswordErrors => _userValidation.GetErrors(propertyPassword) as string;
+        private bool HasErrors => _recoverValidation.HasErrors;
+        private bool IsEnableChangeButton => !_recoverValidation.HasErrors;
+        public string NewPasswordError => _recoverValidation.GetErrors(nameof(NewPasswordError)) as string;
+        public string OldPasswordError => _recoverValidation.GetErrors(nameof(OldPasswordError)) as string;
+        public string LoginErrors => _recoverValidation.GetErrors(nameof(LoginErrors)) as string;
 
         [RelayCommand]
-        public async void ChangePassword()
+        public async void RecoverPassword()
         {
-            _userValidation.ValidationPassword(NewPassword);
-            if (HasErrors) IsEnableChangeButton = false;
+            _recoverValidation.AllValidation(NewPassword, OldPassword);
+
+            if (HasErrors) ;
             else
             {
                 _cts = new CancellationTokenSource();
-                var updatePassword = new UpdatePassword(0,OldPassword,NewPassword);
-                var result = await _apiService.RecoverPasswordApiAsync(Login, updatePassword,_cts.Token);
+                var updatePassword = new UpdatePassword(-1,OldPassword, NewPassword);
+                var result = await _apiService.RecoverPasswordApiAsync(Login, updatePassword, _cts.Token);
 
                 if (result.Success)
                 {
                     await _dialogService.ShowMessage("Пароль обновлен");
                     Back();
                 }
+                else StatusMessage = result.ErrorMessage;
             }
         }
         [RelayCommand]
@@ -71,13 +74,35 @@ namespace AutoCareDiray.ViewModels.Authrozation
 
         partial void OnNewPasswordChanged(string value)
         {
-            _userValidation.ValidationPassword(value);
+            _recoverValidation.ValidationNewPassword(value);
+        }
+        partial void OnOldPasswordChanged(string value)
+        {
+            _recoverValidation.ValidationOldPassword(value);
+        }
+        partial void OnLoginChanged(string value)
+        {
+            _ = DebounceSearchAsync(value);
+        }
+
+        async Task DebounceSearchAsync(string value)
+        {
+            try
+            {
+                _cts?.Cancel();
+                _cts = new CancellationTokenSource();
+
+                await Task.Delay(1000, _cts.Token);
+                await _recoverValidation.ValidationLoginAsync(value, _cts.Token);
+            }
+            catch (TaskCanceledException) { }
         }
 
         private void OnErrorsChangedUI(DataErrorsChangedEventArgs e)
         {
             OnPropertyChanged(nameof(HasErrors));
-            OnPropertyChanged(nameof(PasswordErrors));
+            OnPropertyChanged(nameof(IsEnableChangeButton));
+            OnPropertyChanged(e.PropertyName);
         }
     }
 }

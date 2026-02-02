@@ -91,6 +91,14 @@
         <Setter Property="HorizontalOptions" Value="Start"/>
         <Setter Property="Opacity" Value="0.8"/>
     </Style>
+
+    <Style TargetType="Label" x:Key="LaberErrorAuth">
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="HeightRequest" Value="15"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
+    </Style>
 </ResourceDictionary>
 
     

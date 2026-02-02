@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.RegistrationPage"
+             Shell.FlyoutBehavior="Disabled"
              Style="{StaticResource CustomPage}">
     
     <ScrollView VerticalScrollBarVisibility="Never">
@@ -19,7 +20,10 @@
 
                     <!-- Логотип -->
                     <Label Style="{DynamicResource LabelLogo}"/>
-                    <!-- Поле Ник нейм -->
+
+                <Label Text="{Binding NickNameError }"
+                       Style="{StaticResource LaberErrorAuth}"/>
+                <!-- Поле Ник нейм -->
                     <Border Style="{StaticResource BorderForEntryImputAuth}">
                         <Grid ColumnDefinitions="40, *">
                             <Image Grid.Column="0" 
@@ -32,7 +36,10 @@
                         </Grid>
                     </Border>
 
-                    <!-- Поле email -->
+                <Label Text="{Binding EmailError}"
+                       Style="{StaticResource LaberErrorAuth}"/>
+                    
+                <!-- Поле email -->
                     <Border Style="{StaticResource BorderForEntryImputAuth}">
                         <Grid ColumnDefinitions="40, *">
                             <Image Grid.Column="0" 
@@ -45,7 +52,10 @@
                         </Grid>
                     </Border>
 
-                    <!-- Поле Логин -->
+                <Label Text="{Binding LoginError }"
+                       Style="{StaticResource LaberErrorAuth}"/>
+
+                <!-- Поле Логин -->
                     <Border Style="{StaticResource BorderForEntryImputAuth}">
                         <Grid ColumnDefinitions="40, *">
                             <Image Grid.Column="0" 
@@ -58,7 +68,9 @@
                         </Grid>
                     </Border>
 
-                    <!-- Поле пароль -->
+                <Label Text="{Binding PasswordError }"
+                       Style="{StaticResource LaberErrorAuth}"/>
+                <!-- Поле пароль -->
                     <Border Style="{StaticResource BorderForEntryImputAuth}">
                         <Grid ColumnDefinitions="40, *">
                             <Image Grid.Column="0" 

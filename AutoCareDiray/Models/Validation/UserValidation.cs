@@ -52,7 +52,7 @@ namespace AutoCareDiray.Models.Validation
             {
                 if(email.Contains(" "))
                 {
-                    ErrorAdd(propertyNickName, "Email - не должен содержать пробелы");
+                    ErrorAdd(propertyEmail, "Email - не должен содержать пробелы");
                 }
                 else
                 {
@@ -75,6 +75,7 @@ namespace AutoCareDiray.Models.Validation
                     else ErrorAdd(propertyEmail, "Email - должен содержать не больше 40 символов");
                 }
             }
+            else OnErrorsChanges(propertyEmail);
         }
         public async Task ValidationLoginAsync(string login, CancellationToken token)
         {
@@ -85,7 +86,7 @@ namespace AutoCareDiray.Models.Validation
             {
                 if(login.Contains(" "))
                 {
-                    ErrorAdd(propertyNickName, "Логин - не должен содержать пробелы");
+                    ErrorAdd(propertyLogin, "Логин - не должен содержать пробелы");
                 }
                 else
                 {
@@ -124,7 +125,7 @@ namespace AutoCareDiray.Models.Validation
             {
                 if(password.Contains(" "))
                 {
-                    ErrorAdd(propertyNickName, "Пароль - не должен содержать пробелы");
+                    ErrorAdd(propertyPassword, "Пароль - не должен содержать пробелы");
                 }
                 else
                 {

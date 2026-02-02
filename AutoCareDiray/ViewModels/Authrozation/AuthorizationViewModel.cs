@@ -83,6 +83,15 @@ namespace AutoCareDiray.ViewModels
         }
 
         [RelayCommand]
+        public async void LogInWithout()
+        {
+            Preferences.Clear();
+            Preferences.Set("LoginWithout", true);
+            Preferences.Set("is_login", true);
+            await Shell.Current.GoToAsync("//Main/MainPage");
+        }
+
+        [RelayCommand]
         public void ShowPassword()
         {
             IsPassword = !IsPassword;

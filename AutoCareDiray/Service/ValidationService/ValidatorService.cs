@@ -29,6 +29,11 @@ namespace AutoCareDiray.Service.ValidationService
             return _errors.ContainsKey(propertyName) ? _errors[propertyName].FirstOrDefault() : Enumerable.Empty<string>();
         }
 
+        public bool GetVisibleErrors(string propertyName)
+        {
+            return false;
+        }
+
         public void ErrorAdd(string propertyName,string value)
         {
             _errors.Add(propertyName, new List<string> { value });

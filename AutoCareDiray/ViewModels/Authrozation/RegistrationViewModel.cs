@@ -30,6 +30,7 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         private string password;
 
+
         public RegistrationViewModel(IApiService apiService,IDialogService _dialogService,UserValidation validation) : base(apiService, _dialogService)
         {
             _userValidation = validation;
@@ -87,6 +88,7 @@ namespace AutoCareDiray.ViewModels
             OnPropertyChanged(nameof(HasErrors));
             OnPropertyChanged(nameof(IsValidButton));
             OnPropertyChanged(e.PropertyName);
+            
         }
 
         public async Task RegistrationApiAsync()
@@ -114,7 +116,7 @@ namespace AutoCareDiray.ViewModels
             Preferences.Set("Email", resultUser.Data.Email);
         }
 
-        async  Task DebounceSearchAsync(string value)
+        async Task DebounceSearchAsync(string value)
         {
             try
             {

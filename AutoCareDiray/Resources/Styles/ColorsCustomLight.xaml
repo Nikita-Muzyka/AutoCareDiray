@@ -19,7 +19,7 @@
     <Color x:Key="TextPrimary">#212121</Color>
     <Color x:Key="TextSecondary">#757575</Color>
     <Color x:Key="TextDisabled">#9E9E9E</Color>
-    <Color x:Key="TextOnPrimary">#FFFFFF</Color>
+    <Color x:Key="TextError">#E53935</Color>
 
     <!-- ===== КНОПКИ ===== -->
     <Color x:Key="ButtonPrimaryRed">#E53935</Color>

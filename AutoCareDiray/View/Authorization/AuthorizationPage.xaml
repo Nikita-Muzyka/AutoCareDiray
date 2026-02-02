@@ -6,20 +6,18 @@
              Shell.FlyoutBehavior="Disabled">
 
 
-    
 
-    <!-- ГЛАВНЫЙ КОНТЕЙНЕР: Grid занимает весь экран -->
-    <Grid RowDefinitions="250,auto">
-
-        <!-- LOGO -->
-        <Image Style="{StaticResource ImageLogoApp}"/>
+    <ScrollView VerticalScrollBarVisibility="Never">
         
-        <ScrollView VerticalScrollBarVisibility="Never"
-                    Grid.Row="1">
+        <Grid RowDefinitions="250,auto">
+
+            <!-- LOGO -->
+            <Image Style="{StaticResource ImageLogoApp}"/>
 
             <!-- Контент внутри скролла -->
             <VerticalStackLayout Spacing="5" 
-                                 Padding="30, 20, 30, 0">
+                               Padding="30, 20, 30, 0"
+                               Grid.Row="1">
 
                 <!-- Логотип -->
                 <Label Style="{DynamicResource LabelLogo}"/>
@@ -27,12 +25,12 @@
                 <Border Style="{StaticResource BorderForEntryImputAuth}">
                     <Grid ColumnDefinitions="40, *">
                         <Image Grid.Column="0" 
-                               Source="login_image.png"
-                               Style="{StaticResource ImageImputAuth}"/>
+                             Source="login_image.png"
+                             Style="{StaticResource ImageImputAuth}"/>
                         <Entry Grid.Column="1"
-                               Style="{StaticResource EntryImputAuth}"
-                               Placeholder="Логин"
-                               Text="{Binding Login}"/>
+                             Style="{StaticResource EntryImputAuth}"
+                             Placeholder="Логин"
+                             Text="{Binding Login}"/>
                     </Grid>
                 </Border>
 
@@ -40,48 +38,48 @@
                 <Border Style="{StaticResource BorderForEntryImputAuth}">
                     <Grid ColumnDefinitions="40, *, 40">
                         <Image Grid.Column="0" 
-                               Source="password_image.png"
-                               Style="{StaticResource ImageImputAuth}"/>
+                             Source="password_image.png"
+                             Style="{StaticResource ImageImputAuth}"/>
                         <ImageButton Grid.Column="2" 
-                                     Style="{StaticResource ButtonShowPassword}"
-                                     Command="{Binding ShowPasswordCommand}"/>
+                                   Style="{StaticResource ButtonShowPassword}"
+                                   Command="{Binding ShowPasswordCommand}"/>
                         <Entry Grid.Column="1" 
-                               Style="{StaticResource EntryImputAuth}"
-                               Placeholder="Пароль"
-                               IsPassword="{Binding IsPassword}"
-                               WidthRequest="200"
-                               Text="{Binding Password}"/>
+                             Style="{StaticResource EntryImputAuth}"
+                             Placeholder="Пароль"
+                             IsPassword="{Binding IsPassword}"
+                             WidthRequest="200"
+                             Text="{Binding Password}"/>
                     </Grid>
                 </Border>
 
                 <Border Background="Transparent"
-                        StrokeThickness="0"
-                        Stroke="Transparent">
+                      StrokeThickness="0"
+                      Stroke="Transparent">
 
                     <Grid ColumnDefinitions="*,Auto"
-                          VerticalOptions="Center">
+                        VerticalOptions="Center">
 
                         <!-- Слева: CheckBox + подпись -->
                         <HorizontalStackLayout Grid.Column="0"
-                                               Spacing="8"
-                                               VerticalOptions="Center">
+                                             Spacing="8"
+                                             VerticalOptions="Center">
                             <CheckBox IsChecked="{Binding IsToggleRemember}"
-                                      Style="{StaticResource CheckBoxStandart}"
-                                      WidthRequest="20"/>
+                                    Style="{StaticResource CheckBoxStandart}"
+                                    WidthRequest="20"/>
                             <Label Text="Запомнить меня"
-                                   VerticalOptions="Center"
-                                   FontSize="14"
-                                   FontFamily="RubikRegular"/>
+                                 VerticalOptions="Center"
+                                 FontSize="14"
+                                 FontFamily="RubikRegular"/>
                         </HorizontalStackLayout>
 
-                       
+
                         <Button Grid.Column="1"
-                                Text="Забыли пароль?"
-                                Style="{StaticResource ButtonForgotPassword}"
-                                Command="{Binding RecoverPasswordCommand}"
-                                HorizontalOptions="End"
-                                HeightRequest="40"
-                                WidthRequest="120"/>
+                              Text="Забыли пароль?"
+                              Style="{StaticResource ButtonForgotPassword}"
+                              Command="{Binding RecoverPasswordCommand}"
+                              HorizontalOptions="End"
+                              HeightRequest="40"
+                              WidthRequest="120"/>
                     </Grid>
 
                 </Border>
@@ -89,19 +87,27 @@
 
 
                 <Label Text="{Binding StatusMessage}"
-                       Style="{DynamicResource LabelAuthResponse}"/>
+                     Style="{DynamicResource LabelAuthResponse}"/>
                 <!-- Кнопки -->
                 <Button Text="Войти"
-                        Margin="0,10,0,0"
-                        Style="{StaticResource ButtonCustomStandartRed}"
-                        Command="{Binding LogInCommand}"/>
+                      Margin="0,10,0,0"
+                      Style="{StaticResource ButtonCustomStandartRed}"
+                      Command="{Binding LogInCommand}"/>
 
                 <Button Text="Регистрация"
-                        Margin="0,10,0,0"
-                        Style="{StaticResource ButtonCustomStandartWhite}"
-                        Command="{Binding RegistrationCommand}"/>
+                      Margin="0,10,0,0"
+                      Style="{StaticResource ButtonCustomStandartWhite}"
+                      Command="{Binding RegistrationCommand}"/>
+
+                <Button Grid.Column="1"
+       Text="Войти без авторизации"
+       Style="{StaticResource ButtonForgotPassword}"
+       Command="{Binding LogInWithoutCommand}"
+       HorizontalOptions="Center"
+       HeightRequest="40"
+       WidthRequest="200"/>
 
             </VerticalStackLayout>
-        </ScrollView>
-    </Grid>
+        </Grid>
+    </ScrollView>
 </ContentPage>
