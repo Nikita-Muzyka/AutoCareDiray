@@ -138,6 +138,7 @@
 	<ItemGroup>
 	  <Folder Include="Models\Authorization\" />
 	  <Folder Include="Models\User\" />
+	  <Folder Include="Resources\Images\logo\" />
 	</ItemGroup>
 
 	<ItemGroup>

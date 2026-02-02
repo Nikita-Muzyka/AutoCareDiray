@@ -13,44 +13,34 @@
         <Setter Property="Aspect" Value="AspectFill" />
         <Setter Property="Source" Value="car_side_view.png" />
     </Style>
-    
-    
-    <Style TargetType="Entry" x:Key="EntryImput">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource PrimaryBlack}, Dark={DynamicResource PrimaryWhite}}" />
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={DynamicResource InputPlaceholder}, Dark={DynamicResource InputPlaceholder}}" />
-        <Setter Property="MinimumHeightRequest" Value="50"/>
-        <Setter Property="MinimumWidthRequest" Value="50"/>
-        <Setter Property="WidthRequest" Value="250"/>
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Disabled">
-                        <VisualState.Setters>
-                            <Setter Property="TextColor" Value="{DynamicResource Gray500}" />
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateGroupList>
+
+    <Style TargetType="Label" x:Key="LabelLogo">
+        <Setter Property="FontSize" Value="38"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="Margin" Value="0, 5, 0, 20"/>
+        <Setter Property="FormattedText">
+            <FormattedString>
+                <Span Text="AutoCare " 
+                      TextColor="{StaticResource PrimaryRed}" 
+                      FontAttributes="Bold" 
+                      FontFamily="{StaticResource RubikBold}"/>
+                <Span Text="Diary" 
+                      TextColor="{StaticResource TextSecondary}" 
+                      FontAttributes="Bold" 
+                      FontFamily="{StaticResource RubikBold}"/>
+            </FormattedString>
         </Setter>
     </Style>
 
-    <!--Border для полей ввода под EntryImput-->
-    <Style TargetType="Border" x:Key="BorderForEntryImput">
-        <Setter Property="Stroke" Value="{AppThemeBinding Light={DynamicResource InputBorder}, Dark={DynamicResource InputBorder}}" />
-        <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
-        <Setter Property="StrokeThickness" Value="1"/>
-        <Setter Property="WidthRequest" Value="300"/>
-    </Style>
+
+   
 
 
     <!--Кнопка стандартная красная-->
     <Style TargetType="Button" x:Key="ButtonCustomStandartRed">
         <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryWhite}"/>
         <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPrimaryRed}" />
+        <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderWidth" Value="0"/>
         <Setter Property="CornerRadius" Value="20"/>
@@ -60,6 +50,8 @@
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="MinimumHeightRequest" Value="30"/>
         <Setter Property="MinimumWidthRequest" Value="30"/>
+        <Setter Property="HeightRequest" Value="50"/>
+        <Setter Property="WidthRequest" Value="300"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -80,8 +72,10 @@
     <Style TargetType="Button" x:Key="ButtonCustomStandartWhite">
         <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryBlack}"/>
         <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPrimaryGray}" />
+        <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="BorderWidth" Value="0"/>
+        <Setter Property="BorderWidth" Value="1"/>
+        <Setter Property="BorderColor" Value="Black"/>
         <Setter Property="CornerRadius" Value="20"/>
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="VerticalOptions" Value="Center" />
@@ -89,6 +83,8 @@
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="MinimumHeightRequest" Value="30"/>
         <Setter Property="MinimumWidthRequest" Value="30"/>
+        <Setter Property="HeightRequest" Value="50"/>
+        <Setter Property="WidthRequest" Value="300"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">

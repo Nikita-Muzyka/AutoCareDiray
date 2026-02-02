@@ -39,9 +39,12 @@
         <Setter Property="BorderWidth" Value="0"/>
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="MinimumHeightRequest" Value="30"/>
-        <Setter Property="MinimumWidthRequest" Value="30"/>
+        <Setter Property="MinimumHeightRequest" Value="40"/>
+        <Setter Property="MinimumWidthRequest" Value="50"/>
+        <Setter Property="HeightRequest" Value="40"/>
+        <Setter Property="WidthRequest" Value="50"/>
         <Setter Property="Source" Value="eye_open.png"/>
+        <Setter Property="Opacity" Value="0.5"/>
         <Style.Triggers>
             <DataTrigger TargetType="ImageButton"
                          Binding="{Binding IsToggleImageButton}"
@@ -50,4 +53,44 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
+
+    <!--Border для полей ввода под EntryImput-->
+    <Style TargetType="Border" x:Key="BorderForEntryImputAuth">
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={DynamicResource InputBorder}, Dark={DynamicResource InputBorder}}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="WidthRequest" Value="300"/>
+    </Style>
+
+    <Style TargetType="Entry" x:Key="EntryImputAuth">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource PrimaryBlack}, Dark={DynamicResource PrimaryWhite}}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={DynamicResource InputPlaceholder}, Dark={DynamicResource InputPlaceholder}}" />
+        <Setter Property="MinimumHeightRequest" Value="50"/>
+        <Setter Property="MinimumWidthRequest" Value="50"/>
+        <Setter Property="WidthRequest" Value="250"/>
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource Gray500}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Image" x:Key="ImageImputAuth">
+        <Setter Property="HeightRequest" Value="35"/>
+        <Setter Property="WidthRequest" Value="40"/>
+        <Setter Property="HorizontalOptions" Value="Start"/>
+        <Setter Property="Opacity" Value="0.8"/>
+    </Style>
 </ResourceDictionary>
+
+    

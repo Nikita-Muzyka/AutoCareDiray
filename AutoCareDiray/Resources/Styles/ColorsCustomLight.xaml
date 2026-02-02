@@ -6,7 +6,7 @@
 
     <!-- ===== ОСНОВНЫЕ ЦВЕТА ===== -->
     <Color x:Key="PrimaryRed">#E53935</Color>
-    <Color x:Key="PrimaryWhite">#FFFFFF</Color>
+    <Color x:Key="PrimaryWhite">#FFFFF4</Color>
     <Color x:Key="PrimaryBlack">#212121</Color>
 
     <!-- ===== ФОН И ПОВЕРХНОСТИ ===== -->
@@ -23,7 +23,7 @@
 
     <!-- ===== КНОПКИ ===== -->
     <Color x:Key="ButtonPrimaryRed">#E53935</Color>
-    <Color x:Key="ButtonPrimaryGray">#E8E8E8</Color>
+    <Color x:Key="ButtonPrimaryGray">#FFFFF4</Color>
     <Color x:Key="ButtonPrimaryPressed">#D32F2F</Color>
     <Color x:Key="ButtonSecondary">#F5F5F5</Color>
     <Color x:Key="ButtonTextPrimaryWhite">#FFFFFF</Color>

@@ -3,133 +3,104 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.RegistrationPage"
              Style="{StaticResource CustomPage}">
+    
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <!-- ГЛАВНЫЙ КОНТЕЙНЕР: Grid занимает весь экран -->
+        <Grid RowDefinitions="250,*">
 
-    <!-- ГЛАВНЫЙ КОНТЕЙНЕР: Grid занимает весь экран -->
-    <Grid RowDefinitions="250,auto">
+            <!-- LOGO -->
+            <Image Style="{StaticResource ImageLogoApp}"/>
 
-        <!-- LOGO -->
-        <Image Style="{StaticResource ImageLogoApp}"/>
+     
+                <!-- Контент внутри скролла -->
+                <VerticalStackLayout Spacing="10" 
+                                     Padding="30, 20, 30, 0"
+                                     Grid.Row="1">
 
-        <ScrollView VerticalScrollBarVisibility="Never"
-                  Grid.Row="1">
+                    <!-- Логотип -->
+                    <Label Style="{DynamicResource LabelLogo}"/>
+                    <!-- Поле Ник нейм -->
+                    <Border Style="{StaticResource BorderForEntryImputAuth}">
+                        <Grid ColumnDefinitions="40, *">
+                            <Image Grid.Column="0" 
+                            Source="login_image.png"
+                             Style="{StaticResource ImageImputAuth}"/>
+                            <Entry Grid.Column="1"
+                          Style="{StaticResource EntryImputAuth}"
+                          Placeholder="Ваше имя профиля"
+                          Text="{Binding NickName}"/>
+                        </Grid>
+                    </Border>
 
-            <!-- Контент внутри скролла -->
-            <VerticalStackLayout Spacing="5" 
-                               Padding="30, 20, 30, 0">
+                    <!-- Поле email -->
+                    <Border Style="{StaticResource BorderForEntryImputAuth}">
+                        <Grid ColumnDefinitions="40, *">
+                            <Image Grid.Column="0" 
+                           Source="email_image.png"
+                             Style="{StaticResource ImageImputAuth}"/>
+                            <Entry Grid.Column="1"
+                           Style="{StaticResource EntryImputAuth}"
+                           Placeholder="Ваша почта ( Email )"
+                           Text="{Binding Email}"/>
+                        </Grid>
+                    </Border>
 
-                <!-- Логотип -->
-                <Label HorizontalOptions="Center" 
-                     FontSize="38"
-                     Margin="0, 5, 0, 20">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="AutoCare " TextColor="{StaticResource PrimaryRed}" FontAttributes="Bold" FontFamily="{StaticResource RubikBold}"/>
-                            <Span Text="Diary" TextColor="{StaticResource TextSecondary}" FontAttributes="Bold" FontFamily="{StaticResource RubikBold}"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
+                    <!-- Поле Логин -->
+                    <Border Style="{StaticResource BorderForEntryImputAuth}">
+                        <Grid ColumnDefinitions="40, *">
+                            <Image Grid.Column="0" 
+                               Source="login_image.png"
+                                 Style="{StaticResource ImageImputAuth}"/>
+                            <Entry Grid.Column="1"
+                               Style="{StaticResource EntryImputAuth}"
+                               Placeholder="Логин"
+                               Text="{Binding Login}"/>
+                        </Grid>
+                    </Border>
 
-                <!-- Поле Ник нейм -->
-                <Border Style="{StaticResource BorderForEntryImput}">
-                    <Grid ColumnDefinitions="40, *">
-                        <Image Grid.Column="0" 
+                    <!-- Поле пароль -->
+                    <Border Style="{StaticResource BorderForEntryImputAuth}">
+                        <Grid ColumnDefinitions="40, *">
+                            <Image Grid.Column="0" 
+                           Source="password_image.png"
+                             Style="{StaticResource ImageImputAuth}"/>
+                            <Entry Grid.Column="1"
+                           Style="{StaticResource EntryImputAuth}"
+                           Placeholder="Ваш Пароль"
+                           Text="{Binding Password}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Поле пароль повтор -->
+                    <!--
+             <Border Style="{StaticResource BorderForEntryImput}">
+                 <Grid ColumnDefinitions="40, *">
+                     <Image Grid.Column="0" 
                              HeightRequest="35" 
                              WidthRequest="40"
                              HorizontalOptions="Start" 
                              Opacity="0.8"
                              Source="login_image.png"/>
-                        <Entry Grid.Column="1"
-                             Style="{StaticResource EntryImput}"
-                             Placeholder="Ваше имя профиля"
-                             HorizontalOptions="Start"
-                             Text="{Binding NickName}"/>
-                    </Grid>
-                </Border>
+                     <Entry Grid.Column="1"
+                            Style="{StaticResource EntryImput}"
+                            Placeholder="Повторите пароль"
+                            HorizontalOptions="Start"
+                            Text="{Binding Login}"/>                
+                 </Grid>
+             </Border>-->
 
-                <!-- Поле email -->
-                <Border Style="{StaticResource BorderForEntryImput}">
-                    <Grid ColumnDefinitions="40, *">
-                        <Image Grid.Column="0" 
-                              HeightRequest="35" 
-                              WidthRequest="40"
-                              HorizontalOptions="Start" 
-                              Opacity="0.8"
-                              Source="login_image.png"/>
-                                    <Entry Grid.Column="1"
-                              Style="{StaticResource EntryImput}"
-                              Placeholder="Ваша почта ( Email )"
-                              HorizontalOptions="Start"
-                              Text="{Binding Email}"/>      
-                    </Grid>
-                </Border>
+                    <!-- Кнопки -->
+                    <Button Text="Регистрация"
+                   Margin="0,10,0,0"
+                   Style="{StaticResource ButtonCustomStandartRed}"
+                   Command="{Binding RegistrationUserCommand}"/>
 
-                <!-- Поле Логин -->
-                <Border Style="{StaticResource BorderForEntryImput}">
-                    <Grid ColumnDefinitions="40, *">
-                            <Image Grid.Column="0" 
-                                  HeightRequest="35"                    
-                                  WidthRequest="40"
-                                  HorizontalOptions="Start" 
-                                  Opacity="0.8"
-                                  Source="login_image.png"/>
-                                        <Entry Grid.Column="1"
-                                  Style="{StaticResource EntryImput}"
-                                  Placeholder="Логин"
-                                  HorizontalOptions="Start"
-                                  Text="{Binding Login}"/>      
-                    </Grid>
-                </Border>
+                    <Button Text="Назад"
+                   Margin="0,10,0,0"
+                   Style="{StaticResource ButtonCustomStandartWhite}"
+                   Command="{Binding BackCommand}"/>
 
-                <!-- Поле пароль -->
-                <Border Style="{StaticResource BorderForEntryImput}">
-                    <Grid ColumnDefinitions="40, *">
-                        <Image Grid.Column="0" 
-                              HeightRequest="35"            
-                              WidthRequest="40"
-                              HorizontalOptions="Start" 
-                              Opacity="0.8"
-                              Source="login_image.png"/>
-                                    <Entry Grid.Column="1"
-                              Style="{StaticResource EntryImput}"
-                              Placeholder="Ваш Пароль"
-                              HorizontalOptions="Start"
-                              Text="{Binding Password}"/>          
-                    </Grid>
-                </Border>
-
-                <!-- Поле пароль повтор --><!--
-                <Border Style="{StaticResource BorderForEntryImput}">
-                    <Grid ColumnDefinitions="40, *">
-                        <Image Grid.Column="0" 
-                                HeightRequest="35" 
-                                WidthRequest="40"
-                                HorizontalOptions="Start" 
-                                Opacity="0.8"
-                                Source="login_image.png"/>
-                        <Entry Grid.Column="1"
-                               Style="{StaticResource EntryImput}"
-                               Placeholder="Повторите пароль"
-                               HorizontalOptions="Start"
-                               Text="{Binding Login}"/>                
-                    </Grid>
-                </Border>-->
-
-                <!-- Кнопки -->
-                <Button Text="Регистрация"
-                      Margin="0,10,0,0"
-                      Style="{StaticResource ButtonCustomStandartRed}"
-                      Command="{Binding RegistrationUserCommand}"
-                      HeightRequest="50"
-                      WidthRequest="300"/>
-
-                <Button Text="Назад"
-                      Margin="0,10,0,0"
-                      Style="{StaticResource ButtonCustomStandartWhite}"
-                      Command="{Binding BackCommand}"
-                      HeightRequest="50"
-                      WidthRequest="300"/>
-
-            </VerticalStackLayout>
-        </ScrollView>
-    </Grid>
+                </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
 </ContentPage>

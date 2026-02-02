@@ -22,56 +22,34 @@
                                  Padding="30, 20, 30, 0">
 
                 <!-- Логотип -->
-                <Label HorizontalOptions="Center" 
-                       FontSize="38"
-                       Margin="0, 5, 0, 20">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="AutoCare " TextColor="{StaticResource PrimaryRed}" FontAttributes="Bold" FontFamily="{StaticResource RubikBold}"/>
-                            <Span Text="Diary" TextColor="{StaticResource TextSecondary}" FontAttributes="Bold" FontFamily="{StaticResource RubikBold}"/>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-
+                <Label Style="{DynamicResource LabelLogo}"/>
                 <!-- Поле login -->
-                <Border Style="{StaticResource BorderForEntryImput}">
+                <Border Style="{StaticResource BorderForEntryImputAuth}">
                     <Grid ColumnDefinitions="40, *">
                         <Image Grid.Column="0" 
-                               HeightRequest="35" 
-                               WidthRequest="40"
-                               HorizontalOptions="Start" 
-                               Opacity="0.8"
-                               Source="login_image.png"/>
+                               Source="login_image.png"
+                               Style="{StaticResource ImageImputAuth}"/>
                         <Entry Grid.Column="1"
-                               Style="{StaticResource EntryImput}"
+                               Style="{StaticResource EntryImputAuth}"
                                Placeholder="Логин"
-                               HorizontalOptions="Start"
                                Text="{Binding Login}"/>
                     </Grid>
                 </Border>
 
                 <!-- Поле Password -->
-                <Border Style="{StaticResource BorderForEntryImput}">
+                <Border Style="{StaticResource BorderForEntryImputAuth}">
                     <Grid ColumnDefinitions="40, *, 40">
                         <Image Grid.Column="0" 
-                               HeightRequest="40" 
-                               WidthRequest="40"
-                               HorizontalOptions="Start" 
-                               Opacity="0.8"
-                               Source="password_image.png"/>
+                               Source="password_image.png"
+                               Style="{StaticResource ImageImputAuth}"/>
                         <ImageButton Grid.Column="2" 
                                      Style="{StaticResource ButtonShowPassword}"
-                                     HeightRequest="40" 
-                                     WidthRequest="50"
-                                     HorizontalOptions="Center" 
-                                     Opacity="0.5"
                                      Command="{Binding ShowPasswordCommand}"/>
                         <Entry Grid.Column="1" 
-                               Style="{StaticResource EntryImput}"
+                               Style="{StaticResource EntryImputAuth}"
                                Placeholder="Пароль"
                                IsPassword="{Binding IsPassword}"
                                WidthRequest="200"
-                               HorizontalOptions="Start"
                                Text="{Binding Password}"/>
                     </Grid>
                 </Border>
@@ -96,7 +74,7 @@
                                    FontFamily="RubikRegular"/>
                         </HorizontalStackLayout>
 
-                        <!-- Справа: ваша кнопка -->
+                       
                         <Button Grid.Column="1"
                                 Text="Забыли пароль?"
                                 Style="{StaticResource ButtonForgotPassword}"
@@ -116,16 +94,12 @@
                 <Button Text="Войти"
                         Margin="0,10,0,0"
                         Style="{StaticResource ButtonCustomStandartRed}"
-                        Command="{Binding LogInCommand}"
-                        HeightRequest="50"
-                        WidthRequest="300"/>
+                        Command="{Binding LogInCommand}"/>
 
                 <Button Text="Регистрация"
                         Margin="0,10,0,0"
                         Style="{StaticResource ButtonCustomStandartWhite}"
-                        Command="{Binding RegistrationCommand}"
-                        HeightRequest="50"
-                        WidthRequest="300"/>
+                        Command="{Binding RegistrationCommand}"/>
 
             </VerticalStackLayout>
         </ScrollView>
