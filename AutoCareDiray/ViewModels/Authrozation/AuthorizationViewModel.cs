@@ -1,11 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service;
-using AutoCareDiray.View;
-using AutoCareDiray.Models.Validation;
-using AutoCareDiray.View.Authorization;
-using AutoCareDiray.Shared.Result;
 using AutoCareDiray.Shared.DTOs.UserDTO;
+using AutoCareDiray.Shared.Result;
+using AutoCareDiray.View;
+using AutoCareDiray.View.Authorization;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Devices;
 
 
 namespace AutoCareDiray.ViewModels
@@ -73,8 +76,8 @@ namespace AutoCareDiray.ViewModels
         [RelayCommand]
         public async Task RegistrationAsync()
         {
-            //await Shell.Current.GoToAsync(nameof(RegistrationPage));
-            await _dialogService.ShowInfo("Test");
+            await _dialogService.ShowToastAsync("Пользователь был создан");
+            await Shell.Current.GoToAsync(nameof(RegistrationPage));
         }
 
         [RelayCommand]

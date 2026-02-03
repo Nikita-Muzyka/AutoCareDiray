@@ -53,7 +53,7 @@ namespace AutoCareDiray.ViewModels.Authrozation
 
                 if (result.Success)
                 {
-                    await _dialogService.ShowMessage("Пароль обновлен");
+                    await _dialogService.ShowToastAsync("Пароль был обновлен");
                     Back();
                 }
                 else StatusMessage = result.ErrorMessage;

@@ -99,8 +99,10 @@ namespace AutoCareDiray.ViewModels
                 var response = await _apiService.CreateUserApiAsync(userDTO, _cts.Token);
                 if (response.Success == true)
                 {
-                    await _dialogService.ShowMessage("Пользователь Создан");
+                    await _dialogService.ShowMessageAsync("Пользователь Создан");
                     PreferencesSetUser(response);
+
+                    await _dialogService.ShowToastAsync("Пользователь был создан");
                     await Shell.Current.GoToAsync("..");
                 }
                 else StatusMessage = response.ErrorMessage;

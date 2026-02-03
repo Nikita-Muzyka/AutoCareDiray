@@ -4,10 +4,12 @@ namespace AutoCareDiray.Models.PopUp;
 
 public partial class InformationPopUp : Popup
 {
-    public InformationPopUp(string message)
+    public InformationPopUp(string messageStatus,string message,string messageTwo)
     {
         InitializeComponent();
-        MessageLabel.Text = message; 
+        MessageStatus.Text = messageStatus;
+        MessageText.Text = message;
+        MessageTextTwo.Text = messageTwo;
     }
 
     private void OnCloseClicked(object sender, EventArgs e)

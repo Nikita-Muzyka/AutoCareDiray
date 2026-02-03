@@ -6,42 +6,56 @@
                Background="Transparent"
                FlowDirection="MatchParent">
     
-    <!-- Основной контейнер: серый полупрозрачный прямоугольник -->
+    <!-- Основной контейнер -->
+    
     <Border Background="#CC2D2D2D" 
          StrokeThickness="0"
-         Padding="24"
+         Padding="5"
          HorizontalOptions="Center"
          VerticalOptions="Center"
-         WidthRequest="400"
-         HeightRequest="200"
+         WidthRequest="300"
+         HeightRequest="300"
          Stroke="Transparent"
          StrokeShape="30"
-         Opacity="0.8">
+         Opacity="0.9">
 
         <VerticalStackLayout>
-            <!-- Крестик (справа вверху) -->
-            <Button Grid.Column="1"
-       Text="✕"
-       FontSize="20"
-       TextColor="White"
-       BackgroundColor="Transparent"
-       Clicked="OnCloseClicked"
-       HorizontalOptions="End"
-       VerticalOptions="End"
-       WidthRequest="36"
-       HeightRequest="36"
-       CornerRadius="5"
-       Padding="0" />
+            
+
+            <ImageButton Source="close_infopopup.png"
+                          Clicked="OnCloseClicked"
+                         HeightRequest="30"
+                         WidthRequest="30"
+                         HorizontalOptions="End"
+                         VerticalOptions="End"
+                         BackgroundColor="Transparent"/>
 
             <!-- Текст информации (по центру) -->
-            <Label x:Name="MessageLabel"
-      Grid.Row="1"
-      Grid.ColumnSpan="2"
-      TextColor="White"
-      FontSize="16"
-      HorizontalTextAlignment="Center"
-      VerticalTextAlignment="Center"
-      LineBreakMode="WordWrap" />
+            <Label x:Name="MessageStatus"
+                   TextColor="White"                     
+                   FontSize="24"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"
+                   FontFamily="{DynamicResource RubikBold}"
+                   Margin="0,0,0,10"/>
+
+            <Label x:Name="MessageText"
+                    TextColor="White"                     
+                    FontSize="16"
+                    HorizontalTextAlignment="Center"
+                    VerticalTextAlignment="Center"
+                    FontFamily="{DynamicResource RubikRegular}"
+                    CharacterSpacing="1.2"
+                   Margin="0,0,0,10"/>
+
+            <Label x:Name="MessageTextTwo"
+                   TextColor="White"                     
+                   FontSize="16"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"
+                    FontFamily="{DynamicResource RubikRegular}"
+                    CharacterSpacing="1.2"
+                   Margin="0,0,0,10"/>
 
         </VerticalStackLayout>
     </Border>
