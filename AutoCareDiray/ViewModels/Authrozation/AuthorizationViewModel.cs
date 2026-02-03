@@ -1,15 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
+using AutoCareDiray.Shared.DTOs.UserDTO;
+using AutoCareDiray.Shared.Result;
 using AutoCareDiray.View;
-using AutoCareDiray.Service.APIResponse.UserResponse;
-using AutoCareDiray.Models.Validation;
+using AutoCareDiray.View.Authorization;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Devices;
 
 
 namespace AutoCareDiray.ViewModels
@@ -30,13 +29,13 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         private string statusMessage = String.Empty;
         [ObservableProperty]
-        private bool isToggleSwitchRemember;
+        private bool isToggleRemember;
         [ObservableProperty]
         private bool isPassword = true;
         [ObservableProperty]
-        private bool isTogglePasswordSwitch;
-        [ObservableProperty]
         private bool isLoginButtonEnable = true;
+        [ObservableProperty]
+        private bool isToggleImageButton = true;
 
         [RelayCommand]
         public async Task LogInAsync()
@@ -57,13 +56,12 @@ namespace AutoCareDiray.ViewModels
                     IsLoginButtonEnable = true;
 
                     if (response.Success == true)
-                    {;
-                        StatusMessage = response.Message;
+                    {
                         PreferencesSetUser(response);
 
                         await Shell.Current.GoToAsync("//Main/MainPage");
                     }
-                    else StatusMessage = response.Message;
+                    else StatusMessage = response.ErrorMessage;
                 }
                 else
                 {
@@ -74,26 +72,45 @@ namespace AutoCareDiray.ViewModels
             catch(OperationCanceledException) { IsLoginButtonEnable = true; }
             catch (Exception ex) { StatusMessage = ex.Message; }
         }
+
         [RelayCommand]
         public async Task RegistrationAsync()
         {
-            await Shell.Current.GoToAsync(nameof(RegistrationPage));
+           await Shell.Current.GoToAsync(nameof(RegistrationPage));
         }
 
-        private void PreferencesSetUser(ApiResponse ApiResponse)
+        [RelayCommand]
+        public async void RecoverPassword()
         {
-            GetUserResponse? userResponse = ApiResponse as GetUserResponse;
-            Preferences.Set("User_id", userResponse.User_Id.ToString());
-            Preferences.Set("NickName", userResponse.NickName);
-            Preferences.Set("Email", userResponse.Email);
-            if(IsToggleSwitchRemember) Preferences.Set("is_login", true);
+            await Shell.Current.GoToAsync(nameof(RecoverPasswordView));
         }
 
-        partial void OnIsTogglePasswordSwitchChanged(bool value)
+        [RelayCommand]
+        public async void LogInWithout()
         {
-            IsPassword = !IsTogglePasswordSwitch;
+            Preferences.Clear();
+            Preferences.Set("LoginWithout", true);
+            Preferences.Set("is_login", true);
+            await Shell.Current.GoToAsync("//Main/MainPage");
         }
 
+        [RelayCommand]
+        public void ShowPassword()
+        {
+            IsPassword = !IsPassword;
+            IsToggleImageButton = !IsToggleImageButton;
+        }
+
+        private void PreferencesSetUser(Result result)
+        {
+            Result<UserDTO> resultUser = result as Result<UserDTO>;
+            Preferences.Set("User_id", resultUser.Data.User_id.ToString());
+            Preferences.Set("NickName", resultUser.Data.NickName);
+            Preferences.Set("Email", resultUser.Data.Email);
+            if(IsToggleRemember) Preferences.Set("is_login", true);
+        }
+
+       
         public void CancelToken()
         {
             _cts?.Cancel();

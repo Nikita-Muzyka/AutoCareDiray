@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.Resources.Styles.StylesCustom.Authorization.AuthorizationStyle">
+
+
+    <!--Кнопка забыл пароль-->
+    <Style TargetType="Button" x:Key="ButtonForgotPassword">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource ButtonTextGray},Dark={DynamicResource ButtonTextGray}}"/>
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="BorderWidth" Value="0"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Padding" Value="5,5"/>
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="MinimumHeightRequest" Value="30"/>
+        <Setter Property="MinimumWidthRequest" Value="30"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Gray950}, Dark={DynamicResource Gray200}}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource ButtonSecondary}, Dark={DynamicResource ButtonSecondary}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--Кнопка показать пароль/убрать пароль-->
+    <Style TargetType="ImageButton" x:Key="ButtonShowPassword">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="0"/>
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="MinimumHeightRequest" Value="40"/>
+        <Setter Property="MinimumWidthRequest" Value="50"/>
+        <Setter Property="HeightRequest" Value="40"/>
+        <Setter Property="WidthRequest" Value="50"/>
+        <Setter Property="Source" Value="eye_open.png"/>
+        <Setter Property="Opacity" Value="0.5"/>
+        <Style.Triggers>
+            <DataTrigger TargetType="ImageButton"
+                         Binding="{Binding IsToggleImageButton}"
+                         Value="false">
+                <Setter Property="Source" Value="eye_closed.png"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--Border для полей ввода под EntryImput-->
+    <Style TargetType="Border" x:Key="BorderForEntryImputAuth">
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={DynamicResource InputBorder}, Dark={DynamicResource InputBorder}}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="WidthRequest" Value="300"/>
+    </Style>
+
+    <Style TargetType="Entry" x:Key="EntryImputAuth">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource PrimaryBlack}, Dark={DynamicResource PrimaryWhite}}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={DynamicResource InputPlaceholder}, Dark={DynamicResource InputPlaceholder}}" />
+        <Setter Property="MinimumHeightRequest" Value="50"/>
+        <Setter Property="MinimumWidthRequest" Value="50"/>
+        <Setter Property="WidthRequest" Value="250"/>
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource Gray500}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Image" x:Key="ImageImputAuth">
+        <Setter Property="HeightRequest" Value="35"/>
+        <Setter Property="WidthRequest" Value="40"/>
+        <Setter Property="HorizontalOptions" Value="Start"/>
+        <Setter Property="Opacity" Value="0.8"/>
+    </Style>
+
+    <Style TargetType="Label" x:Key="LaberErrorAuth">
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="HeightRequest" Value="15"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
+    </Style>
+</ResourceDictionary>
+
+    

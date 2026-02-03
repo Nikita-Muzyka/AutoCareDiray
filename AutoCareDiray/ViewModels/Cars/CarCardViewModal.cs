@@ -15,6 +15,7 @@ namespace AutoCareDiray.ViewModels.Cars
     [QueryProperty(nameof(SelectedCar),"SelCar")]
     public partial class CarCardViewModal : BaseViewModel
     {
+        private Car SelectedCar;
         public CarCardViewModal(IApiService apiService, IDialogService dialogService) : base(apiService, dialogService) 
         {
             

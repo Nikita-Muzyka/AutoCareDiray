@@ -3,8 +3,10 @@ using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service; // Ваши сервисы
 using AutoCareDiray.Service.ValidationService;
 using AutoCareDiray.View;
+using AutoCareDiray.View.Authorization;
 using AutoCareDiray.View.Maintenanse;
 using AutoCareDiray.ViewModels;
+using AutoCareDiray.ViewModels.Authrozation;
 using AutoCareDiray.ViewModels.Cars;
 using AutoCareDiray.ViewModels.Maintenanse;
 using CommunityToolkit.Maui;
@@ -32,32 +34,52 @@ namespace AutoCareDiray
                 });
 
 
-#if ANDROID && DEBUG
-            string baseAddress = "http://192.168.0.105:5286/";
-            TimeSpan time = TimeSpan.FromSeconds(500);
-#elif DEBUG
+            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
+            {
+#if ANDROID
+
+        handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
+#elif IOS
+                // Убираем рамку на iOS
+                handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#elif WINDOWS
+        // Убираем рамку на Windows
+        handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+#endif
+            });
+
+
             string baseAddress = "http://localhost:5286/";
             TimeSpan time = TimeSpan.FromSeconds(30);
-#else
-        string baseAddress = "2";
-        TimeSpan.FromSeconds(30);
-#endif
 
-            builder.Services.AddSingleton(new HttpClient
+            builder.Services.AddSingleton<HttpClient>(sp =>
             {
-                BaseAddress = new Uri(baseAddress),
-                Timeout = time
+                var handler = new HttpClientHandler
+                {
+                    UseProxy = false
+                };
+
+                var client = new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(baseAddress),
+                    Timeout = new TimeSpan(time.Ticks)
+                };
+
+                return client;
             });
 
             builder.Services.AddScoped<IApiService, ApiService>();
             builder.Services.AddTransient<IDialogService,DialogService>();
             builder.Services.AddTransient<IValidatorService, ValidatorService>();
             builder.Services.AddTransient<UserValidation>();
+            builder.Services.AddTransient<RecoverValidation>();
 
             builder.Services.AddTransient<AuthorizationPage>();
             builder.Services.AddTransient<AuthorizationViewModel>();
             builder.Services.AddTransient<RegistrationPage>();
             builder.Services.AddTransient<RegistrationViewModel>();
+            builder.Services.AddTransient<RecoverPasswordView>();
+            builder.Services.AddTransient<RecoverPasswordViewModels>();
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<MainPageViewModal>();
             builder.Services.AddTransient<UserSettingsViewModal>();

@@ -2,129 +2,117 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.RegistrationPage"
+             Shell.FlyoutBehavior="Disabled"
              Style="{StaticResource CustomPage}">
+    
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <!-- ГЛАВНЫЙ КОНТЕЙНЕР: Grid занимает весь экран -->
+        <Grid RowDefinitions="250,*">
 
-    <ScrollView>
-        <Grid HorizontalOptions="Center"
-              VerticalOptions="Center"
-              RowSpacing="20"
-              Padding="20">
+            <!-- LOGO -->
+            <Image Style="{StaticResource ImageLogoApp}"/>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="250"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+     
+                <!-- Контент внутри скролла -->
+                <VerticalStackLayout Spacing="10" 
+                                     Padding="30, 20, 30, 0"
+                                     Grid.Row="1">
 
-            <!-- Header Section -->
-            <VerticalStackLayout Grid.Row="0"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Center"
-                                 Spacing="10">
+                    <!-- Логотип -->
+                    <Label Style="{DynamicResource LabelLogo}"/>
 
-                <Image Source="main_image_app.png"
-                       HeightRequest="200"
-                       Aspect="AspectFit"
-                       Grid.Row="0"/>
+                <Label Text="{Binding NickNameError }"
+                       Style="{StaticResource LaberErrorAuth}"/>
+                <!-- Поле Ник нейм -->
+                    <Border Style="{StaticResource BorderForEntryImputAuth}">
+                        <Grid ColumnDefinitions="40, *">
+                            <Image Grid.Column="0" 
+                            Source="login_image.png"
+                             Style="{StaticResource ImageImputAuth}"/>
+                            <Entry Grid.Column="1"
+                          Style="{StaticResource EntryImputAuth}"
+                          Placeholder="Ваше имя профиля"
+                          Text="{Binding NickName}"/>
+                        </Grid>
+                    </Border>
 
-                <Label Text="Регистрация"
-                       Grid.Row="1"
-                       FontSize="40"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"
-                       TextColor="#E53935"
-                       FontFamily="RubikBold"/>
-            </VerticalStackLayout>
+                <Label Text="{Binding EmailError}"
+                       Style="{StaticResource LaberErrorAuth}"/>
+                    
+                <!-- Поле email -->
+                    <Border Style="{StaticResource BorderForEntryImputAuth}">
+                        <Grid ColumnDefinitions="40, *">
+                            <Image Grid.Column="0" 
+                           Source="email_image.png"
+                             Style="{StaticResource ImageImputAuth}"/>
+                            <Entry Grid.Column="1"
+                           Style="{StaticResource EntryImputAuth}"
+                           Placeholder="Ваша почта ( Email )"
+                           Text="{Binding Email}"/>
+                        </Grid>
+                    </Border>
 
-            <!-- Form Section -->
-            <VerticalStackLayout Grid.Row="2"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Center"
-                                 Spacing="15"
-                                 WidthRequest="300">
+                <Label Text="{Binding LoginError }"
+                       Style="{StaticResource LaberErrorAuth}"/>
 
-                <!-- NickName -->
-                <Border Style="{StaticResource BorderForEntryCustom}"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center">
-                    <StackLayout>
-                        <Label Text="{Binding NickNameError}"
-                               IsVisible="{Binding HasErrors}"
-                               Style="{StaticResource LabelAuthResponse}"/>
-                        <Entry Text="{Binding NickName}"
-                               Placeholder="NickName (Обязательно)"
-                               Style="{StaticResource EntryCustom}"/>
-                    </StackLayout>
-                </Border>
+                <!-- Поле Логин -->
+                    <Border Style="{StaticResource BorderForEntryImputAuth}">
+                        <Grid ColumnDefinitions="40, *">
+                            <Image Grid.Column="0" 
+                               Source="login_image.png"
+                                 Style="{StaticResource ImageImputAuth}"/>
+                            <Entry Grid.Column="1"
+                               Style="{StaticResource EntryImputAuth}"
+                               Placeholder="Логин"
+                               Text="{Binding Login}"/>
+                        </Grid>
+                    </Border>
 
-                <!-- Email -->
-                <Border Style="{StaticResource BorderForEntryCustom}"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center">
-                    <StackLayout>
-                        <Label Text="{Binding EmailError}"
-                               Style="{StaticResource LabelAuthResponse}"
-                               IsVisible="{Binding HasErrors}"/>
-                        <Entry Text="{Binding Email}"
-                               Placeholder="Email"
-                               Style="{StaticResource EntryCustom}"/>
-                    </StackLayout>
-                </Border>
+                <Label Text="{Binding PasswordError }"
+                       Style="{StaticResource LaberErrorAuth}"/>
+                <!-- Поле пароль -->
+                    <Border Style="{StaticResource BorderForEntryImputAuth}">
+                        <Grid ColumnDefinitions="40, *">
+                            <Image Grid.Column="0" 
+                           Source="password_image.png"
+                             Style="{StaticResource ImageImputAuth}"/>
+                            <Entry Grid.Column="1"
+                           Style="{StaticResource EntryImputAuth}"
+                           Placeholder="Ваш Пароль"
+                           Text="{Binding Password}"/>
+                        </Grid>
+                    </Border>
 
-                <!-- Login -->
-                <Border Style="{StaticResource BorderForEntryCustom}"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center">
-                    <StackLayout>
-                        <Label Text="{Binding LoginError}"
-                               Style="{StaticResource LabelAuthResponse}"
-                               IsVisible="{Binding HasErrors}"/>
-                        <Entry Text="{Binding Login}"
-                               Placeholder="Login (Обязательно)"
-                               Style="{StaticResource EntryCustom}"/>
-                    </StackLayout>
-                </Border>
+                    <!-- Поле пароль повтор -->
+                    <!--
+             <Border Style="{StaticResource BorderForEntryImput}">
+                 <Grid ColumnDefinitions="40, *">
+                     <Image Grid.Column="0" 
+                             HeightRequest="35" 
+                             WidthRequest="40"
+                             HorizontalOptions="Start" 
+                             Opacity="0.8"
+                             Source="login_image.png"/>
+                     <Entry Grid.Column="1"
+                            Style="{StaticResource EntryImput}"
+                            Placeholder="Повторите пароль"
+                            HorizontalOptions="Start"
+                            Text="{Binding Login}"/>                
+                 </Grid>
+             </Border>-->
 
-                <!-- Password -->
-                <Border Style="{StaticResource BorderForEntryCustom}"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center">
-                    <StackLayout>
-                        <Label Text="{Binding PasswordError}"
-                               Style="{StaticResource LabelAuthResponse}"
-                               IsVisible="{Binding HasErrors}"/>
-                        <Entry Text="{Binding Password}"
-                               Placeholder="Password (Обязательно)"
-                               Style="{StaticResource EntryCustom}"/>
-                    </StackLayout>
-                </Border>
-            </VerticalStackLayout>
+                    <!-- Кнопки -->
+                    <Button Text="Регистрация"
+                   Margin="0,10,0,0"
+                   Style="{StaticResource ButtonCustomStandartRed}"
+                   Command="{Binding RegistrationUserCommand}"/>
 
-            <!-- Buttons Section -->
-            <VerticalStackLayout Grid.Row="3"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Center"
-                                 Spacing="10"
-                                 WidthRequest="300">
+                    <Button Text="Назад"
+                   Margin="0,10,0,0"
+                   Style="{StaticResource ButtonCustomStandartWhite}"
+                   Command="{Binding BackCommand}"/>
 
-                <Label Text="{Binding StatusMessage}"
-                       Style="{StaticResource LabelAuthResponse}"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center"/>
-
-                <Button Text="Создать"
-                        IsEnabled="{Binding IsValidButton}"
-                        Command="{Binding CreateUserDTOCommand}"
-                        Style="{StaticResource ButtonCustom}"
-                        HorizontalOptions="Fill"/>
-
-                <Button Text="Назад"
-                        Command="{Binding CloseModalViewCommand}"
-                        Style="{StaticResource ButtonCustom}"
-                        HorizontalOptions="Fill"/>
-            </VerticalStackLayout>
-
+                </VerticalStackLayout>
         </Grid>
     </ScrollView>
 </ContentPage>

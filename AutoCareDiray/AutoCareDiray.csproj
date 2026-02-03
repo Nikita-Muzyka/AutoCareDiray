@@ -87,16 +87,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Models\PopUp\InformationPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\ColorsCustomDark.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\ColorsCustomLight.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Resources\Styles\StylesCustom.xaml">
+	  <MauiXaml Update="Resources\Styles\StylesCustomStandart.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\StylesCustom\Authorization\AuthorizationStyle.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Authorization\AuthorizationPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\Authorization\RecoverPasswordView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Authorization\RegistrationPage.xaml">
@@ -131,6 +140,11 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\Authorization\" />
+	  <Folder Include="Models\User\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\AutoCareDiray.Shared\AutoCareDiray.Shared\AutoCareDiray.Shared.csproj" />
 	</ItemGroup>
 
 </Project>
