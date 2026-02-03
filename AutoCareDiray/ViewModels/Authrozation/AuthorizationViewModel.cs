@@ -73,7 +73,8 @@ namespace AutoCareDiray.ViewModels
         [RelayCommand]
         public async Task RegistrationAsync()
         {
-            await Shell.Current.GoToAsync(nameof(RegistrationPage));
+            //await Shell.Current.GoToAsync(nameof(RegistrationPage));
+            await _dialogService.ShowInfo("Test");
         }
 
         [RelayCommand]

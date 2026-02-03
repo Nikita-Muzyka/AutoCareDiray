@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="AutoCareDiray.Models.PopUp.InformationPopUp"
+               Background="Transparent"
+               FlowDirection="MatchParent">
+    
+    <!-- Основной контейнер: серый полупрозрачный прямоугольник -->
+    <Border Background="#CC2D2D2D" 
+         StrokeThickness="0"
+         Padding="24"
+         HorizontalOptions="Center"
+         VerticalOptions="Center"
+         WidthRequest="400"
+         HeightRequest="200"
+         Stroke="Transparent"
+         StrokeShape="30"
+         Opacity="0.8">
+
+        <VerticalStackLayout>
+            <!-- Крестик (справа вверху) -->
+            <Button Grid.Column="1"
+       Text="✕"
+       FontSize="20"
+       TextColor="White"
+       BackgroundColor="Transparent"
+       Clicked="OnCloseClicked"
+       HorizontalOptions="End"
+       VerticalOptions="End"
+       WidthRequest="36"
+       HeightRequest="36"
+       CornerRadius="5"
+       Padding="0" />
+
+            <!-- Текст информации (по центру) -->
+            <Label x:Name="MessageLabel"
+      Grid.Row="1"
+      Grid.ColumnSpan="2"
+      TextColor="White"
+      FontSize="16"
+      HorizontalTextAlignment="Center"
+      VerticalTextAlignment="Center"
+      LineBreakMode="WordWrap" />
+
+        </VerticalStackLayout>
+    </Border>
+</toolkit:Popup>

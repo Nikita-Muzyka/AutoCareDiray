@@ -1,4 +1,7 @@
-﻿using CommunityToolkit.Maui.Extensions;
+﻿using AutoCareDiray.Models.PopUp;
+using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Extensions;
+using Microsoft.Maui.Controls.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +24,17 @@ namespace AutoCareDiray.Service
         public async Task ShowMessage(string message)
         {
             await Shell.Current.DisplayAlert("",message,"Ok");
+        }
+
+        public async Task ShowInfo(string message)
+        {
+            var popup = new InformationPopUp(message);
+            await Application.Current.MainPage.ShowPopupAsync(popup, new PopupOptions
+            {
+                PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
+                Shape = null
+            });
+
         }
     }
 }
