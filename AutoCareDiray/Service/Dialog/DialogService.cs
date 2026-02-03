@@ -43,14 +43,17 @@ namespace AutoCareDiray.Service
 
         public async Task ShowToastAsync(string message)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            if (DeviceInfo.Platform == DevicePlatform.Android || DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            ToastDuration duration = ToastDuration.Short;
-            double fontSize = 14;
+                ToastDuration duration = ToastDuration.Short;
+                double fontSize = 14;
 
-            var toast = Toast.Make(message, duration, fontSize);
+                var toast = Toast.Make(message, duration, fontSize);
 
-            await toast.Show(cancellationTokenSource.Token);
+                await toast.Show(cancellationTokenSource.Token);
+            }
         }
     }
 }

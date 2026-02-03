@@ -76,8 +76,7 @@ namespace AutoCareDiray.ViewModels
         [RelayCommand]
         public async Task RegistrationAsync()
         {
-            await _dialogService.ShowToastAsync("Пользователь был создан");
-            await Shell.Current.GoToAsync(nameof(RegistrationPage));
+           await Shell.Current.GoToAsync(nameof(RegistrationPage));
         }
 
         [RelayCommand]
