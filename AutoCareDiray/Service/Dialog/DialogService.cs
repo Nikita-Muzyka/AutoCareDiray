@@ -28,10 +28,9 @@ namespace AutoCareDiray.Service
             await Shell.Current.DisplayAlert("",message,"Ok");
         }
 
-        public async Task ShowInfoAsync()
+        public async Task ShowWarningLogInAsync()
         {
-            var popup = new InformationPopUp("Предупреждение!","1. Без регистрации вы не сможете переносить данные на другой телефон или планшет ",
-                "2. Вы не сможете сохранять данные на сервере только на памяти телефона, что занимает память телефона");
+            var popup = new InformationPopUp();
             await Application.Current.MainPage.ShowPopupAsync(popup, new PopupOptions
             {
                 PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),

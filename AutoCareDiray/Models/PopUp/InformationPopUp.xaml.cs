@@ -11,6 +11,10 @@ public partial class InformationPopUp : Popup
         MessageText.Text = message;
         MessageTextTwo.Text = messageTwo;
     }
+    public InformationPopUp()
+    {
+        InitializeComponent();
+    }
 
     private void OnCloseClicked(object sender, EventArgs e)
     {

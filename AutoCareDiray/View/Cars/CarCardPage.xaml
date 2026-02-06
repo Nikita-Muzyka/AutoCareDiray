@@ -5,13 +5,13 @@
              Title="CarCardPage">
     <StackLayout>
         <Label Text="Model"/>
-        <Label Text="{Binding SelectedCar.Model}"/>
+        <Label Text="{Binding CarSelected.Model}"/>
         <Label Text="Brand"
                Margin="0,20,0,0"/>
-        <Label Text="{Binding SelectedCar.Brand}"/>
+        <Label Text="{Binding CarSelected.Brand}"/>
         <Label Text="Car_id"
                Margin="0,20,0,0"/>
-        <Label Text="{Binding SelectedCar.Car_id}"/>
+        <Label Text="{Binding CarSelected.Car_id}"/>
         <Label Text="Year"
                Margin="0,20,0,0"/>
         <Label Text="{Binding SelectedCar.Year}"/>

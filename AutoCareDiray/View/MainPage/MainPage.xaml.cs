@@ -9,4 +9,10 @@ public partial class MainPage : ContentPage
 		InitializeComponent();
 		BindingContext = mainVM;
 	}
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+		
+    }
 }

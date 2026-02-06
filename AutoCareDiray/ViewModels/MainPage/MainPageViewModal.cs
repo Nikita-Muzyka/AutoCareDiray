@@ -13,7 +13,8 @@ namespace AutoCareDiray.ViewModels
     {
         public MainPageViewModal(IApiService apiService,IDialogService dialogService) : base(apiService,dialogService)
         {
-
         }
+
+      
     }
 }

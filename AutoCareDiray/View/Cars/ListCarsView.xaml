@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AutoCareDiray.ViewModels.Cars" 
+             x:Class="AutoCareDiray.View.ListCarsView"
+             Style="{StaticResource CustomPage}">
+
+    <ScrollView HorizontalScrollBarVisibility="Never"
+                VerticalScrollBarVisibility="Never">
+        <Grid RowDefinitions="*,100">
+            <VerticalStackLayout Grid.Row="0">
+                
+                <CollectionView ItemsSource="{Binding Cars}"
+                                SelectedItem="{Binding SelectedCar}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command ="{Binding Source={RelativeSource AncestorType= {x:Type vm:ListCarsViewModal}},
+                                        Path=GoCarCardCommand}"
+                                                          CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </Border.GestureRecognizers>
+
+                                <VerticalStackLayout>
+                                    <Grid ColumnDefinitions="100,*,*">
+                                        <Image Source="car_icon.png"
+                                               HeightRequest="80"
+                                               WidthRequest="60"/>
+                                        <Label Text="{Binding Model}" 
+                                               FontSize="20"
+                                               Grid.Column="1"
+                                               HorizontalOptions="Start"
+                                               VerticalOptions="Center"
+                                               TextColor="{DynamicResource TextPrimaryRed}"
+                                               FontFamily="{StaticResource RubikRegular}"/>
+
+                                        <Label Text="{Binding Current_mileage}" 
+                                                FontSize="20"
+                                                Grid.Column="2"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="Center"
+                                                TextColor="{DynamicResource TextPrimaryRed}"
+                                                FontFamily="{StaticResource RubikRegular}"/>                       
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="1">
+                <ImageButton HeightRequest="80"
+                             WidthRequest="80"
+                             Source="plus_icon.png"
+                             Command="{Binding GoCreateCarCommand}"/>
+
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

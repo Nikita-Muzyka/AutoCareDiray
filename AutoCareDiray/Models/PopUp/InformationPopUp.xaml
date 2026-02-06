@@ -32,6 +32,7 @@
 
             <!-- Текст информации (по центру) -->
             <Label x:Name="MessageStatus"
+                   Text="Предупреждение!"
                    TextColor="White"                     
                    FontSize="24"
                    HorizontalTextAlignment="Center"
@@ -40,6 +41,7 @@
                    Margin="0,0,0,10"/>
 
             <Label x:Name="MessageText"
+                   Text="1. Без регистрации вы не сможете переносить данные на другой телефон или планшет "
                     TextColor="White"                     
                     FontSize="16"
                     HorizontalTextAlignment="Center"
@@ -49,6 +51,7 @@
                    Margin="0,0,0,10"/>
 
             <Label x:Name="MessageTextTwo"
+                   Text="2. Вы не сможете сохранять данные на сервере только на памяти телефона, что дополнительнр нагружает ваш телефон или планшет"
                    TextColor="White"                     
                    FontSize="16"
                    HorizontalTextAlignment="Center"

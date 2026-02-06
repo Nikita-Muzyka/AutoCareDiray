@@ -22,7 +22,7 @@
 
         <Tab Title="Авто"
              Route="ListCars">
-            <ShellContent ContentTemplate="{DataTemplate local:ListCars}"/>
+            <ShellContent ContentTemplate="{DataTemplate local:ListCarsView}"/>
         </Tab>
 
         <Tab Title="Профиль"
@@ -30,4 +30,6 @@
             <ShellContent ContentTemplate="{DataTemplate local:UserSettingsPage}"/>
         </Tab>
     </TabBar>
+    
+    
 </Shell>

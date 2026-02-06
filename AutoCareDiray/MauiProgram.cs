@@ -12,6 +12,7 @@ using AutoCareDiray.ViewModels.Maintenanse;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.DependencyInjection; // Добавьте эту строку
 using Microsoft.Extensions.Logging;
+using UraniumUI;
 
 
 namespace AutoCareDiray
@@ -23,8 +24,10 @@ namespace AutoCareDiray
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
-                 .UseMauiCommunityToolkit() // ← Добавьте эту строку!
-                .ConfigureFonts(fonts =>
+                 .UseMauiCommunityToolkit()
+                 .UseUraniumUI()
+                 .UseUraniumUIMaterial()
+                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
@@ -84,7 +87,7 @@ namespace AutoCareDiray
             builder.Services.AddTransient<MainPageViewModal>();
             builder.Services.AddTransient<UserSettingsViewModal>();
             builder.Services.AddTransient<UserSettingsPage>();
-            builder.Services.AddTransient<ListCars>();
+            builder.Services.AddTransient<ListCarsView>();
             builder.Services.AddTransient<ListCarsViewModal>();
             builder.Services.AddTransient<CarCardPage>();
             builder.Services.AddTransient<CarCardViewModal>();

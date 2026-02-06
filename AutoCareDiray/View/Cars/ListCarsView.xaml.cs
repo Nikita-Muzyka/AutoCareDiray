@@ -4,9 +4,9 @@ using AutoCareDiray.ViewModels.Cars;
 
 namespace AutoCareDiray.View;
 
-public partial class ListCars : ContentPage
+public partial class ListCarsView : ContentPage
 {
-	public ListCars(ListCarsViewModal list)
+	public ListCarsView(ListCarsViewModal list)
 	{
 		InitializeComponent();
 		BindingContext = list;

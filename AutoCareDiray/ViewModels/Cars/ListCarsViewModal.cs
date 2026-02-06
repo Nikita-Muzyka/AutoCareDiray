@@ -45,20 +45,13 @@ namespace AutoCareDiray.ViewModels.Cars
             await Shell.Current.GoToAsync(nameof(CreateCarsPage));
         }
         [RelayCommand]
-        public async void GoCarCard()
+        public async Task GoCarCard(Car CarSelected)
         {
-            if (SelectedCar is null)
+            var property = new Dictionary<string, object>()
             {
-                Errors = "Ошибка";
-            }
-            else 
-            {
-                var property = new Dictionary<string, object>()
-                {
-                    ["SelCar"] = SelectedCar
-                };
-                await Shell.Current.GoToAsync(nameof(CarCardPage),property);
-            } 
+                ["SelCar"] = CarSelected
+            };
+            await Shell.Current.GoToAsync(nameof(CarCardPage), property);
         }
 
         [RelayCommand]

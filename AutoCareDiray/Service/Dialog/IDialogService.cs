@@ -10,7 +10,7 @@ namespace AutoCareDiray.Service
     {
         Task<bool> ShowConfirmationMessage(string message);
         Task ShowMessageAsync(string message);
-        Task ShowInfoAsync();
+        Task ShowWarningLogInAsync();
         Task ShowToastAsync(string message);
     }
 }

@@ -80,17 +80,17 @@ namespace AutoCareDiray.ViewModels
         }
 
         [RelayCommand]
-        public async void RecoverPassword()
+        public async Task RecoverPassword()
         {
             await Shell.Current.GoToAsync(nameof(RecoverPasswordView));
         }
 
         [RelayCommand]
-        public async void LogInWithout()
+        public async Task LogInWithout()
         {
             Preferences.Clear();
             Preferences.Set("LoginWithout", true);
-            Preferences.Set("is_login", true);
+            await _dialogService.ShowWarningLogInAsync();
             await Shell.Current.GoToAsync("//Main/MainPage");
         }
 

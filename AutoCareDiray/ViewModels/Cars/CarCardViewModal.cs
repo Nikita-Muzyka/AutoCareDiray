@@ -12,10 +12,10 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AutoCareDiray.ViewModels.Cars
 {
-    [QueryProperty(nameof(SelectedCar),"SelCar")]
+    [QueryProperty(nameof(CarSelected),"SelCar")]
     public partial class CarCardViewModal : BaseViewModel
     {
-        private Car SelectedCar;
+        public Car CarSelected;
         public CarCardViewModal(IApiService apiService, IDialogService dialogService) : base(apiService, dialogService) 
         {
             
@@ -26,7 +26,7 @@ namespace AutoCareDiray.ViewModels.Cars
         {
             var Car = new Dictionary<string, object>()
             {
-                ["Car"] = SelectedCar
+                ["Car"] = CarSelected
             };
             await Shell.Current.GoToAsync(nameof(CreateMaintenanse), Car);
         }
