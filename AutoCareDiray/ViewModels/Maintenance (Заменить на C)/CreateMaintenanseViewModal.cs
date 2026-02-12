@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace AutoCareDiray.ViewModels
 {
-    [QueryProperty(nameof(SelectedCar),"Car")]
+    //[QueryProperty(nameof(SelectedCar),"Car")]
     public partial class CreateMaintenanseViewModal : BaseViewModel
     {
-        [ObservableProperty]
-        public Car selectedCar;
+        //[ObservableProperty]
+        //public Car selectedCar;
 
         [ObservableProperty]
         public string serviceDate;
@@ -42,20 +42,20 @@ namespace AutoCareDiray.ViewModels
 
         }
 
-        [RelayCommand]
-        public async void CreateMaintenanse()
-        {
-            var date = DateTime.Parse(ServiceDate);
-            var mileage = int.Parse(Mileage);
-            var cost = int.Parse(Cost);
+        //[RelayCommand]
+        //public async void CreateMaintenanse()
+        //{
+        //    var date = DateTime.Parse(ServiceDate);
+        //    var mileage = int.Parse(Mileage);
+        //    var cost = int.Parse(Cost);
 
-            var maintenanse = new MaintenanseModel(SelectedCar.Car_id, date, mileage, ServiceType, Description, cost, ServiceCentre);
-            Text = "Запись создана";
-        }
-        [RelayCommand]
-        public async void GoBack()
-        {
-            await Shell.Current.GoToAsync("..");
-        }
+        //    var maintenanse = new MaintenanseModel(SelectedCar.Car_id, date, mileage, ServiceType, Description, cost, ServiceCentre);
+        //    Text = "Запись создана";
+        //}
+        //[RelayCommand]
+        //public async void GoBack()
+        //{
+        //    await Shell.Current.GoToAsync("..");
+        //}
     }
 }

@@ -36,16 +36,17 @@ namespace AutoCareDiray
 
             window.Created += async (s, e) =>
             {
-               
-                bool check = Preferences.Get("is_login", false);
-                if (check)
-                {
-                    await Shell.Current.GoToAsync("//Main");
-                }
-                else
-                {
-                    await Shell.Current.GoToAsync("//AuthorizationPage");
-                }
+
+                //bool check = Preferences.Get("is_login", false);
+                //if (check)
+                //{
+                //    await Shell.Current.GoToAsync("//Main");
+                //}
+                //else
+                //{
+                //    await Shell.Current.GoToAsync("//AuthorizationPage");
+                //}
+                await Shell.Current.GoToAsync("//ListVehicle");
             };
             
             return window;

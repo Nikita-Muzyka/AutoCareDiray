@@ -104,6 +104,9 @@
 	  <MauiXaml Update="Resources\Styles\StylesCustom\Authorization\AuthorizationStyle.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\StylesCustom\VehicleView\VehicleViewStyle.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\Authorization\AuthorizationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -113,19 +116,16 @@
 	  <MauiXaml Update="View\Authorization\RegistrationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Cars\CarCardPage.xaml">
+	  <MauiXaml Update="View\VehicleView\CardVehicleView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Cars\CreateCarsPage.xaml">
+	  <MauiXaml Update="View\VehicleView\CreateVehicleView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Cars\ListCarsView.xaml">
+	  <MauiXaml Update="View\VehicleView\ListVehicleView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\Maintenance (Заменить на C)\CreateMaintenanse.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="View\MainPage\MainPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\MainPage\UserSettingsPage.xaml">
@@ -150,8 +150,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="View\Cars\ListCarsView.xaml.cs">
-	    <DependentUpon>ListCarsView.xaml</DependentUpon>
+	  <Compile Update="View\VehicleView\CreateVehicleView.xaml.cs">
+	    <DependentUpon>CreateVehicleView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\VehicleView\ListVehicleView.xaml.cs">
+	    <DependentUpon>ListVehicleView.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 

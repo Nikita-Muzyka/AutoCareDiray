@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:AutoCareDiray.ViewModels.Cars" 
-             x:Class="AutoCareDiray.View.ListCarsView"
+             xmlns:vmVehicle="clr-namespace:AutoCareDiray.ViewModels.VehicleViewModel" 
+             x:Class="AutoCareDiray.View.VehicleView.ListVehicleView"
              Style="{StaticResource CustomPage}">
 
     <ScrollView HorizontalScrollBarVisibility="Never"
@@ -10,13 +10,13 @@
         <Grid RowDefinitions="*,100">
             <VerticalStackLayout Grid.Row="0">
                 
-                <CollectionView ItemsSource="{Binding Cars}"
-                                SelectedItem="{Binding SelectedCar}">
+                <CollectionView ItemsSource="{Binding Vehicles}"
+                                SelectedItem="{Binding SelectedVehicle}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border>
                                 <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Command ="{Binding Source={RelativeSource AncestorType= {x:Type vm:ListCarsViewModal}},
+                                    <TapGestureRecognizer Command ="{Binding Source={RelativeSource AncestorType= {x:Type vmVehicle:ListVehicleViewModel}},
                                         Path=GoCarCardCommand}"
                                                           CommandParameter="{Binding .}">
                                     </TapGestureRecognizer>
@@ -54,7 +54,7 @@
                 <ImageButton HeightRequest="80"
                              WidthRequest="80"
                              Source="plus_icon.png"
-                             Command="{Binding GoCreateCarCommand}"/>
+                             Command="{Binding GoCreateVehicleCommand}"/>
 
             </VerticalStackLayout>
         </Grid>

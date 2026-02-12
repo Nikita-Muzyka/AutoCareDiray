@@ -1,6 +1,7 @@
 ﻿using AutoCareDiray.View;
 using AutoCareDiray.View.Authorization;
 using AutoCareDiray.View.Maintenanse;
+using AutoCareDiray.View.VehicleView;
 
 namespace AutoCareDiray
 {
@@ -11,8 +12,8 @@ namespace AutoCareDiray
             InitializeComponent();
             Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
             Routing.RegisterRoute(nameof(RecoverPasswordView), typeof(RecoverPasswordView));
-            Routing.RegisterRoute(nameof(CreateCarsPage), typeof(CreateCarsPage));
-            Routing.RegisterRoute(nameof(CarCardPage), typeof(CarCardPage));
+            Routing.RegisterRoute(nameof(CreateVehicleView), typeof(CreateVehicleView));
+            Routing.RegisterRoute(nameof(CardVehicleView), typeof(CardVehicleView));
             Routing.RegisterRoute(nameof(CreateMaintenanse), typeof(CreateMaintenanse));
             Routing.RegisterRoute(nameof(ListMaintenanseView), typeof(ListMaintenanseView));
         }

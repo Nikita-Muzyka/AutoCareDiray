@@ -1,6 +1,4 @@
-﻿using AutoCareDiray.Models;
-using AutoCareDiray.Services;
-using AutoCareDiray.Shared.DTOs.UserDTO;
+﻿using AutoCareDiray.Shared.DTOs.UserDTO;
 using AutoCareDiray.Shared.Result;
 using System;
 using System.Collections.Generic;
@@ -239,54 +237,6 @@ namespace AutoCareDiray.Service
                 return Result.ErrorCreate("При удалении пользователя произошла ошибка приложения");
             }
         }
-
-
-        // HTTP Create Car
-        public async Task<ApiResponse> CreateCarApiAsync(Car car, CancellationToken token)
-        {
-            try
-            {
-                token.ThrowIfCancellationRequested();
-                var response = await _httpClient.PostAsJsonAsync($"api/Car/create", car);
-                var result = await response.Content.ReadFromJsonAsync<GetCarResponse>();
-
-                return result;
-            }
-            catch (OperationCanceledException) { throw; }
-            catch (HttpRequestException ex)
-            {
-                return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return new ErrorsResponse("При создании авто произошла ошибка приложения", ex.Message);
-            }
-        }
-
-        // HTTP Get Cars
-        public async Task<ApiResponse> GetCarByUserIdApiAsync(CancellationToken token)
-        {
-            try
-            {
-                var user_id = Preferences.Get("User_id", 0);
-                var response = await _httpClient.GetAsync($"api/Car/getCars/{user_id}");
-                token.ThrowIfCancellationRequested();
-
-                var result = await response.Content.ReadFromJsonAsync<CarListResponse>();
-                token.ThrowIfCancellationRequested();
-                return result;
-            }
-            catch (OperationCanceledException) { throw; }
-            catch (HttpRequestException ex)
-            {
-                return new ErrorsResponse("Отсутствует подключение к серверу", ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return new ErrorsResponse("При поиске авто пользователя произошла ошибка приложения", ex.Message);
-            }
-        }
-
     }
 }
 

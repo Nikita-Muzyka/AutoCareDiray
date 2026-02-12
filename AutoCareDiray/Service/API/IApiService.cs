@@ -19,9 +19,5 @@ namespace AutoCareDiray.Service
         Task<Result> UpdatePasswordApiAsync(int user_id, UpdatePassword updatePassword, CancellationToken token);
         Task<Result> RecoverPasswordApiAsync(string login, UpdatePassword updatePassword, CancellationToken token);
         Task<Result> DeleteUserApiAsync(int User_id, CancellationToken token);
-
-        //Car
-        Task<ApiResponse> CreateCarApiAsync(Car car, CancellationToken token);
-        Task<ApiResponse> GetCarByUserIdApiAsync(CancellationToken token);
     }
 }
