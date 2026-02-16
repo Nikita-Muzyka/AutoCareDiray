@@ -59,6 +59,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Models\Authorization\**" />
+	  <AndroidResource Remove="Models\User\**" />
+	  <Compile Remove="Models\Authorization\**" />
+	  <Compile Remove="Models\User\**" />
+	  <EmbeddedResource Remove="Models\Authorization\**" />
+	  <EmbeddedResource Remove="Models\User\**" />
+	  <MauiCss Remove="Models\Authorization\**" />
+	  <MauiCss Remove="Models\User\**" />
+	  <MauiXaml Remove="Models\Authorization\**" />
+	  <MauiXaml Remove="Models\User\**" />
+	  <None Remove="Models\Authorization\**" />
+	  <None Remove="Models\User\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Remove="Resources\Fonts\FontsStyle.xaml.cs" />
 	</ItemGroup>
 
@@ -76,10 +91,17 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.13">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.13" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.13">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10" />
-		<PackageReference Include="UraniumUI" Version="2.14.0" />
-		<PackageReference Include="UraniumUI.Material" Version="2.14.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -141,8 +163,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Models\Authorization\" />
-	  <Folder Include="Models\User\" />
+	  <Folder Include="Service\Navigation\" />
 	</ItemGroup>
 
 	<ItemGroup>

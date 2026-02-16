@@ -16,8 +16,7 @@ public partial class ListVehicleView : ContentPage
         base.OnAppearing();
         if (BindingContext is ListVehicleViewModel list)
         {
-            //list.LoadCarsCommand.Execute(null);
-            list.CreateTokenCommand.Execute(null);
+           list.LoadVehiclesCommand.Execute(null);
         }
     }
     protected override void OnDisappearing()

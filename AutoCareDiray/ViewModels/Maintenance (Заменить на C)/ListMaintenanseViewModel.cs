@@ -10,19 +10,19 @@ using System.Collections.ObjectModel;
 
 namespace AutoCareDiray.ViewModels.Maintenanse
 {
-    public partial class ListMaintenanseViewModel : BaseViewModel
+    public partial class ListMaintenanseViewModel
     {
-        [ObservableProperty]
-        public ObservableCollection<MaintenanseModel> listMaintenanse = new();
-        public ListMaintenanseViewModel(IApiService apiService,IDialogService dialogService) : base(apiService, dialogService)
-        {
-            LoadMain();
-        }
+        //[ObservableProperty]
+        //public ObservableCollection<MaintenanseModel> listMaintenanse = new();
+        //public ListMaintenanseViewModel(IApiService apiService,IDialogService dialogService) : base(apiService, dialogService)
+        //{
+        //    LoadMain();
+        //}
 
-        void LoadMain()
-        {
-            var main = new MaintenanseModel(1,DateTime.Now,230000,"Ремонт","Большие работы с ходовой",40000,"-");
-            ListMaintenanse.Add(main);
-        }
+        //void LoadMain()
+        //{
+        //    var main = new MaintenanseModel(1,DateTime.Now,230000,"Ремонт","Большие работы с ходовой",40000,"-");
+        //    ListMaintenanse.Add(main);
+        //}
     }
 }

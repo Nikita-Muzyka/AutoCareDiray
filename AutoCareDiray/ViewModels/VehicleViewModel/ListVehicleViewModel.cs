@@ -1,9 +1,10 @@
 ﻿using AutoCareDiray.Service;
 using AutoCareDiray.View.VehicleView;
 using CommunityToolkit.Mvvm.ComponentModel;
-using AutoCareDiray.Models.VehicleModel;
+using AutoCareDiray.Shared.Models.VehicleModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using AutoCareDiray.Service.Data;
 
 namespace AutoCareDiray.ViewModels.VehicleViewModel
 {
@@ -23,9 +24,10 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
         /// Конструктор
         /// </summary>
         /// <param name="apiService"></param>
-        public ListVehicleViewModel(IApiService apiService, IDialogService dialogService) : base(apiService,dialogService)
+        public ListVehicleViewModel(IApiService apiService, IDialogService dialogService,IDataService dataService) : base(apiService,dialogService,dataService)
         {
             Vehicles = new ObservableCollection<Vehicle>();
+            _cts = new CancellationTokenSource();
         }
 
         [RelayCommand]
@@ -43,42 +45,41 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
             await Shell.Current.GoToAsync(nameof(CardVehicleView), property);
         }
 
-        //[RelayCommand]
+        [RelayCommand]
         /// <summary>
         /// Загрузка авто с сервера
         /// </summary>
-        //public async void LoadCars()
-        //{
+        public async void LoadVehicles()
+        {
+            //try
+            //{
+            //    var response = await _apiService.GetCarByUserIdApiAsync(_cts.Token);
+            //    var carsResponse = response as CarListResponse;
 
-        //    try
-        //    {
-        //        _cts = new CancellationTokenSource();
-        //        var response = await _apiService.GetCarByUserIdApiAsync(_cts.Token);
-        //        var carsResponse = response as CarListResponse;
-
-        //        if(carsResponse != null)
-        //        {
-        //            foreach (var addcar in carsResponse.cars)
-        //            {
-        //                Vehicles.Add(addcar);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Errors = ex.Message;
-        //    }
-        //}
+            //    if (carsResponse != null)
+            //    {
+            //        foreach (var addcar in carsResponse.cars)
+            //        {
+            //            Vehicles.Add(addcar);
+            //        }
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Errors = ex.Message;
+            //}
+            Vehicles.Clear();
+            foreach (var addcar in await _dataService.ListVehicleAsync(_cts.Token))
+            {
+                Vehicles.Add(addcar);
+            }
+        }
 
         [RelayCommand]
         public void CancelToken()
         {
             _cts.Cancel();
             _cts.Dispose();
-        }
-        [RelayCommand]
-        public void CreateToken()
-        {
             _cts = new CancellationTokenSource();
         }
     }

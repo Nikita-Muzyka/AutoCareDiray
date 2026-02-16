@@ -11,36 +11,36 @@ using System.Threading.Tasks;
 namespace AutoCareDiray.ViewModels
 {
     //[QueryProperty(nameof(SelectedCar),"Car")]
-    public partial class CreateMaintenanseViewModal : BaseViewModel
+    public partial class CreateMaintenanseViewModal
     {
         //[ObservableProperty]
         //public Car selectedCar;
 
-        [ObservableProperty]
-        public string serviceDate;
+        //[ObservableProperty]
+        //public string serviceDate;
 
-        [ObservableProperty]
-        public string mileage;
+        //[ObservableProperty]
+        //public string mileage;
 
-        [ObservableProperty]
-        public string serviceType;
+        //[ObservableProperty]
+        //public string serviceType;
 
-        [ObservableProperty]
-        public string description;
+        //[ObservableProperty]
+        //public string description;
 
-        [ObservableProperty]
-        public string cost;
+        //[ObservableProperty]
+        //public string cost;
 
-        [ObservableProperty]
-        public string serviceCentre;
+        //[ObservableProperty]
+        //public string serviceCentre;
 
-        [ObservableProperty]
-        public string text;
+        //[ObservableProperty]
+        //public string text;
 
-        public CreateMaintenanseViewModal(IApiService apiService, IDialogService dialogService) :base(apiService, dialogService)
-        {
+        //public CreateMaintenanseViewModal(IApiService apiService, IDialogService dialogService) :base(apiService, dialogService)
+        //{
 
-        }
+        //}
 
         //[RelayCommand]
         //public async void CreateMaintenanse()

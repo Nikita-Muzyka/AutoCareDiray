@@ -3,13 +3,13 @@
 namespace AutoCareDiray.ViewModels.VehicleViewModel
 {
     //[QueryProperty(nameof(CarSelected),"SelCar")]
-    public partial class CardVehicleViewModel : BaseViewModel
+    public partial class CardVehicleViewModel
     {
         //public Car CarSelected;
-        public CardVehicleViewModel(IApiService apiService, IDialogService dialogService) : base(apiService, dialogService)
-        {
+        //public CardVehicleViewModel(IApiService apiService, IDialogService dialogService) : base(apiService, dialogService)
+        //{
 
-        }
+        //}
 
         //[RelayCommand]
         //public async void CreateMaintenanse()

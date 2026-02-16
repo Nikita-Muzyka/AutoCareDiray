@@ -1,6 +1,7 @@
-﻿using AutoCareDiray.Models;
+﻿using AutoCareDiray.Shared.Data;
 using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service; // Ваши сервисы
+using AutoCareDiray.Service.Data;
 using AutoCareDiray.Service.ValidationService;
 using AutoCareDiray.View;
 using AutoCareDiray.View.Authorization;
@@ -11,9 +12,9 @@ using AutoCareDiray.ViewModels.Authrozation;
 using AutoCareDiray.ViewModels.Maintenanse;
 using AutoCareDiray.ViewModels.VehicleViewModel;
 using CommunityToolkit.Maui;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection; // Добавьте эту строку
 using Microsoft.Extensions.Logging;
-using UraniumUI;
 
 
 namespace AutoCareDiray
@@ -38,19 +39,26 @@ namespace AutoCareDiray
 
             Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
             {
-#if ANDROID
-
-        handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
-#elif IOS
+                #if ANDROID
+                handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
+                #elif IOS
                 // Убираем рамку на iOS
                 handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
-#elif WINDOWS
-        // Убираем рамку на Windows
-        handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
-#endif
+                #elif WINDOWS
+                // Убираем рамку на Windows
+                handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+                #endif
             });
 
-
+            var DbPath = Path.Combine(FileSystem.AppDataDirectory, "vehicles.db");
+            builder.Services.AddDbContext<AppDBContex>(options =>
+            {
+                options.UseSqlite($"Data Source={DbPath}");
+                #if Debug
+                options.EnableSensitiveDataLogging();
+                options.LogTo(Console.WriteLine, LogLevel.Information);
+                #endif
+            },ServiceLifetime.Scoped);
             string baseAddress = "http://localhost:5286/";
             TimeSpan time = TimeSpan.FromSeconds(30);
 
@@ -71,6 +79,7 @@ namespace AutoCareDiray
             });
 
             builder.Services.AddScoped<IApiService, ApiService>();
+            builder.Services.AddScoped<IDataService,DataService>();
             builder.Services.AddTransient<IDialogService,DialogService>();
             builder.Services.AddTransient<IValidatorService, ValidatorService>();
 

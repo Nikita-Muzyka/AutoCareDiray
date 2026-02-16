@@ -1,4 +1,5 @@
 ﻿using AutoCareDiray.Service;
+using AutoCareDiray.Service.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -19,7 +20,7 @@ namespace AutoCareDiray.ViewModels
         [ObservableProperty]
         public string textError;
 
-        public UserSettingsViewModal(IApiService apiService, IDialogService dialogService) :base(apiService, dialogService)
+        public UserSettingsViewModal(IApiService apiService, IDialogService dialogService,IDataService dataService) :base(apiService, dialogService, dataService)
         {
             _cts = new CancellationTokenSource();
         }

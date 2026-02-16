@@ -1,11 +1,14 @@
 ﻿using AutoCareDiray.Resources.Styles;
+using AutoCareDiray.Service.Data;
 using AutoCareDiray.View;
 namespace AutoCareDiray
 {
     public partial class App : Application
     {
-        public App()
+        private readonly IDataService _dataService;
+        public App(IDataService dataService)
         {
+            _dataService = dataService;
             InitializeComponent();
             Application.Current.UserAppTheme = AppTheme.Light;
         }
@@ -46,6 +49,7 @@ namespace AutoCareDiray
                 //{
                 //    await Shell.Current.GoToAsync("//AuthorizationPage");
                 //}
+                _dataService.InitializeDatabase();
                 await Shell.Current.GoToAsync("//ListVehicle");
             };
             

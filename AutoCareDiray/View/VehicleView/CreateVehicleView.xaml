@@ -11,40 +11,59 @@
             
             <VerticalStackLayout Spacing="10">
                 <!-- Поле name car -->
-                <Border Style="{StaticResource BorderForEntryImputCar}">
-                    <Entry Style="{StaticResource EntryImputCar}"
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Entry Style="{DynamicResource EntryImput}"
                            Placeholder="Название ТС"
-                           Text="{Binding NameCar}"/>
+                           Text="{Binding NameVehicle}"/>
                 </Border>
 
-                <Border Style="{StaticResource BorderForEntryImputCar}">
-                    <Entry Style="{StaticResource EntryImputCar}"
-                           Placeholder="Дата производства ТС"
-                           Text="{Binding YearCreate}"/>               
+                <Label Text=""
+                       Style="{DynamicResource LaberError}"/>
+                
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <VerticalStackLayout>
+                        <Label Text="Выберите дату производства авто"
+                               Style="{DynamicResource LabelInEntry}"/>
+                        <DatePicker Format="d"
+                                    Date ="{Binding YearCreateSelected}"
+                                    MaximumDate="{Binding DateNow}">
+                        </DatePicker>
+                    </VerticalStackLayout>
+                </Border>
+
+
+                <Label Text="{Binding YearPurchaseError}"
+                       Style="{DynamicResource LaberError}"/>
+                
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <VerticalStackLayout>
+                        <Label Text="Выберите дату покупки авто"
+                Style="{DynamicResource LabelInEntry}"/>
+                        <DatePicker Format="d"
+                                    Date ="{Binding YearPurchaseSelected}"
+                                    MaximumDate="{Binding DateNow}">
+                        </DatePicker>
+                    </VerticalStackLayout>
                 </Border>
 
                 <Label Text="{Binding MileageError}"
                        Style="{DynamicResource LaberError}"/>
-                
-                <Border Style="{StaticResource BorderForEntryImputCar}">
-                    <Entry Style="{StaticResource EntryImputCar}"
+
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Entry Style="{DynamicResource EntryImput}"
                            Placeholder="Пробег"
-                           Text="{Binding Mileage}"/>             
+                           Text="{Binding Mileage}"/>
                 </Border>
 
-                <Border Style="{StaticResource BorderForEntryImputCar}">
-                    <Entry Style="{StaticResource EntryImputCar}"
-                           Placeholder="Год Покупки"
-                           Text="{Binding YearPurchase}"/>               
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Picker Title="Выберите Тип ТС"
+                            Style="{DynamicResource PickerStandart}"
+                            ItemsSource="{Binding TypeVehicle}"
+                            SelectedItem="{Binding SelectedTypeVehicle}">
+                    </Picker>
                 </Border>
 
-                <Picker Title="Выберите Тип ТС"
-                        Style="{DynamicResource PickerStandart}"
-                        ItemsSource="{Binding TypeVehicle}"
-                        SelectedItem="{Binding SelectedTypeVehicle}">
-                </Picker>
 
-              
                 <Button Text="Create" 
                         Margin="0,10,0,0"
                         Style="{StaticResource ButtonCustomStandartRed}"

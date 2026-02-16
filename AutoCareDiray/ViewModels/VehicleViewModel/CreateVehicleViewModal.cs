@@ -1,10 +1,12 @@
 ﻿using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service;
-using AutoCareDiray.Models.VehicleModel;
+using AutoCareDiray.Shared.Models.VehicleModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using AutoCareDiray.Service.Data;
+
 
 namespace AutoCareDiray.ViewModels.VehicleViewModel
 {
@@ -17,13 +19,15 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string nameVehicle;
         [ObservableProperty]
-        private string yearCreate;
+        private DateTime yearCreateSelected = DateTime.Today;
         [ObservableProperty]
         private string mileage;
         [ObservableProperty]
-        private string yearPuchase;
+        private DateTime yearPurchaseSelected = DateTime.Today;
         [ObservableProperty]
         private string selectedTypeVehicle;
+        [ObservableProperty]
+        private DateTime dateNow = DateTime.Today;
 
         [ObservableProperty]
         private string statusMessage;
@@ -32,7 +36,8 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
 
 
 
-        public CreateVehicleViewModel(IApiService apiService,IDialogService dialogService,VehicleValidation vehicleValidation) : base(apiService, dialogService)
+        public CreateVehicleViewModel(IApiService apiService,IDialogService dialogService,IDataService dataService,VehicleValidation vehicleValidation) 
+            : base(apiService, dialogService,dataService)
         {
             _vehicleValidation = vehicleValidation;
             _vehicleValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
@@ -42,6 +47,7 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
         // Получение ошибок
         public bool HasErrors => _vehicleValidation.HasErrors;
         public string MileageError => _vehicleValidation.GetErrors(nameof(MileageError)) as string;
+        public string YearPurchaseError => _vehicleValidation.GetErrors(nameof(YearPurchaseError)) as string;
 
         /// <summary>
         /// Конвертация данных для создания авто
@@ -60,9 +66,24 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
         public async void CreateVehicle()
         {
             _vehicleValidation.ValidationMileage(Mileage);
+            _vehicleValidation.ValidationDate(YearPurchaseSelected, YearCreateSelected);
             if (!HasErrors)
             {
-                var vehicle = CreateClassVehicle();
+                int MileageInt = ConverFromInt(Mileage);
+
+                var vehicle = new Vehicle
+                {
+                    NameVehicle = NameVehicle,
+                    Mileage = MileageInt,
+                    YearCreate = DateOnly.FromDateTime(YearCreateSelected),
+                    YearPurchase = DateOnly.FromDateTime(YearPurchaseSelected),
+                };
+                if(_dataService is null)
+                {
+
+                }
+                    await _dataService.CreateVehicleAsync(vehicle);
+                await Shell.Current.GoToAsync("..");
             }
         }
 
@@ -71,6 +92,14 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
         partial void OnMileageChanged(string value)
         {
             _vehicleValidation.ValidationMileage(value);
+        }
+        partial void OnYearCreateSelectedChanged(DateTime value)
+        {
+            _vehicleValidation.ValidationDate(YearPurchaseSelected, YearCreateSelected);
+        }
+        partial void OnYearPurchaseSelectedChanged(DateTime value)
+        {
+            _vehicleValidation.ValidationDate(YearPurchaseSelected, YearCreateSelected);
         }
 
         /// <summary>
@@ -83,22 +112,6 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
             OnPropertyChanged(e.PropertyName);
         }
 
-        /// <summary>
-        /// Создание авто
-        /// </summary>
-        /// <returns></returns>
-        Vehicle CreateClassVehicle()
-        {
-           
-            int MileageInt = ConverFromInt(Mileage);
-
-            var car = new Vehicle
-            {
-              NameVehicle = NameVehicle,
-            };
-
-            return car;
-        }
         public void CancelToken()
         {
             _cts.Cancel();

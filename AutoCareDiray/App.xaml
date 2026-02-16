@@ -14,7 +14,6 @@
                 <!--<ResourceDictionary Source="/Resources/Styles/ColorsCustomDark.xaml"/>-->
                 <ResourceDictionary Source="/Resources/Styles/StylesCustomStandart.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/StylesCustom/Authorization/AuthorizationStyle.xaml"/>
-                <ResourceDictionary Source="/Resources/Styles/StylesCustom/VehicleView/VehicleViewStyle.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

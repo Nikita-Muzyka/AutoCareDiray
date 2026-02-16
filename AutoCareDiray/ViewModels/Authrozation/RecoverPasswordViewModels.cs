@@ -1,5 +1,6 @@
 ﻿using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service;
+using AutoCareDiray.Service.Data;
 using AutoCareDiray.Shared.DTOs.UserDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,7 +13,8 @@ namespace AutoCareDiray.ViewModels.Authrozation
     {
         private RecoverValidation _recoverValidation;
         private CancellationTokenSource _cts;
-        public RecoverPasswordViewModels(IApiService apiService, IDialogService dialog,RecoverValidation recoverValidation) : base(apiService, dialog)
+        public RecoverPasswordViewModels(IApiService apiService, IDialogService dialog,IDataService dataService,RecoverValidation recoverValidation) 
+            : base(apiService, dialog, dataService)
         {
             _recoverValidation = recoverValidation;
             recoverValidation.ErrorsChanged += (s,e) => OnErrorsChangedUI(e);

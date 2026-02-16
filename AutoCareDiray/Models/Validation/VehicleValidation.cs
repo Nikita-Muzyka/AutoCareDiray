@@ -15,7 +15,8 @@ namespace AutoCareDiray.Models.Validation
     {
         //string propertyVinCode = "VinCode";
         string propertyMileage = "MileageError";
-      
+        string propertyYearPurchase = "YearPurchaseError";
+
 
         public VehicleValidation(IApiService apiService) :base(apiService) { }
 
@@ -44,6 +45,19 @@ namespace AutoCareDiray.Models.Validation
             }
 
             else ErrorAdd(propertyMileage, "Поле обязательно к заполнению");
+        }
+
+        public void ValidationDate(DateTime? yearPurchase, DateTime? yearCreate)
+        {
+            ErrorRemove(propertyYearPurchase);
+            if (yearPurchase < yearCreate)
+            {
+                ErrorAdd(propertyYearPurchase, "Дата покупки не может быть раньше чем производство");
+            }
+            else
+            {
+                OnErrorsChanges(propertyYearPurchase);
+            }
         }
     }
 }

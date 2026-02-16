@@ -1,6 +1,7 @@
 ﻿
 using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service;
+using AutoCareDiray.Service.Data;
 using AutoCareDiray.Shared.DTOs.UserDTO;
 using AutoCareDiray.Shared.Result;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -31,7 +32,8 @@ namespace AutoCareDiray.ViewModels
         private string password;
 
 
-        public RegistrationViewModel(IApiService apiService,IDialogService _dialogService,UserValidation validation) : base(apiService, _dialogService)
+        public RegistrationViewModel(IApiService apiService,IDialogService _dialogService,IDataService dataService, UserValidation validation) 
+            : base(apiService, _dialogService, dataService)
         {
             _userValidation = validation;
             _cts = new CancellationTokenSource();
