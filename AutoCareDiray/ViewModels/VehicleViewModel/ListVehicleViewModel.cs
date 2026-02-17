@@ -40,7 +40,7 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
         {
             var property = new Dictionary<string, object>()
             {
-                ["SelVehicle"] = VehicleSelected
+                ["VehicleId"] = VehicleSelected.Vehicle_Id
             };
             await Shell.Current.GoToAsync(nameof(CardVehicleView), property);
         }

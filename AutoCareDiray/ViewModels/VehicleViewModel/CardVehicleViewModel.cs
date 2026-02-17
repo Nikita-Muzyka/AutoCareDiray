@@ -1,16 +1,40 @@
 ﻿using AutoCareDiray.Service;
+using AutoCareDiray.Service.Data;
+using AutoCareDiray.Shared.Models.VehicleModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AutoCareDiray.ViewModels.VehicleViewModel
 {
-    //[QueryProperty(nameof(CarSelected),"SelCar")]
-    public partial class CardVehicleViewModel
+    [QueryProperty(nameof(VehicleId), "VehicleId")]
+    public partial class CardVehicleViewModel : BaseViewModel
     {
-        //public Car CarSelected;
-        //public CardVehicleViewModel(IApiService apiService, IDialogService dialogService) : base(apiService, dialogService)
-        //{
+        private int _vehicleId;
+        public int VehicleId
+        {
+            get => _vehicleId;
+            set
+            {
+                _vehicleId = value;
+                OnPropertyChanged();
+                LoadVehicle();
+            }
+        }
+        CancellationTokenSource _cts;
 
-        //}
+        [ObservableProperty]
+        private Vehicle vehicleRespon;
 
+        public CardVehicleViewModel(IApiService apiService, IDialogService dialogService,IDataService dataService) 
+            : base(apiService, dialogService,dataService)
+        {
+          _cts = new CancellationTokenSource();
+        }
+
+
+        private async Task LoadVehicle()
+        {
+            VehicleRespon = await _dataService.GetVehicleAsync(VehicleId, _cts.Token);
+        }
         //[RelayCommand]
         //public async void CreateMaintenanse()
         //{

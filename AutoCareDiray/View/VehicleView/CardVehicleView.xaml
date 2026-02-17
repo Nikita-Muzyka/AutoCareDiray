@@ -2,43 +2,62 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.VehicleView.CardVehicleView"
-             Title="CardVehicleView">
-    
+             Style="{DynamicResource CustomPage}">
+
     <Grid RowDefinitions="*,100">
-        <VerticalStackLayout>
-            <Label Text="Model"/>
-            <Label Text="{Binding CarSelected.Model}"/>
-            <Label Text="Brand"
-     Margin="0,20,0,0"/>
-            <Label Text="{Binding CarSelected.Brand}"/>
-            <Label Text="Car_id"
-     Margin="0,20,0,0"/>
-            <Label Text="{Binding CarSelected.Car_id}"/>
-            <Label Text="Year"
-     Margin="0,20,0,0"/>
-            <Label Text="{Binding SelectedCar.Year}"/>
-            <Label Text="Vin"
-     Margin="0,20,0,0"/>
-            <Label Text="{Binding SelectedCar.Vin}"/>
+        <ScrollView>
 
-            <Label Text="Mileage"
-     Margin="0,20,0,0"/>
-            <Label Text="{Binding SelectedCar.Current_mileage}"/>
-            <Label Text="year purchase"
-     Margin="0,20,0,0"/>
-            <Label Text="{Binding SelectedCar.Year_purchase}"/>
-
-            <Label Text="Transmission box"
-     Margin="0,20,0,0"/>
-            <Label Text="{Binding SelectedCar.Transmission_box}"/>
-            <Label Text="Engine type"
-     Margin="0,20,0,0"/>
-            <Label Text="{Binding SelectedCar.Engine_type}"/>
-        </VerticalStackLayout>
+            <VerticalStackLayout Spacing="15">
+                <!-- Поле name car -->
 
 
-        <Button Text="Create Mint"
-             Grid.Row="1"
-             Command="{Binding CreateMaintenanseCommand}"/>
+                <Grid ColumnDefinitions="150,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="Название ТС:"
+                                   Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" 
+                                   Text="{Binding VehicleRespon.NameVehicle}"
+                                   Style="{DynamicResource LaberInfo}"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="150,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="Дата производства:"
+                    Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" 
+                    Text="{Binding VehicleRespon.YearCreate}"
+                    Style="{DynamicResource LaberInfo}"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="150,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="Дата покупки:"
+                           Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" 
+                           Text="{Binding VehicleRespon.YearPurchase}"
+                           Style="{DynamicResource LaberInfo}"/>                  
+                </Grid>
+
+                <Grid ColumnDefinitions="150,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="Пробег:"
+                           Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" 
+                           Text="{Binding VehicleRespon.Mileage}"
+                           Style="{DynamicResource LaberInfo}"/>            
+                </Grid>
+
+
+                <Grid ColumnDefinitions="150,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="Тип ТС:"
+                           Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" 
+                           Text="{Binding VehicleRespon.VehicleType}"
+                           Style="{DynamicResource LaberInfo}"/>            
+                </Grid>
+
+            </VerticalStackLayout>
+        </ScrollView>
     </Grid>
 </ContentPage>

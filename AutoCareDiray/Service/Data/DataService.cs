@@ -17,12 +17,17 @@ namespace AutoCareDiray.Service.Data
             _dbContex = db;
         }
 
-        public async Task CreateVehicleAsync(Vehicle vehicle)
+        public async Task CreateVehicleAsync(Vehicle vehicle, CancellationToken token)
         {
             try
             {
-                await _dbContex.Vehicles.AddAsync(vehicle);
-                await _dbContex.SaveChangesAsync();
+                token.ThrowIfCancellationRequested();
+                await _dbContex.Vehicles.AddAsync(vehicle, token);
+                await _dbContex.SaveChangesAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+
             }
             catch (Exception ex)
             {
@@ -30,16 +35,39 @@ namespace AutoCareDiray.Service.Data
             }
 
         }
-        public async Task<IEnumerable<Vehicle>> ListVehicleAsync()
+        public async Task<IEnumerable<Vehicle>> ListVehicleAsync(CancellationToken token)
         {
             try
             {
-                var vehicles = await _dbContex.Vehicles.ToListAsync();
+                token.ThrowIfCancellationRequested();
+                var vehicles = await _dbContex.Vehicles.ToListAsync(token);
                 return vehicles;
+            }
+            catch (OperationCanceledException)
+            {
+                return Enumerable.Empty<Vehicle>();
             }
             catch (Exception ex)
             {
                 return Enumerable.Empty<Vehicle>();
+            }
+        }
+
+        public async Task<Vehicle> GetVehicleAsync(int Vehicle_Id, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var vehicle = await _dbContex.Vehicles.FirstOrDefaultAsync(v => v.Vehicle_Id == Vehicle_Id, token);
+                return vehicle;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
 
