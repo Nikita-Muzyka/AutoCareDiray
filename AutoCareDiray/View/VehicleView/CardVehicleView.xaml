@@ -4,12 +4,15 @@
              x:Class="AutoCareDiray.View.VehicleView.CardVehicleView"
              Style="{DynamicResource CustomPage}">
 
-    <Grid RowDefinitions="*,100">
+    <Grid RowDefinitions="*,100"
+          HorizontalOptions="Center">
         <ScrollView>
-
+            
             <VerticalStackLayout Spacing="15">
                 <!-- Поле name car -->
 
+                <!-- LOGO -->
+                <Image Style="{StaticResource ImageLogoApp}"/>
 
                 <Grid ColumnDefinitions="150,auto"
                       HorizontalOptions="Center">
@@ -20,7 +23,7 @@
                                    Style="{DynamicResource LaberInfo}"/>
                 </Grid>
 
-                <Grid ColumnDefinitions="150,auto"
+                <Grid ColumnDefinitions="190,auto"
                       HorizontalOptions="Center">
                     <Label Text="Дата производства:"
                     Style="{DynamicResource LaberInfo}"/>

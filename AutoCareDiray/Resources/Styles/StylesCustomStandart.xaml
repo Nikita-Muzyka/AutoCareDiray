@@ -48,8 +48,9 @@
         <Setter Property="HorizontalOptions" Value="Center"/>
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
-        <Setter Property="HeightRequest" Value="30"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HeightRequest" Value="40"/>
+        <Setter Property="WidthRequest" Value="120"/>
+        <Setter Property="FontSize" Value="16"/>
     </Style>
 
     <!--Border для полей ввода под EntryImput-->

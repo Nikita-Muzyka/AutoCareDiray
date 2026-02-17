@@ -77,6 +77,7 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
                     Mileage = MileageInt,
                     YearCreate = DateOnly.FromDateTime(YearCreateSelected),
                     YearPurchase = DateOnly.FromDateTime(YearPurchaseSelected),
+                    VehicleType = SelectedTypeVehicle,
                 };
                 if(_dataService is null)
                 {
