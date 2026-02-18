@@ -163,10 +163,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Service\Navigation\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\..\AutoCareDiray.Shared\AutoCareDiray.Shared\AutoCareDiray.Shared.csproj" />
 	</ItemGroup>
 

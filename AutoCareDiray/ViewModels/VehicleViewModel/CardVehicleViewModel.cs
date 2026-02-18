@@ -1,7 +1,9 @@
 ﻿using AutoCareDiray.Service;
+using AutoCareDiray.Service.Navigation;
 using AutoCareDiray.Service.Data;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace AutoCareDiray.ViewModels.VehicleViewModel
 {
@@ -24,8 +26,8 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
         [ObservableProperty]
         private Vehicle vehicleRespon;
 
-        public CardVehicleViewModel(IApiService apiService, IDialogService dialogService,IDataService dataService) 
-            : base(apiService, dialogService,dataService)
+        public CardVehicleViewModel(IApiService apiService, IDialogService dialogService,IDataService dataService,INavigationService navigation)
+            : base(apiService, dialogService, dataService, navigation)
         {
           _cts = new CancellationTokenSource();
         }

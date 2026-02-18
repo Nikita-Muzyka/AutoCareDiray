@@ -6,15 +6,28 @@
 ### Vehicle
 | Поле            | Тип         | Обязательное?  | Описание             |
 |-----------------|-------------|----------------|----------------------|
-| Id              | `int`       | Да (Авто)      | Первичный ключ       |
+| Vehicle_Id      | `int`       | Да (Авто)      | Первичный ключ       |
 | Name            | `string`    | Нет            | Название авто        |
 | Mileage         | `int`       | Да             | Пробег (км)          |
 | DatePurchase    | `DateOnly`  | Нет            | Дата покупки         |
 | DateProduction  | `DateOnly`  | Нет            | Дата производства    |
 
+### Repair
+| Поле            | Тип         | Обязательное?  | Описание             |
+|-----------------|-------------|----------------|----------------------|
+| Repair_Id       | `int`       | Да (Авто)      | Первичный ключ       |
+| Vehicle_Id      | `int`       | Да             | Вторичный ключ       |
+| DateRepair      | `DateOnly`  | Нет            | Дата ремонта         |
+| Mileage         | `int`       | Нет            | Пробег (км)          |
+| SpareParts      | `string`    | Нет            | Запчасти             |
+| Cost            | `int`       | Нет            | Стоимости            |
+| Description     | `string`    | Нет            | Описание работ       |
+
 ## Views
 - ListVehicleView.xaml
 - CreateVehicleView.xaml
+- CardVehicleView.xaml
+
 - CardVehicleView.xaml
 
 ## ViewModels
@@ -23,10 +36,14 @@
 - CreateVehicleViewModel
 - CardVehicleViewModel
 
+- RepairVehicleViewModel
+
 ## Services
 - IValidationService, ValidationService
 - IApiService,ApiService
 - IDialogService,DialogService
+- IDataService,DataService
+- INavigationService,NavigationService
 
 ## Data
 - AppDBContex

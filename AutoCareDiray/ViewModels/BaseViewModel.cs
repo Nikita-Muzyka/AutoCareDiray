@@ -1,6 +1,7 @@
 ﻿using AutoCareDiray.Models;
 using AutoCareDiray.Service;
 using AutoCareDiray.Service.Data;
+using AutoCareDiray.Service.Navigation;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,13 @@ namespace AutoCareDiray.ViewModels
         protected readonly IApiService _apiService;
         protected readonly IDataService _dataService;
         protected readonly IDialogService _dialogService;
-        public BaseViewModel(IApiService apiService, IDialogService dialogService, IDataService dataService)
+        protected readonly INavigationService _navigationService;
+        public BaseViewModel(IApiService apiService, IDialogService dialogService, IDataService dataService,INavigationService navigation)
         {
             _apiService = apiService;
             _dialogService = dialogService;
             _dataService = dataService;
+            _navigationService = navigation;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service;
+using AutoCareDiray.Service.Navigation;
 using AutoCareDiray.Service.Data;
 using AutoCareDiray.Shared.DTOs.UserDTO;
 using AutoCareDiray.Shared.Result;
@@ -19,7 +20,8 @@ namespace AutoCareDiray.ViewModels
     {
         
         private CancellationTokenSource _cts;
-        public AuthorizationViewModel(IApiService apiService,IDialogService dialog,IDataService dataService) :base(apiService,dialog, dataService)
+        public AuthorizationViewModel(IApiService apiService,IDialogService dialog,IDataService dataService,INavigationService navigation) 
+            :base(apiService,dialog, dataService, navigation)
         {
         }
 

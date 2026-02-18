@@ -15,6 +15,7 @@ using CommunityToolkit.Maui;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection; // Добавьте эту строку
 using Microsoft.Extensions.Logging;
+using AutoCareDiray.Service.Navigation;
 
 
 namespace AutoCareDiray
@@ -82,17 +83,18 @@ namespace AutoCareDiray
             builder.Services.AddScoped<IDataService,DataService>();
             builder.Services.AddTransient<IDialogService,DialogService>();
             builder.Services.AddTransient<IValidatorService, ValidatorService>();
+            builder.Services.AddScoped<INavigationService,NavigationService>();
 
             builder.Services.AddTransient<UserValidation>();
             builder.Services.AddTransient<RecoverValidation>();
             builder.Services.AddTransient<VehicleValidation>();
 
-            builder.Services.AddTransient<AuthorizationPage>();
-            builder.Services.AddTransient<AuthorizationViewModel>();
-            builder.Services.AddTransient<RegistrationPage>();
-            builder.Services.AddTransient<RegistrationViewModel>();
-            builder.Services.AddTransient<RecoverPasswordView>();
-            builder.Services.AddTransient<RecoverPasswordViewModels>();
+            //builder.Services.AddTransient<AuthorizationPage>();
+            //builder.Services.AddTransient<AuthorizationViewModel>();
+            //builder.Services.AddTransient<RegistrationPage>();
+            //builder.Services.AddTransient<RegistrationViewModel>();
+            //builder.Services.AddTransient<RecoverPasswordView>();
+            //builder.Services.AddTransient<RecoverPasswordViewModels>();
             builder.Services.AddTransient<UserSettingsViewModal>();
             builder.Services.AddTransient<UserSettingsPage>();
             builder.Services.AddTransient<ListVehicleView>();

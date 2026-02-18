@@ -1,10 +1,12 @@
 ﻿using AutoCareDiray.Service;
+using AutoCareDiray.Service.Navigation;
 using AutoCareDiray.View.VehicleView;
 using CommunityToolkit.Mvvm.ComponentModel;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using AutoCareDiray.Service.Data;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AutoCareDiray.ViewModels.VehicleViewModel
 {
@@ -24,7 +26,8 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
         /// Конструктор
         /// </summary>
         /// <param name="apiService"></param>
-        public ListVehicleViewModel(IApiService apiService, IDialogService dialogService,IDataService dataService) : base(apiService,dialogService,dataService)
+        public ListVehicleViewModel(IApiService apiService, IDialogService dialogService,IDataService dataService,INavigationService navigation) 
+            : base(apiService,dialogService,dataService,navigation)
         {
             Vehicles = new ObservableCollection<Vehicle>();
             _cts = new CancellationTokenSource();
@@ -33,7 +36,7 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
         [RelayCommand]
         public async void GoCreateVehicle()
         {
-            await Shell.Current.GoToAsync(nameof(CreateVehicleView));
+            await _navigationService.GoNavigation(nameof(CreateVehicleView));
         }
         [RelayCommand]
         public async Task GoCarCard(Vehicle VehicleSelected)
@@ -42,7 +45,7 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
             {
                 ["VehicleId"] = VehicleSelected.Vehicle_Id
             };
-            await Shell.Current.GoToAsync(nameof(CardVehicleView), property);
+            await _navigationService.GoNavigation(nameof(CardVehicleView), property);
         }
 
         [RelayCommand]

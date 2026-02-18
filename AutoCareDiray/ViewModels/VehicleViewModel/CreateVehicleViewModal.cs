@@ -1,5 +1,6 @@
 ﻿using AutoCareDiray.Models.Validation;
 using AutoCareDiray.Service;
+using AutoCareDiray.Service.Navigation;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -36,8 +37,8 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
 
 
 
-        public CreateVehicleViewModel(IApiService apiService,IDialogService dialogService,IDataService dataService,VehicleValidation vehicleValidation) 
-            : base(apiService, dialogService,dataService)
+        public CreateVehicleViewModel(IApiService apiService,IDialogService dialogService,IDataService dataService,INavigationService navigation,
+            VehicleValidation vehicleValidation) : base(apiService, dialogService,dataService,navigation)
         {
             _vehicleValidation = vehicleValidation;
             _vehicleValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
@@ -84,7 +85,7 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
 
                 }
                     await _dataService.CreateVehicleAsync(vehicle,_cts.Token);
-                await Shell.Current.GoToAsync("..");
+                await _navigationService.GoToBack();
             }
         }
 
