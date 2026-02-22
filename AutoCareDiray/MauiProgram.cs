@@ -4,18 +4,16 @@ using AutoCareDiray.Service; // Ваши сервисы
 using AutoCareDiray.Service.Data;
 using AutoCareDiray.Service.ValidationService;
 using AutoCareDiray.View;
-using AutoCareDiray.View.Authorization;
-using AutoCareDiray.View.Maintenanse;
 using AutoCareDiray.View.VehicleView;
 using AutoCareDiray.ViewModels;
-using AutoCareDiray.ViewModels.Authrozation;
-using AutoCareDiray.ViewModels.Maintenanse;
 using AutoCareDiray.ViewModels.VehicleViewModel;
 using CommunityToolkit.Maui;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection; // Добавьте эту строку
 using Microsoft.Extensions.Logging;
 using AutoCareDiray.Service.Navigation;
+using AutoCareDiray.View.RepairView;
+using AutoCareDiray.ViewModels.RepairViewModel;
 
 
 namespace AutoCareDiray
@@ -97,16 +95,19 @@ namespace AutoCareDiray
             //builder.Services.AddTransient<RecoverPasswordViewModels>();
             builder.Services.AddTransient<UserSettingsViewModal>();
             builder.Services.AddTransient<UserSettingsPage>();
+
             builder.Services.AddTransient<ListVehicleView>();
             builder.Services.AddTransient<ListVehicleViewModel>();
             builder.Services.AddTransient<CardVehicleView>();
             builder.Services.AddTransient<CardVehicleViewModel>();
             builder.Services.AddTransient<CreateVehicleView>();
             builder.Services.AddTransient<CreateVehicleViewModel>();
-            builder.Services.AddTransient<CreateMaintenanse>();
-            builder.Services.AddTransient<CreateMaintenanseViewModal>();
-            builder.Services.AddTransient<ListMaintenanseView>();
-            builder.Services.AddTransient<ListMaintenanseViewModel>();
+
+
+            builder.Services.AddTransient<ListRepairView>();
+            builder.Services.AddTransient<ListRepairViewModel>();
+
+
 
             // Регистрация сервиса
 

@@ -43,7 +43,7 @@ namespace AutoCareDiray.ViewModels.VehicleViewModel
         {
             var property = new Dictionary<string, object>()
             {
-                ["VehicleId"] = VehicleSelected.Vehicle_Id
+                ["VehicleId"] = VehicleSelected.Id
             };
             await _navigationService.GoNavigation(nameof(CardVehicleView), property);
         }

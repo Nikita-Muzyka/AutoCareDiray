@@ -11,6 +11,8 @@
 | Mileage         | `int`       | Да             | Пробег (км)          |
 | DatePurchase    | `DateOnly`  | Нет            | Дата покупки         |
 | DateProduction  | `DateOnly`  | Нет            | Дата производства    |
+**Навигация**
+- public Repair Repait {get;set;} 
 
 ### Repair
 | Поле            | Тип         | Обязательное?  | Описание             |
@@ -18,25 +20,44 @@
 | Repair_Id       | `int`       | Да (Авто)      | Первичный ключ       |
 | Vehicle_Id      | `int`       | Да             | Вторичный ключ       |
 | DateRepair      | `DateOnly`  | Нет            | Дата ремонта         |
-| Mileage         | `int`       | Нет            | Пробег (км)          |
+| TypeRepair_Id   | `int`       | Да             | Вторичный ключ       |
 | SpareParts      | `string`    | Нет            | Запчасти             |
 | Cost            | `int`       | Нет            | Стоимости            |
 | Description     | `string`    | Нет            | Описание работ       |
+
+### RepairTypes
+| Поле            | Тип              | Обязательное?  | Описание             |
+|-----------------|------------------|----------------|----------------------|
+| TypeRepair_Id   | `int`            | Да             | Первичный ключ       |
+| TitleRepair     | `string`         | Да             | Название ремонта     |
+| IntervalMileage | `int`            | Да             | Интервал пробега     |
+| IntervalDate    | `DateOnly`       | Да             | Интервал даты        |
+
+### ListRepairTypes
+| Поле            | Тип                 | Обязательное?  | Описание             |
+|-----------------|---------------------|----------------|----------------------|
+| ListRepair_Id   | `int`               | Да             | Первичный ключ       |
+| ListRepairTypes | `List<RepairTypes>` | Да             | Список классов ремонта    |
 
 ## Views
 - ListVehicleView.xaml
 - CreateVehicleView.xaml
 - CardVehicleView.xaml
 
-- CardVehicleView.xaml
+- ListRepairView.xaml
+- CreateRepairView.xaml
+- CardRepairView.xaml
 
 ## ViewModels
 - BaseViewModel _Базовый класс для VM_
+
 - ListVehicleViewModel
 - CreateVehicleViewModel
 - CardVehicleViewModel
 
-- RepairVehicleViewModel
+- ListRepairViewModel
+- CreateRepairViewModel
+- CardRepairViewModel
 
 ## Services
 - IValidationService, ValidationService

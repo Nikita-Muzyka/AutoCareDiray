@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vehicleView="clr-namespace:AutoCareDiray.View.VehicleView"
+    xmlns:repairView="clr-namespace:AutoCareDiray.View.RepairView"
     Title="AutoCareDiray"
     Style="{StaticResource CustomTabBar}">
 
@@ -18,6 +19,11 @@
         <Tab Title="Авто"
              Route="ListVehicle">
             <ShellContent ContentTemplate="{DataTemplate vehicleView:ListVehicleView}"/>
+        </Tab>
+
+        <Tab Title="Ремонт"
+             Route="ListRepair">
+            <ShellContent ContentTemplate="{DataTemplate repairView:ListRepairView}"/>
         </Tab>
 
     </TabBar>
