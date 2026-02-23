@@ -88,6 +88,65 @@ namespace AutoCareDiray.Service.Data
                 return new List<Repair>();
             }
         }
+
+        public async Task<bool> CreateRepairAsync(Repair repair, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                await _dbContex.Repairs.AddAsync(repair, token);
+                await _dbContex.SaveChangesAsync();
+                return true;
+            }
+            catch (OperationCanceledException ex)
+            {
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+        //RepairType
+
+        public async Task<List<RepairType>> GetListRepairTypeAsync(int vehicleId, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var repairs = await _dbContex.RepairTypes.Where(c => c.VehicleId == vehicleId).ToListAsync();
+                return repairs;
+            }
+            catch (OperationCanceledException ex)
+            {
+                return new List<RepairType>();
+            }
+            catch (Exception ex)
+            {
+                return new List<RepairType>();
+            }
+        }
+
+        public async Task<bool> UpdateRepairTypeAsync(RepairType repaitType, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                await _dbContex.RepairTypes.AddAsync(repaitType, token);
+                await _dbContex.SaveChangesAsync();
+                return true;
+            }
+            catch (OperationCanceledException ex)
+            {
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public void InitializeDatabase()
         {
             _dbContex.Database.Migrate();

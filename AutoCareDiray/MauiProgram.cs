@@ -106,6 +106,8 @@ namespace AutoCareDiray
 
             builder.Services.AddTransient<ListRepairView>();
             builder.Services.AddTransient<ListRepairViewModel>();
+            builder.Services.AddTransient<CreateRepairView>();
+            builder.Services.AddTransient<CreateRepairViewModel>();
 
 
 

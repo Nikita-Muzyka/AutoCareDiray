@@ -222,7 +222,19 @@
         </Setter>
     </Style>
 
-   
+    <Style TargetType="Editor" x:Key="EditorStandart">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBlack}, Dark={StaticResource PrimaryWhite}}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HeightRequest" Value="150"/>
+        <Setter Property="WidthRequest" Value="300"/>
+    </Style>
+
+
 
     <Style TargetType="Shell" x:Key="CustomTabBar">
         <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryWhite}, Dark={StaticResource PrimaryBlack}}" />

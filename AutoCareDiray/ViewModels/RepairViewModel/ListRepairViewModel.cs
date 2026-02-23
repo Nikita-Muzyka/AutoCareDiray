@@ -31,7 +31,8 @@ namespace AutoCareDiray.ViewModels.RepairViewModel
         [RelayCommand]
         public async void LoadData()
         {
-            Vehicles.Clear();
+            if(Vehicles is not null) Vehicles.Clear();
+
             foreach (var vehicle in await _dataService.ListVehicleAsync(_cts.Token))
             {
                 if(vehicle is not null)
@@ -43,7 +44,7 @@ namespace AutoCareDiray.ViewModels.RepairViewModel
         }
         async void LoadRepairs()
         {
-            Repairs.Clear();
+            if(Repairs is not null) Repairs.Clear();
             foreach (var repairs in await _dataService.ListRepairForVehicleAsync(SelectedVehicle.Id,_cts.Token))
             {
                 if (repairs is not null)
@@ -61,11 +62,15 @@ namespace AutoCareDiray.ViewModels.RepairViewModel
         [RelayCommand]
         public async Task GoCreateRepair()
         {
-            await _navigationService.GoNavigation(nameof(CreateRepairView));
+            var property = new Dictionary<string, object>()
+            {
+                ["VehicleId"] = SelectedVehicle.Id,
+            };
+            await _navigationService.GoNavigation(nameof(CreateRepairView),property);
         }
         partial void OnSelectedVehicleChanged(Vehicle value)
         {
-            LoadRepairs();
+            if(value is not null) LoadRepairs();
         }
 
         [RelayCommand]
