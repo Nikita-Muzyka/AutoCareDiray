@@ -5,6 +5,7 @@ using AutoCareDiray.Shared.Models.RepairModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace AutoCareDiray.ViewModels.RepairViewModel
 {
@@ -12,7 +13,7 @@ namespace AutoCareDiray.ViewModels.RepairViewModel
     public partial class CreateRepairViewModel : BaseViewModel
     {
         CancellationTokenSource _cts;
-        private int VehicleIdGet { get; set; }
+        public int VehicleIdGet { get; set; }
         public ObservableCollection<RepairType> RepairTypes { get; set; } = new ObservableCollection<RepairType>();
 
         [ObservableProperty]
@@ -43,10 +44,12 @@ namespace AutoCareDiray.ViewModels.RepairViewModel
         [RelayCommand]
         public async void Loading()
         {
+            if(RepairTypes.Count > 0) RepairTypes.Clear();
             foreach (var repairs in await _dataService.GetListRepairTypeAsync(VehicleIdGet, _cts.Token))
             {
                 if (repairs is not null) RepairTypes.Add(repairs);
             }
+            SelectedRepairType = RepairTypes.FirstOrDefault() ?? null;
         }
 
         [RelayCommand]
@@ -79,8 +82,21 @@ namespace AutoCareDiray.ViewModels.RepairViewModel
             }
         }
 
+        partial void OnSelectedRepairTypeChanged(RepairType value)
+        {
+            if (value is not null)
+            {
+                IntervalMileageFilled = value.IntervalMileagee ?? 0;
+            }
+        }
 
 
-
+        [RelayCommand]
+        public void CancelToken()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = new CancellationTokenSource();
+        }
     }
 }

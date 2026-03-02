@@ -20,8 +20,10 @@ namespace AutoCareDiray.Service.Data
             try
             {
                 token.ThrowIfCancellationRequested();
+
                 await _dbContex.Vehicles.AddAsync(vehicle, token);
                 await _dbContex.SaveChangesAsync(token);
+
             }
             catch (OperationCanceledException)
             {

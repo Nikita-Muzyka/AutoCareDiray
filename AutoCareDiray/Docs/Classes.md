@@ -4,40 +4,46 @@
 
 ## Models
 ### Vehicle
-| Поле            | Тип         | Обязательное?  | Описание             |
-|-----------------|-------------|----------------|----------------------|
-| Vehicle_Id      | `int`       | Да (Авто)      | Первичный ключ       |
-| Name            | `string`    | Нет            | Название авто        |
-| Mileage         | `int`       | Да             | Пробег (км)          |
-| DatePurchase    | `DateOnly`  | Нет            | Дата покупки         |
-| DateProduction  | `DateOnly`  | Нет            | Дата производства    |
+| Поле               | Тип         | Обязательное?  | Описание             |
+|--------------------|-------------|----------------|----------------------|
+| Id                 | `int`       | Да (Авто)      | Первичный ключ       |
+| Name               | `string`    | Нет            | Название авто        |
+| VehicleType           | `string`    | Нет            | ТИп авто             |
+| Mileage            | `int`       | Да             | Пробег (км)          |
+| DatePurchase       | `DateOnly`  | Нет            | Дата покупки         |
+| DateProduction     | `DateOnly`  | Нет            | Дата производства    |
+
 **Навигация**
-- public Repair Repait {get;set;} 
+- public List"Repair" Repait {get;set;} = new()
+- public List'RepairTypes' RepairTypes {get;set;} = new()
 
 ### Repair
 | Поле            | Тип         | Обязательное?  | Описание             |
 |-----------------|-------------|----------------|----------------------|
-| Repair_Id       | `int`       | Да (Авто)      | Первичный ключ       |
-| Vehicle_Id      | `int`       | Да             | Вторичный ключ       |
+| Id              | `int`       | Да (Авто)      | Первичный ключ       |
+| VehicleId       | `int`       | Да             | Вторичный ключ       |
 | DateRepair      | `DateOnly`  | Нет            | Дата ремонта         |
-| TypeRepair_Id   | `int`       | Да             | Вторичный ключ       |
+| RepairTypeId    | `int`       | Да             | Вторичный ключ       |
 | SpareParts      | `string`    | Нет            | Запчасти             |
 | Cost            | `int`       | Нет            | Стоимости            |
 | Description     | `string`    | Нет            | Описание работ       |
 
+**Навигация**
+- public Vehicle Vehicle {get;set;}
+- public RepairType  RepairType {get;set;}
+
 ### RepairTypes
 | Поле            | Тип              | Обязательное?  | Описание             |
 |-----------------|------------------|----------------|----------------------|
-| TypeRepair_Id   | `int`            | Да             | Первичный ключ       |
+| Id              | `int`            | Да             | Первичный ключ       |
 | TitleRepair     | `string`         | Да             | Название ремонта     |
 | IntervalMileage | `int`            | Да             | Интервал пробега     |
 | IntervalDate    | `DateOnly`       | Да             | Интервал даты        |
+| VehicleId       | `int`            | Да             | ID Vehicle           |
 
-### ListRepairTypes
-| Поле            | Тип                 | Обязательное?  | Описание             |
-|-----------------|---------------------|----------------|----------------------|
-| ListRepair_Id   | `int`               | Да             | Первичный ключ       |
-| ListRepairTypes | `List<RepairTypes>` | Да             | Список классов ремонта    |
+**Навигация**
+- public Vehicle Vehicle {get;set;}
+- public List 'Repair' Repairs {get;set;} = new()
 
 ## Views
 - ListVehicleView.xaml

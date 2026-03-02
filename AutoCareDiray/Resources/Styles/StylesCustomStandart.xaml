@@ -88,7 +88,7 @@
 
     <Style TargetType="Picker" x:Key="PickerStandart">
         <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="HorizontalOptions" Value="Start"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
         <Setter Property="HeightRequest" Value="50"/>
         <Setter Property="WidthRequest" Value="300"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>

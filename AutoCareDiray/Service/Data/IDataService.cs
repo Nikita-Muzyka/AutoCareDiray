@@ -13,6 +13,8 @@ namespace AutoCareDiray.Service.Data
 
         Task<Vehicle> GetVehicleAsync(int Vehicle_Id, CancellationToken token);
 
+        //Task<Vehicle> GetVehicleAndRepairTypeAsync(int Vehicle_Id, CancellationToken token);
+
         //Repair
 
         Task<List<Repair>> ListRepairForVehicleAsync(int VehicleId, CancellationToken token);
