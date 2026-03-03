@@ -1,5 +1,4 @@
-using AutoCareDiray.Service;
-using AutoCareDiray.ViewModels.VehicleViewModel;
+using AutoCareDiray.Shared.ViewModels.VehicleViewModel;
 
 namespace AutoCareDiray.View.VehicleView;
 

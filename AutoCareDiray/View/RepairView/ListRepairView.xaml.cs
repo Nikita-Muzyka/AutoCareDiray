@@ -1,4 +1,4 @@
-using AutoCareDiray.ViewModels.RepairViewModel;
+using AutoCareDiray.Shared.ViewModels.RepairViewModel;
 
 namespace AutoCareDiray.View.RepairView;
 

@@ -1,19 +1,19 @@
 ﻿using AutoCareDiray.Shared.Data;
-using AutoCareDiray.Models.Validation;
-using AutoCareDiray.Service; // Ваши сервисы
-using AutoCareDiray.Service.Data;
-using AutoCareDiray.Service.ValidationService;
-using AutoCareDiray.View;
+using AutoCareDiray.Shared.Service.Api;
+using AutoCareDiray.Shared.Service.Data;
+using AutoCareDiray.Service.Navigation;
+using AutoCareDiray.Service.Dialog;
+using AutoCareDiray.Shared.Models.Validation;
+using AutoCareDiray.Shared.Service.ValidationService;
 using AutoCareDiray.View.VehicleView;
-using AutoCareDiray.ViewModels;
-using AutoCareDiray.ViewModels.VehicleViewModel;
+using AutoCareDiray.Shared.ViewModels.VehicleViewModel;
+using AutoCareDiray.Shared.ViewModels.RepairViewModel;
 using CommunityToolkit.Maui;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection; // Добавьте эту строку
 using Microsoft.Extensions.Logging;
-using AutoCareDiray.Service.Navigation;
 using AutoCareDiray.View.RepairView;
-using AutoCareDiray.ViewModels.RepairViewModel;
+using AutoCareDiray.Shared.Interface;
 
 
 namespace AutoCareDiray
@@ -83,8 +83,8 @@ namespace AutoCareDiray
             builder.Services.AddTransient<IValidatorService, ValidatorService>();
             builder.Services.AddScoped<INavigationService,NavigationService>();
 
-            builder.Services.AddTransient<UserValidation>();
-            builder.Services.AddTransient<RecoverValidation>();
+            //builder.Services.AddTransient<UserValidation>();
+            //builder.Services.AddTransient<RecoverValidation>();
             builder.Services.AddTransient<VehicleValidation>();
 
             //builder.Services.AddTransient<AuthorizationPage>();
@@ -93,8 +93,8 @@ namespace AutoCareDiray
             //builder.Services.AddTransient<RegistrationViewModel>();
             //builder.Services.AddTransient<RecoverPasswordView>();
             //builder.Services.AddTransient<RecoverPasswordViewModels>();
-            builder.Services.AddTransient<UserSettingsViewModal>();
-            builder.Services.AddTransient<UserSettingsPage>();
+            //builder.Services.AddTransient<UserSettingsViewModal>();
+            //builder.Services.AddTransient<UserSettingsPage>();
 
             builder.Services.AddTransient<ListVehicleView>();
             builder.Services.AddTransient<ListVehicleViewModel>();

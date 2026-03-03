@@ -1,5 +1,5 @@
 ﻿using AutoCareDiray.Resources.Styles;
-using AutoCareDiray.Service.Data;
+using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.View;
 namespace AutoCareDiray
 {

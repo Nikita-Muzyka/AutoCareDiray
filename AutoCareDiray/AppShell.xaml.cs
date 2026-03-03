@@ -13,9 +13,9 @@ namespace AutoCareDiray
             InitializeComponent();
             //Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
             //Routing.RegisterRoute(nameof(RecoverPasswordView), typeof(RecoverPasswordView));
-            Routing.RegisterRoute(nameof(CreateVehicleView), typeof(CreateVehicleView));
-            Routing.RegisterRoute(nameof(CardVehicleView), typeof(CardVehicleView));
-            Routing.RegisterRoute(nameof(CreateRepairView), typeof(CreateRepairView));
+            Routing.RegisterRoute("createVehicle", typeof(CreateVehicleView));
+            Routing.RegisterRoute("cardVehicle", typeof(CardVehicleView));
+            Routing.RegisterRoute("createRepair", typeof(CreateRepairView));
         }
     }
 }

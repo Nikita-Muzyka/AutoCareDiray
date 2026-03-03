@@ -1,4 +1,4 @@
-﻿using AutoCareDiray.Models.PopUp;
+﻿using AutoCareDiray.Shared.Interface;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
@@ -10,49 +10,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoCareDiray.Service
+namespace AutoCareDiray.Service.Dialog;
+
+class DialogService : IDialogService
 {
-    class DialogService : IDialogService
+   
+    public async Task ShowMessageAsync(string message)
     {
-        public async Task<bool> ShowConfirmationMessage(string message)
+        await Shell.Current.DisplayAlert("",message,"Ok");
+    }
+
+    //public async Task ShowWarningLogInAsync()
+    //{
+    //    var popup = new InformationPopUp();
+    //    await Application.Current.MainPage.ShowPopupAsync(popup, new PopupOptions
+    //    {
+    //        PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
+    //        Shape = null,
+    //        CanBeDismissedByTappingOutsideOfPopup = false
+    //    });
+
+    //}
+
+    public async Task ShowToastAsync(string message)
+    {
+        if (DeviceInfo.Platform == DevicePlatform.Android || DeviceInfo.Platform == DevicePlatform.iOS)
         {
-            var popup = new ConfirmationPopup(message);
-            await Application.Current.MainPage.ShowPopupAsync(popup);
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            bool result = await popup.Result;
+            ToastDuration duration = ToastDuration.Short;
+            double fontSize = 14;
 
-            return result;
-        }
-        public async Task ShowMessageAsync(string message)
-        {
-            await Shell.Current.DisplayAlert("",message,"Ok");
-        }
+            var toast = Toast.Make(message, duration, fontSize);
 
-        public async Task ShowWarningLogInAsync()
-        {
-            var popup = new InformationPopUp();
-            await Application.Current.MainPage.ShowPopupAsync(popup, new PopupOptions
-            {
-                PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
-                Shape = null,
-                CanBeDismissedByTappingOutsideOfPopup = false
-            });
-
-        }
-
-        public async Task ShowToastAsync(string message)
-        {
-            if (DeviceInfo.Platform == DevicePlatform.Android || DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-                ToastDuration duration = ToastDuration.Short;
-                double fontSize = 14;
-
-                var toast = Toast.Make(message, duration, fontSize);
-
-                await toast.Show(cancellationTokenSource.Token);
-            }
+            await toast.Show(cancellationTokenSource.Token);
         }
     }
 }

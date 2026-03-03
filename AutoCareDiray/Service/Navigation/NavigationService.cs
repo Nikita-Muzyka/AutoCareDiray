@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoCareDiray.Shared.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,21 +9,21 @@ namespace AutoCareDiray.Service.Navigation
 {
     public class NavigationService : INavigationService
     {
-        public async Task GoNavigation(ShellNavigationState ShellState)
+        public async Task GoNavigation(string roud)
         {
             var shell = Shell.Current;
             if (shell is not null)
             {
-                await Shell.Current.GoToAsync(ShellState);
+                await Shell.Current.GoToAsync(roud);
             }
         }
 
-        public async Task GoNavigation(ShellNavigationState ShellState, IDictionary<string, object> paramentr)
+        public async Task GoNavigation(string roud, IDictionary<string, object> paramentr)
         {
             var shell = Shell.Current;
             if (shell is not null)
             {
-                await Shell.Current.GoToAsync(ShellState, paramentr);
+                await Shell.Current.GoToAsync(roud, paramentr);
             }
         }
 
