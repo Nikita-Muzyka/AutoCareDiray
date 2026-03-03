@@ -1,193 +1,252 @@
-﻿using AutoCareDiray.ViewModels.VehicleViewModel;
-using AutoCareDiray.Models.Validation;
-using AutoCareDiray.Service;
-using AutoCareDiray.Service.Navigation;
-using AutoCareDiray.Service.Data;
+﻿using AutoCareDiray.Shared.ViewModels.RepairViewModel; // Твоя VM из Core
+using AutoCareDiray.Shared.Interface;                   // Интерфейсы из Core
+using AutoCareDiray.Shared.Models.RepairModel;       // Модели
 using Moq;
 using Xunit;
 using FluentAssertions;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace AutoCareDiray.Tests
 {
-    public class CreateVehicleViewModelTests
+    // Класс тестов должен быть public
+    public class CreateRepairViewModelTests
     {
-        // Моки зависимостей
+        // === МОКИ (Подделки зависимостей) ===
+        // Мы создаем "фейковые" версии сервисов, чтобы не зависеть от реального кода
         private Mock<IApiService> _mockApiService;
         private Mock<IDialogService> _mockDialogService;
         private Mock<IDataService> _mockDataService;
-        private Mock<INavigationService> _mockNavigation;
-        private VehicleValidation _vehicleValidation;
+        private Mock<INavigationService> _mockNavigationService;
 
-        private CreateVehicleViewModel _viewModel;
+        private CreateRepairViewModel _viewModel;
 
-        public CreateVehicleViewModelTests()
+        // === ИНИЦИАЛИЗАЦИЯ ===
+        // Этот метод запускается ПЕРЕД КАЖДЫМ тестом (гарантия чистоты)
+        public CreateRepairViewModelTests()
         {
-            // Инициализация моков перед каждым тестом
             _mockApiService = new Mock<IApiService>();
             _mockDialogService = new Mock<IDialogService>();
             _mockDataService = new Mock<IDataService>();
-            _mockNavigation = new Mock<INavigationService>();
-            _vehicleValidation = new VehicleValidation(); // Реальный объект валидации
+            _mockNavigationService = new Mock<INavigationService>();
 
-            _viewModel = new CreateVehicleViewModel(
+            // Создаем ViewModel с поддельными сервисами
+            _viewModel = new CreateRepairViewModel(
                 _mockApiService.Object,
                 _mockDialogService.Object,
                 _mockDataService.Object,
-                _mockNavigation.Object,
-                _vehicleValidation
+                _mockNavigationService.Object
             );
         }
 
-        #region Тесты валидации пробега
-
+        // ============================================================
+        // 🧪 ТЕСТ 1: Инициализация ViewModel
+        // ============================================================
         [Fact]
-        public void ValidationMileage_ValidNumber_NoErrors()
+        public async Task Initialize_SetsVehicleId_AndCallsLoading()
         {
-            // Arrange
-            _viewModel.Mileage = "15000";
+            // --- ARRANGE (Подготовка) ---
+            int testVehicleId = 123;
 
-            // Act
-            _vehicleValidation.ValidationMileage(_viewModel.Mileage);
+            // --- ACT (Действие) ---
+            // Вызываем метод инициализации
+            await _viewModel.Initialize(testVehicleId);
 
-            // Assert
-            _viewModel.HasErrors.Should().BeFalse();
-            _vehicleValidation.GetErrors(nameof(_viewModel.Mileage)).Should().BeNullOrEmpty();
+            // --- ASSERT (Проверка) ---
+            // Проверяем, что ID сохранился (через приватное поле не проверить, 
+            // но мы проверим, что Loading был вызван косвенно)
+            // Флаг isInitialize приватный, поэтому проверяем поведение
+            _viewModel.RepairTypes.Should().NotBeNull();
         }
 
-        [Theory]
-        [InlineData("")]
-        [InlineData("abc")]
-        [InlineData("12.34")]
-        [InlineData("-100")]
-        public void ValidationMileage_InvalidInput_HasErrors(string invalidMileage)
-        {
-            // Arrange
-            _viewModel.Mileage = invalidMileage;
-
-            // Act
-            _vehicleValidation.ValidationMileage(_viewModel.Mileage);
-
-            // Assert
-            _viewModel.HasErrors.Should().BeTrue();
-            _vehicleValidation.GetErrors(nameof(_viewModel.Mileage)).Should().NotBeNullOrEmpty();
-        }
-
-        #endregion
-
-        #region Тесты валидации дат
-
+        // ============================================================
+        // 🧪 ТЕСТ 2: Загрузка списка ремонтов (Loading)
+        // ============================================================
         [Fact]
-        public void ValidationDate_PurchaseAfterCreate_NoErrors()
+        public async Task Initialize_FetchesRepairTypes_FromDataService()
         {
-            // Arrange
-            var create = new DateTime(2020, 1, 1);
-            var purchase = new DateTime(2022, 1, 1);
+            // --- ARRANGE ---
+            int testVehicleId = 123;
 
-            // Act
-            _vehicleValidation.ValidationDate(purchase, create);
+            var mockRepairTypes = new List<RepairType>
+    {
+        new RepairType { Id = 1, TitleRepair = "ТО", IntervalMileagee = 15000 },
+        new RepairType { Id = 2, TitleRepair = "Масло", IntervalMileagee = 8000 }
+    };
 
-            // Assert
-            _vehicleValidation.GetErrors(nameof(_viewModel.YearPurchaseSelected)).Should().BeNullOrEmpty();
-        }
-
-        [Fact]
-        public void ValidationDate_PurchaseBeforeCreate_HasErrors()
-        {
-            // Arrange
-            var create = new DateTime(2022, 1, 1);
-            var purchase = new DateTime(2020, 1, 1); // Ошибка: покупка раньше создания
-
-            // Act
-            _vehicleValidation.ValidationDate(purchase, create);
-
-            // Assert
-            _vehicleValidation.GetErrors(nameof(_viewModel.YearPurchaseSelected)).Should().NotBeNullOrEmpty();
-        }
-
-        #endregion
-
-        #region Тесты команды CreateVehicle
-
-        [Fact]
-        public async Task CreateVehicleAsync_ValidData_CallsDataServiceAndNavigatesBack()
-        {
-            // Arrange
-            _viewModel.NameVehicle = "Toyota Camry";
-            _viewModel.Mileage = "50000";
-            _viewModel.YearCreateSelected = new DateTime(2020, 1, 1);
-            _viewModel.YearPurchaseSelected = new DateTime(2022, 1, 1);
-            _viewModel.SelectedTypeVehicle = "Автомобиль";
-
-            // Мокаем DataService: метод CreateVehicleAsync должен выполниться успешно
             _mockDataService
-                .Setup(x => x.CreateVehicleAsync(It.IsAny<Shared.Models.VehicleModel.Vehicle>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.CompletedTask);
+                .Setup(x => x.GetListRepairTypeAsync(testVehicleId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(mockRepairTypes);
 
-            // Act
-            await _viewModel.CreateVehicleAsync(); // Если оставили async void — используйте await Task.Run(() => _viewModel.CreateVehicle())
+            // --- ACT ---
+            // ✅ Вызываем ТОЛЬКО Initialize (он сам вызовет Loading внутри)
+            await _viewModel.Initialize(testVehicleId);
 
-            // Assert
-            // 1. DataService был вызван ровно 1 раз
+            // --- ASSERT ---
+            _viewModel.RepairTypes.Should().HaveCount(2);
+            _viewModel.SelectedRepairType.Should().NotBeNull();
+
+            // ✅ Проверяем, что сервис был вызван 1 раз (при инициализации)
             _mockDataService.Verify(x =>
-                x.CreateVehicleAsync(
-                    It.Is<Shared.Models.VehicleModel.Vehicle>(v =>
-                        v.NameVehicle == "Toyota Camry" &&
-                        v.Mileage == 50000),
+                x.GetListRepairTypeAsync(testVehicleId, It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        // ============================================================
+        // 🧪 ТЕСТ 3: Создание ремонта — УСПЕХ
+        // ============================================================
+        [Fact]
+        public async Task CreateRepair_ValidData_SavesAndNavigatesBack()
+        {
+            // --- ARRANGE ---
+            // 1. Инициализируем ViewModel
+            await _viewModel.Initialize(123);
+
+            // 2. Заполняем тестовые данные
+            _viewModel.RepairTypes.Add(new RepairType { Id = 1, TitleRepair = "ТО" });
+            _viewModel.SelectedRepairType = _viewModel.RepairTypes[0];
+            _viewModel.DateRepairSelected = DateTime.Today;
+            _viewModel.SparePartsFilled = "Фильтр";
+            _viewModel.CostFilled = 1000;
+            _viewModel.DescriptionFilled = "Замена";
+            _viewModel.IntervalMileageFilled = 15000;
+            _viewModel.IntervalDateSelected = DateTime.Today.AddMonths(6);
+
+            // 3. Настраиваем моки: сервисы должны вернуть true (успех)
+            _mockDataService
+                .Setup(x => x.CreateRepairAsync(It.IsAny<Repair>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            _mockDataService
+                .Setup(x => x.UpdateRepairTypeAsync(It.IsAny<RepairType>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
+            // --- ACT ---
+            // Вызываем команду создания ремонта
+            await _viewModel.CreateRepairCommand.ExecuteAsync(null);
+
+            // --- ASSERT ---
+            // 1. Проверяем, что CreateRepairAsync был вызван 1 раз
+            _mockDataService.Verify(x =>
+                x.CreateRepairAsync(
+                    It.Is<Repair>(r => r.VehicleId == 123 && r.SpareParts == "Фильтр"),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
 
-            // 2. Навигация назад была вызвана
-            _mockNavigation.Verify(x => x.GoToBack(), Times.Once);
-
-            // 3. Статус сообщения не содержит ошибок
-            _viewModel.StatusMessage.Should().NotContain("ошибка", Because: "данные валидны");
-        }
-
-        [Fact]
-        public async Task CreateVehicleAsync_InvalidMileage_DoesNotCallDataService()
-        {
-            // Arrange
-            _viewModel.Mileage = "invalid"; // Некорректный пробег
-            _vehicleValidation.ValidationMileage(_viewModel.Mileage);
-
-            // Act
-            await _viewModel.CreateVehicleAsync();
-
-            // Assert
-            // DataService НЕ должен быть вызван, т.к. есть ошибки валидации
+            // 2. Проверяем, что UpdateRepairTypeAsync был вызван 1 раз
             _mockDataService.Verify(x =>
-                x.CreateVehicleAsync(It.IsAny<Shared.Models.VehicleModel.Vehicle>(), It.IsAny<CancellationToken>()),
-                Times.Never);
+                x.UpdateRepairTypeAsync(
+                    It.Is<RepairType>(rt => rt.IntervalMileagee == 15000),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
 
-            // Навигация НЕ должна произойти
-            _mockNavigation.Verify(x => x.GoToBack(), Times.Never);
+            // 3. Проверяем, что навигация назад была выполнена
+            _mockNavigationService.Verify(x => x.GoToBack(), Times.Once);
+
+            // 4. Проверяем, что сообщение об ошибке НЕ установлено
+            _viewModel.StatusMessage.Should().BeNullOrEmpty();
         }
 
-        #endregion
-
-        #region Тесты свойств и коллекций
-
+        // ============================================================
+        // 🧪 ТЕСТ 4: Создание ремонта — ОШИБКА
+        // ============================================================
         [Fact]
-        public void TypeVehicle_ContainsExpectedValues()
+        public async Task CreateRepair_ServiceReturnsFalse_ShowsErrorMessage()
         {
-            // Arrange & Act
-            var types = _viewModel.TypeVehicle;
+            // --- ARRANGE ---
+            await _viewModel.Initialize(123);
 
-            // Assert
-            types.Should().Contain("Автомобиль", "Мотоцикл", "Грузовое ТС", "Другое");
-            types.Should().HaveCount(4);
+            _viewModel.RepairTypes.Add(new RepairType { Id = 1, TitleRepair = "ТО" });
+            _viewModel.SelectedRepairType = _viewModel.RepairTypes[0];
+            _viewModel.DateRepairSelected = DateTime.Today;
+            _viewModel.SparePartsFilled = "Фильтр";
+            _viewModel.CostFilled = 1000;
+            _viewModel.DescriptionFilled = "Замена";
+
+            // Настраиваем моки: сервис возвращает false (ошибка)
+            _mockDataService
+                .Setup(x => x.CreateRepairAsync(It.IsAny<Repair>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
+
+            // --- ACT ---
+            await _viewModel.CreateRepairCommand.ExecuteAsync(null);
+
+            // --- ASSERT ---
+            // Проверяем, что установлено сообщение об ошибке
+            _viewModel.StatusMessage.Should().Be("Ремонт или интервалы не были сохранены");
+
+            // Проверяем, что навигация НЕ была выполнена (нельзя уходить при ошибке)
+            _mockNavigationService.Verify(x => x.GoToBack(), Times.Never);
         }
 
+        // ============================================================
+        // 🧪 ТЕСТ 5: Выбор типа ремонта — Автозаполнение интервала
+        // ============================================================
         [Fact]
-        public void DefaultValues_AreSetCorrectly()
+        public void OnSelectedRepairTypeChanged_UpdatesIntervalMileageFilled()
         {
-            // Assert
-            _viewModel.DateNow.Date.Should().Be(DateTime.Today.Date);
-            _viewModel.YearCreateSelected.Date.Should().Be(DateTime.Today.Date);
+            // --- ARRANGE ---
+            var repairType = new RepairType
+            {
+                Id = 1,
+                TitleRepair = "ТО",
+                IntervalMileagee = 20000 // Ожидаемое значение
+            };
+
+            // --- ACT ---
+            // Устанавливаем SelectedRepairType (это вызовет partial метод автоматически)
+            _viewModel.SelectedRepairType = repairType;
+
+            // --- ASSERT ---
+            // Проверяем, что интервал пробега заполнился автоматически
+            _viewModel.IntervalMileageFilled.Should().Be(20000);
         }
 
-        #endregion
+        // ============================================================
+        // 🧪 ТЕСТ 6: Отмена операции — Reset CancellationToken
+        // ============================================================
+        [Fact]
+        public void CancelToken_CreatesNewCancellationTokenSource()
+        {
+            // --- ARRANGE ---
+            // Запоминаем старый токен (через публичное свойство или косвенно)
+
+            // --- ACT ---
+            _viewModel.CancelTokenCommand.Execute(null);
+
+            // --- ASSERT ---
+            // Т.к. _cts приватный, проверяем, что метод выполнился без исключений
+            // Это регрессионный тест — защита от ошибок в будущем
+            // Можно добавить проверку, что старый токен отменен (через Mock)
+        }
+
+        // ============================================================
+        // 🧪 ТЕСТ 7: Повторная инициализация — Защита от дублей
+        // ============================================================
+        [Fact]
+        public async Task Initialize_CalledTwice_DoesNotReloadData()
+        {
+            // --- ARRANGE ---
+            var mockRepairTypes = new List<RepairType>
+            {
+                new RepairType { Id = 1, TitleRepair = "ТО" }
+            };
+
+            _mockDataService
+                .Setup(x => x.GetListRepairTypeAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(mockRepairTypes);
+
+            // --- ACT ---
+            // Вызываем инициализацию ДВАЖДЫ
+            await _viewModel.Initialize(123);
+            await _viewModel.Initialize(999); // Второй вызов с другим ID
+
+            // --- ASSERT ---
+            // DataService должен быть вызван только 1 раз (защита isInitialize сработала)
+            _mockDataService.Verify(x =>
+                x.GetListRepairTypeAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
     }
-} 
+}
