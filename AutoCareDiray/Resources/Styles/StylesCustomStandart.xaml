@@ -197,6 +197,13 @@
         </Setter>
     </Style>
 
+    <Style TargetType="ImageButton" x:Key="ImageButtonStandart">
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="MinimumHeightRequest" Value="10"/>
+        <Setter Property="MinimumWidthRequest" Value="10"/>
+    </Style>
+
     <Style TargetType="CheckBox" x:Key="CheckBoxStandart">
         <Setter Property="Color" Value="{DynamicResource PrimaryRed}"/>
     </Style>
