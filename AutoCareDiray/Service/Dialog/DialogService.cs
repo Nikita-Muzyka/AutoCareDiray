@@ -20,6 +20,15 @@ class DialogService : IDialogService
         await Shell.Current.DisplayAlert("",message,"Ok");
     }
 
+    public async Task ShowWarningLogInAsync()
+    {
+        var popup = new InformationPopUp();
+        await Application.Current.MainPage.ShowPopupAsync(popup, new PopupOptions
+        {
+            PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
+            Shape = null,
+            CanBeDismissedByTappingOutsideOfPopup = false
+        });
     //public async Task ShowWarningLogInAsync()
     //{
     //    var popup = new InformationPopUp();
@@ -30,7 +39,7 @@ class DialogService : IDialogService
     //        CanBeDismissedByTappingOutsideOfPopup = false
     //    });
 
-    //}
+        }
 
     public async Task ShowToastAsync(string message)
     {
