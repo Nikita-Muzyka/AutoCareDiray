@@ -19,7 +19,7 @@ namespace AutoCareDiray.Service.Navigation
         }
 
         public async Task GoNavigation(string roud, IDictionary<string, object> paramentr)
-        {
+         {
             var shell = Shell.Current;
             if (shell is not null)
             {

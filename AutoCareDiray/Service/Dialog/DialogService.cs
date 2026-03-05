@@ -1,4 +1,5 @@
-﻿using AutoCareDiray.Shared.Interface;
+﻿using AutoCareDiray.Service.PopUp;
+using AutoCareDiray.Shared.Interface;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
@@ -29,17 +30,8 @@ class DialogService : IDialogService
             Shape = null,
             CanBeDismissedByTappingOutsideOfPopup = false
         });
-    //public async Task ShowWarningLogInAsync()
-    //{
-    //    var popup = new InformationPopUp();
-    //    await Application.Current.MainPage.ShowPopupAsync(popup, new PopupOptions
-    //    {
-    //        PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
-    //        Shape = null,
-    //        CanBeDismissedByTappingOutsideOfPopup = false
-    //    });
 
-        }
+    }
 
     public async Task ShowToastAsync(string message)
     {
@@ -54,5 +46,20 @@ class DialogService : IDialogService
 
             await toast.Show(cancellationTokenSource.Token);
         }
+    }
+
+    public async Task<bool> ShowConfirmationAsync(string vehicleName)
+    {
+        var popup = new ConfirmationPopUp(vehicleName);
+
+        var result = await Application.Current.MainPage.ShowPopupAsync<bool>(popup, new PopupOptions
+        {
+            PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
+            Shape = null,
+            CanBeDismissedByTappingOutsideOfPopup = false
+        });
+
+        if (result.Result == true) return true;
+        else return false;
     }
 }
