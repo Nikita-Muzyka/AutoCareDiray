@@ -41,7 +41,7 @@
         <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
     </Style>
 
-    <!--Для информации в Border-->
+    <!--Для информации -->
     <Style TargetType="Label" x:Key="LaberInfo">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
@@ -51,6 +51,19 @@
         <Setter Property="HeightRequest" Value="40"/>
         <Setter Property="WidthRequest" Value="120"/>
         <Setter Property="FontSize" Value="16"/>
+    </Style>
+
+
+    <!--Для информации -->
+    <Style TargetType="Label" x:Key="LaberInfoMini">
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextSecondary}"/>
+        <Setter Property="HeightRequest" Value="30"/>
+        <Setter Property="WidthRequest" Value="300"/>
+        <Setter Property="FontSize" Value="10"/>
     </Style>
 
     <!--Border для полей ввода под EntryImput-->

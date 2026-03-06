@@ -8,7 +8,7 @@
 |--------------------|-------------|----------------|----------------------|
 | Id                 | `int`       | Да (Авто)      | Первичный ключ       |
 | Name               | `string`    | Нет            | Название авто        |
-| VehicleType           | `string`    | Нет            | ТИп авто             |
+| VehicleType        | `string`    | Нет            | ТИп авто             |
 | Mileage            | `int`       | Да             | Пробег (км)          |
 | DatePurchase       | `DateOnly`  | Нет            | Дата покупки         |
 | DateProduction     | `DateOnly`  | Нет            | Дата производства    |
@@ -18,15 +18,16 @@
 - public List'RepairTypes' RepairTypes {get;set;} = new()
 
 ### Repair
-| Поле            | Тип         | Обязательное?  | Описание             |
-|-----------------|-------------|----------------|----------------------|
-| Id              | `int`       | Да (Авто)      | Первичный ключ       |
-| VehicleId       | `int`       | Да             | Вторичный ключ       |
-| DateRepair      | `DateOnly`  | Нет            | Дата ремонта         |
-| RepairTypeId    | `int`       | Да             | Вторичный ключ       |
-| SpareParts      | `string`    | Нет            | Запчасти             |
-| Cost            | `int`       | Нет            | Стоимости            |
-| Description     | `string`    | Нет            | Описание работ       |
+| Поле            | Тип         | Обязательное?  | Описание                         |
+|-----------------|-------------|----------------|----------------------------------|
+| Id              | `int`       | Да (Авто)      | Первичный ключ                   |
+| VehicleId       | `int`       | Да             | Вторичный ключ                   |
+| CurrentMileage  | `int`       | Да             | Пробег на момомент создания      |
+| DateRepair      | `DateOnly`  | Нет            | Дата ремонта                     |
+| RepairTypeId    | `int`       | Да             | Вторичный ключ                   |
+| SpareParts      | `string`    | Нет            | Запчасти                         |
+| Cost            | `int`       | Нет            | Стоимости                        |
+| Description     | `string`    | Нет            | Описание работ                   |
 
 **Навигация**
 - public Vehicle Vehicle {get;set;}
@@ -44,6 +45,11 @@
 **Навигация**
 - public Vehicle Vehicle {get;set;}
 - public List 'Repair' Repairs {get;set;} = new()
+
+
+- VehicleValidation
+- RepairValidation
+
 
 ## Views
 - ListVehicleView.xaml

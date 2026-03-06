@@ -9,22 +9,26 @@
 
             <VerticalStackLayout Spacing="10">
 
+                <!--RepairTypes-->
                 <Picker ItemsSource="{Binding RepairTypes}"
                         ItemDisplayBinding="{Binding TitleRepair}"
                         SelectedItem="{Binding SelectedRepairType}"
                         Style="{DynamicResource PickerStandart}">
                     
                 </Picker>
+
+                <!--IntervalMileage-->
                 
+                <Label Text="Интервал в КМ на вашем авто для замены или проведение повторного обслуживания"
+                       Style="{DynamicResource LaberInfoMini}"/>
+
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <Entry Style="{DynamicResource EntryImput}"
                            Placeholder="Интервал пробега"
                            Text="{Binding IntervalMileageFilled}"/>
                 </Border>
 
-                <!--<Label Text=""
-                       Style="{DynamicResource LaberError}"/>-->
-
+                <!--DateReapir-->
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <VerticalStackLayout>
                         <Label Text="Выберите дату ремонта"
@@ -35,17 +39,14 @@
                         </DatePicker>
                     </VerticalStackLayout>
                 </Border>
+                
+                <!--Mileage-->
 
-                <Border Style="{DynamicResource BorderForEntryImput}">
-                    <VerticalStackLayout>
-                        <Label Text="Следующая замена"
-                Style="{DynamicResource LabelInEntry}"/>
-                        <DatePicker Format="d"
-                                    Date ="{Binding IntervalDateSelected}"
-                                    MaximumDate="{Binding DateNow}">
-                        </DatePicker>
-                    </VerticalStackLayout>
-                </Border>
+                <Label Text="Текущий пробег вашего авто нужен для отчетности ремонта"
+                       Style="{DynamicResource LaberInfoMini}"/>
+
+                <Label Text="{Binding MileageError}"
+                       Style="{DynamicResource LaberError}"/>
 
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <Entry Style="{DynamicResource EntryImput}"
@@ -53,29 +54,38 @@
                            Text="{Binding MileageFilled}"/>
                 </Border>
 
+                <!--SpareParts-->
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <Entry Style="{DynamicResource EntryImput}"
                             Placeholder="Замененые запчасти"
                             Text="{Binding SparePartsFilled}"/>
                 </Border>
 
+                <!--Cost-->
+                <Label Text="{Binding CostError}"
+                       Style="{DynamicResource LaberError}"/>
+                
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <Entry Style="{DynamicResource EntryImput}"
                            Placeholder="Стоимость запчастей и ремонта"
                            Text="{Binding CostFilled}"/>
                 </Border>
 
+                <!--Description-->
+                
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <Editor Style="{DynamicResource EditorStandart}"
                             Placeholder="Описание работ"
                             Text="{Binding DescriptionFilled}"/>
                 </Border>
 
+                
+                <!--LabelError-->
                 <Label Text="{Binding StatusMessage}"
                        Style="{DynamicResource LaberError}"/>
 
 
-                <Button Text="Create" 
+                <Button Text="Создать запись" 
                         Margin="0,10,0,0"
                         Style="{StaticResource ButtonCustomStandartRed}"
                         Command="{Binding CreateRepairCommand}"/>

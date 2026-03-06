@@ -86,6 +86,7 @@ namespace AutoCareDiray
             //builder.Services.AddTransient<UserValidation>();
             //builder.Services.AddTransient<RecoverValidation>();
             builder.Services.AddTransient<VehicleValidation>();
+            builder.Services.AddTransient<RepairValidation>();
 
             //builder.Services.AddTransient<AuthorizationPage>();
             //builder.Services.AddTransient<AuthorizationViewModel>();
