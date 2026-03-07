@@ -8,6 +8,8 @@
     <Grid RowDefinitions="*,100">
         <ScrollView>
             
+            <!--NameVehicle-->
+            
             <VerticalStackLayout Spacing="10">
                 <!-- Поле name car -->
                 <Border Style="{DynamicResource BorderForEntryImput}">
@@ -16,8 +18,7 @@
                            Text="{Binding NameVehicle}"/>
                 </Border>
 
-                <Label Text=""
-                       Style="{DynamicResource LaberError}"/>
+                <!--DateCreate-->
                 
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <VerticalStackLayout>
@@ -30,6 +31,7 @@
                     </VerticalStackLayout>
                 </Border>
 
+                <!--DatePurchase-->
 
                 <Label Text="{Binding YearPurchaseError}"
                        Style="{DynamicResource LaberError}"/>
@@ -45,6 +47,7 @@
                     </VerticalStackLayout>
                 </Border>
 
+                <!--Mileage-->
                 <Label Text="{Binding MileageError}"
                        Style="{DynamicResource LaberError}"/>
 
@@ -53,6 +56,8 @@
                            Placeholder="Пробег"
                            Text="{Binding Mileage}"/>
                 </Border>
+
+                <!--VehicleType-->
 
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <Picker Title="Выберите Тип ТС"

@@ -16,6 +16,7 @@ namespace AutoCareDiray
             Routing.RegisterRoute("CreateVehicleView", typeof(CreateVehicleView));
             Routing.RegisterRoute("CardVehicleView", typeof(CardVehicleView));
             Routing.RegisterRoute("CreateRepairView", typeof(CreateRepairView));
+            Routing.RegisterRoute("CardRepairView", typeof(CardRepairView));
         }
     }
 }

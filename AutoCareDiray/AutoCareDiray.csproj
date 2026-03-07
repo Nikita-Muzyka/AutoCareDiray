@@ -126,6 +126,9 @@
 	  <MauiXaml Update="View\Authorization\RegistrationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="View\RepairView\CardRepairView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\RepairView\CreateRepairView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

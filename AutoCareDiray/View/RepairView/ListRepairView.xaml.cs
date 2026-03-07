@@ -15,7 +15,7 @@ public partial class ListRepairView : ContentPage
         base.OnAppearing();
 		if(BindingContext is ListRepairViewModel vm)
 		{
-			vm.LoadDataCommand.Execute(null);
+			vm.StartLoadingCommand.Execute(null);
 		}
     }
     protected override void OnDisappearing()

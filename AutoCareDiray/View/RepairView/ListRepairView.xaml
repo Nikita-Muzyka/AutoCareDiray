@@ -11,12 +11,15 @@
             <VerticalStackLayout Grid.Row="0">
                 <Label Style="{DynamicResource LabelTextCustom}"
                        Text="Выбор авто"/>
-                <Picker Style="{DynamicResource PickerStandart}" 
-                        ItemsSource="{Binding Vehicles}"
-                        ItemDisplayBinding="{Binding NameVehicle}"
-                        SelectedItem="{Binding SelectedVehicle}">
-                    
-                </Picker>
+                
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Picker Style="{DynamicResource PickerStandart}" 
+                            ItemsSource="{Binding Vehicles}"
+                            ItemDisplayBinding="{Binding NameVehicle}"
+                            SelectedItem="{Binding SelectedVehicle}">
+                    </Picker>
+                </Border>
+                
             </VerticalStackLayout>
             <VerticalStackLayout Grid.Row="1">
 
@@ -31,27 +34,38 @@
                                                       CommandParameter="{Binding .}">
                                     </TapGestureRecognizer>
                                 </Border.GestureRecognizers>
-                                <VerticalStackLayout>
-                                    <Grid ColumnDefinitions="100,auto,*">
+                                
+                                <VerticalStackLayout HeightRequest="80">
+                                    <Grid ColumnDefinitions="100,*,auto,auto">
                                         <Image Source="repair_image.png"
-                                           HeightRequest="80"
-                                           WidthRequest="60"/>
-                                        <Label Text="Тип ремонта: " 
-                                           FontSize="18"
-                                           Margin="0,0,5,0"
-                                           Grid.Column="1"
-                                           HorizontalOptions="Start"
-                                           VerticalOptions="Center"
-                                           TextColor="{DynamicResource TextPrimaryRed}"
-                                           FontFamily="{StaticResource RubikRegular}"/>
-
+                                                HeightRequest="50"
+                                                WidthRequest="50"
+                                                Grid.Column="0"/>
                                         <Label Text="{Binding RepairType.TitleRepair}" 
-                                            FontSize="20"
-                                            Grid.Column="2"
-                                            HorizontalOptions="Start"
-                                            VerticalOptions="Center"
-                                            TextColor="{DynamicResource TextPrimaryRed}"
-                                            FontFamily="{StaticResource RubikRegular}"/>
+                                                FontSize="20"
+                                                Grid.Column="1"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="Center"
+                                                TextColor="{DynamicResource TextPrimaryRed}"
+                                                FontFamily="{StaticResource RubikRegular}"/>
+                                        <ImageButton Source="edit_image.png"
+                                                     Grid.Column="2"
+                                                     HeightRequest="30"
+                                                     WidthRequest="30"
+                                                     HorizontalOptions="End"
+                                                     Margin="0,10,20,00"
+                                                     Style="{StaticResource ImageButtonStandart}"
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vmRepair:ListRepairViewModel}},Path=UpdateRepairCommand}"
+                                                     CommandParameter="{Binding .}"/>
+                                        <ImageButton Source="delete_image.png"
+                                                     Grid.Column="3"
+                                                     HeightRequest="30"
+                                                     WidthRequest="30"
+                                                     HorizontalOptions="End"
+                                                     Margin="0,10,20,0"
+                                                     Style="{StaticResource ImageButtonStandart}"
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vmRepair:ListRepairViewModel}},Path=DeleteRepairCommand}"
+                                                     CommandParameter="{Binding .}"/>                
                                     </Grid>
                                 </VerticalStackLayout>
                             </Border>
