@@ -85,7 +85,7 @@
                        Style="{DynamicResource LaberError}"/>
 
 
-                <Button Text="Создать запись" 
+                <Button Text="{Binding ButtonName}" 
                         Margin="0,10,0,0"
                         Style="{StaticResource ButtonCustomStandartRed}"
                         Command="{Binding CreateRepairCommand}"/>

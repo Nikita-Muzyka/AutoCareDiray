@@ -1,3 +1,4 @@
+using AutoCareDiray.Shared.Models.VehicleModel;
 using AutoCareDiray.Shared.ViewModels.RepairViewModel;
 namespace AutoCareDiray.View.RepairView;
 
@@ -13,12 +14,9 @@ public partial class CreateRepairView : ContentPage, IQueryAttributable
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if(query.TryGetValue("VehicleId", out var obj))
+        if(query != null)
         {
-            if(obj is int vehicleId)
-            {
-                _viewModel.InitializeCommand.Execute(vehicleId);
-            }
+            _viewModel.InitializeCommand.Execute(query);
         }
     }
     protected override void OnAppearing()

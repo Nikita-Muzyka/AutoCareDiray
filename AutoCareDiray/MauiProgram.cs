@@ -78,10 +78,10 @@ namespace AutoCareDiray
             });
 
             builder.Services.AddScoped<IApiService, ApiService>();
-            builder.Services.AddScoped<IDataService,DataService>();
+            builder.Services.AddSingleton<IDataService,DataService>();
             builder.Services.AddTransient<IDialogService,DialogService>();
             builder.Services.AddTransient<IValidatorService, ValidatorService>();
-            builder.Services.AddScoped<INavigationService,NavigationService>();
+            builder.Services.AddSingleton<INavigationService,NavigationService>();
 
             //builder.Services.AddTransient<UserValidation>();
             //builder.Services.AddTransient<RecoverValidation>();

@@ -9,7 +9,7 @@
                 VerticalScrollBarVisibility="Never">
         <Grid RowDefinitions="*,100">
             <VerticalStackLayout Grid.Row="0">
-                <CollectionView ItemsSource="{Binding Vehicles}"
+                <CollectionView ItemsSource="{Binding Vehicles,Mode=TwoWay}"
                                 SelectedItem="{Binding SelectedVehicle}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
