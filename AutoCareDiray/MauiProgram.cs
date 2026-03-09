@@ -61,7 +61,7 @@ namespace AutoCareDiray
             string baseAddress = "http://localhost:5286/";
             TimeSpan time = TimeSpan.FromSeconds(30);
 
-            builder.Services.AddSingleton<HttpClient>(sp =>
+            builder.Services.AddScoped<HttpClient>(sp =>
             {
                 var handler = new HttpClientHandler
                 {
@@ -77,8 +77,8 @@ namespace AutoCareDiray
                 return client;
             });
 
-            builder.Services.AddScoped<IApiService, ApiService>();
-            builder.Services.AddSingleton<IDataService,DataService>();
+            //builder.Services.AddScoped<IApiService, ApiService>();
+            builder.Services.AddScoped<IDataService,DataService>();
             builder.Services.AddTransient<IDialogService,DialogService>();
             builder.Services.AddTransient<IValidatorService, ValidatorService>();
             builder.Services.AddSingleton<INavigationService,NavigationService>();
