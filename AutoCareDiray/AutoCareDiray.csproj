@@ -76,8 +76,21 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.13">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.13" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.13">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\AutoCareDiray.Shared\AutoCareDiray.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -87,9 +100,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Models\PopUp\InformationPopUp.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\ColorsCustomDark.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -102,6 +112,15 @@
 	  <MauiXaml Update="Resources\Styles\StylesCustom\Authorization\AuthorizationStyle.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\StylesCustom\VehicleView\VehicleViewStyle.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Service\PopUp\ConfirmationPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Service\PopUp\InformationPopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\Authorization\AuthorizationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -111,25 +130,25 @@
 	  <MauiXaml Update="View\Authorization\RegistrationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Cars\CarCardPage.xaml">
+	  <MauiXaml Update="View\RepairView\CardRepairView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Cars\CreateCarsPage.xaml">
+	  <MauiXaml Update="View\RepairView\CreateRepairView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Cars\ListCars.xaml">
+	  <MauiXaml Update="View\RepairView\ListRepairView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Maintenance (Заменить на C)\CreateMaintenanse.xaml">
+	  <MauiXaml Update="View\VehicleView\CardVehicleView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\MainPage\MainPage.xaml">
+	  <MauiXaml Update="View\VehicleView\CreateVehicleView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\VehicleView\ListVehicleView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\MainPage\UserSettingsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="View\Maintenance (Заменить на C)\ListMaintenanseView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
@@ -139,12 +158,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Models\Authorization\" />
-	  <Folder Include="Models\User\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\AutoCareDiray.Shared\AutoCareDiray.Shared\AutoCareDiray.Shared.csproj" />
+	  <Compile Update="View\VehicleView\CreateVehicleView.xaml.cs">
+	    <DependentUpon>CreateVehicleView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="View\VehicleView\ListVehicleView.xaml.cs">
+	    <DependentUpon>ListVehicleView.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

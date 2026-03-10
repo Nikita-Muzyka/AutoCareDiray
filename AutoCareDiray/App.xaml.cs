@@ -1,13 +1,23 @@
 ﻿using AutoCareDiray.Resources.Styles;
+using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.View;
+using System.Diagnostics;
 namespace AutoCareDiray
 {
     public partial class App : Application
     {
-        public App()
+        private readonly IDataService _dataService;
+        public App(IDataService dataService)
         {
+            _dataService = dataService;
             InitializeComponent();
             Application.Current.UserAppTheme = AppTheme.Light;
+            // 🔍 Выводим точный путь, куда MAUI сохраняет файлы
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "vehicles.db");
+            Debug.WriteLine($"🗄️ Путь к БД приложения: {dbPath}");
+
+            // Проверка: существует ли файл?
+            Debug.WriteLine($"✅ Файл существует: {File.Exists(dbPath)}");
         }
         
 
@@ -36,16 +46,20 @@ namespace AutoCareDiray
 
             window.Created += async (s, e) =>
             {
-               
-                bool check = Preferences.Get("is_login", false);
-                if (check)
-                {
-                    await Shell.Current.GoToAsync("//Main");
-                }
-                else
-                {
-                    await Shell.Current.GoToAsync("//AuthorizationPage");
-                }
+
+                //bool check = Preferences.Get("is_login", false);
+                //if (check)
+                //{
+                //    await Shell.Current.GoToAsync("//Main");
+                //}
+                //else
+                //{
+                //    await Shell.Current.GoToAsync("//AuthorizationPage");
+                //}
+
+
+                _dataService.InitializeDatabase();
+                await Shell.Current.GoToAsync("//ListVehicle");
             };
             
             return window;

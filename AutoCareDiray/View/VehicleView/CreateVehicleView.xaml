@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
+             x:Class="AutoCareDiray.View.VehicleView.CreateVehicleView"
+             Style="{StaticResource CustomPage}">
+
+    <Grid RowDefinitions="*,100">
+        <ScrollView>
+            
+            <!--NameVehicle-->
+            
+            <VerticalStackLayout Spacing="10">
+                <!-- Поле name car -->
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Entry Style="{DynamicResource EntryImput}"
+                           Placeholder="Название ТС"
+                           Text="{Binding NameVehicle}"/>
+                </Border>
+
+                <!--DateCreate-->
+                
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <VerticalStackLayout>
+                        <Label Text="Выберите дату производства авто"
+                               Style="{DynamicResource LabelInEntry}"/>
+                        <DatePicker Format="d"
+                                    Date ="{Binding YearCreateSelected}"
+                                    MaximumDate="{Binding DateNow}">
+                        </DatePicker>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--DatePurchase-->
+
+                <Label Text="{Binding YearPurchaseError}"
+                       Style="{DynamicResource LaberError}"/>
+                
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <VerticalStackLayout>
+                        <Label Text="Выберите дату покупки авто"
+                Style="{DynamicResource LabelInEntry}"/>
+                        <DatePicker Format="d"
+                                    Date ="{Binding YearPurchaseSelected}"
+                                    MaximumDate="{Binding DateNow}">
+                        </DatePicker>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--Mileage-->
+                <Label Text="{Binding MileageError}"
+                       Style="{DynamicResource LaberError}"/>
+
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Entry Style="{DynamicResource EntryImput}"
+                           Placeholder="Пробег"
+                           Text="{Binding Mileage}"
+                           Keyboard="Numeric"/>
+                </Border>
+
+                <!--VehicleType-->
+
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Picker Title="Выберите Тип ТС"
+                            Style="{DynamicResource PickerStandart}"
+                            ItemsSource="{Binding TypeVehicle}"
+                            SelectedItem="{Binding SelectedTypeVehicle}">
+                    </Picker>
+                </Border>
+
+
+                <Button Text="{Binding ButtonName}" 
+                        Margin="0,10,0,0"
+                        Style="{StaticResource ButtonCustomStandartRed}"
+                        Command="{Binding CreateVehicleCommand}"/>
+              
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

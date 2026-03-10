@@ -3,31 +3,30 @@
     x:Class="AutoCareDiray.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:AutoCareDiray.View"
+    xmlns:vehicleView="clr-namespace:AutoCareDiray.View.VehicleView"
+    xmlns:repairView="clr-namespace:AutoCareDiray.View.RepairView"
     Title="AutoCareDiray"
     Style="{StaticResource CustomTabBar}">
 
 
     
-        <ShellContent 
+        <!--<ShellContent 
          Route="AuthorizationPage"
-         ContentTemplate="{DataTemplate local:AuthorizationPage}"/>
+         ContentTemplate="{DataTemplate local:AuthorizationPage}"/>-->
 
-
-    <TabBar Route="Main">
-        <Tab Title="Главная"
-             Route="MainPage">
-            <ShellContent ContentTemplate="{DataTemplate local:MainPage}"/>
-        </Tab>
+    <TabBar>
 
         <Tab Title="Авто"
-             Route="ListCars">
-            <ShellContent ContentTemplate="{DataTemplate local:ListCars}"/>
+             Route="ListVehicle">
+            <ShellContent ContentTemplate="{DataTemplate vehicleView:ListVehicleView}"/>
         </Tab>
 
-        <Tab Title="Профиль"
-      Route="UserSettings">
-            <ShellContent ContentTemplate="{DataTemplate local:UserSettingsPage}"/>
+        <Tab Title="Ремонт"
+             Route="ListRepair">
+            <ShellContent ContentTemplate="{DataTemplate repairView:ListRepairView}"/>
         </Tab>
+
     </TabBar>
+    
+    
 </Shell>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.View.VehicleView.CardVehicleView"
+             Style="{DynamicResource CustomPage}">
+
+    <Grid RowDefinitions="*,100"
+          HorizontalOptions="Center">
+        <ScrollView>
+            
+            <VerticalStackLayout Spacing="15">
+                <!-- Поле name car -->
+
+                <!-- LOGO -->
+                <Image Style="{StaticResource ImageLogoApp}"/>
+
+                <Grid ColumnDefinitions="150,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="Название ТС:"
+                                   Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" 
+                                   Text="{Binding VehicleRespon.NameVehicle}"
+                                   Style="{DynamicResource LaberInfo}"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="190,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="Дата производства:"
+                    Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" 
+                    Text="{Binding VehicleRespon.YearCreate}"
+                    Style="{DynamicResource LaberInfo}"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="150,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="Дата покупки:"
+                           Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" 
+                           Text="{Binding VehicleRespon.YearPurchase}"
+                           Style="{DynamicResource LaberInfo}"/>                  
+                </Grid>
+
+                <Grid ColumnDefinitions="150,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="Пробег:"
+                           Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" 
+                           Text="{Binding VehicleRespon.Mileage}"
+                           Style="{DynamicResource LaberInfo}"/>            
+                </Grid>
+
+
+                <Grid ColumnDefinitions="150,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="Тип ТС:"
+                           Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" 
+                           Text="{Binding VehicleRespon.VehicleType}"
+                           Style="{DynamicResource LaberInfo}"/>            
+                </Grid>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.View.RepairView.CreateRepairView"
+             Style="{StaticResource CustomPage}">
+
+    <Grid RowDefinitions="*,100">
+        <ScrollView>
+
+            <VerticalStackLayout Spacing="10">
+
+                <!--RepairTypes-->
+                <Picker ItemsSource="{Binding RepairTypes}"
+                        ItemDisplayBinding="{Binding TitleRepair}"
+                        SelectedItem="{Binding SelectedRepairType}"
+                        Style="{DynamicResource PickerStandart}">
+                    
+                </Picker>
+
+                <!--IntervalMileage-->
+                
+                <Label Text="Интервал в КМ на вашем авто для замены или проведение повторного обслуживания"
+                       Style="{DynamicResource LaberInfoMini}"/>
+
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Entry Style="{DynamicResource EntryImput}"
+                           Placeholder="Интервал пробега"
+                           Text="{Binding IntervalMileageFilled}"
+                           Keyboard="Numeric"/>
+                </Border>
+
+                <!--DateReapir-->
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <VerticalStackLayout>
+                        <Label Text="Выберите дату ремонта"
+                               Style="{DynamicResource LabelInEntry}"/>
+                        <DatePicker Format="d"
+                                    Date ="{Binding DateRepairSelected}"
+                                    MaximumDate="{Binding DateNow}">
+                        </DatePicker>
+                    </VerticalStackLayout>
+                </Border>
+                
+                <!--Mileage-->
+
+                <Label Text="Текущий пробег вашего авто нужен для отчетности ремонта"
+                       Style="{DynamicResource LaberInfoMini}"/>
+
+                <Label Text="{Binding MileageError}"
+                       Style="{DynamicResource LaberError}"/>
+
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Entry Style="{DynamicResource EntryImput}"
+                           Placeholder="Текущий Пробег ТС"
+                           Text="{Binding MileageFilled}"
+                           Keyboard="Numeric"/>
+                </Border>
+
+                <!--SpareParts-->
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Entry Style="{DynamicResource EntryImput}"
+                            Placeholder="Замененые запчасти"
+                            Text="{Binding SparePartsFilled}"/>
+                </Border>
+
+                <!--Cost-->
+                <Label Text="{Binding CostError}"
+                       Style="{DynamicResource LaberError}"/>
+                
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Entry Style="{DynamicResource EntryImput}"
+                           Placeholder="Стоимость запчастей и ремонта"
+                           Text="{Binding CostFilled}"
+                           Keyboard="Numeric"/>
+                </Border>
+
+                <!--Description-->
+                
+                <Border Style="{DynamicResource BorderForEntryImput}">
+                    <Editor Style="{DynamicResource EditorStandart}"
+                            Placeholder="Описание работ"
+                            Text="{Binding DescriptionFilled}"/>
+                </Border>
+
+                
+                <!--LabelError-->
+                <Label Text="{Binding StatusMessage}"
+                       Style="{DynamicResource LaberError}"/>
+
+
+                <Button Text="{Binding ButtonName}" 
+                        Margin="0,10,0,0"
+                        Style="{StaticResource ButtonCustomStandartRed}"
+                        Command="{Binding CreateRepairCommand}"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -1,4 +1,5 @@
-﻿using AutoCareDiray.Models.PopUp;
+﻿using AutoCareDiray.Service.PopUp;
+using AutoCareDiray.Shared.Interface;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
@@ -10,50 +11,55 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoCareDiray.Service
+namespace AutoCareDiray.Service.Dialog;
+
+class DialogService : IDialogService
 {
-    class DialogService : IDialogService
+   
+    public async Task ShowMessageAsync(string message)
     {
-        public async Task<bool> ShowConfirmationMessage(string message)
+        await Shell.Current.DisplayAlert("",message,"Ok");
+    }
+
+    public async Task ShowWarningLogInAsync()
+    {
+        var popup = new InformationPopUp();
+        await Application.Current.MainPage.ShowPopupAsync(popup, new PopupOptions
         {
-            var popup = new ConfirmationPopup(message);
-            await Application.Current.MainPage.ShowPopupAsync(popup);
+            PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
+            Shape = null,
+            CanBeDismissedByTappingOutsideOfPopup = false
+        });
 
-            bool result = await popup.Result;
+    }
 
-            return result;
-        }
-        public async Task ShowMessageAsync(string message)
+    public async Task ShowToastAsync(string message)
+    {
+        if (DeviceInfo.Platform == DevicePlatform.Android || DeviceInfo.Platform == DevicePlatform.iOS)
         {
-            await Shell.Current.DisplayAlert("",message,"Ok");
-        }
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-        public async Task ShowInfoAsync()
+            ToastDuration duration = ToastDuration.Short;
+            double fontSize = 14;
+
+            var toast = Toast.Make(message, duration, fontSize);
+
+            await toast.Show(cancellationTokenSource.Token);
+        }
+    }
+
+    public async Task<bool> ShowConfirmationAsync(string vehicleName)
+    {
+        var popup = new ConfirmationPopUp(vehicleName);
+
+        var result = await Application.Current.MainPage.ShowPopupAsync<bool>(popup, new PopupOptions
         {
-            var popup = new InformationPopUp("Предупреждение!","1. Без регистрации вы не сможете переносить данные на другой телефон или планшет ",
-                "2. Вы не сможете сохранять данные на сервере только на памяти телефона, что занимает память телефона");
-            await Application.Current.MainPage.ShowPopupAsync(popup, new PopupOptions
-            {
-                PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
-                Shape = null,
-                CanBeDismissedByTappingOutsideOfPopup = false
-            });
+            PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
+            Shape = null,
+            CanBeDismissedByTappingOutsideOfPopup = false
+        });
 
-        }
-
-        public async Task ShowToastAsync(string message)
-        {
-            if (DeviceInfo.Platform == DevicePlatform.Android || DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-                ToastDuration duration = ToastDuration.Short;
-                double fontSize = 14;
-
-                var toast = Toast.Make(message, duration, fontSize);
-
-                await toast.Show(cancellationTokenSource.Token);
-            }
-        }
+        if (result.Result == true) return true;
+        else return false;
     }
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup  xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:system="clr-namespace:System;assembly=mscorlib"
+                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                x:TypeArguments="system:Boolean"
+                x:Class="AutoCareDiray.Service.PopUp.ConfirmationPopUp"
+                Background="{StaticResource PrimaryWhite}">
+
+    <Border 
+        StrokeShape="RoundRectangle 16"
+        BackgroundColor="Transparent"
+        Padding="5"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        WidthRequest="200">
+
+        <VerticalStackLayout Spacing="16">
+
+            <!-- Иконка или заголовок --><!--
+            <Image 
+                Source="question_icon.png" 
+                HeightRequest="48" 
+                WidthRequest="48"
+                HorizontalOptions="Center"/>-->
+
+            <!-- Сообщение -->
+            <Label 
+                x:Name="labelMessage"
+                Text="" 
+                FontSize="14" 
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"/>
+
+            <!-- Кнопки Да/Нет -->
+            <HorizontalStackLayout 
+                Spacing="10" 
+                HorizontalOptions="Center"
+                Margin="0,16,0,0">
+
+                <Button 
+                    Text="Нет" 
+                    Style="{DynamicResource ButtonCustomStandartWhite}"
+                    WidthRequest="80"
+                    HeightRequest="30"
+                    Clicked="OnNoClicked"/>
+
+                <Button 
+                    Text="Да" 
+                    Style="{DynamicResource ButtonCustomStandartRed}"
+                    WidthRequest="80"
+                    HeightRequest="30"
+                    Clicked="OnYesClicked"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </Border>
+    </toolkit:Popup>

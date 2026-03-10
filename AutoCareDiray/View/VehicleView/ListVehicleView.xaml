@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vmVehicle="clr-namespace:AutoCareDiray.Shared.ViewModels.VehicleViewModel;assembly=AutoCareDiray.Shared" 
+             x:Class="AutoCareDiray.View.VehicleView.ListVehicleView"
+             Style="{StaticResource CustomPage}">
+
+    <Grid RowDefinitions="*,100">
+        <VerticalStackLayout Grid.Row="0">
+            <CollectionView ItemsSource="{Binding Vehicles,Mode=TwoWay}"
+                                SelectedItem="{Binding SelectedVehicle}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command ="{Binding Source={RelativeSource AncestorType= {x:Type vmVehicle:ListVehicleViewModel}},
+                                        Path=GoCarCardCommand}"
+                                                          CommandParameter="{Binding .}">
+                                </TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+
+                            <VerticalStackLayout HeightRequest="100">
+                                <Grid ColumnDefinitions="100,*,auto,auto">
+                                    <Image Source="car_icon.png"
+                                               Grid.Column="0"
+                                               HeightRequest="60"
+                                               WidthRequest="60"
+                                               Margin="0,10,0,0"
+                                               VerticalOptions="Center"/>
+                                    <Grid Grid.Column="1">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding NameVehicle}" 
+                                                      FontSize="20"
+                                                      Grid.Row="0"
+                                                      Margin="0,10,0,0"
+                                                      HorizontalOptions="Start"
+                                                      VerticalOptions="Center"
+                                                      TextColor="{DynamicResource TextPrimaryRed}"
+                                                      FontFamily="{StaticResource RubikRegular}"/>
+                                            <Label Text="{Binding Mileage}" 
+                                                               FontSize="20"
+                                                               Grid.Row="1"
+                                                               Margin="0,10,0,0"
+                                                               HorizontalOptions="Start"
+                                                               VerticalOptions="Center"
+                                                               TextColor="{DynamicResource TextPrimaryRed}"
+                                                               FontFamily="{StaticResource RubikRegular}"/>
+
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                    <ImageButton Source="edit_image.png"
+                                                  Grid.Column="2"
+                                                  HeightRequest="30"
+                                                  WidthRequest="30"
+                                                  HorizontalOptions="End"
+                                                  Margin="0,10,20,00"
+                                                  Style="{StaticResource ImageButtonStandart}"
+                                                  Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}},Path=EditVehicleCommand}"
+                                                  CommandParameter="{Binding .}"/>
+                                    <ImageButton Source="delete_image.png"
+                                                     Grid.Column="3"
+                                                     HeightRequest="30"
+                                                     WidthRequest="30"
+                                                     HorizontalOptions="End"
+                                                     Margin="0,10,20,0"
+                                                     Style="{StaticResource ImageButtonStandart}"
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}},Path=DeleteVehicleCommand}"
+                                                     CommandParameter="{Binding .}"/>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Row="1">
+            <ImageButton HeightRequest="80"
+                             WidthRequest="80"
+                             Source="plus_icon.png"
+                             Command="{Binding GoCreateVehicleCommand}"/>
+
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

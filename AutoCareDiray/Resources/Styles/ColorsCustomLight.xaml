@@ -17,6 +17,7 @@
 
     <!-- ===== ТЕКСТ ===== -->
     <Color x:Key="TextPrimary">#212121</Color>
+    <Color x:Key="TextPrimaryRed">#E53935</Color>
     <Color x:Key="TextSecondary">#757575</Color>
     <Color x:Key="TextDisabled">#9E9E9E</Color>
     <Color x:Key="TextError">#E53935</Color>

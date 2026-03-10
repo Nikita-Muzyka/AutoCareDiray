@@ -1,6 +1,8 @@
-﻿using AutoCareDiray.View;
+﻿
+using AutoCareDiray.View;
 using AutoCareDiray.View.Authorization;
-using AutoCareDiray.View.Maintenanse;
+using AutoCareDiray.View.VehicleView;
+using AutoCareDiray.View.RepairView;
 
 namespace AutoCareDiray
 {
@@ -9,12 +11,12 @@ namespace AutoCareDiray
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
-            Routing.RegisterRoute(nameof(RecoverPasswordView), typeof(RecoverPasswordView));
-            Routing.RegisterRoute(nameof(CreateCarsPage), typeof(CreateCarsPage));
-            Routing.RegisterRoute(nameof(CarCardPage), typeof(CarCardPage));
-            Routing.RegisterRoute(nameof(CreateMaintenanse), typeof(CreateMaintenanse));
-            Routing.RegisterRoute(nameof(ListMaintenanseView), typeof(ListMaintenanseView));
+            //Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
+            //Routing.RegisterRoute(nameof(RecoverPasswordView), typeof(RecoverPasswordView));
+            Routing.RegisterRoute("CreateVehicleView", typeof(CreateVehicleView));
+            Routing.RegisterRoute("CardVehicleView", typeof(CardVehicleView));
+            Routing.RegisterRoute("CreateRepairView", typeof(CreateRepairView));
+            Routing.RegisterRoute("CardRepairView", typeof(CardRepairView));
         }
     }
 }

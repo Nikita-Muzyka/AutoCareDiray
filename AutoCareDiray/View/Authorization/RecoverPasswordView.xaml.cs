@@ -1,12 +1,11 @@
-using AutoCareDiray.ViewModels.Authrozation;
 
 namespace AutoCareDiray.View.Authorization;
 
 public partial class RecoverPasswordView : ContentPage
 {
-	public RecoverPasswordView(RecoverPasswordViewModels vm)
+	public RecoverPasswordView(/*RecoverPasswordViewModels vm*/)
 	{
 		InitializeComponent();
-		BindingContext = vm;
+		//BindingContext = vm;
 	}
 }
