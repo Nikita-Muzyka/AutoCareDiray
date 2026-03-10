@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AutoCareDiray.Shared.Migrations
 {
     /// <inheritdoc />
-    public partial class NewMigration : Migration
+    public partial class CreateNewDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,9 +17,9 @@ namespace AutoCareDiray.Shared.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    NameVehicle = table.Column<string>(type: "TEXT", nullable: true),
-                    YearCreate = table.Column<DateOnly>(type: "TEXT", nullable: true),
-                    YearPurchase = table.Column<DateOnly>(type: "TEXT", nullable: true),
+                    NameVehicle = table.Column<string>(type: "TEXT", nullable: false),
+                    YearCreate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    YearPurchase = table.Column<DateTime>(type: "TEXT", nullable: false),
                     VehicleType = table.Column<string>(type: "TEXT", nullable: false),
                     Mileage = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -36,7 +36,7 @@ namespace AutoCareDiray.Shared.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     TitleRepair = table.Column<string>(type: "TEXT", nullable: false),
                     IntervalMileagee = table.Column<int>(type: "INTEGER", nullable: false),
-                    IntervalDate = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    IntervalDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     VehicleId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -56,10 +56,11 @@ namespace AutoCareDiray.Shared.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    DateRepair = table.Column<DateOnly>(type: "TEXT", nullable: true),
-                    SpareParts = table.Column<string>(type: "TEXT", nullable: true),
-                    Cost = table.Column<int>(type: "INTEGER", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    CurrentMileage = table.Column<int>(type: "INTEGER", nullable: false),
+                    DateRepair = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    SpareParts = table.Column<string>(type: "TEXT", nullable: false),
+                    Cost = table.Column<int>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
                     VehicleId = table.Column<int>(type: "INTEGER", nullable: false),
                     RepairTypeId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

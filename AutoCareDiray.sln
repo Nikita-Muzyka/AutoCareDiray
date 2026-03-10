@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoCareDiray", "AutoCareDi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoCareDiray.Tests", "AutoCareDiray.Tests\AutoCareDiray.Tests.csproj", "{2CEB62A3-F151-4887-888B-B934D4FEDECD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoCareDiray.Shared", "..\AutoCareDiray.Shared\AutoCareDiray.Shared\AutoCareDiray.Shared.csproj", "{108D34EE-CE96-26AF-431C-B9CC6000C7FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoCareDiray.Shared", "AutoCareDiray.Shared\AutoCareDiray.Shared.csproj", "{EB2D5165-2188-F8D7-4FC6-67277AD9C1F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +24,10 @@ Global
 		{2CEB62A3-F151-4887-888B-B934D4FEDECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CEB62A3-F151-4887-888B-B934D4FEDECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CEB62A3-F151-4887-888B-B934D4FEDECD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{108D34EE-CE96-26AF-431C-B9CC6000C7FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{108D34EE-CE96-26AF-431C-B9CC6000C7FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{108D34EE-CE96-26AF-431C-B9CC6000C7FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{108D34EE-CE96-26AF-431C-B9CC6000C7FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB2D5165-2188-F8D7-4FC6-67277AD9C1F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB2D5165-2188-F8D7-4FC6-67277AD9C1F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB2D5165-2188-F8D7-4FC6-67277AD9C1F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB2D5165-2188-F8D7-4FC6-67277AD9C1F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -23,15 +23,15 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string buttonName = "Создать";
         [ObservableProperty]
-        private string nameVehicle;
+        private string nameVehicle = String.Empty;
         [ObservableProperty]
         private DateTime yearCreateSelected = DateTime.Today;
         [ObservableProperty]
-        private string mileage;
+        private string mileage = String.Empty;
         [ObservableProperty]
         private DateTime yearPurchaseSelected = DateTime.Today;
         [ObservableProperty]
-        private string selectedTypeVehicle;
+        private string selectedTypeVehicle = String.Empty;
         [ObservableProperty]
         private DateTime dateNow = DateTime.Today;
 
@@ -127,8 +127,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             var result = await _dataService.UpdateVehicleAsync(vehicle, _cts.Token);
             if(result)
             {
-                //_isEditVehicle = false;
-                //ButtonName = "Создать";
                 await _dialogService.ShowToastAsync("Данные обновлены");
                 await _navigationService.GoToBack();
             }

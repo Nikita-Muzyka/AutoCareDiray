@@ -33,14 +33,12 @@ namespace AutoCareDiray.Shared.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RepairTypeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("SpareParts")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("VehicleId")

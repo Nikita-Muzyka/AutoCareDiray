@@ -45,7 +45,29 @@ namespace AutoCareDiray.Shared.Service.Data
             try
             {
                 token.ThrowIfCancellationRequested();
-                var vehicles = await _dbContex.Vehicles.AsNoTracking().ToListAsync(token);
+                var vehicles = await _dbContex.Vehicles
+                    .Select(c => new Vehicle { Id = c.Id, Mileage = c.Mileage, NameVehicle = c.NameVehicle })
+                    .ToListAsync(token);
+                return vehicles;
+            }
+            catch (OperationCanceledException)
+            {
+                return new List<Vehicle>();
+            }
+            catch (Exception ex)
+            {
+                return new List<Vehicle>();
+            }
+        }
+
+        public async Task<List<Vehicle>> ListVehicleForListRepairAsync(CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var vehicles = await _dbContex.Vehicles
+                    .Select(c => new Vehicle { Id = c.Id,NameVehicle = c.NameVehicle })
+                    .ToListAsync(token);
                 return vehicles;
             }
             catch (OperationCanceledException)
@@ -76,6 +98,7 @@ namespace AutoCareDiray.Shared.Service.Data
             }
         }
 
+
         public async Task<Vehicle> GetVehicleAndRepairTypesAsync(int Vehicle_Id, CancellationToken token)
         {
             try
@@ -83,6 +106,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 token.ThrowIfCancellationRequested();
                 var vehicle = await _dbContex.Vehicles
                     .Include(c => c.ReepairTypes)
+                    .Select(c => new Vehicle {Id = c.Id, Mileage = c.Mileage,ReepairTypes = c.ReepairTypes})
                     .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
                 return vehicle ?? new Vehicle();
             }
@@ -101,8 +125,12 @@ namespace AutoCareDiray.Shared.Service.Data
             try
             {
                 token.ThrowIfCancellationRequested();
-                _dbContex.Vehicles.Remove(vehicle);
-                await _dbContex.SaveChangesAsync(token);
+                var respon = await _dbContex.Vehicles.FindAsync(vehicle.Id);
+                if(respon != null)
+                {
+                    _dbContex.Vehicles.Remove(respon);
+                    await _dbContex.SaveChangesAsync(token);
+                }
             }
             catch (OperationCanceledException)
             {
@@ -131,6 +159,7 @@ namespace AutoCareDiray.Shared.Service.Data
                     vehicleDb.YearCreate = vehicle.YearCreate;
                     vehicleDb.NameVehicle = vehicle.NameVehicle;
                     vehicleDb.VehicleType = vehicle.VehicleType;
+                    vehicleDb.Mileage = vehicle.Mileage;
 
                     await _dbContex.SaveChangesAsync(token);
 
@@ -147,6 +176,28 @@ namespace AutoCareDiray.Shared.Service.Data
             }
         }
 
+        public async Task UpdateVehicleMileageAsync(int vehicleId,int mileage, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var vehicleDB = await _dbContex.Vehicles.FindAsync(vehicleId, token);
+                if (vehicleDB != null)
+                {
+                    vehicleDB.Mileage = mileage;
+                    await _dbContex.SaveChangesAsync(token);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
         //Repair
 
         public async Task<List<Repair>> ListRepairForVehicleAsync(int VehicleId, CancellationToken token)
@@ -154,7 +205,11 @@ namespace AutoCareDiray.Shared.Service.Data
             try
             {
                 token.ThrowIfCancellationRequested();
-                var repairs = await _dbContex.Repairs.Where(c => c.VehicleId == VehicleId).Include(c => c.RepairType).ToListAsync();
+                var repairs = await _dbContex.Repairs
+                    .Where(c => c.VehicleId == VehicleId)
+                    .Include(c => c.RepairType)
+                    .Select(c => new Repair { Id = c.Id,DateRepair = c.DateRepair, RepairType = c.RepairType })
+                    .ToListAsync();
                 return repairs;
             }
             catch (OperationCanceledException ex)
@@ -208,8 +263,12 @@ namespace AutoCareDiray.Shared.Service.Data
             try
             {
                 token.ThrowIfCancellationRequested();
-                _dbContex.Repairs.Remove(repair);
-                await _dbContex.SaveChangesAsync();
+                var respon = await _dbContex.Repairs.FindAsync(repair.Id);
+                if (respon != null)
+                {
+                    _dbContex.Repairs.Remove(respon);
+                    await _dbContex.SaveChangesAsync();
+                }
 
             }
             catch (OperationCanceledException ex)

@@ -20,6 +20,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private int _repairId = -1;
         private bool isInitialize = false;
         private bool _isUpdateRepair = false;
+        private Vehicle _vehicle;
 
         [ObservableProperty]
         private string buttonName = "Создать";
@@ -63,6 +64,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             else return 0;
         };
 
+
+        //Инициализация и определения редактирования или обновления данных
         [RelayCommand]
         public async Task Initialize(IDictionary<string,object> query)
         {
@@ -82,12 +85,13 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 {
                     _repairId = value;
                     isInitialize = true;
-                    await LoadingUdpate();
+                    await LoadingUpdate();
                 }
             }
         }
 
-        public async Task LoadingUdpate()
+        //Загрузка ресурсов под редактирования 
+        public async Task LoadingUpdate()
         {
             var repairUpdate = await _dataService.GetRepairAsync(_repairId, _cts.Token);
             if (repairUpdate != null)
@@ -109,22 +113,26 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             }
             else await _dialogService.ShowToastAsync("Ремонт не загрузился");
         }
+
+        //Загрузка под создания ремонта
         public async Task Loading()
         {
             if(RepairTypes.Count > 0) RepairTypes.Clear();
-            var vehicle = await _dataService.GetVehicleAndRepairTypesAsync(_vehicleId, _cts.Token);
-            if(vehicle != null)
+            _vehicle = await _dataService.GetVehicleAndRepairTypesAsync(_vehicleId, _cts.Token);
+            if(_vehicle != null)
             {
-                foreach (var repairs in vehicle.ReepairTypes)
+                foreach (var repairs in _vehicle.ReepairTypes)
                 {
                     if (repairs is not null) RepairTypes.Add(repairs);
                 }
                 SelectedRepairType = RepairTypes.FirstOrDefault(new RepairType());
                 IntervalMileageFilled = SelectedRepairType.IntervalMileagee;
-                MileageFilled = vehicle.Mileage;
+                MileageFilled = _vehicle.Mileage;
             }
         }
 
+
+        //Создание или редактирование ремонта
         [RelayCommand]
         public async Task CreateRepair()
         {
@@ -140,6 +148,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 RepairTypeId = SelectedRepairType.Id,
                 CurrentMileage = MileageFilled,
             };
+
+            if (MileageFilled > _vehicle.Mileage) await _dataService.UpdateVehicleMileageAsync(_vehicleId, MileageFilled, _cts.Token);
 
             if (_isUpdateRepair)
             {

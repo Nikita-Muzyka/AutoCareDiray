@@ -1,4 +1,4 @@
-﻿using AutoCareDiray.Shared.Migrations;
+﻿
 using AutoCareDiray.View;
 using AutoCareDiray.View.Authorization;
 using AutoCareDiray.View.VehicleView;

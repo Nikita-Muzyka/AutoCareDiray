@@ -49,7 +49,7 @@ namespace AutoCareDiray
                 #endif
             });
 
-            var DbPath = Path.Combine(FileSystem.AppDataDirectory, "vehiclesApp.db");
+            var DbPath = Path.Combine(FileSystem.AppDataDirectory, "auto_care_diray.db");
             builder.Services.AddDbContext<AppDBContex>(options =>
             {
                 options.UseSqlite($"Data Source={DbPath}");

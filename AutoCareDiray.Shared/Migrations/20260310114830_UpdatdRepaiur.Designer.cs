@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoCareDiray.Shared.Migrations
 {
     [DbContext(typeof(AppDBContex))]
-    [Migration("20260304071738_NewMigration")]
-    partial class NewMigration
+    [Migration("20260310114830_UpdatdRepaiur")]
+    partial class UpdatdRepaiur
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,10 +26,13 @@ namespace AutoCareDiray.Shared.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Cost")
+                    b.Property<int>("Cost")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly?>("DateRepair")
+                    b.Property<int>("CurrentMileage")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateRepair")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -59,7 +62,7 @@ namespace AutoCareDiray.Shared.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly>("IntervalDate")
+                    b.Property<DateTime>("IntervalDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("IntervalMileagee")
@@ -89,16 +92,17 @@ namespace AutoCareDiray.Shared.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("NameVehicle")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("VehicleType")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateOnly?>("YearCreate")
+                    b.Property<DateTime>("YearCreate")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateOnly?>("YearPurchase")
+                    b.Property<DateTime>("YearPurchase")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

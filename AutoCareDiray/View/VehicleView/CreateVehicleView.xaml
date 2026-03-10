@@ -54,7 +54,8 @@
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <Entry Style="{DynamicResource EntryImput}"
                            Placeholder="Пробег"
-                           Text="{Binding Mileage}"/>
+                           Text="{Binding Mileage}"
+                           Keyboard="Numeric"/>
                 </Border>
 
                 <!--VehicleType-->

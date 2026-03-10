@@ -1,6 +1,6 @@
 ﻿using AutoCareDiray.Shared.ViewModels.RepairViewModel; // Твоя VM из Core
 using AutoCareDiray.Shared.Interface;                   // Интерфейсы из Core
-using AutoCareDiray.Shared.Models.RepairModel;       // Модели
+using AutoCareDiray.Shared.Models.RepairModel;      // Модели
 using Moq;
 using Xunit;
 using FluentAssertions;

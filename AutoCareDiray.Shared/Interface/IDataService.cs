@@ -11,6 +11,8 @@ namespace AutoCareDiray.Shared.Interface
 
         Task<List<Vehicle>> ListVehicleAsync(CancellationToken token);
 
+        Task<List<Vehicle>> ListVehicleForListRepairAsync(CancellationToken token);
+
         Task<Vehicle> GetVehicleAsync(int Vehicle_Id, CancellationToken token);
 
         Task<Vehicle> GetVehicleAndRepairTypesAsync(int Vehicle_Id, CancellationToken token);
@@ -18,6 +20,8 @@ namespace AutoCareDiray.Shared.Interface
         Task DeleteVehicleAsync(Vehicle vehicle, CancellationToken token);
 
         Task<bool> UpdateVehicleAsync(Vehicle vehicle, CancellationToken token);
+
+        Task UpdateVehicleMileageAsync(int vehicleId,int Mileage, CancellationToken token);
 
         //Repair
 

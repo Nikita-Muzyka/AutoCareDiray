@@ -55,7 +55,7 @@
                     <Label Text="Описание работ:"
                            Style="{DynamicResource LaberInfo}"/>
                     <Label Grid.Column="1" 
-                           Text="{Binding RepairRespon.Discription}"
+                           Text="{Binding RepairRespon.Description}"
                            Style="{DynamicResource LaberInfo}"/>
                 </Grid>
 

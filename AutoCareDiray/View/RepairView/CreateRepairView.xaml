@@ -25,7 +25,8 @@
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <Entry Style="{DynamicResource EntryImput}"
                            Placeholder="Интервал пробега"
-                           Text="{Binding IntervalMileageFilled}"/>
+                           Text="{Binding IntervalMileageFilled}"
+                           Keyboard="Numeric"/>
                 </Border>
 
                 <!--DateReapir-->
@@ -51,7 +52,8 @@
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <Entry Style="{DynamicResource EntryImput}"
                            Placeholder="Текущий Пробег ТС"
-                           Text="{Binding MileageFilled}"/>
+                           Text="{Binding MileageFilled}"
+                           Keyboard="Numeric"/>
                 </Border>
 
                 <!--SpareParts-->
@@ -68,7 +70,8 @@
                 <Border Style="{DynamicResource BorderForEntryImput}">
                     <Entry Style="{DynamicResource EntryImput}"
                            Placeholder="Стоимость запчастей и ремонта"
-                           Text="{Binding CostFilled}"/>
+                           Text="{Binding CostFilled}"
+                           Keyboard="Numeric"/>
                 </Border>
 
                 <!--Description-->

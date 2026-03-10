@@ -90,7 +90,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\AutoCareDiray.Shared\AutoCareDiray.Shared\AutoCareDiray.Shared.csproj" />
+	  <ProjectReference Include="..\AutoCareDiray.Shared\AutoCareDiray.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

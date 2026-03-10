@@ -26,18 +26,18 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         }
 
         [RelayCommand]
-        public async void StartLoading()
+        public async Task StartLoading()
         {
             if (Vehicles.Count > 0) Vehicles.Clear();
 
-            foreach (var vehicle in await _dataService.ListVehicleAsync(_cts.Token))
+            foreach (var vehicle in await _dataService.ListVehicleForListRepairAsync(_cts.Token))
             {
                 if (vehicle is not null)
                 {
                     Vehicles.Add(vehicle);
                 }
             }
-            SelectedVehicle = Vehicles.FirstOrDefault() ?? null;
+            SelectedVehicle = Vehicles.FirstOrDefault() ?? new Vehicle();
         }
 
         async Task LoadRepairs()
