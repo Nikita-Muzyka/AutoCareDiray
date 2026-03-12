@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using AutoCareDiray.Shared.Interface;
+using AutoCareDiray.Shared.Service.ResultService;   
 
 
 namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
@@ -29,27 +30,33 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         public async Task StartLoading()
         {
             if (Vehicles.Count > 0) Vehicles.Clear();
-
-            foreach (var vehicle in await _dataService.ListVehicleForListRepairAsync(_cts.Token))
+            var result = await _dataService.ListVehicleForListRepairAsync(_cts.Token);
+            if (result.Success)
             {
-                if (vehicle is not null)
+                var resultVehicles = result as Result<List<Vehicle>>;
+                foreach (var addcar in resultVehicles.Data)
                 {
-                    Vehicles.Add(vehicle);
+                    Vehicles.Add(addcar);
                 }
+                SelectedVehicle = Vehicles.FirstOrDefault() ?? new Vehicle();
+                await LoadRepairs();
             }
-            SelectedVehicle = Vehicles.FirstOrDefault() ?? new Vehicle();
+            else await _dialogService.ShowToastAsync(result.ErrorMessage);
         }
 
-        async Task LoadRepairs()
+        private async Task LoadRepairs()
         {
             if (Repairs.Count > 0) Repairs.Clear();
-            foreach (var repairs in await _dataService.ListRepairForVehicleAsync(SelectedVehicle.Id, _cts.Token))
+            var result = await _dataService.ListRepairForVehicleAsync(SelectedVehicle.Id, _cts.Token);
+            if (result.Success)
             {
-                if (repairs is not null)
+                var resultRepairs = result as Result<List<Repair>>;
+                foreach (var repairs in resultRepairs.Data)
                 {
                     Repairs.Add(repairs);
                 }
             }
+            else await _dialogService.ShowToastAsync(result.ErrorMessage);
         }
 
         [RelayCommand]
@@ -70,10 +77,10 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             };
             await _navigationService.GoNavigation("CreateRepairView", property);
         }
-        partial void OnSelectedVehicleChanged(Vehicle value)
-        {
-            if (value is not null) LoadRepairs();
-        }
+        //partial void OnSelectedVehicleChanged(Vehicle value)
+        //{
+        //    if (value is not null) LoadRepairs(value.Repairs);
+        //}
 
         [RelayCommand]
         public void CancelToken()

@@ -68,6 +68,8 @@
                     </Picker>
                 </Border>
 
+                <Label Text="{Binding StatusMessage}"
+                       Style="{DynamicResource LaberError}"/>
 
                 <Button Text="{Binding ButtonName}" 
                         Margin="0,10,0,0"

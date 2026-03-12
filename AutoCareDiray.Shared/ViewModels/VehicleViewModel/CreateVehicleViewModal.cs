@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using AutoCareDiray.Shared.Service.Data;
+using AutoCareDiray.Shared.Service.ResultService;
 using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Interface;
 
@@ -76,7 +77,12 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             {
                 if (VehicleId >= 0)
                 {
-                    _vehicle = await _dataService.GetVehicleAsync(VehicleId, _cts.Token);
+                    var result = await _dataService.GetVehicleAsync(VehicleId, _cts.Token);
+                    if(result.Success)
+                    {
+                        var resultVehicle = result as Result<Vehicle>;
+                        _vehicle = resultVehicle.Data ?? new Vehicle();
+                    }
                     if (_vehicle.Id >= 0)
                     {
                         _isInitilized = true;
@@ -115,9 +121,15 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 else
                 {
                     CreateRepairTypes(vehicle);
+
                    var result =  await _dataService.CreateVehicleAsync(vehicle, _cts.Token);
-                    if (result) await _navigationService.GoToBack();
-                    else await _dialogService.ShowToastAsync("Не удалось создать авто");
+
+                    if (result.Success)
+                    {
+                        await _dialogService.ShowToastAsync("ТС создано");
+                        await _navigationService.GoToBack();
+                    }
+                    else StatusMessage = result.ErrorMessage;
                 }
             }
         }
@@ -125,11 +137,12 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         public async Task EditVehicle(Vehicle vehicle)
         {
             var result = await _dataService.UpdateVehicleAsync(vehicle, _cts.Token);
-            if(result)
+            if(result.Success)
             {
                 await _dialogService.ShowToastAsync("Данные обновлены");
                 await _navigationService.GoToBack();
             }
+            else StatusMessage = result.ErrorMessage;
         }
 
         //методы Community Tool

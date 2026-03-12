@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using AutoCareDiray.Shared.Interface;
 using CommunityToolkit.Mvvm.Input;
+using AutoCareDiray.Shared.Service.ResultService;   
 
 namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
@@ -33,7 +34,12 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         }
         private async Task LoadVehicle()
         {
-            VehicleRespon = await _dataService.GetVehicleAsync(_vehicleId, _cts.Token);
+            var result = await _dataService.GetVehicleAsync(_vehicleId, _cts.Token);
+            if(result.Success)
+            {
+                var resultVehicle = result as Result<Vehicle>;
+                VehicleRespon = resultVehicle.Data ?? new Vehicle();
+            }
         }
         //[RelayCommand]
         //public async void CreateMaintenanse()
