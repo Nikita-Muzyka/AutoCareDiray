@@ -207,9 +207,10 @@ namespace AutoCareDiray.Shared.Service.Data
                 token.ThrowIfCancellationRequested();
                 var repairs = await _dbContex.Repairs
                     .Where(c => c.VehicleId == VehicleId)
-                    .Include(c => c.RepairType)
-                    .Select(c => new Repair { Id = c.Id,DateRepair = c.DateRepair, RepairType = c.RepairType })
-                    .ToListAsync();
+                    .Select(c => new Repair { Id = c.Id,DateRepair = c.DateRepair,CurrentMileage = c.CurrentMileage,RepairType = c.RepairType,Vehicle = c.Vehicle })
+                    .OrderBy(c => c.DateRepair)
+                    .ToListAsync(token);
+
                 return repairs;
             }
             catch (OperationCanceledException ex)

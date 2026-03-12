@@ -19,14 +19,37 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         public string? SpareParts { get; set; } = String.Empty;
         public int Cost { get; set; } = default;
         public string? Description { get; set; } = String.Empty;
+        public string? ProgressPercent
+        {
+            get
+            {
+                return $"До след ремонта {Math.Round(ProgressMileage,1) * 100} %";
+            }
+        }
+
+        public double ProgressMileage
+        {
+            get
+            {
+                if (Vehicle.Mileage > 0)
+                {
+                    var newMileage = Vehicle.Mileage - CurrentMileage;
+                    var progress = (double)newMileage / (double)RepairType.IntervalMileagee;
+
+                    var result = Math.Min(progress, 1);
+                    return result;
+                }
+                else return 0;
+            }
+        }
 
 
         [Required]
         public int VehicleId { get; set; }
-        public Vehicle Vehicle { get; set; }
+        public Vehicle? Vehicle { get; set; }
 
         [Required]
         public int RepairTypeId { get; set; }
-        public RepairType RepairType { get; set; }
+        public RepairType? RepairType { get; set; }
     }
 }
