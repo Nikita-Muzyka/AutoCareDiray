@@ -108,8 +108,28 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 token.ThrowIfCancellationRequested();
                 var vehicle = await _dbContex.Vehicles
-                    .Include(c => c.ReepairTypes)
-                    .Select(c => new Vehicle {Id = c.Id, Mileage = c.Mileage,ReepairTypes = c.ReepairTypes})
+                    .Include(c => c.RepairTypes)
+                    .Select(c => new Vehicle {Id = c.Id, Mileage = c.Mileage,RepairTypes = c.RepairTypes})
+                    .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
+                if (vehicle != null) return Result<Vehicle>.SuccessCreate(vehicle);
+                else return Result.ErrorCreate("Машина не найдена");
+            }
+            catch (OperationCanceledException)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при получении машины: {ex.Message}");
+            }
+        }
+        public async Task<Result> GetVehicleAndRepairTypesForUpdateAsync(int Vehicle_Id, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var vehicle = await _dbContex.Vehicles
+                    .Include(c => c.RepairTypes)
                     .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
                 if (vehicle != null) return Result<Vehicle>.SuccessCreate(vehicle);
                 else return Result.ErrorCreate("Машина не найдена");
@@ -360,7 +380,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 if (repairDb != null)
                 {
                     repairDb.IntervalDate = repaitType.IntervalDate;
-                    repairDb.IntervalMileagee = repaitType.IntervalMileagee;
+                    repairDb.IntervalMileage = repaitType.IntervalMileage;
 
                     await _dbContex.SaveChangesAsync();
                     return Result.SuccessCreate();

@@ -102,7 +102,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 ButtonName = " Редактировать";
 
                 SelectedRepairType = resultRepair.Data.RepairType;
-                IntervalMileageFilled = resultRepair.Data.RepairType.IntervalMileagee;
+                IntervalMileageFilled = resultRepair.Data.RepairType.IntervalMileage;
                 DateRepairSelected = resultRepair.Data.DateRepair;
                 MileageFilled = resultRepair.Data.CurrentMileage;
                 SparePartsFilled = resultRepair.Data.SpareParts;
@@ -125,12 +125,12 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             {
                 var resultVehicle = result as Result<Vehicle>;
                 _vehicle = resultVehicle.Data;
-                foreach (var repairs in _vehicle.ReepairTypes)
+                foreach (var repairs in _vehicle.RepairTypes)
                 {
                     if (repairs is not null) RepairTypes.Add(repairs);
                 }
                 SelectedRepairType = RepairTypes.FirstOrDefault(new RepairType());
-                IntervalMileageFilled = SelectedRepairType.IntervalMileagee;
+                IntervalMileageFilled = SelectedRepairType.IntervalMileage;
                 MileageFilled = _vehicle.Mileage;
             }
             else StatusMessage = result.ErrorMessage;
@@ -174,9 +174,9 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 }
 
 
-                if (SelectedRepairType.IntervalMileagee != IntervalMileageFilled)
+                if (SelectedRepairType.IntervalMileage != IntervalMileageFilled)
                 {
-                    SelectedRepairType.IntervalMileagee = IntervalMileageFilled;
+                    SelectedRepairType.IntervalMileage = IntervalMileageFilled;
                     var resultUpdateTypeRep = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
                     if (resultUpdateTypeRep.Success == false)
                     {
@@ -198,9 +198,9 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                     return;
                 }
 
-                if (SelectedRepairType.IntervalMileagee != IntervalMileageFilled)
+                if (SelectedRepairType.IntervalMileage != IntervalMileageFilled)
                 {
-                    SelectedRepairType.IntervalMileagee = IntervalMileageFilled;
+                    SelectedRepairType.IntervalMileage = IntervalMileageFilled;
                     var resultUpdate = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
                     if (resultUpdate.Success == false)
                     {

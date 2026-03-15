@@ -34,7 +34,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
                 if (Vehicle.Mileage > 0)
                 {
                     var newMileage = Vehicle.Mileage - CurrentMileage;
-                    var progress = (double)newMileage / (double)RepairType.IntervalMileagee;
+                    var progress = (double)newMileage / (double)RepairType.IntervalMileage;
 
                     var result = Math.Min(progress, 1);
                     return result;

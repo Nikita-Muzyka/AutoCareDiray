@@ -18,6 +18,8 @@ namespace AutoCareDiray.Shared.Interface
 
         Task<Result> GetVehicleAndRepairTypesAsync(int Vehicle_Id, CancellationToken token);
 
+        Task<Result> GetVehicleAndRepairTypesForUpdateAsync(int Vehicle_Id, CancellationToken token);
+
         Task<Result> DeleteVehicleAsync(Vehicle vehicle, CancellationToken token);
 
         Task<Result> UpdateVehicleAsync(Vehicle vehicle, CancellationToken token);

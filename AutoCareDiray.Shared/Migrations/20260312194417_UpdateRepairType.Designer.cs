@@ -3,6 +3,7 @@ using System;
 using AutoCareDiray.Shared.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoCareDiray.Shared.Migrations
 {
     [DbContext(typeof(AppDBContex))]
-    partial class AppDBContexModelSnapshot : ModelSnapshot
+    [Migration("20260312194417_UpdateRepairType")]
+    partial class UpdateRepairType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.13");
@@ -59,17 +62,10 @@ namespace AutoCareDiray.Shared.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime?>("IntervalDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IntervalMileage")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsRemoveMaintenance")
+                    b.Property<int>("IntervalMileagee")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsServiced")
@@ -79,10 +75,6 @@ namespace AutoCareDiray.Shared.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("TitleRepair")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TransmissionType")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -109,19 +101,7 @@ namespace AutoCareDiray.Shared.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("StateNumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TransmissionType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("VehicleType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("VinCode")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -158,7 +138,7 @@ namespace AutoCareDiray.Shared.Migrations
             modelBuilder.Entity("AutoCareDiray.Shared.Models.RepairModel.RepairType", b =>
                 {
                     b.HasOne("AutoCareDiray.Shared.Models.VehicleModel.Vehicle", "Vehicle")
-                        .WithMany("RepairTypes")
+                        .WithMany("ReepairTypes")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -173,7 +153,7 @@ namespace AutoCareDiray.Shared.Migrations
 
             modelBuilder.Entity("AutoCareDiray.Shared.Models.VehicleModel.Vehicle", b =>
                 {
-                    b.Navigation("RepairTypes");
+                    b.Navigation("ReepairTypes");
 
                     b.Navigation("Repairs");
                 });
