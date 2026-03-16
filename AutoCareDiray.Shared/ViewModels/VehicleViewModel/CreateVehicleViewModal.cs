@@ -1,13 +1,15 @@
-﻿using AutoCareDiray.Shared.Models.Validation;
+﻿using AutoCareDiray.Shared.Interface;
+using AutoCareDiray.Shared.Models.RepairModel;
+using AutoCareDiray.Shared.Models.Validation;
 using AutoCareDiray.Shared.Models.VehicleModel;
+using AutoCareDiray.Shared.Service.Data;
+using AutoCareDiray.Shared.Service.ResultService;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using AutoCareDiray.Shared.Service.Data;
-using AutoCareDiray.Shared.Service.ResultService;
-using AutoCareDiray.Shared.Models.RepairModel;
-using AutoCareDiray.Shared.Interface;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 
 namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
@@ -16,14 +18,22 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
     {
         private VehicleValidation _vehicleValidation;
         private CancellationTokenSource _cts;
-
         private Vehicle _vehicle;
+        private List<RepairType> _listRepairType;
+        private ObservableCollection<RepairGroup> _grouped;
         //Инициализирована ли страница
         private bool _isInitilized = false;
         //переключатель с создания авто на обновление данных авто
         private bool _isUpdateVehicle = false;
 
-        
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsNotBusy))] // Теперь он должен его видеть
+        private bool isBusy;
+
+        // Это свойство ты прописываешь сам, и оно должно быть PUBLIC
+        public bool IsNotBusy => !IsBusy;
+
         [ObservableProperty]
         private string buttonName = "Создать";
         [ObservableProperty]
@@ -120,10 +130,30 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         /// Инициализация при создании авто
         /// </summary>
         [RelayCommand]
-        public async void InitilizeForCreateVeicle()
+        public async Task InitilizeForCreateVeicle()
         {
             if (_isInitilized) return;
-            CreateRepairTypeGrups();
+            IsBusy = true;
+            try
+            {
+
+                await Task.Delay(100);
+                var groups = await Task.Run(() => CreateRepairTypeGroups());
+
+                RepairGrouped = new ObservableCollection<RepairGroup>(groups);
+
+                _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
+                _isInitilized = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка загрузки: {ex.Message}");
+            }
+            finally
+            {
+                await Task.Delay(1000);
+                IsBusy = false;
+            }
         }
 
 
@@ -134,15 +164,14 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             if (!HasErrors)
             {
                 int MileageInt = ConverFromInt(Mileage);
-                var repairType = RepairGrouped.SelectMany(c => c).ToList();
-                repairType.RemoveAll(c => c.IsRemoveMaintenance == true);
+                _listRepairType.RemoveAll(c => c.IsRemoveMaintenance == true);
                
 
                     var vehicle = new Vehicle(NameVehicle, YearCreateSelected,
                         YearPurchaseSelected, VinCode,
                         StateNumber, TransmissionType,
                         SelectedTypeVehicle, MileageInt,
-                        repairType);
+                        _listRepairType);
 
                 if (_isUpdateVehicle)
                 {
@@ -166,8 +195,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [RelayCommand]
         public void ChangeIsServiced()
         {
-            var listRepairType = RepairGrouped.SelectMany(c => c).ToList();
-            foreach (var list in listRepairType)
+            foreach (var list in _listRepairType)
             {
                 list.IsServiced = !list.IsServiced;
             }
@@ -188,10 +216,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
         partial void OnTransmissionTypeChanged(string value)
         {
-            List<RepairType> repairTypes = RepairGrouped.SelectMany(c => c).ToList();
             if (value == "Автоматическая")
             {
-                foreach (var list in repairTypes.Where(c => c.Category == "Трансмиссия и Жидкости").ToList())
+                foreach (var list in _listRepairType.Where(c => c.Category == "Трансмиссия и Жидкости").ToList())
                 {
                     if(list.TransmissionType == "Автоматическая")
                     {
@@ -205,7 +232,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             }
             else
             {
-                foreach (var list in repairTypes.Where(c => c.Category == "Трансмиссия и Жидкости").ToList())
+                foreach (var list in _listRepairType.Where(c => c.Category == "Трансмиссия и Жидкости").ToList())
                 {
                     if (list.TransmissionType == "Механическая")
                     {
@@ -248,97 +275,98 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _cts = new CancellationTokenSource();
         }
 
-        private void CreateRepairTypeGrups()
+        private ObservableCollection<RepairGroup> CreateRepairTypeGroups()
         {
-            RepairGrouped = new ObservableCollection<RepairGroup>
-    {
-        new RepairGroup("Регламентное ТО", new List<RepairType>
-        {
-            new("ТО (Общее)","ТО", 15000),
-            new("Масло и масляный фильтр","ТО", 8000),
-            new("Воздушный фильтр","ТО", 20000),
-            new("Салонный фильтр","ТО", 15000),
-            new("Топливный фильтр","ТО", 40000)
-        }),
+            var groups = new ObservableCollection<RepairGroup>
+            {
+                new RepairGroup("Регламентное ТО", new List<RepairType>
+                {
+                    new("ТО (Общее)","ТО", 15000),
+                    new("Масло и масляный фильтр","ТО", 8000),
+                    new("Воздушный фильтр","ТО", 20000),
+                    new("Салонный фильтр","ТО", 15000),
+                    new("Топливный фильтр","ТО", 40000)
+                }),
 
-        new RepairGroup("Тормозная система", new List<RepairType>
-        {
-            new("Тормозные колодки передние","Тормозная система", 30000),
-            new("Тормозные колодки задние","Тормозная система", 50000),
-            new("Тормозные диски передние","Тормозная система", 60000),
-            new("Тормозные диски задние","Тормозная система", 80000),
-            new("Тормозная жидкость","Тормозная система", 40000),
-            new("Обслуживвание задних тормозов","Тормозная система"),
-            new("Обслуживвание передних тормозов","Тормозная система")
-        }),
+                new RepairGroup("Тормозная система", new List<RepairType>
+                {
+                    new("Тормозные колодки передние","Тормозная система", 30000),
+                    new("Тормозные колодки задние","Тормозная система", 50000),
+                    new("Тормозные диски передние","Тормозная система", 60000),
+                    new("Тормозные диски задние","Тормозная система", 80000),
+                    new("Тормозная жидкость","Тормозная система", 40000),
+                    new("Обслуживвание задних тормозов","Тормозная система"),
+                    new("Обслуживвание передних тормозов","Тормозная система")
+                }),
 
-        new RepairGroup("Двигатель и ГРМ", new List<RepairType>
-        {
-            new("Свечи зажигания","Двигатель и ГРМ", 30000),
-            new("Ремень ГРМ","Двигатель и ГРМ", 90000),
-            new("Ремень ГРМ + Помпа","Двигатель и ГРМ", 90000),
-            new("Цепь ГРМ","Двигатель и ГРМ", 150000),
-            new("Ремень генератора","Двигатель и ГРМ", 60000),
-            new("Катушки зажигания","Двигатель и ГРМ", 100000)
-        }),
+                new RepairGroup("Двигатель и ГРМ", new List<RepairType>
+                {
+                    new("Свечи зажигания","Двигатель и ГРМ", 30000),
+                    new("Ремень ГРМ","Двигатель и ГРМ", 90000),
+                    new("Ремень ГРМ + Помпа","Двигатель и ГРМ", 90000),
+                    new("Цепь ГРМ","Двигатель и ГРМ", 150000),
+                    new("Ремень генератора","Двигатель и ГРМ", 60000),
+                    new("Катушки зажигания","Двигатель и ГРМ", 100000)
+                }),
 
-        new RepairGroup("Подвеска и Рулевое", new List<RepairType>
-        {
-            new("Стойки амортизаторов передние","Подвеска и Рулевое", 80000),
-            new("Стойки амортизаторов задние","Подвеска и Рулевое", 100000),
-            new("Сайлентблоки","Подвеска и Рулевое", 80000),
-            new("Шаровые опоры","Подвеска и Рулевое", 80000),
-            new("Стойки стабилизатора","Подвеска и Рулевое", 50000),
-            new("Рулевые наконечники","Подвеска и Рулевое", 60000),
-            new("Ступичный подшипник","Подвеска и Рулевое", 100000),
-            new("Обслуживание передней подвески","Подвеска и Рулевое"),
-            new("Обслуживание задний подвески","Подвеска и Рулевое"),
-        }),
+                new RepairGroup("Подвеска и Рулевое", new List<RepairType>
+                {
+                    new("Стойки амортизаторов передние","Подвеска и Рулевое", 80000),
+                    new("Стойки амортизаторов задние","Подвеска и Рулевое", 100000),
+                    new("Сайлентблоки","Подвеска и Рулевое", 80000),
+                    new("Шаровые опоры","Подвеска и Рулевое", 80000),
+                    new("Стойки стабилизатора","Подвеска и Рулевое", 50000),
+                    new("Рулевые наконечники","Подвеска и Рулевое", 60000),
+                    new("Ступичный подшипник","Подвеска и Рулевое", 100000),
+                    new("Обслуживание передней подвески","Подвеска и Рулевое"),
+                    new("Обслуживание задний подвески","Подвеска и Рулевое"),
+                }),
 
-        new RepairGroup("Трансмиссия и Жидкости", new List<RepairType>
-        {
-            new("Масло в АКПП/CVT","Трансмиссия и Жидкости", 60000,"Автоматическая"),
-            new("Масло в МКПП","Трансмиссия и Жидкости", 80000),
-            new("Ремонт коробки","Трансмиссия и Жидкости", 60000),
-            new("Сцепление","Трансмиссия и Жидкости", 100000,"Механическая"),
-            new("Замена ремня АКПП","Трансмиссия и Жидкости", 100000,"Автоматическая"),
-            new("ГУР жидкость","Трансмиссия и Жидкости", 60000, new DateTime(2)),
-            new("Антифриз","Трансмиссия и Жидкости", 60000, new DateTime(3)),
-            new("Тосол","Трансмиссия и Жидкости", 60000, new DateTime(2)),
-            new("Тормозная жидкость","Трансмиссия и Жидкости", 60000, new DateTime(4))
-        }),
+                new RepairGroup("Трансмиссия и Жидкости", new List<RepairType>
+                {
+                    new("Масло в АКПП/CVT","Трансмиссия и Жидкости", 60000,"Автоматическая"),
+                    new("Масло в МКПП","Трансмиссия и Жидкости", 80000),
+                    new("Ремонт коробки","Трансмиссия и Жидкости", 60000),
+                    new("Сцепление","Трансмиссия и Жидкости", 100000,"Механическая"),
+                    new("Замена ремня АКПП","Трансмиссия и Жидкости", 100000,"Автоматическая"),
+                    new("ГУР жидкость","Трансмиссия и Жидкости", 60000, new DateTime(2)),
+                    new("Антифриз","Трансмиссия и Жидкости", 60000, new DateTime(3)),
+                    new("Тосол","Трансмиссия и Жидкости", 60000, new DateTime(2)),
+                    new("Тормозная жидкость","Трансмиссия и Жидкости", 60000, new DateTime(4))
+                }),
 
-        new RepairGroup("Электрика и Охлаждение", new List<RepairType>
-        {
-            new("Аккумулятор (АКБ)","Электрика и Охлаждение", 70000),
-            new("Генератор","Электрика и Охлаждение", 150000),
-            new("Стартер","Электрика и Охлаждение", 150000),
-            new("Помпа","Электрика и Охлаждение", 90000),
-            new("Термостат","Электрика и Охлаждение", 100000),
-            new("Замена датчика","Электрика и Охлаждение", 0)
-        }),
+                new RepairGroup("Электрика и Охлаждение", new List<RepairType>
+                {
+                    new("Аккумулятор (АКБ)","Электрика и Охлаждение", 70000),
+                    new("Генератор","Электрика и Охлаждение", 150000),
+                    new("Стартер","Электрика и Охлаждение", 150000),
+                    new("Помпа","Электрика и Охлаждение", 90000),
+                    new("Термостат","Электрика и Охлаждение", 100000),
+                    new("Замена датчика","Электрика и Охлаждение", 0)
+                }),
 
-        new RepairGroup("Шины и Колеса", new List<RepairType>
-        {
-            new("Развал-схождение","Шины и Колеса", 15000),
-            new("Балансировка колёс","Шины и Колеса", 15000),
-            new("Переобувка","Шины и Колеса", 0) // Здесь можно добавить логику по дате
-        }),
+                new RepairGroup("Шины и Колеса", new List<RepairType>
+                {
+                    new("Развал-схождение","Шины и Колеса", 15000),
+                    new("Балансировка колёс","Шины и Колеса", 15000),
+                    new("Переобувка","Шины и Колеса", 0) // Здесь можно добавить логику по дате
+                }),
 
-        new RepairGroup("Выхлопная система", new List<RepairType>
-        {
-            new("Катализатор","Выхлопная система"),
-            new("Выпускной коллектор","Выхлопная система"),
-            new("Датчики выпускной системы","Выхлопная система") // Здесь можно добавить логику по дате
-        }),
+                new RepairGroup("Выхлопная система", new List<RepairType>
+                {
+                    new("Катализатор","Выхлопная система"),
+                    new("Выпускной коллектор","Выхлопная система"),
+                    new("Датчики выпускной системы","Выхлопная система") // Здесь можно добавить логику по дате
+                }),
 
-        new RepairGroup("Прочее", new List<RepairType>
-        {
-            new("Дворники (щётки)","Прочее"),
-            new("Лампы (фары/габариты)","Прочее"),
-            new("Кондиционер (заправка)", "Прочее", 40000)
-        })
-    };
+                new RepairGroup("Прочее", new List<RepairType>
+                {
+                    new("Дворники (щётки)","Прочее"),
+                    new("Лампы (фары/габариты)","Прочее"),
+                    new("Кондиционер (заправка)", "Прочее", 40000)
+                })
+            };
+            return groups;
         }
     }
 }

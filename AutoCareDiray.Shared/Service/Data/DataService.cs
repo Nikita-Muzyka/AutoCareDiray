@@ -46,7 +46,8 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 token.ThrowIfCancellationRequested();
                 var vehicles = await _dbContex.Vehicles
-                    .Select(c => new Vehicle { Id = c.Id, Mileage = c.Mileage, NameVehicle = c.NameVehicle })
+                    .Include(c => c.RepairTypes)
+                    .Select(c => new Vehicle { Id = c.Id, Mileage = c.Mileage, NameVehicle = c.NameVehicle,RepairTypes = c.RepairTypes })
                     .ToListAsync(token);
                 if(vehicles.Count > 0) return Result<List<Vehicle>>.SuccessCreate(vehicles);
                 else return Result.ErrorCreate("Список машин пуст");

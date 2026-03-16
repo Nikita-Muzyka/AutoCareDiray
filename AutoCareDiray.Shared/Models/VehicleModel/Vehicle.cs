@@ -17,12 +17,12 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         public string VinCode { get; set; } = String.Empty;
         public string StateNumber { get; set; } = String.Empty;
         public string TransmissionType { get; set; } = String.Empty;
-
         [Required]
         public string VehicleType { get; set; } = String.Empty;
-
         [Required]
         public int Mileage { get; set; }
+
+        public string? WarningRepair {  get; set; } = String.Empty;
 
         public List<Repair> Repairs { get; set; } = new();
         public List<RepairType> RepairTypes { get; set; } = new();

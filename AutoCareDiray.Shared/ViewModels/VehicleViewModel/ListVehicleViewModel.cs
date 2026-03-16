@@ -6,6 +6,7 @@ using AutoCareDiray.Shared.Service.Data;
 using Microsoft.EntityFrameworkCore.Metadata;
 using AutoCareDiray.Shared.Service.ResultService;
 using AutoCareDiray.Shared.Interface;
+using System.Diagnostics;
 
 namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
@@ -20,7 +21,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private string errors;
         [ObservableProperty]
         private Vehicle selectedVehicle;
-
+        
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -58,6 +59,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             {
                 var resultVehicles = result as Result<List<Vehicle>>;
                 var cars = resultVehicles.Data;
+                CheckWarningRepair(cars);
 
                 foreach (var addcar in cars)
                 {
@@ -100,6 +102,17 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _cts.Cancel();
             _cts.Dispose();
             _cts = new CancellationTokenSource();
+        }
+
+
+        private void CheckWarningRepair(IEnumerable<Vehicle> cars)
+        {
+            foreach(var list in cars)
+            {
+                var repairsType = list.RepairTypes.Where(c => list.Mileage - c.LastServiceMileage > c.IntervalMileage).ToList();
+                int count = repairsType.Count;
+                list.WarningRepair = $"Внимание:{count}";
+            }
         }
     }
 }
