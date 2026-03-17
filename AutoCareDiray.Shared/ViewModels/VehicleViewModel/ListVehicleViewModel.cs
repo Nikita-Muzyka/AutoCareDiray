@@ -107,9 +107,10 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
         private void CheckWarningRepair(IEnumerable<Vehicle> cars)
         {
-            foreach(var list in cars)
+            foreach (var list in cars)
             {
-                var repairsType = list.RepairTypes.Where(c => list.Mileage - c.LastServiceMileage > c.IntervalMileage).ToList();
+                var sortRepairType = list.RepairTypes.Where(c => c.IntervalMileage > 0).ToList();
+               var repairsType = sortRepairType.Where(c => list.Mileage - c.LastServiceMileage > c.IntervalMileage).ToList();
                 int count = repairsType.Count;
                 list.WarningRepair = $"Внимание:{count}";
             }
