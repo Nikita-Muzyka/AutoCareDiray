@@ -2,79 +2,145 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
+             xmlns:models="clr-namespace:AutoCareDiray.Shared.Models.RepairModel;assembly=AutoCareDiray.Shared"
              x:Class="AutoCareDiray.View.VehicleView.CreateVehicleView"
              Style="{StaticResource CustomPage}">
 
-    <Grid RowDefinitions="*,100">
+    <Grid>
+
         <ScrollView>
-            
-            <!--NameVehicle-->
-            
-            <VerticalStackLayout Spacing="10">
-                <!-- Поле name car -->
-                <Border Style="{DynamicResource BorderForEntryImput}">
-                    <Entry Style="{DynamicResource EntryImput}"
-                           Placeholder="Название ТС"
-                           Text="{Binding NameVehicle}"/>
-                </Border>
+            <VerticalStackLayout>
 
-                <!--DateCreate-->
-                
-                <Border Style="{DynamicResource BorderForEntryImput}">
-                    <VerticalStackLayout>
-                        <Label Text="Выберите дату производства авто"
-                               Style="{DynamicResource LabelInEntry}"/>
-                        <DatePicker Format="d"
-                                    Date ="{Binding YearCreateSelected}"
-                                    MaximumDate="{Binding DateNow}">
-                        </DatePicker>
-                    </VerticalStackLayout>
-                </Border>
+                <VerticalStackLayout Spacing="15" Padding="20">
 
-                <!--DatePurchase-->
+                    <Label Text="Общая информация" FontAttributes="Bold" FontSize="18" Margin="0,10,0,0"/>
 
-                <Label Text="{Binding YearPurchaseError}"
-                       Style="{DynamicResource LaberError}"/>
-                
-                <Border Style="{DynamicResource BorderForEntryImput}">
-                    <VerticalStackLayout>
-                        <Label Text="Выберите дату покупки авто"
-                Style="{DynamicResource LabelInEntry}"/>
-                        <DatePicker Format="d"
-                                    Date ="{Binding YearPurchaseSelected}"
-                                    MaximumDate="{Binding DateNow}">
-                        </DatePicker>
-                    </VerticalStackLayout>
-                </Border>
+                    <Border Style="{DynamicResource BorderForEntryImput}">
+                        <Entry Style="{DynamicResource EntryImput}" Placeholder="Название ТС (например, Моя BMW)" Text="{Binding NameVehicle}"/>
+                    </Border>
 
-                <!--Mileage-->
-                <Label Text="{Binding MileageError}"
-                       Style="{DynamicResource LaberError}"/>
+                    <Border Style="{DynamicResource BorderForEntryImput}">
+                        <VerticalStackLayout>
+                            <Label Text="Выберите дату производства авто" Style="{DynamicResource LabelInEntry}"/>
+                            <DatePicker Format="d" Date="{Binding YearCreateSelected}" MaximumDate="{Binding DateNow}" />
+                        </VerticalStackLayout>
+                    </Border>
 
-                <Border Style="{DynamicResource BorderForEntryImput}">
-                    <Entry Style="{DynamicResource EntryImput}"
-                           Placeholder="Пробег"
-                           Text="{Binding Mileage}"
-                           Keyboard="Numeric"/>
-                </Border>
+                    <Label Text="{Binding YearPurchaseError}" Style="{DynamicResource LaberError}"/>
+                    <Border Style="{DynamicResource BorderForEntryImput}">
+                        <VerticalStackLayout>
+                            <Label Text="Выберите дату покупки авто" Style="{DynamicResource LabelInEntry}"/>
+                            <DatePicker Format="d" Date="{Binding YearPurchaseSelected}" MaximumDate="{Binding DateNow}" />
+                        </VerticalStackLayout>
+                    </Border>
 
-                <!--VehicleType-->
+                    <Border Style="{DynamicResource BorderForEntryImput}">
+                        <Entry Style="{DynamicResource EntryImput}" Placeholder="Вин код авто (По желанию)" Text="{Binding VinCode}" Keyboard="Text"/>
+                    </Border>
 
-                <Border Style="{DynamicResource BorderForEntryImput}">
-                    <Picker Title="Выберите Тип ТС"
-                            Style="{DynamicResource PickerStandart}"
-                            ItemsSource="{Binding TypeVehicle}"
-                            SelectedItem="{Binding SelectedTypeVehicle}">
-                    </Picker>
-                </Border>
+                    <Border Style="{DynamicResource BorderForEntryImput}">
+                        <Entry Style="{DynamicResource EntryImput}" Placeholder="Гос номер авто (По желанию)" Text="{Binding StateNumber}" Keyboard="Text"/>
+                    </Border>
 
+                    <Label Text="{Binding MileageError}" Style="{DynamicResource LaberError}"/>
+                    <Border Style="{DynamicResource BorderForEntryImput}">
+                        <Entry Style="{DynamicResource EntryImput}" Placeholder="Текущий пробег" Text="{Binding Mileage}" Keyboard="Numeric"/>
+                    </Border>
 
-                <Button Text="{Binding ButtonName}" 
-                        Margin="0,10,0,0"
-                        Style="{StaticResource ButtonCustomStandartRed}"
-                        Command="{Binding CreateVehicleCommand}"/>
-              
+                    <Border Style="{DynamicResource BorderForEntryImput}">
+                        <Picker Title="Выберите Тип ТС" Style="{DynamicResource PickerStandart}" ItemsSource="{Binding TypeVehicle}" SelectedItem="{Binding SelectedTypeVehicle}" />
+                    </Border>
+
+                    <BoxView HeightRequest="1" Color="#E0E0E0" Margin="0,10"/>
+
+                    <Label Text="Регламент обслуживания" FontAttributes="Bold" FontSize="18"/>
+                    <Label Text="Отметьте, что вы уже заменили недавно. Остальное приложение предложит заменить само." FontSize="12" TextColor="Gray" Margin="0,0,0,10"/>
+
+                    <Button Text="Авто полностью обслужено"
+                            HorizontalOptions="Center"
+                            Style="{DynamicResource ButtonCustomStandartRed}"
+                            Command="{Binding ChangeIsServicedCommand}"
+                            Margin="0,0,0,10"/>
+
+                    <StackLayout RadioButtonGroup.GroupName="Transmission"
+                                 RadioButtonGroup.SelectedValue="{Binding TransmissionType}"
+                                 Orientation="Horizontal"
+                                 HorizontalOptions="Center"
+                                 Margin="0,0,0,15">
+                        <RadioButton Content="Механическая (МКПП)" Value="Механическая" Margin="0,0,10,0"/>
+                        <RadioButton Content="Автоматическая(АКПП)" Value="Автоматическая" />
+                    </StackLayout>
+
+                    <Label Text="Настройка деталей по категориям:" FontAttributes="Bold" FontSize="15" Margin="0,0,0,5"/>
+                    <Border Style="{DynamicResource BorderForEntryImput}" Stroke="#E0E0E0" StrokeThickness="1" BackgroundColor="#F8F8F8">
+                        <Picker Title="Выберите категорию..." 
+                                ItemsSource="{Binding RepairGrouped}" 
+                                ItemDisplayBinding="{Binding Name}" 
+                                SelectedItem="{Binding SelectedGroup}"
+                                TextColor="Red"
+                                FontAttributes="Bold"
+                                Margin="5,0"/>
+                    </Border>
+
+                </VerticalStackLayout>
+
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding SelectedGroup}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:RepairType">
+
+                            <Grid BackgroundColor="White" 
+                                  Margin="20,4,20,4" 
+                                  Padding="15"
+                                  HeightRequest="75" 
+                                  RowDefinitions="*, *" 
+                                  ColumnDefinitions="*, 80">
+
+                                <Label Text="{Binding TitleRepair}" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" FontSize="14" FontAttributes="Bold" LineBreakMode="TailTruncation"/>
+
+                                <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*, Auto" ColumnSpacing="3">
+                                    <Entry Text="{Binding IntervalMileage}" Grid.Column="0" Keyboard="Numeric" HeightRequest="36" HorizontalTextAlignment="Center"/>
+                                    <Label Text="км" Grid.Column="1" VerticalOptions="Center" FontSize="11" TextColor="Gray"/>
+                                </Grid>
+
+                                <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Spacing="15" Margin="0,5,0,0">
+                                    <HorizontalStackLayout Spacing="2">
+                                        <CheckBox IsChecked="{Binding IsServiced}" Color="Red" Scale="0.8"/>
+                                        <Label Text="Обслужено" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+
+                                    <HorizontalStackLayout Spacing="2">
+                                        <CheckBox IsChecked="{Binding IsRemoveMaintenance}" Color="Red" Scale="0.8"/>
+                                        <Label Text="Не нужно" VerticalOptions="Center" FontSize="12"/>
+                                    </HorizontalStackLayout>
+                                </HorizontalStackLayout>
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Padding="20,15,20,40">
+                    <Label Text="{Binding StatusMessage}" Style="{DynamicResource LaberError}" HorizontalTextAlignment="Center" Margin="0,0,0,10"/>
+                    <Button Text="{Binding ButtonName}" 
+                            Style="{StaticResource ButtonCustomStandartRed}"
+                            Command="{Binding CreateVehicleCommand}"/>
+                </VerticalStackLayout>
+
             </VerticalStackLayout>
         </ScrollView>
+
+        <Grid IsVisible="{Binding IsBusy}" 
+              BackgroundColor="#80000000" 
+              InputTransparent="False">
+
+            <VerticalStackLayout VerticalOptions="Center" 
+                                 HorizontalOptions="Center" 
+                                 Spacing="15">
+                <ActivityIndicator IsRunning="{Binding IsBusy}" Color="White" Scale="2"/>
+                <Label Text="Загрузка формы..." TextColor="White" FontAttributes="Bold" FontSize="16"/>
+            </VerticalStackLayout>
+        </Grid>
+
     </Grid>
 </ContentPage>

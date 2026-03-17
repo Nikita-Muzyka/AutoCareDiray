@@ -4,6 +4,7 @@ using AutoCareDiray.Shared.Models.Validation;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using AutoCareDiray.Shared.Service.ValidationService;
 using CommunityToolkit.Mvvm.ComponentModel;
+using AutoCareDiray.Shared.Service.ResultService;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -93,42 +94,46 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         //Загрузка ресурсов под редактирования 
         public async Task LoadingUpdate()
         {
-            var repairUpdate = await _dataService.GetRepairAsync(_repairId, _cts.Token);
-            if (repairUpdate != null)
+            var result = await _dataService.GetRepairAsync(_repairId, _cts.Token);
+            if (result.Success)
             {
+                var resultRepair = result as Result<Repair>;
                 _isUpdateRepair = true;
                 ButtonName = " Редактировать";
 
-                SelectedRepairType = repairUpdate.RepairType;
-                IntervalMileageFilled = repairUpdate.RepairType.IntervalMileagee;
-                DateRepairSelected = repairUpdate.DateRepair;
-                MileageFilled = repairUpdate.CurrentMileage;
-                SparePartsFilled = repairUpdate.SpareParts;
-                CostFilled = repairUpdate.Cost.ToString();
-                DescriptionFilled = repairUpdate.Description;
+                SelectedRepairType = resultRepair.Data.RepairType;
+                IntervalMileageFilled = resultRepair.Data.RepairType.IntervalMileage;
+                DateRepairSelected = resultRepair.Data.DateRepair;
+                MileageFilled = resultRepair.Data.CurrentMileage;
+                SparePartsFilled = resultRepair.Data.SpareParts;
+                CostFilled = resultRepair.Data.Cost.ToString();
+                DescriptionFilled = resultRepair.Data.Description;
 
                 if (RepairTypes.Count > 0) RepairTypes.Clear();
-                RepairTypes.Add(repairUpdate.RepairType);
+                RepairTypes.Add(resultRepair.Data.RepairType);
                 SelectedRepairType = RepairTypes.FirstOrDefault(new RepairType());
             }
-            else await _dialogService.ShowToastAsync("Ремонт не загрузился");
+            else StatusMessage = result.ErrorMessage;
         }
 
         //Загрузка под создания ремонта
         public async Task Loading()
         {
             if(RepairTypes.Count > 0) RepairTypes.Clear();
-            _vehicle = await _dataService.GetVehicleAndRepairTypesAsync(_vehicleId, _cts.Token);
-            if(_vehicle != null)
+            var result = await _dataService.GetVehicleAndRepairTypesAsync(_vehicleId, _cts.Token);
+            if (result.Success)
             {
-                foreach (var repairs in _vehicle.ReepairTypes)
+                var resultVehicle = result as Result<Vehicle>;
+                _vehicle = resultVehicle.Data;
+                foreach (var repairs in _vehicle.RepairTypes)
                 {
                     if (repairs is not null) RepairTypes.Add(repairs);
                 }
                 SelectedRepairType = RepairTypes.FirstOrDefault(new RepairType());
-                IntervalMileageFilled = SelectedRepairType.IntervalMileagee;
+                IntervalMileageFilled = SelectedRepairType.IntervalMileage;
                 MileageFilled = _vehicle.Mileage;
             }
+            else StatusMessage = result.ErrorMessage;
         }
 
 
@@ -149,32 +154,63 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 CurrentMileage = MileageFilled,
             };
 
-            if (MileageFilled > _vehicle.Mileage) await _dataService.UpdateVehicleMileageAsync(_vehicleId, MileageFilled, _cts.Token);
+            if (MileageFilled > _vehicle.Mileage)
+            {
+               var resultMileage =  await _dataService.UpdateVehicleMileageAsync(_vehicleId, MileageFilled, _cts.Token);
+               if (resultMileage.Success == false)
+                {
+                    StatusMessage = resultMileage.ErrorMessage;
+                    return;
+                }
+            }
 
             if (_isUpdateRepair)
             {
-                var repairSuccess = await _dataService.UpdateRepairAsync(repairCreate, _cts.Token);
-                if (SelectedRepairType.IntervalMileagee != IntervalMileageFilled)
+                var resultUdateRepair = await _dataService.UpdateRepairAsync(repairCreate, _cts.Token);
+                if(resultUdateRepair.Success == false)
                 {
-                    SelectedRepairType.IntervalMileagee = IntervalMileageFilled;
-                    await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
+                    StatusMessage = resultUdateRepair.ErrorMessage;
+                    return;
                 }
+
+
+                if (SelectedRepairType.IntervalMileage != IntervalMileageFilled)
+                {
+                    SelectedRepairType.IntervalMileage = IntervalMileageFilled;
+                    var resultUpdateTypeRep = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
+                    if (resultUpdateTypeRep.Success == false)
+                    {
+                        StatusMessage = resultUpdateTypeRep.ErrorMessage;
+                        return;
+                    }
+                }
+
                 _isUpdateRepair = false;
-                if (repairSuccess) await _navigationService.GoToBack();
-                else StatusMessage = "Ремонт не был сохранен";
+                if (resultUdateRepair.Success) await _navigationService.GoToBack();
+                else StatusMessage = resultUdateRepair.ErrorMessage;
             }
             else
             {
-                var repairSuccess = await _dataService.CreateRepairAsync(repairCreate, _cts.Token);
-
-                if (SelectedRepairType.IntervalMileagee != IntervalMileageFilled)
+                var resultCreateRepair = await _dataService.CreateRepairAsync(repairCreate, _cts.Token);
+                if(resultCreateRepair.Success == false)
                 {
-                    SelectedRepairType.IntervalMileagee = IntervalMileageFilled;
-                    await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
+                    StatusMessage = resultCreateRepair.ErrorMessage;
+                    return;
                 }
 
-                if (repairSuccess) await _navigationService.GoToBack();
-                else StatusMessage = "Ремонт не был сохранен";
+                if (SelectedRepairType.IntervalMileage != IntervalMileageFilled)
+                {
+                    SelectedRepairType.IntervalMileage = IntervalMileageFilled;
+                    var resultUpdate = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
+                    if (resultUpdate.Success == false)
+                    {
+                        StatusMessage = resultUpdate.ErrorMessage;
+                        return;
+                    }
+                }
+
+                if (resultCreateRepair.Success) await _navigationService.GoToBack();
+                else StatusMessage = resultCreateRepair.ErrorMessage;
             }
         }
 

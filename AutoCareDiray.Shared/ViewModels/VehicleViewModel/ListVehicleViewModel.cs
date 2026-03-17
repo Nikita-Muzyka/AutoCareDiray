@@ -4,7 +4,9 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using AutoCareDiray.Shared.Service.Data;
 using Microsoft.EntityFrameworkCore.Metadata;
+using AutoCareDiray.Shared.Service.ResultService;
 using AutoCareDiray.Shared.Interface;
+using System.Diagnostics;
 
 namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
@@ -19,7 +21,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private string errors;
         [ObservableProperty]
         private Vehicle selectedVehicle;
-
+        
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -52,24 +54,34 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         public async Task LoadVehicles()
         {
             if(Vehicles.Count > 0) Vehicles.Clear();
-            var cars = await _dataService.ListVehicleAsync(_cts.Token);
-            if(cars != null)
+            var result = await _dataService.ListVehicleAsync(_cts.Token);
+            if (result.Success)
             {
+                var resultVehicles = result as Result<List<Vehicle>>;
+                var cars = resultVehicles.Data;
+                CheckWarningRepair(cars);
+
                 foreach (var addcar in cars)
                 {
                     Vehicles.Add(addcar);
                 }
             }
+            else await _dialogService.ShowToastAsync(result.ErrorMessage);
         }
 
         [RelayCommand]
         public async Task DeleteVehicle(Vehicle vehicleSelected)
         {
-            var result = await _dialogService.ShowConfirmationAsync(vehicleSelected.NameVehicle);
-            if (result)
+            var respon = await _dialogService.ShowConfirmationAsync(vehicleSelected.NameVehicle);
+            if (respon)
             {
-                await _dataService.DeleteVehicleAsync(vehicleSelected, _cts.Token);
-                await LoadVehicles();
+                var result = await _dataService.DeleteVehicleAsync(vehicleSelected, _cts.Token);
+                if(result.Success)
+                {
+                    await _dialogService.ShowToastAsync("ТС удалено");
+                    await LoadVehicles();
+                }
+                else await _dialogService.ShowToastAsync(result.ErrorMessage);
             }
         }
 
@@ -90,6 +102,18 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _cts.Cancel();
             _cts.Dispose();
             _cts = new CancellationTokenSource();
+        }
+
+
+        private void CheckWarningRepair(IEnumerable<Vehicle> cars)
+        {
+            foreach (var list in cars)
+            {
+                var sortRepairType = list.RepairTypes.Where(c => c.IntervalMileage > 0).ToList();
+               var repairsType = sortRepairType.Where(c => list.Mileage - c.LastServiceMileage > c.IntervalMileage).ToList();
+                int count = repairsType.Count;
+                list.WarningRepair = $"Внимание:{count}";
+            }
         }
     }
 }

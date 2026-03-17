@@ -60,6 +60,35 @@
                            Style="{DynamicResource LaberInfo}"/>            
                 </Grid>
 
+                <Grid ColumnDefinitions="150,auto"
+                      HorizontalOptions="Center">
+                    <Label Text="VIN:" Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" Text="{Binding VehicleRespon.VinCode}" Style="{DynamicResource LaberInfo}"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="150,auto"
+                    HorizontalOptions="Center">
+                    <Label Text="Гос номер" Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" Text="{Binding VehicleRespon.StateNumber}" Style="{DynamicResource LaberInfo}"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="150,auto"
+      HorizontalOptions="Center">
+                    <Label Text="Коробка" Style="{DynamicResource LaberInfo}"/>
+                    <Label Grid.Column="1" Text="{Binding VehicleRespon.TransmissionType}" Style="{DynamicResource LaberInfo}"/>
+                </Grid>
+
+
+                <CollectionView ItemsSource="{Binding WarningRepairType,Mode=TwoWay}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout>
+                                <Label Text="{Binding TitleRepair}"/>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

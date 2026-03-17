@@ -1,3 +1,4 @@
+using AutoCareDiray.Shared.Models.VehicleModel;
 using AutoCareDiray.Shared.ViewModels.VehicleViewModel;
 
 namespace AutoCareDiray.View.VehicleView;
@@ -14,13 +15,22 @@ public partial class CreateVehicleView : ContentPage,IQueryAttributable
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if(query.TryGetValue("VehicleId",out var obj))
+        if(query != null)
         {
-            if(obj is int vehicleId)
+            if (query.TryGetValue("VehicleId", out var obj))
             {
-                _viewModel.InitilizeCommand.Execute(vehicleId);
+                if (obj is int vehicleId)
+                {
+                    _viewModel.InitilizeUpdateVeicleCommand.Execute(vehicleId);
+                }
             }
-        }
+        }  
+            _viewModel.InitilizeForCreateVeicleCommand.Execute(null);
+    }
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();   
+        _viewModel.InitilizeForCreateVeicleCommand.Execute(null);
     }
     protected override void OnDisappearing()
     {

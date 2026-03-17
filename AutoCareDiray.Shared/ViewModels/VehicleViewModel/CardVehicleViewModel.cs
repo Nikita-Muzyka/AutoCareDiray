@@ -1,9 +1,11 @@
 ﻿using AutoCareDiray.Shared.Service.Data;
 using AutoCareDiray.Shared.Models.VehicleModel;
-using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Interface;
 using CommunityToolkit.Mvvm.Input;
+using AutoCareDiray.Shared.Service.ResultService;
+using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
@@ -13,7 +15,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private bool isInitilize = false;
        
         CancellationTokenSource _cts;
-
+        [ObservableProperty]
+        ObservableCollection<RepairType> warningRepairType;
         [ObservableProperty]
         private Vehicle vehicleRespon;
 
@@ -33,27 +36,15 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         }
         private async Task LoadVehicle()
         {
-            VehicleRespon = await _dataService.GetVehicleAsync(_vehicleId, _cts.Token);
-        }
-        //[RelayCommand]
-        //public async void CreateMaintenanse()
-        //{
-        //    var Car = new Dictionary<string, object>()
-        //    {
-        //        ["Car"] = CarSelected
-        //    };
-        //    await Shell.Current.GoToAsync(nameof(CreateMaintenanse), Car);
-        //}
-        //[RelayCommand]
-        //public async void ListMaintenanse()
-        //{
+            var result = await _dataService.GetVehicleAsync(_vehicleId, _cts.Token);
+            if(result.Success)
+            {
+                var resultVehicle = result as Result<Vehicle>;
+                VehicleRespon = resultVehicle.Data ?? new Vehicle();
 
-        //    await Shell.Current.GoToAsync(nameof(ListMaintenanseView));
-        //}
-        //[RelayCommand]
-        //public async void GoBack()
-        //{
-        //    await Shell.Current.GoToAsync("..");
-        //}
+                var warning = VehicleRespon.RepairTypes.Where(c => VehicleRespon.Mileage - c.LastServiceMileage > c.IntervalMileage).ToList();
+                WarningRepairType = new ObservableCollection<RepairType>(warning);
+            }
+        }
     }
 }

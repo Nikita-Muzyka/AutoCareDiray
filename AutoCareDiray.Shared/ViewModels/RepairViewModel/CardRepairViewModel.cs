@@ -2,11 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using AutoCareDiray.Shared.Models.RepairModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoCareDiray.Shared.Service.ResultService;
 
 namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 {
@@ -27,7 +23,13 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         public async Task Initilize(int repairId)
         {
             if (_isinitilize) return;
-            RepairRespon = await _dataService.GetRepairAsync(repairId,_cts.Token);
+            var result = await _dataService.GetRepairAsync(repairId,_cts.Token);
+            if (result.Success)
+            {
+              var resultRepair = result as Result<Repair>;
+                RepairRespon = resultRepair.Data;
+                _isinitilize = true;
+            }
         }
 
         [RelayCommand]

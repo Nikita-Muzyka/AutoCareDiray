@@ -3,6 +3,7 @@ using System;
 using AutoCareDiray.Shared.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoCareDiray.Shared.Migrations
 {
     [DbContext(typeof(AppDBContex))]
-    partial class AppDBContexModelSnapshot : ModelSnapshot
+    [Migration("20260314101219_UpdateDB")]
+    partial class UpdateDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.13");
@@ -69,20 +72,16 @@ namespace AutoCareDiray.Shared.Migrations
                     b.Property<int>("IntervalMileage")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsRemoveMaintenance")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("IsServiced")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("LastServiceMileage")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TitleRepair")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<bool>("RemoveMaintenance")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("TransmissionType")
+                    b.Property<string>("TitleRepair")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -109,23 +108,12 @@ namespace AutoCareDiray.Shared.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("StateNumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TransmissionType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("VehicleType")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("VinCode")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("WarningRepair")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("YearCreate")
