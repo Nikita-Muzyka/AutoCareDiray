@@ -30,9 +30,12 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsNotBusy))] // Теперь он должен его видеть
         private bool isBusy;
-
-        // Это свойство ты прописываешь сам, и оно должно быть PUBLIC
         public bool IsNotBusy => !IsBusy;
+
+        [ObservableProperty]
+        private ObservableCollection<RepairGroup> repairGrouped;
+        [ObservableProperty]
+        private RepairGroup selectedGroup;
 
         [ObservableProperty]
         private string buttonName = "Создать";
@@ -57,9 +60,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
         [ObservableProperty]
         private string statusMessage;
-
-        [ObservableProperty]
-        private ObservableCollection<RepairGroup> repairGrouped;
 
         public ObservableCollection<string> TypeVehicle { get; } = new() { "Автомобиль", "Мотоцикл", "Грузовое ТС", "Другое" };
 
@@ -141,6 +141,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 var groups = await Task.Run(() => CreateRepairTypeGroups());
 
                 RepairGrouped = new ObservableCollection<RepairGroup>(groups);
+                SelectedGroup = RepairGrouped.FirstOrDefault();
+
+                await Task.Delay(1000);
 
                 _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
                 _isInitilized = true;
@@ -151,7 +154,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             }
             finally
             {
-                await Task.Delay(1000);
                 IsBusy = false;
             }
         }
@@ -341,15 +343,15 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                     new("Генератор","Электрика и Охлаждение", 150000),
                     new("Стартер","Электрика и Охлаждение", 150000),
                     new("Помпа","Электрика и Охлаждение", 90000),
-                    new("Термостат","Электрика и Охлаждение", 100000),
-                    new("Замена датчика","Электрика и Охлаждение", 0)
+                    new("Термостат","Электрика и Охлаждение"),
+                    new("Замена датчика","Электрика и Охлаждение")
                 }),
 
                 new RepairGroup("Шины и Колеса", new List<RepairType>
                 {
                     new("Развал-схождение","Шины и Колеса", 15000),
                     new("Балансировка колёс","Шины и Колеса", 15000),
-                    new("Переобувка","Шины и Колеса", 0) // Здесь можно добавить логику по дате
+                    new("Переобувка","Шины и Колеса") // Здесь можно добавить логику по дате
                 }),
 
                 new RepairGroup("Выхлопная система", new List<RepairType>

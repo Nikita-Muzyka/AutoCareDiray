@@ -24,7 +24,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         public string Category { get; set; }
 
         [Required]
-        public int IntervalMileage { get; set; } = 0;
+        public int IntervalMileage { get; set; } = -1;
 
         //Последний пробег ремонта авто
         [Required]
@@ -83,12 +83,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
             LastServiceMileage = lastServiceMileage;
             TransmissionType = transmissionType;
         }
-        public RepairType(string titleRepair,string category, int intervalMileage, int lastServiceMileage) 
-            : this(titleRepair,category, intervalMileage, lastServiceMileage,String.Empty, new DateTime())
-        {
-
-        }
-
+     
         public RepairType(string titleRepair, string category, int intervalMileage)
            : this(titleRepair, category, intervalMileage, default, String.Empty, new DateTime())
         {
@@ -106,6 +101,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         {
 
         }
+
 
         public RepairType(string titleRepair, string category, int intervalMileage, DateTime intervalDate)
          : this(titleRepair, category, intervalMileage, default, String.Empty, intervalDate)

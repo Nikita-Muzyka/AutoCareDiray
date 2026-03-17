@@ -61,6 +61,13 @@ _«Позволяет внести своё авто и данные о прош
   - Дата покупки (Label | DateOnly)
   - Дата производства (Label | DateOnly)
   - Тип Тс (Label | String)
+  - VIN (Label | String)
+  - Тип коробки (Label | String)
+  - Гос номер (Label | String)
+   **Элементы**:
+  - `CollectionView` (RepairType которые требует срочного внимания)
+
+
 
 ## TabItem (Repair) 
 

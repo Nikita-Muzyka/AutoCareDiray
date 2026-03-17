@@ -88,7 +88,9 @@ namespace AutoCareDiray.Shared.Service.Data
             try
             {
                 token.ThrowIfCancellationRequested();
-                var vehicle = await _dbContex.Vehicles.FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
+                var vehicle = await _dbContex.Vehicles
+                    .Include(c=> c.RepairTypes)
+                    .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
 
                 if (vehicle != null) return Result<Vehicle>.SuccessCreate(vehicle);
                 else return Result.ErrorCreate("Машина не найдена");
