@@ -70,23 +70,26 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         }
 
         [RelayCommand]
-        public async Task DeleteVehicle(Vehicle vehicleSelected)
+        public async void ShowVehicleOptions(Vehicle selectedVehicle)
         {
-            var respon = await _dialogService.ShowConfirmationAsync(vehicleSelected.NameVehicle);
-            if (respon)
+            if (selectedVehicle == null) return;
+            var respon = await _dialogService.ShowDisplayAction();
+            if (respon == "Отмена") return;
+            if (respon == "Редактировать") await EditVehicle(selectedVehicle);
+            else if (respon == "Удалить") await DeleteVehicle(selectedVehicle);
+        }
+        private async Task DeleteVehicle(Vehicle vehicleSelected)
+        {
+            var result = await _dataService.DeleteVehicleAsync(vehicleSelected, _cts.Token);
+            if (result.Success)
             {
-                var result = await _dataService.DeleteVehicleAsync(vehicleSelected, _cts.Token);
-                if(result.Success)
-                {
-                    await _dialogService.ShowToastAsync("ТС удалено");
-                    await LoadVehicles();
-                }
-                else await _dialogService.ShowToastAsync(result.ErrorMessage);
+                await _dialogService.ShowToastAsync("ТС удалено");
+                await LoadVehicles();
             }
+            else await _dialogService.ShowToastAsync(result.ErrorMessage);
         }
 
-        [RelayCommand]
-        public async Task EditVehicle(Vehicle vehicleSelected)
+        private async Task EditVehicle(Vehicle vehicleSelected)
         {
             var property = new Dictionary<string, object>()
             {

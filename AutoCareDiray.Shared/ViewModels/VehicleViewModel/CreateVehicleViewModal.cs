@@ -133,29 +133,42 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         public async Task InitilizeForCreateVeicle()
         {
             if (_isInitilized) return;
-            IsBusy = true;
-            try
-            {
 
-                await Task.Delay(100);
-                var groups = await Task.Run(() => CreateRepairTypeGroups());
+            await Task.Delay(100);
+            var groups = await Task.Run(() => CreateRepairTypeGroups());
 
-                RepairGrouped = new ObservableCollection<RepairGroup>(groups);
-                SelectedGroup = RepairGrouped.FirstOrDefault();
+            RepairGrouped = new ObservableCollection<RepairGroup>(groups);
+            SelectedGroup = RepairGrouped.FirstOrDefault();
 
-                await Task.Delay(1000);
+            await Task.Delay(1000);
 
-                _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
-                _isInitilized = true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Ошибка загрузки: {ex.Message}");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
+            _isInitilized = true;
+
+
+            //IsBusy = true;
+            //try
+            //{
+
+            //    await Task.Delay(100);
+            //    var groups = await Task.Run(() => CreateRepairTypeGroups());
+
+            //    RepairGrouped = new ObservableCollection<RepairGroup>(groups);
+            //    SelectedGroup = RepairGrouped.FirstOrDefault();
+
+            //    await Task.Delay(1000);
+
+            //    _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
+            //    _isInitilized = true;
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine($"Ошибка загрузки: {ex.Message}");
+            //}
+            //finally
+            //{
+            //    IsBusy = false;
+            //}
         }
 
 

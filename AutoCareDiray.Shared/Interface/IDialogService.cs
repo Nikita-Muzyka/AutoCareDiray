@@ -8,5 +8,7 @@
         Task ShowToastAsync(string message);
 
         Task<bool> ShowConfirmationAsync(string vehicleName);
+
+        Task<string> ShowDisplayAction();
     }
 }

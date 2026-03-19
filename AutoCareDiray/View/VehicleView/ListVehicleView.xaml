@@ -3,80 +3,75 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vmVehicle="clr-namespace:AutoCareDiray.Shared.ViewModels.VehicleViewModel;assembly=AutoCareDiray.Shared" 
              x:Class="AutoCareDiray.View.VehicleView.ListVehicleView"
+             xmlns:behaviors="clr-namespace:AutoCareDiray.Controls.Behaviors"
              Style="{StaticResource CustomPage}">
+    
+    <Grid RowDefinitions="Auto, *">
 
-    <Grid RowDefinitions="*,100">
-        <VerticalStackLayout Grid.Row="0">
-            <CollectionView ItemsSource="{Binding Vehicles,Mode=TwoWay}"
-                            SelectedItem="{Binding SelectedVehicle}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command ="{Binding Source={RelativeSource AncestorType= {x:Type vmVehicle:ListVehicleViewModel}},
-                                        Path=GoCarCardCommand}"
-                                                      CommandParameter="{Binding .}">
-                                </TapGestureRecognizer>
-                            </Border.GestureRecognizers>
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="20,15,20,10">
+            <Label Style="{DynamicResource LabelLogo}" 
+                   FontSize="26"/>
 
-                            <VerticalStackLayout HeightRequest="100">
-                                <Grid ColumnDefinitions="80,*,Auto,auto">
-                                    <Image Source="car_icon.png" Grid.Column="0" Margin="0,10,0,0" VerticalOptions="Center"/>
-                                    <VerticalStackLayout Grid.Column="1">
-                                        <Label Text="{Binding NameVehicle}" 
-                                                      FontSize="20"
-                                                      Grid.Row="0"
-                                                      Margin="0,10,0,0"
-                                                      HorizontalOptions="Start"
-                                                      VerticalOptions="Center"
-                                                      TextColor="{DynamicResource TextPrimaryRed}"
-                                                      FontFamily="{StaticResource RubikRegular}"/>
-                                        <Label Text="{Binding Mileage}" 
-                                                               FontSize="20"
-                                                               Grid.Row="1"
-                                                               Margin="0,10,0,0"
-                                                               HorizontalOptions="Start"
-                                                               VerticalOptions="Center"
-                                                               TextColor="{DynamicResource TextPrimaryRed}"
-                                                               FontFamily="{StaticResource RubikRegular}"/>
+            <!--<ImageButton Grid.Column="1" 
+                         Source="settings_icon.png" 
+                         HeightRequest="24" 
+                         WidthRequest="24" 
+                         VerticalOptions="Center"/>-->
+        </Grid>
 
-                                    </VerticalStackLayout>
+        <CollectionView Grid.Row="1" 
+                        ItemsSource="{Binding Vehicles, Mode=TwoWay}"
+                        SelectedItem="{Binding SelectedVehicle}"
+                        SelectionMode="None">
 
-                                    <VerticalStackLayout Grid.Column="2" VerticalOptions="End">
-                                        <Label Style="{DynamicResource LaberInfo}" Text="{Binding WarningRepair}"/>
-                                    </VerticalStackLayout>
-                                    <HorizontalStackLayout Grid.Column="3">
-                                        <ImageButton Source="edit_image.png"
-                                                   HeightRequest="30"
-                                                   WidthRequest="30"
-                                                   HorizontalOptions="End"
-                                                   Margin="0,10,20,00"
-                                                   Style="{StaticResource ImageButtonStandart}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}},Path=EditVehicleCommand}"
-                                                   CommandParameter="{Binding .}"/>
-                                        <ImageButton Source="delete_image.png"
-                                                      HeightRequest="30"
-                                                      WidthRequest="30"
-                                                      HorizontalOptions="End"
-                                                      Margin="0,10,20,0"
-                                                      Style="{StaticResource ImageButtonStandart}"
-                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}},Path=DeleteVehicleCommand}"
-                                                      CommandParameter="{Binding .}"/>          
-                                    </HorizontalStackLayout>
-                                </Grid>
-                            </VerticalStackLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10,15,10,10"> <!--Выдвижение карточки для анимации-->
+                        <Border Style="{DynamicResource BorderForCollectionView}"> <!--Обертка карточки-->
+                            <Grid ColumnDefinitions="Auto, *, Auto"
+                                  Style="{DynamicResource GridForCardList}">
+                                
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}}, Path=GoCarCardCommand}"
+                             CommandParameter="{Binding .}"/>
+                                </Grid.GestureRecognizers>
+
+                                <Border Grid.Column="0"
+                                        Style="{DynamicResource BorderListIndicator}">
+
+                                    <Image Source="car_icon.png"
+                                           Style="{StaticResource ImageForList}"/>
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                    <Label Text="{Binding NameVehicle}"
+                                           Style="{DynamicResource LaberCustom}"/>
+
+                                    <Label Text="{Binding Mileage, StringFormat='{0} км'}" 
+                                           Style="{DynamicResource LaberSecondaryCustom}"/>
+                                </VerticalStackLayout>
+
+                                <ImageButton Grid.Column="2" 
+                                             Style="{DynamicResource ImageKebab}"
+                                             Source="dots_image.png"  
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}}, Path=ShowVehicleOptionsCommand}"
+                                             CommandParameter="{Binding .}"/>               
+                            </Grid>
                         </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-        <VerticalStackLayout Grid.Row="1">
-            <ImageButton HeightRequest="80"
-                             WidthRequest="80"
-                             Source="plus_icon.png"
-                             Command="{Binding GoCreateVehicleCommand}"/>
+        <Grid Grid.Row="1"
+            Padding="10,10,10,10"
+          VerticalOptions="End"
+          Margin="0,0,0,20">
 
-        </VerticalStackLayout>
+                <Button Text="+"
+                        Command="{Binding GoCreateVehicleCommand}"
+                        Style="{DynamicResource ButtonCreate}"/>            
+         
+        </Grid>
     </Grid>
 </ContentPage>

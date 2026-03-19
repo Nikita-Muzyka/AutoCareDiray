@@ -130,7 +130,7 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <Grid IsVisible="{Binding IsBusy}" 
+        <!--<Grid IsVisible="{Binding IsBusy}" 
               BackgroundColor="#80000000" 
               InputTransparent="False">
 
@@ -140,7 +140,7 @@
                 <ActivityIndicator IsRunning="{Binding IsBusy}" Color="White" Scale="2"/>
                 <Label Text="Загрузка формы..." TextColor="White" FontAttributes="Bold" FontSize="16"/>
             </VerticalStackLayout>
-        </Grid>
+        </Grid>-->
 
     </Grid>
 </ContentPage>

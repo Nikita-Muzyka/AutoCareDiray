@@ -62,4 +62,10 @@ class DialogService : IDialogService
         if (result.Result == true) return true;
         else return false;
     }
+
+    public async Task<string> ShowDisplayAction()
+    {
+        string response = await Application.Current.MainPage.DisplayActionSheet("Выберите действие", "Отмена", null, "Редактировать", "Удалить");
+        return response;
+    }
 }
