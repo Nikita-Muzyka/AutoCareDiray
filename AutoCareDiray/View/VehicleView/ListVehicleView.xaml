@@ -24,31 +24,52 @@
                         SelectedItem="{Binding SelectedVehicle}"
                         SelectionMode="None">
 
+            <CollectionView.EmptyView>
+                <Label Text="🤷‍♂️ Кажется тут пусто."
+                       Style="{DynamicResource LabelInfo}"
+                       FontSize="20"/>
+            </CollectionView.EmptyView>
+            
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="10,15,10,10"> <!--Выдвижение карточки для анимации-->
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"  CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
                         <Border Style="{DynamicResource BorderForCollectionView}"> <!--Обертка карточки-->
                             <Grid ColumnDefinitions="Auto, *, Auto"
                                   Style="{DynamicResource GridForCardList}">
-                                
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}}, Path=GoCarCardCommand}"
-                             CommandParameter="{Binding .}"/>
-                                </Grid.GestureRecognizers>
 
                                 <Border Grid.Column="0"
                                         Style="{DynamicResource BorderListIndicator}">
 
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding NeedsService}" Value="False">
+                                            <Setter Property="Stroke" Value="{DynamicResource StatusCompleted}" />
+                                        </DataTrigger>
+
+                                        <DataTrigger TargetType="Border" Binding="{Binding NeedsService}" Value="True">
+                                            <Setter Property="Stroke" Value="{DynamicResource StatusOverdue}"/>
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                    
                                     <Image Source="car_icon.png"
                                            Style="{StaticResource ImageForList}"/>
                                 </Border>
 
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
                                     <Label Text="{Binding NameVehicle}"
-                                           Style="{DynamicResource LaberCustom}"/>
+                                           Style="{DynamicResource LabelCustom}"/>
 
                                     <Label Text="{Binding Mileage, StringFormat='{0} км'}" 
-                                           Style="{DynamicResource LaberSecondaryCustom}"/>
+                                           Style="{DynamicResource LabelSecondaryCustom}"/>
+                                    
+                                    <Grid Shadow="{StaticResource ShadowRedLightForGrid}"
+                                          IsVisible="{Binding LabelWarningRepair}">
+                                        <Label Text="{Binding WarningRepair}"
+                                               Style="{StaticResource LabelWarningForCard}"
+                                               IsVisible="{Binding LabelWarningRepair}"/>
+                                    </Grid>
                                 </VerticalStackLayout>
 
                                 <ImageButton Grid.Column="2" 
@@ -64,14 +85,10 @@
         </CollectionView>
 
         <Grid Grid.Row="1"
-            Padding="10,10,10,10"
-          VerticalOptions="End"
-          Margin="0,0,0,20">
-
-                <Button Text="+"
-                        Command="{Binding GoCreateVehicleCommand}"
+              Style="{StaticResource GridForButtonCreate}">
+            <Button Command="{Binding GoCreateVehicleCommand}"
                         Style="{DynamicResource ButtonCreate}"/>            
-         
         </Grid>
+        
     </Grid>
 </ContentPage>

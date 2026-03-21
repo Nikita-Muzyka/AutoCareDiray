@@ -8,6 +8,7 @@
 
     <Shadow x:Key="ShadowRedLightForBorder" Brush="{DynamicResource ShadowRedLight}" Opacity="0.2" Offset="0,1" Radius="7"/>
     <Shadow x:Key="ShadowRedLightForButton" Brush="{DynamicResource ShadowRedLight}" Opacity="0.8" Offset="0,6" Radius="10"/>
+    <Shadow x:Key="ShadowRedLightForGrid" Brush="{DynamicResource ShadowRedLight}" Opacity="0.5" Offset="0,2" Radius="5"/>
     
     
     <!-- Image Лого картинка программы-->
@@ -38,6 +39,9 @@
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="Aspect" Value="AspectFill" />
+        <Style.Behaviors>
+            <behaviors:ImageButtonBounceBehavior/>
+        </Style.Behaviors>
     </Style>
 
     <!--Label лого-->
@@ -58,7 +62,7 @@
     </Style>
 
     <!--Label обычный текст главный-->
-    <Style TargetType="Label" x:Key="LaberCustom">
+    <Style TargetType="Label" x:Key="LabelCustom">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="FontSize" Value="18"/>
@@ -67,38 +71,44 @@
     </Style>
 
     <!--Label обычный текст для второстепенных задач-->
-    <Style TargetType="Label" x:Key="LaberSecondaryCustom">
+    <Style TargetType="Label" x:Key="LabelSecondaryCustom">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="FontSize" Value="13"/>
         <Setter Property="TextColor" Value="{DynamicResource TextSecondary}"/>
     </Style>
 
+    <!-- Label Для информации -->
+    <Style TargetType="Label" x:Key="LabelInfo">
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextSecondary}"/>
+        <Setter Property="FontSize" Value="16"/>
+    </Style>
+
     <!-- Label Ошибки-->
-    <Style TargetType="Label" x:Key="LaberError">
+    <Style TargetType="Label" x:Key="LabelError">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="HorizontalOptions" Value="Center"/>
         <Setter Property="HeightRequest" Value="16"/>
         <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
     </Style>
-    
 
-    <!-- Label Для информации -->
-    <Style TargetType="Label" x:Key="LaberInfo">
+    <!-- Label Для предупреждения -->
+    <Style TargetType="Label" x:Key="LabelWarningForCard">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
-        <Setter Property="HeightRequest" Value="40"/>
-        <Setter Property="WidthRequest" Value="120"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="12"/>
+        <!--<Setter Property="Shadow" Value="{StaticResource ShadowRedLightForLabel}"/>-->
     </Style>
 
 
-    <!--Label Для информации -->
-    <Style TargetType="Label" x:Key="LaberInfoMini">
+    <!--Label Для информации MINI -->
+    <Style TargetType="Label" x:Key="LabelInfoMini">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="HorizontalOptions" Value="Center"/>
@@ -146,7 +156,15 @@
           <behaviors:ViewBounceBehavior/>
       </Style.Behaviors>-->
     </Style>
-    
+
+    <!-- Grid для Button Create + -->
+    <Style TargetType="Grid" x:Key="GridForButtonCreate">
+        <Setter Property="Padding" Value="10,10,10,10"/>
+        <Setter Property="VerticalOptions" Value="End"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,20"/>
+    </Style>
+
     <!--Border для полей ввода под EntryImput-->
     <Style TargetType="Border" x:Key="BorderForEntryImput">
         <Setter Property="Stroke" Value="{AppThemeBinding Light={DynamicResource InputBorder}, Dark={DynamicResource InputBorder}}" />
@@ -167,7 +185,6 @@
     <!--Border для индикатора в  CollectionView конкретно круг задач в авто-->
     <Style TargetType="Border" x:Key="BorderListIndicator">
         <Setter Property="StrokeShape" Value="RoundRectangle 35"/>
-        <Setter Property="Stroke" Value="{DynamicResource StatusOverdue}"/>
         <Setter Property="StrokeThickness" Value="2.3"/>
         <Setter Property="WidthRequest" Value="60"/>
         <Setter Property="HeightRequest" Value="60"/>
@@ -226,6 +243,7 @@
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Shadow" Value="{DynamicResource ShadowRedLightForButton}"/>
         <Setter Property="CornerRadius" Value="40"/>
+        <Setter Property="Text" Value="+"/>
         <Style.Behaviors>
             <behaviors:ButtonBounceBehavior/>
         </Style.Behaviors>

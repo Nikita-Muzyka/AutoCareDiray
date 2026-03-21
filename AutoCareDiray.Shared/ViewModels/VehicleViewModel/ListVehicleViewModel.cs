@@ -21,7 +21,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private string errors;
         [ObservableProperty]
         private Vehicle selectedVehicle;
-        
+        [ObservableProperty]
+        private bool labelWarningRepair = false;
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -115,7 +117,17 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 var sortRepairType = list.RepairTypes.Where(c => c.IntervalMileage > 0).ToList();
                var repairsType = sortRepairType.Where(c => list.Mileage - c.LastServiceMileage > c.IntervalMileage).ToList();
                 int count = repairsType.Count;
-                list.WarningRepair = $"Внимание:{count}";
+                if (count > 0)
+                {
+                    list.WarningRepair = $"Ко-во узлов требующих осомтра:{count}";
+                    list.NeedsService = true;
+                    LabelWarningRepair = true;
+                }
+                else
+                { 
+                    list.NeedsService = false;
+                    LabelWarningRepair = false;
+                }
             }
         }
     }
