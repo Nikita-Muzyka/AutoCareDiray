@@ -61,7 +61,7 @@
                                     <Label Text="{Binding NameVehicle}"
                                            Style="{DynamicResource LabelCustom}"/>
 
-                                    <Label Text="{Binding Mileage, StringFormat='{0} км'}" 
+                                    <Label Text="{Binding Mileage, StringFormat='{0:N0} км'}" 
                                            Style="{DynamicResource LabelSecondaryCustom}"/>
                                     
                                     <Grid Shadow="{StaticResource ShadowRedLightForGrid}"
