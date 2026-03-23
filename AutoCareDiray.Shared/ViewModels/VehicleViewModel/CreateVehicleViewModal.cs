@@ -125,6 +125,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                     .Select(g => new RepairGroup(g.Key,g.ToList()))
                     .ToList();
                 RepairGrouped = new ObservableCollection<RepairGroup>(groups);
+                _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
+
+                if(string.IsNullOrWhiteSpace(_vehicle.TransmissionType) == false) TransmissionType = _vehicle.TransmissionType;
 
                 _isUpdateVehicle = true;
                 _isInitilized = true;

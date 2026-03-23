@@ -280,7 +280,7 @@
 
 
     <!--Button  стандартная белая -->
-    <Style TargetType="Button" x:Key="ButtonCustomStandartWhite">
+    <!--<Style TargetType="Button" x:Key="ButtonCustomStandartWhite">
         <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryBlack}"/>
         <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPrimaryGray}" />
         <Setter Property="CharacterSpacing" Value="1.2"/>
@@ -310,10 +310,10 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
-    </Style>
+    </Style>-->
 
     <!--Button предупреждения-->
-    <Style TargetType="Button" x:Key="ButtonCustomWarning">
+    <!--<Style TargetType="Button" x:Key="ButtonCustomWarning">
         <Setter Property="TextColor" Value="{StaticResource ButtonTextSecondary}"/>
         <Setter Property="BackgroundColor" Value="{StaticResource ButtonSecondary}" />
         <Setter Property="FontSize" Value="14"/>
@@ -339,7 +339,7 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
-    </Style>
+    </Style>-->
 
     <Style TargetType="ImageButton" x:Key="ImageButtonStandart">
         <Setter Property="HorizontalOptions" Value="Center" />
