@@ -16,29 +16,42 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
     public partial class CreateVehicleViewModel : BaseViewModel
     {
+        #region Основные поля для работы
+
         private VehicleValidation _vehicleValidation;
         private CancellationTokenSource _cts;
         private Vehicle _vehicle;
         private List<RepairType> _listRepairType;
-        private ObservableCollection<RepairGroup> _grouped;
         //Инициализирована ли страница
         private bool _isInitilized = false;
         //переключатель с создания авто на обновление данных авто
         private bool _isUpdateVehicle = false;
+        #endregion
 
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsNotBusy))] // Теперь он должен его видеть
-        private bool isBusy;
-        public bool IsNotBusy => !IsBusy;
-
+        #region Свойства для работы UI
         [ObservableProperty]
         private ObservableCollection<RepairGroup> repairGrouped;
         [ObservableProperty]
         private RepairGroup selectedGroup;
 
         [ObservableProperty]
+        private bool isNameVehicle = false;
+        [ObservableProperty]
+        private bool isYearPurchaseError = false;
+        [ObservableProperty]
+        private bool isVinCode = false;
+        [ObservableProperty]
+        private bool isStateNumber = false;
+        [ObservableProperty]
+        private bool isMileageError = false;
+        [ObservableProperty]
+        private bool isMileage = false;
+        [ObservableProperty]
+        private bool isTypeVehicleError = false;
+        [ObservableProperty]
         private string buttonName = "Создать";
+
         [ObservableProperty]
         private string nameVehicle = String.Empty;
         [ObservableProperty]
@@ -57,12 +70,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private DateTime dateNow = DateTime.Today;
         [ObservableProperty]
         private string transmissionType = String.Empty;
-
         [ObservableProperty]
         private string statusMessage;
-
-        public ObservableCollection<string> TypeVehicle { get; } = new() { "Автомобиль", "Мотоцикл", "Грузовое ТС", "Другое" };
-
+        #endregion
 
 
         public CreateVehicleViewModel(IDialogService dialogService,IDataService dataService,INavigationService navigation,
@@ -71,13 +81,16 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _vehicleValidation = vehicleValidation;
             _vehicleValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
             _cts = new CancellationTokenSource();
-            SelectedTypeVehicle = TypeVehicle.FirstOrDefault(String.Empty);
         }
 
-        // Получение ошибок
+
+        #region получение текса ошибок
         public bool HasErrors => _vehicleValidation.HasErrors;
         public string MileageError => _vehicleValidation.GetErrors(nameof(MileageError)) as string ?? String.Empty;
         public string YearPurchaseError => _vehicleValidation.GetErrors(nameof(YearPurchaseError)) as string ?? String.Empty;
+        public string TypeVehicleError => _vehicleValidation.GetErrors(nameof(TypeVehicleError)) as string ?? String.Empty;
+        #endregion
+
 
         /// <summary>
         /// Конвертация данных для создания авто
@@ -144,38 +157,16 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
             _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
             _isInitilized = true;
-
-
-            //IsBusy = true;
-            //try
-            //{
-
-            //    await Task.Delay(100);
-            //    var groups = await Task.Run(() => CreateRepairTypeGroups());
-
-            //    RepairGrouped = new ObservableCollection<RepairGroup>(groups);
-            //    SelectedGroup = RepairGrouped.FirstOrDefault();
-
-            //    await Task.Delay(1000);
-
-            //    _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
-            //    _isInitilized = true;
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine($"Ошибка загрузки: {ex.Message}");
-            //}
-            //finally
-            //{
-            //    IsBusy = false;
-            //}
         }
 
-
+        /// <summary>
+        /// Создание авто
+        /// </summary>
+        /// <returns></returns>
         [RelayCommand]
         public async Task CreateVehicle()
         {
-            _vehicleValidation.ValidationAll(Mileage, YearPurchaseSelected, YearCreateSelected);
+            _vehicleValidation.ValidationAll(Mileage, YearPurchaseSelected, YearCreateSelected, SelectedTypeVehicle);
             if (!HasErrors)
             {
                 int MileageInt = ConverFromInt(Mileage);
@@ -207,6 +198,25 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             }
         }
 
+        /// <summary>
+        /// Обновление данных авто
+        /// </summary>
+        /// <param name="vehicle"></param>
+        /// <returns></returns>
+        public async Task EditVehicle(Vehicle vehicle)
+        {
+            var result = await _dataService.UpdateVehicleAsync(vehicle, _cts.Token);
+            if (result.Success)
+            {
+                await _dialogService.ShowToastAsync("Данные обновлены");
+                await _navigationService.GoToBack();
+            }
+            else StatusMessage = result.ErrorMessage;
+        }
+
+        /// <summary>
+        /// Работа с кнопкой полностью авто обслужено
+        /// </summary>
         [RelayCommand]
         public void ChangeIsServiced()
         {
@@ -216,18 +226,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             }
         }
 
-        public async Task EditVehicle(Vehicle vehicle)
-        {
-            var result = await _dataService.UpdateVehicleAsync(vehicle, _cts.Token);
-            if(result.Success)
-            {
-                await _dialogService.ShowToastAsync("Данные обновлены");
-                await _navigationService.GoToBack();
-            }
-            else StatusMessage = result.ErrorMessage;
-        }
 
-        //методы Community Tool
+        #region Методы CommunityToolKit
 
         partial void OnTransmissionTypeChanged(string value)
         {
@@ -272,17 +272,40 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         {
             _vehicleValidation.ValidationDate(YearPurchaseSelected, YearCreateSelected);
         }
+        partial void OnSelectedTypeVehicleChanged(string value)
+        {
+            _vehicleValidation.ValidationTypeVehicle(value);
+        }
+        #endregion
+
 
         /// <summary>
         /// Метод которые вызывает event 
         /// </summary>
         /// <param name="e"></param>
-        void OnErrorsChangedUI(DataErrorsChangedEventArgs e)
+        private void OnErrorsChangedUI(DataErrorsChangedEventArgs e)
         {
             OnPropertyChanged(nameof(HasErrors));
             OnPropertyChanged(e.PropertyName);
+            CheckErrorsChanged();
         }
 
+        /// <summary>
+        /// Переключение bool для текста ошибок
+        /// </summary>
+        private void CheckErrorsChanged()
+        {
+            if(MileageError.Any()) IsMileageError = true;
+            else IsMileageError = false;
+            if(YearPurchaseError.Any()) IsYearPurchaseError = true;
+            else IsYearPurchaseError = false;
+            if(TypeVehicleError.Any()) IsTypeVehicleError = true;
+            else IsTypeVehicleError = false;
+        }
+
+        /// <summary>
+        /// Удаление токена
+        /// </summary>
         public void CancelToken()
         {
             _cts.Cancel();
@@ -290,6 +313,10 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _cts = new CancellationTokenSource();
         }
 
+        /// <summary>
+        /// Создание RepairType
+        /// </summary>
+        /// <returns></returns>
         private ObservableCollection<RepairGroup> CreateRepairTypeGroups()
         {
             var groups = new ObservableCollection<RepairGroup>
@@ -379,6 +406,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 })
             };
             return groups;
-        }
+        } 
     }
 }

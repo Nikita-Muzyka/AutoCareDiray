@@ -11,12 +11,6 @@
         <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="20,15,20,10">
             <Label Style="{DynamicResource LabelLogo}" 
                    FontSize="26"/>
-
-            <!--<ImageButton Grid.Column="1" 
-                         Source="settings_icon.png" 
-                         HeightRequest="24" 
-                         WidthRequest="24" 
-                         VerticalOptions="Center"/>-->
         </Grid>
 
         <CollectionView Grid.Row="1" 
@@ -33,10 +27,12 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="10,15,10,10"> <!--Выдвижение карточки для анимации-->
+                        
                         <Grid.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"  CommandParameter="{Binding .}"/>
                         </Grid.GestureRecognizers>
-                        <Border Style="{DynamicResource BorderForCollectionView}"> <!--Обертка карточки-->
+
+                        <Border Style="{DynamicResource BorderForCollectionView}">
                             <Grid ColumnDefinitions="Auto, *, Auto"
                                   Style="{DynamicResource GridForCardList}">
 
@@ -52,10 +48,11 @@
                                             <Setter Property="Stroke" Value="{DynamicResource StatusOverdue}"/>
                                         </DataTrigger>
                                     </Border.Triggers>
-                                    
+
                                     <Image Source="car_icon.png"
                                            Style="{StaticResource ImageForList}"/>
                                 </Border>
+                                <!--Border индикатор круг для авто-->
 
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
                                     <Label Text="{Binding NameVehicle}"
@@ -63,7 +60,7 @@
 
                                     <Label Text="{Binding Mileage, StringFormat='{0:N0} км'}" 
                                            Style="{DynamicResource LabelSecondaryCustom}"/>
-                                    
+
                                     <Grid Shadow="{StaticResource ShadowRedLightForGrid}"
                                           IsVisible="{Binding LabelWarningRepair}">
                                         <Label Text="{Binding WarningRepair}"
@@ -71,14 +68,17 @@
                                                IsVisible="{Binding LabelWarningRepair}"/>
                                     </Grid>
                                 </VerticalStackLayout>
+                                <!--Данные авто-->
 
                                 <ImageButton Grid.Column="2" 
                                              Style="{DynamicResource ImageKebab}"
                                              Source="dots_image.png"  
                                              Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}}, Path=ShowVehicleOptionsCommand}"
-                                             CommandParameter="{Binding .}"/>               
+                                             CommandParameter="{Binding .}"/>
+                                <!--Кебаб меню для карточки авто-->
                             </Grid>
                         </Border>
+                        <!--Обертка карточки-->
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
