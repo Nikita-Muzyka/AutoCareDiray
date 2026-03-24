@@ -127,8 +127,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 RepairGrouped = new ObservableCollection<RepairGroup>(groups);
                 _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
 
-                if(string.IsNullOrWhiteSpace(_vehicle.TransmissionType) == false) TransmissionType = _vehicle.TransmissionType;
-
                 _isUpdateVehicle = true;
                 _isInitilized = true;
                 ButtonName = "Изменить";
@@ -139,6 +137,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 Mileage = _vehicle.Mileage.ToString();
                 SelectedTypeVehicle = _vehicle.VehicleType;
                 VinCode = _vehicle.VinCode;
+                if (string.IsNullOrWhiteSpace(_vehicle.TransmissionType) == false) TransmissionType = _vehicle.TransmissionType;
             }
         }
 
@@ -154,7 +153,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             var groups = await Task.Run(() => CreateRepairTypeGroups());
 
             RepairGrouped = new ObservableCollection<RepairGroup>(groups);
-            SelectedGroup = RepairGrouped.FirstOrDefault();
 
             await Task.Delay(1000);
 
@@ -174,13 +172,13 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             {
                 int MileageInt = ConverFromInt(Mileage);
                 _listRepairType.RemoveAll(c => c.IsRemoveMaintenance == true);
-               
 
-                    var vehicle = new Vehicle(NameVehicle, YearCreateSelected,
-                        YearPurchaseSelected, VinCode,
-                        StateNumber, TransmissionType,
-                        SelectedTypeVehicle, MileageInt,
-                        _listRepairType);
+
+                var vehicle = new Vehicle(NameVehicle, YearCreateSelected,
+                    YearPurchaseSelected, VinCode,
+                    StateNumber, TransmissionType,
+                    SelectedTypeVehicle, MileageInt,
+                    _listRepairType);
 
                 if (_isUpdateVehicle)
                 {
@@ -189,7 +187,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 }
                 else
                 {
-                   var result =  await _dataService.CreateVehicleAsync(vehicle, _cts.Token);
+                    var result = await _dataService.CreateVehicleAsync(vehicle, _cts.Token);
 
                     if (result.Success)
                     {
@@ -199,6 +197,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                     else StatusMessage = result.ErrorMessage;
                 }
             }
+            else await _dialogService.ShowToastAsync("Ошибка. Проверте все поля");
         }
 
         /// <summary>

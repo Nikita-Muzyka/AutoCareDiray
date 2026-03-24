@@ -4,6 +4,7 @@
              x:Class="AutoCareDiray.View.VehicleView.CardVehicleView"
              Style="{DynamicResource CustomPage}">
 
+    
     <Grid RowDefinitions="*,100"
           HorizontalOptions="Center">
         <ScrollView>
