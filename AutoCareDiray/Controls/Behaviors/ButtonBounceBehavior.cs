@@ -8,7 +8,7 @@ namespace AutoCareDiray.Controls.Behaviors
 {
     public class ButtonBounceBehavior : Behavior<Button>
     {
-        private float _originalShadowOpacity = 1f;
+        private Shadow originShadow;
 
         protected override void OnAttachedTo(Button button)
         {
@@ -31,17 +31,18 @@ namespace AutoCareDiray.Controls.Behaviors
             {
                 Microsoft.Maui.Controls.ViewExtensions.CancelAnimations(button);
 
-                // ХАК ОТ КВАДРАТНОЙ ТЕНИ: Делаем тень невидимой на время нажатия
+                originShadow = button.Shadow;
+
                 if (button.Shadow != null)
                 {
-                    _originalShadowOpacity = button.Shadow.Opacity;
-                    button.Shadow.Opacity = 0;
+                    button.Shadow = null;
                 }
 
                 await Task.WhenAll(
                     button.ScaleTo(0.85, 100, Easing.CubicOut),
                     button.FadeTo(0.8, 100, Easing.CubicOut)
                 );
+
             }
         }
 
@@ -54,11 +55,7 @@ namespace AutoCareDiray.Controls.Behaviors
                     button.FadeTo(1.0, 250)
                 );
 
-                // Возвращаем тень обратно после того, как кнопка "отпружинила"
-                if (button.Shadow != null)
-                {
-                    button.Shadow.Opacity = _originalShadowOpacity;
-                }
+                button.Shadow = originShadow;
             }
         }
     }

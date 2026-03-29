@@ -21,7 +21,7 @@
         <Setter Property="Source" Value="car_side_view.png" />
     </Style>
 
-    <!--Image Лого картинка для списка -->
+    <!--Image Лого картинка для списка авто-->
     <Style TargetType="Image" x:Key="ImageForList">
         <Setter Property="HeightRequest" Value="30" />
         <Setter Property="WidthRequest" Value="30" />
@@ -30,7 +30,17 @@
         <Setter Property="Aspect" Value="AspectFill" />
     </Style>
 
-    <!--ImageButton Лого картинка для списка -->
+    <!--Image для картинок на карточке информации -->
+    <Style TargetType="Image" x:Key="ImageForCardInfo">
+        <Setter Property="HeightRequest" Value="30" />
+        <Setter Property="WidthRequest" Value="30" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0,0,5,0" />
+        <Setter Property="Aspect" Value="Fill" />
+    </Style>
+
+    <!--ImageButton кнопка картинка для списка Кебаб меню (удалить редактировать)-->
     <Style TargetType="ImageButton" x:Key="ImageKebab">
         <Setter Property="HeightRequest" Value="30" />
         <Setter Property="WidthRequest" Value="30" />
@@ -42,6 +52,14 @@
         <Style.Behaviors>
             <behaviors:ImageButtonBounceBehavior/>
         </Style.Behaviors>
+    </Style>
+
+    <!--ImageButton стандартный-->
+    <Style TargetType="ImageButton" x:Key="ImageButtonStandart">
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="MinimumHeightRequest" Value="10"/>
+        <Setter Property="MinimumWidthRequest" Value="10"/>
     </Style>
 
     <!--Label лого-->
@@ -107,39 +125,27 @@
         <!--<Setter Property="Shadow" Value="{StaticResource ShadowRedLightForLabel}"/>-->
     </Style>
 
-
-    <!--Label Для информации MINI -->
-    <Style TargetType="Label" x:Key="LabelInfoMini">
+    <!--Label для карточек название категории-->
+    <Style TargetType="Label" x:Key="LabelForCardInfoCategory">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="TextColor" Value="{DynamicResource TextSecondary}"/>
-        <Setter Property="HeightRequest" Value="30"/>
-        <Setter Property="WidthRequest" Value="300"/>
-        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimary}"/>
     </Style>
 
-
-    <!--Label placeholder для border ввода данных-->
-    <Style TargetType="Label" x:Key="LabelPlaceholder">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextSecondary}, Dark={StaticResource PrimaryWhite}}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="HorizontalOptions" Value="Start" />
-        <Setter Property="VerticalOptions" Value="Center" />
+    <!--Label для карточек красный для данных -->
+    <Style TargetType="Label" x:Key="LabelForCardInfoData">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="Margin" Value="10,0,0,0"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimaryRed}"/>
     </Style>
-
 
     <!--Grid для карточки CollectionView, чтобы было отступы между карточками и от краев экрана-->
     <Style TargetType="Grid" x:Key="GridForCardList">
         <Setter Property="Padding" Value="15"/>
         <Setter Property="ColumnSpacing" Value="15"/>
-        <!--<Style.Behaviors>
-          <behaviors:ViewBounceBehavior/>
-      </Style.Behaviors>-->
     </Style>
 
     <!-- Grid для Button Create + -->
@@ -158,6 +164,15 @@
        
     </Style>
 
+    <!--Border для карточек информации авто -->
+    <Style TargetType="Border" x:Key="BorderForCardInfo">
+        <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
+        <Setter Property="StrokeThickness" Value="0"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource Background}"/>
+        <Setter Property="Shadow" Value="{DynamicResource ShadowRedLightForBorder}"/>
+    </Style>
 
     <!--Border для карточек CollectionView-->
     <Style TargetType="Border" x:Key="BorderForCollectionView">
@@ -278,7 +293,6 @@
         </Style.Behaviors>
     </Style>
 
-
     <!--Button  стандартная белая -->
     <!--<Style TargetType="Button" x:Key="ButtonCustomStandartWhite">
         <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryBlack}"/>
@@ -341,13 +355,6 @@
         </Setter>
     </Style>-->
 
-    <Style TargetType="ImageButton" x:Key="ImageButtonStandart">
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="MinimumHeightRequest" Value="10"/>
-        <Setter Property="MinimumWidthRequest" Value="10"/>
-    </Style>
-
     <Style TargetType="CheckBox" x:Key="CheckBoxStandart">
         <Setter Property="Color" Value="{DynamicResource PrimaryRed}"/>
     </Style>
@@ -386,9 +393,8 @@
         <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource PrimaryRed}, Dark={StaticResource PrimaryRed}}" />
         <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource PrimaryBlack}, Dark={StaticResource PrimaryWhite}}" />
     </Style>
-
-
-
+    
+    <!--Дизайн для всех страниц-->
     <Style TargetType="Page" ApplyToDerivedTypes="True" x:Key="CustomPage">
         <Setter Property="Padding" Value="0"/>
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryWhite}, Dark={StaticResource PrimaryBlack}}" />

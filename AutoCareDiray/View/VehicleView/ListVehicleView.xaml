@@ -11,11 +11,9 @@
         <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="20,15,20,10">
             <Label Style="{DynamicResource LabelLogo}" 
                    FontSize="26"/>
-        </Grid>
+        </Grid> <!--лого-->
 
-        <CollectionView Grid.Row="1" 
-                        ItemsSource="{Binding Vehicles, Mode=TwoWay}"
-                        SelectedItem="{Binding SelectedVehicle}"
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Vehicles, Mode=TwoWay}" SelectedItem="{Binding SelectedVehicle}"
                         SelectionMode="None">
 
             <CollectionView.EmptyView>
@@ -33,8 +31,8 @@
                         </Grid.GestureRecognizers>
 
                         <Border Style="{DynamicResource BorderForCollectionView}">
-                            <Grid ColumnDefinitions="Auto, *, Auto"
-                                  Style="{DynamicResource GridForCardList}">
+                            
+                            <Grid ColumnDefinitions="Auto, *, Auto" Style="{DynamicResource GridForCardList}">
 
                                 <Border Grid.Column="0"
                                         Style="{DynamicResource BorderListIndicator}">
@@ -55,16 +53,13 @@
                                 <!--Border индикатор круг для авто-->
 
                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                    <Label Text="{Binding NameVehicle}"
-                                           Style="{DynamicResource LabelCustom}"/>
+                                    
+                                    <Label Text="{Binding NameVehicle}" Style="{DynamicResource LabelCustom}"/>
 
-                                    <Label Text="{Binding Mileage, StringFormat='{0:N0} км'}" 
-                                           Style="{DynamicResource LabelSecondaryCustom}"/>
+                                    <Label Text="{Binding Mileage, StringFormat='{0:N0} км'}" Style="{DynamicResource LabelSecondaryCustom}"/>
 
-                                    <Grid Shadow="{StaticResource ShadowRedLightForGrid}"
-                                          IsVisible="{Binding LabelWarningRepair}">
-                                        <Label Text="{Binding WarningRepair}"
-                                               Style="{StaticResource LabelWarningForCard}"
+                                    <Grid Shadow="{StaticResource ShadowRedLightForGrid}" IsVisible="{Binding LabelWarningRepair}">
+                                        <Label Text="{Binding WarningRepair}" Style="{StaticResource LabelWarningForCard}"
                                                IsVisible="{Binding LabelWarningRepair}"/>
                                     </Grid>
                                 </VerticalStackLayout>
@@ -77,18 +72,20 @@
                                              CommandParameter="{Binding .}"/>
                                 <!--Кебаб меню для карточки авто-->
                             </Grid>
+                            
                         </Border>
                         <!--Обертка карточки-->
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-        </CollectionView>
+            
+        </CollectionView> <!--карточки-->
 
         <Grid Grid.Row="1"
               Style="{StaticResource GridForButtonCreate}">
             <Button Command="{Binding GoCreateVehicleCommand}"
                         Style="{DynamicResource ButtonCreate}"/>            
-        </Grid>
+        </Grid> <!--кнопка создать авто-->
         
     </Grid>
 </ContentPage>
