@@ -316,6 +316,15 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         }
 
         /// <summary>
+        /// Отписка от эвента
+        /// </summary>
+        [RelayCommand]
+        public void OffEvent()
+        {
+            _vehicleValidation.ErrorsChanged -= (s,e) => OnErrorsChangedUI(e);
+        }
+
+        /// <summary>
         /// Создание RepairType
         /// </summary>
         /// <returns></returns>
