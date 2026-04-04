@@ -4,21 +4,23 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using AutoCareDiray.Shared.Interface;
-using AutoCareDiray.Shared.Service.ResultService;   
+using AutoCareDiray.Shared.Service.ResultService;
+using System.ComponentModel;
 
 
 namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 {
     public partial class ListRepairViewModel : BaseViewModel
     {
+        #region Основные списки классов
         public ObservableCollection<Repair> Repairs { get; set; } = new ObservableCollection<Repair>();
         public ObservableCollection<Vehicle> Vehicles { get; set; } = new ObservableCollection<Vehicle>();
 
         CancellationTokenSource _cts;
 
         [ObservableProperty]
-        public Vehicle selectedVehicle = new Vehicle();
-
+        private Vehicle selectedVehicle; 
+        #endregion
 
         public ListRepairViewModel(IDialogService dialog, IDataService data, INavigationService navigate)
             : base(dialog, data, navigate)
@@ -38,10 +40,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 {
                     Vehicles.Add(addcar);
                 }
-                SelectedVehicle = Vehicles.FirstOrDefault() ?? new Vehicle();
-                await LoadRepairs();
             }
-            else await _dialogService.ShowToastAsync(result.ErrorMessage);
         }
 
         private async Task LoadRepairs()
@@ -56,7 +55,6 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                     Repairs.Add(repairs);
                 }
             }
-            else await _dialogService.ShowToastAsync(result.ErrorMessage);
         }
 
         [RelayCommand]
@@ -77,10 +75,16 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             };
             await _navigationService.GoNavigation("CreateRepairView", property);
         }
-        //partial void OnSelectedVehicleChanged(Vehicle value)
-        //{
-        //    if (value is not null) LoadRepairs(value.Repairs);
-        //}
+
+        [RelayCommand]
+        public async void ShowRepairOptions(Repair selectedRepair)
+        {
+            if (selectedRepair == null) return;
+            var respon = await _dialogService.ShowDisplayAction();
+            if (respon == "Отмена") return;
+            if (respon == "Редактировать") await UpdateRepair(selectedRepair);
+            else if (respon == "Удалить") await DeleteRepair(selectedRepair);
+        }
 
         [RelayCommand]
         public void CancelToken()
@@ -106,6 +110,11 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             };
 
             await _navigationService.GoNavigation("CreateRepairView", parametr);
+        }
+
+        async partial void OnSelectedVehicleChanged(Vehicle value)
+        {
+            await LoadRepairs();
         }
     }
 }
