@@ -4,64 +4,113 @@
              x:Class="AutoCareDiray.View.RepairView.CardRepairView"
              Style="{DynamicResource CustomPage}">
 
-    <Grid RowDefinitions="*,100"
-          HorizontalOptions="Center">
-        <ScrollView>
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
 
-            <VerticalStackLayout Spacing="15">
-                <!-- Поле name car -->
+            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" VerticalOptions="Center">
 
-                <!-- LOGO -->
-                <Image Style="{StaticResource ImageLogoApp}"/>
+                <!--<Border Grid.Column="0" HeightRequest="50" WidthRequest="50" CornerRadius="25" 
+                       Padding="10" BackgroundColor="#F0F0F0" HasShadow="False">
+                    <Image Source="car_icon.png" Aspect="AspectFit"/>
+                </>-->
 
-                <Grid ColumnDefinitions="150,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="Пробег авто на момент созданя записи:"
-                                   Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" 
-                                   Text="{Binding RepairRespon.CurrentMileage}"
-                                   Style="{DynamicResource LaberInfo}"/>
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label Text="{Binding RepairType.Category}" FontSize="12" Style="{DynamicResource LabelSecondaryCustom}"/>
+                    <Label Text="{Binding RepairType.TitleRepair}" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Border Style="{DynamicResource BorderForCardInfo}">
+                <VerticalStackLayout Spacing="5">
+
+                    <Label Text="{Binding Repair.ProgressPercent}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
+
+                    <ProgressBar Progress="{Binding Repair.ProgressMileage}" ProgressColor="Red"/>
+
+                    <!--<HorizontalStackLayout HorizontalOptions="Center" Margin="0,5,0,0">
+                        <Label Text="{Binding RemainingMileageText}" FontSize="12" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="{Binding RemainingDaysText}" FontSize="12" Style="{DynamicResource LabelSecondaryCustom}"/>
+                    </HorizontalStackLayout>-->
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{DynamicResource BorderForCardInfo}">
+                <Grid RowDefinitions="Auto, Auto, auto" ColumnDefinitions="*, *" RowSpacing="15" ColumnSpacing="15">
+
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                        <Label Text="Дата проведения" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="{Binding Repair.DateRepair, StringFormat='{}{0:dd.MM.yyyy}'}" 
+                               Style="{DynamicResource LabelCustom}" FontSize="15"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                        <Label Text="Пробег авто на момент ремонта" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="{Binding Repair.CurrentMileage, StringFormat='{}{0} км'}" 
+                               Style="{DynamicResource LabelCustom}" FontSize="15"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                        <Label Text="Интервал замены" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="{Binding RepairType.IntervalMileage}" Style="{DynamicResource LabelCustom}" 
+                               FontSize="15"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                        <Label Text="Стоимость" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="{Binding Repair.Cost, StringFormat='{}{0} ₽'}" Style="{DynamicResource LabelCustom}" 
+                               FontSize="15"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+                        <Label Text="Замененные запчасти" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="{Binding Repair.SpareParts, StringFormat='{}{0:dd.MM.yyyy}'}" 
+                               Style="{DynamicResource LabelCustom}" FontSize="15"/>
+                    </VerticalStackLayout>
+
                 </Grid>
+            </Border>
 
-                <Grid ColumnDefinitions="190,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="Дата ремонта:"
-                           Style="{DynamicResource LaberInfo}"/>
-                     <Label Grid.Column="1" 
-                            Text="{Binding RepairRespon.DateRepair }"
-                            Style="{DynamicResource LaberInfo}"/>         
+            <Border Style="{DynamicResource BorderForCardInfo}">
+                <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                    <Label Text="Описание работы" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                    <Label Text="{Binding Repair.Description}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--<Border Style="{DynamicResource BorderForEntryImput}" Padding="15" 
+                    IsVisible="{Binding HasDocumentation}">
+                <VerticalStackLayout Spacing="10">
+
+                    <Label Text="Запчасти и работы" FontAttributes="Bold" TextColor="Black"/>
+                    <Label Text="{Binding SparePartsList}" FontSize="14" TextColor="#333333"/>
+
+                    <BoxView HeightRequest="1" Color="#EEEEEE" Margin="0,5"/>
+
+                    <Label Text="Комментарий мастера" FontAttributes="Bold" TextColor="Black"/>
+                    <Label Text="{Binding Description}" FontSize="14" TextColor="#333333"/>
+                </VerticalStackLayout>
+            </Border>-->
+
+            <!--<VerticalStackLayout Spacing="10" Margin="0,10,0,30">
+
+                <Button Text="✅ ПОВТОРИТЬ РЕМОНТ (ОБНОВИТЬ)" 
+                        Style="{StaticResource ButtonCustomStandartRed}" 
+                        BackgroundColor="DarkGreen"
+                        Command="{Binding RepeatRepairCommand}"/>
+
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                    <Button Grid.Column="0" Text="Изменить" 
+                            Style="{StaticResource ButtonCustomStandartRed}" 
+                            BackgroundColor="#2B2B2B"
+                            Command="{Binding EditRepairCommand}"/>
+
+                    <Button Grid.Column="1" Text="Удалить" 
+                            BackgroundColor="Transparent" TextColor="Red" BorderColor="Red" BorderWidth="1"
+                            CornerRadius="10"
+                            Command="{Binding DeleteRepairCommand}"/>
                 </Grid>
+            </VerticalStackLayout>-->
 
-                <Grid ColumnDefinitions="190,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="Замененные запчасти:"
-                    Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" 
-                    Text="{Binding RepairRespon.SpareParts}"
-                    Style="{DynamicResource LaberInfo}"/>
-                </Grid>
-
-                <Grid ColumnDefinitions="150,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="Стоимость ремонта:"
-                           Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" 
-                           Text="{Binding RepairRespon.Cost}"
-                           Style="{DynamicResource LaberInfo}"/>
-                </Grid>
-
-                <Grid ColumnDefinitions="150,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="Описание работ:"
-                           Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" 
-                           Text="{Binding RepairRespon.Description}"
-                           Style="{DynamicResource LaberInfo}"/>
-                </Grid>
-
-
-             
-            </VerticalStackLayout>
-        </ScrollView>
-    </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

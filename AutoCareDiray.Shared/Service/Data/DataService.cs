@@ -282,7 +282,9 @@ namespace AutoCareDiray.Shared.Service.Data
             try
             {
                 token.ThrowIfCancellationRequested();
-                var repairDb = await _dbContex.Repairs.FindAsync(repairId,token);
+                var repairDb = await _dbContex.Repairs
+                    .Include(c => c.RepairType)
+                    .FirstOrDefaultAsync(c => c.Id == repairId);
 
                 if(repairDb != null) return Result<Repair>.SuccessCreate(repairDb);
                 else return Result.ErrorCreate("Ремонт не найден");

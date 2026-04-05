@@ -14,6 +14,7 @@
     <Color x:Key="ShadowRedLight">#E45752</Color>
     <Color x:Key="ShadowDisableButton">#383838</Color>
     <Color x:Key="CardBorder">#BABABA</Color>
+    <Color x:Key="BorderStroke">#777777</Color>
 
     <!-- ===== ТЕКСТ ===== -->
     <Color x:Key="TextPrimary">#212121</Color>

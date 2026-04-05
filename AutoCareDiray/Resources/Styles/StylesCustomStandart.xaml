@@ -329,14 +329,14 @@
        
     </Style>
 
-    <!--Border для карточек информации авто -->
+    <!--Border для карточек информации -->
     <Style TargetType="Border" x:Key="BorderForCardInfo">
         <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
-        <Setter Property="StrokeThickness" Value="0"/>
-        <Setter Property="Margin" Value="10"/>
+        <Setter Property="StrokeThickness" Value="0.5"/>
+        <Setter Property="Stroke" Value="{DynamicResource BorderStroke}"/>
+        <Setter Property="Margin" Value="5"/>
         <Setter Property="Padding" Value="10"/>
         <Setter Property="BackgroundColor" Value="{DynamicResource Background}"/>
-        <Setter Property="Shadow" Value="{DynamicResource ShadowRedLightForBorder}"/>
     </Style>
 
     <!--Border для карточек CollectionView-->
