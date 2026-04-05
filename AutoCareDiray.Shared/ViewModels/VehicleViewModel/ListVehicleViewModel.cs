@@ -12,6 +12,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
     public partial class ListVehicleViewModel : BaseViewModel
     {
+        #region основыне классы и списки
+
         private CancellationTokenSource _cts;
 
         [ObservableProperty]
@@ -23,6 +25,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private Vehicle selectedVehicle;
         [ObservableProperty]
         private bool labelWarningRepair = false;
+        #endregion
 
         /// <summary>
         /// Конструктор
@@ -38,7 +41,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         public async void GoCreateVehicle()
         {
             await _navigationService.GoNavigation("CreateVehicleView");
-        }
+        } //навигация создания авто
+
         [RelayCommand]
         public async Task GoCarCard(Vehicle VehicleSelected)
         {
@@ -47,12 +51,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 ["VehicleId"] = VehicleSelected.Id
             };
             await _navigationService.GoNavigation("CardVehicleView", property);
-        }
+        } //навигация карточки авто
 
         [RelayCommand]
-        /// <summary>
-        /// Загрузка авто с сервера
-        /// </summary>
         public async Task LoadVehicles()
         {
             if(Vehicles.Count > 0) Vehicles.Clear();
@@ -69,8 +70,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 }
             }
             else await _dialogService.ShowToastAsync(result.ErrorMessage);
-        }
-
+        } //загрузка списка авто
         [RelayCommand]
         public async void ShowVehicleOptions(Vehicle selectedVehicle)
         {
@@ -80,6 +80,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             if (respon == "Редактировать") await EditVehicle(selectedVehicle);
             else if (respon == "Удалить") await DeleteVehicle(selectedVehicle);
         }
+
         private async Task DeleteVehicle(Vehicle vehicleSelected)
         {
             var result = await _dataService.DeleteVehicleAsync(vehicleSelected, _cts.Token);
@@ -89,7 +90,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 await LoadVehicles();
             }
             else await _dialogService.ShowToastAsync(result.ErrorMessage);
-        }
+        } //удаление авто
 
         private async Task EditVehicle(Vehicle vehicleSelected)
         {
@@ -99,7 +100,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             };
 
             await _navigationService.GoNavigation("CreateVehicleView", property);
-        }
+        } //обновление информации авто
 
         [RelayCommand]
         public void CancelToken()
@@ -107,8 +108,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _cts.Cancel();
             _cts.Dispose();
             _cts = new CancellationTokenSource();
-        }
-
+        } //отмена токена
 
         private void CheckWarningRepair(IEnumerable<Vehicle> cars)
         {
@@ -129,6 +129,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                     LabelWarningRepair = false;
                 }
             }
-        }
+        }  //проверка кол предупреждений о ремонте авто
     }
 }

@@ -12,21 +12,23 @@
     <!-- ===== ФОН И ПОВЕРХНОСТИ ===== -->
     <Color x:Key="Background">#FFFFFF</Color>
     <Color x:Key="ShadowRedLight">#E45752</Color>
+    <Color x:Key="ShadowDisableButton">#383838</Color>
     <Color x:Key="CardBorder">#BABABA</Color>
 
     <!-- ===== ТЕКСТ ===== -->
     <Color x:Key="TextPrimary">#212121</Color>
     <Color x:Key="TextPrimaryRed">#E53935</Color>
     <Color x:Key="TextSecondary">#757575</Color>
+    <Color x:Key="TextPlaceholder">#757575</Color>
     <Color x:Key="TextDisabled">#9E9E9E</Color>
     <Color x:Key="TextError">#E53935</Color>
 
     <!-- ===== КНОПКИ ===== -->
     <Color x:Key="ButtonPrimaryRed">#E53935</Color>
-    <Color x:Key="ButtonDisable">#E3E3E3</Color>
+    <Color x:Key="ButtonDisable">#807F7F</Color>
     <Color x:Key="ButtonTextPrimaryWhite">#FFFFFF</Color>
     <Color x:Key="ButtonTextPrimaryBlack">#000000</Color>
-    <Color x:Key="ButtonTextDisable">#E53935</Color>
+    <Color x:Key="ButtonTextDisable">#FFFFFF</Color>
     <Color x:Key="ButtonPressed">#FF8888</Color>
     <Color x:Key="ButtonTextPressed">#E53935</Color>
     

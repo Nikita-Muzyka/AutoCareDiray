@@ -6,7 +6,7 @@
              Style="{DynamicResource CustomPage}">
 
 
-    <Grid RowDefinitions="auto,*,auto">
+    <Grid RowDefinitions="auto,*">
         
         <VerticalStackLayout Grid.Row="0" Margin="15">
             <Border Style="{DynamicResource BorderForEntryImput}" Margin="30,0,30,0">
@@ -17,52 +17,50 @@
             </Border>
         </VerticalStackLayout> <!--Picker выбора авто-->
 
-        <VerticalStackLayout Grid.Row="1" Margin="0,15,0,0">
+        <CollectionView ItemsSource="{Binding Repairs}" SelectedItem="{Binding SelectedRepair}" SelectionMode="None"
+                            Grid.Row="1" Margin="0,15,0,0">
 
-            <CollectionView ItemsSource="{Binding Repairs}" SelectedItem="{Binding SelectedRepair}" SelectionMode="None">
+            <CollectionView.EmptyView>
+                <Label Text="🤷‍♂️ Кажется тут пусто." Style="{DynamicResource LabelInfo}" FontSize="20"/>
+            </CollectionView.EmptyView>
 
-                <CollectionView.EmptyView>
-                    <Label Text="🤷‍♂️ Кажется тут пусто." Style="{DynamicResource LabelInfo}" FontSize="20"/>
-                </CollectionView.EmptyView>
-                
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Padding="10,15,10,10">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10,15,10,10">
 
-                            <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"  CommandParameter="{Binding .}"/>
-                            </Grid.GestureRecognizers>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"  CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
 
-                            <Border Style="{DynamicResource BorderForCollectionView}">
-                                <Grid ColumnDefinitions="auto,*,auto" Style="{DynamicResource GridForCardList}">
+                        <Border Style="{DynamicResource BorderForCollectionView}">
+                            <Grid ColumnDefinitions="auto,*,auto" Style="{DynamicResource GridForCardList}">
 
-                                    <Image Source="repair_image.png" Style="{DynamicResource ImageForList}" Grid.Column="0"/>
+                                <Image Source="repair_image.png" Style="{DynamicResource ImageForList}" Grid.Column="0"/>
 
-                                    <VerticalStackLayout Grid.Column="1" Padding="5" Spacing="5">
-                                        <Label Text="{Binding RepairType.TitleRepair}" Style="{DynamicResource LabelCustom}"/>
-                                        <Label Text="{Binding DateRepair,StringFormat='{}{0:d}'}" Style="{DynamicResource LabelSecondaryCustom}"/>
+                                <VerticalStackLayout Grid.Column="1" Padding="5" Spacing="5">
+                                    <Label Text="{Binding RepairType.TitleRepair}" Style="{DynamicResource LabelCustom}"/>
+                                    <Label Text="{Binding DateRepair,StringFormat='{}{0:d}'}" Style="{DynamicResource LabelSecondaryCustom}"/>
 
-                                        <Label Text="{Binding ProgressPercent}" Style="{DynamicResource LabelWarningForCard}"/>
-                                        <ProgressBar ProgressColor="Red" Progress="{Binding ProgressMileage}"/>
-                                    </VerticalStackLayout>
-                                    <ImageButton Grid.Column="2" 
+                                    <Label Text="{Binding ProgressPercent}" Style="{DynamicResource LabelWarningForCard}"/>
+                                    <ProgressBar ProgressColor="Red" Progress="{Binding ProgressMileage}"/>
+                                </VerticalStackLayout>
+
+                                <ImageButton Grid.Column="2" 
                                                   Style="{DynamicResource ImageKebab}" Source="dots_image.png"  
                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vmRepair:ListRepairViewModel}}, Path=ShowRepairOptionsCommand}"
-                                                  CommandParameter="{Binding .}"/>              
-                                    <!--Кебаб меню для карточки авто-->
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout> <!--Списки ремонтов авто-->
+                                                  CommandParameter="{Binding .}"/>
+                                <!--Кебаб меню для карточки авто-->
+                            </Grid>
+                        </Border>
+                        <!--Основные поля ремонта-->
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-        <Grid Grid.Row="1"
-        Style="{StaticResource GridForButtonCreate}">
-            <Button Command="{Binding GoCreateVehicleCommand}"
-                  Style="{DynamicResource ButtonCreate}"/>
-        </Grid>
-    <!--кнопка создать авто-->
+        <Grid Grid.Row="1" Style="{StaticResource GridForButtonCreate}">
+            <Button Command="{Binding GoCreateRepairCommand}" Style="{DynamicResource ButtonCreate}"
+                    IsEnabled="{Binding IsButtonEnable}"/>
+        </Grid> <!--кнопка создать авто-->
     </Grid>
 </ContentPage>

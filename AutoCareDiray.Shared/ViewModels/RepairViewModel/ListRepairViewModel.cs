@@ -19,7 +19,10 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         CancellationTokenSource _cts;
 
         [ObservableProperty]
-        private Vehicle selectedVehicle; 
+        private Vehicle selectedVehicle;
+
+        [ObservableProperty]
+        private bool isButtonEnable = false;
         #endregion
 
         public ListRepairViewModel(IDialogService dialog, IDataService data, INavigationService navigate)
@@ -41,21 +44,25 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                     Vehicles.Add(addcar);
                 }
             }
-        }
+            else IsButtonEnable = false;
+        } //начало загрузки страницы
 
         private async Task LoadRepairs()
         {
             if (Repairs.Count > 0) Repairs.Clear();
-            var result = await _dataService.ListRepairForVehicleAsync(SelectedVehicle.Id, _cts.Token);
-            if (result.Success)
+            if(SelectedVehicle != null)
             {
-                var resultRepairs = result as Result<List<Repair>>;
-                foreach (var repairs in resultRepairs.Data)
+                var result = await _dataService.ListRepairForVehicleAsync(SelectedVehicle.Id, _cts.Token);
+                if (result.Success)
                 {
-                    Repairs.Add(repairs);
+                    var resultRepairs = result as Result<List<Repair>>;
+                    foreach (var repairs in resultRepairs.Data)
+                    {
+                        Repairs.Add(repairs);
+                    }
                 }
             }
-        }
+        } //загрузка ремонта
 
         [RelayCommand]
         public async Task GoRepairCard(Repair repair)
@@ -65,16 +72,17 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 ["RepairId"] = repair.Id,
             };
             await _navigationService.GoNavigation("CardRepairView", parametr);
-        }
+        } //навигация перехона на карточку ремонта
         [RelayCommand]
         public async Task GoCreateRepair()
         {
-            var property = new Dictionary<string, object>()
+            var parametr = new Dictionary<string, object>()
             {
-                ["VehicleId"] = SelectedVehicle.Id,
+                ["VehicleId"] = SelectedVehicle.Id
             };
-            await _navigationService.GoNavigation("CreateRepairView", property);
-        }
+
+            await _navigationService.GoNavigation("CreateRepairView",parametr);
+        } //навигация создания ремонта
 
         [RelayCommand]
         public async void ShowRepairOptions(Repair selectedRepair)
@@ -84,7 +92,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             if (respon == "Отмена") return;
             if (respon == "Редактировать") await UpdateRepair(selectedRepair);
             else if (respon == "Удалить") await DeleteRepair(selectedRepair);
-        }
+        } //Кебабб меню вывод после нажатия
 
         [RelayCommand]
         public void CancelToken()
@@ -92,14 +100,14 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             _cts.Cancel();
             _cts.Dispose();
             _cts = new CancellationTokenSource();
-        }
+        } //отмена токена при закртие страницы
 
         [RelayCommand]
         public async Task DeleteRepair(Repair repair)
         {
             await _dataService.DeleteRepairAsync(repair, _cts.Token);
             await LoadRepairs();
-        }
+        } //удаление ремонта
 
         [RelayCommand]
         public async Task UpdateRepair(Repair repair)
@@ -110,11 +118,12 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             };
 
             await _navigationService.GoNavigation("CreateRepairView", parametr);
-        }
+        } //редактирование ремонта
 
         async partial void OnSelectedVehicleChanged(Vehicle value)
         {
+            if(value != null) IsButtonEnable = true;
             await LoadRepairs();
-        }
+        } //логика при выборе авто
     }
 }

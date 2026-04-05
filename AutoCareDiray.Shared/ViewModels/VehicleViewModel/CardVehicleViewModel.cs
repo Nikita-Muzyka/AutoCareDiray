@@ -12,14 +12,20 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
     public partial class CardVehicleViewModel : BaseViewModel
     {
+        #region Основые классы и списки
+
         private int _vehicleId;
         private bool isInitilize = false;
-       
+
         CancellationTokenSource _cts;
+
         [ObservableProperty]
         ObservableCollection<RepairType> warningRepairType;
+
         [ObservableProperty]
         private Vehicle vehicleCard;
+
+        #endregion
 
         public CardVehicleViewModel(IDialogService dialog, IDataService data, INavigationService navigate)
             : base(dialog, data, navigate)
@@ -34,7 +40,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _vehicleId = vehicleId;
             await LoadVehicle();
             isInitilize = true;
-        }
+        } // инициализация карточки
         private async Task LoadVehicle()
         {
             var result = await _dataService.GetVehicleAsync(_vehicleId, _cts.Token);
@@ -46,6 +52,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 var warning = sortRepairType.Where(c => VehicleCard.Mileage - c.LastServiceMileage > c.IntervalMileage).ToList();
                 WarningRepairType = new ObservableCollection<RepairType>(warning);
             }
-        }
+        } // загрузка информации по авто
     }
 }

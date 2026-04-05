@@ -28,7 +28,8 @@ public partial class CreateRepairView : ContentPage, IQueryAttributable
 		base.OnDisappearing();
         if (BindingContext is CreateRepairViewModel vm)
         {
-            vm.CancelTokenCommand.Execute(null);	
+            vm.CancelTokenCommand.Execute(null);
+            vm.OffEventCommand.Execute(null);
         }
     }
 }

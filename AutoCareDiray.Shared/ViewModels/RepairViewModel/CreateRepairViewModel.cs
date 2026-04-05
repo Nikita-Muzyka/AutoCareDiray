@@ -14,6 +14,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 {
     public partial class CreateRepairViewModel : BaseViewModel
     {
+        #region основные классы и списки
+
         CancellationTokenSource _cts;
         RepairValidation _validationRepair;
 
@@ -44,6 +46,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         [ObservableProperty]
         private string statusMessage;
 
+        #endregion
+
         public CreateRepairViewModel(IDialogService dialog,IDataService data,INavigationService navigate,RepairValidation validation) 
             : base(dialog, data, navigate)
         {
@@ -52,9 +56,13 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             _validationRepair.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
         }
 
+        #region свойства для ошибок в реальном времени
+
         public bool HasErrors => _validationRepair.HasErrors;
         public string MileageError => _validationRepair.GetErrors(nameof(MileageError)) as String;
         public string CostError => _validationRepair.GetErrors(nameof(CostError)) as String;
+
+        #endregion
 
         Func<string, int> ConverFromInt = (property) =>
         {
@@ -63,10 +71,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 return result;
             }
             else return 0;
-        };
+        }; //конвертирует со string in Int
 
-
-        //Инициализация и определения редактирования или обновления данных
         [RelayCommand]
         public async Task Initialize(IDictionary<string,object> query)
         {
@@ -77,7 +83,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 {
                     _vehicleId = value;
                     isInitialize = true;
-                    await Loading();
+                    await LoadingCreate();
                 }
             }
             else if(query.TryGetValue("RepairId", out var objTwo))
@@ -89,9 +95,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                     await LoadingUpdate();
                 }
             }
-        }
+        } //Инициализация и определения редактирования или обновления данных
 
-        //Загрузка ресурсов под редактирования 
         public async Task LoadingUpdate()
         {
             var result = await _dataService.GetRepairAsync(_repairId, _cts.Token);
@@ -108,16 +113,16 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 SparePartsFilled = resultRepair.Data.SpareParts;
                 CostFilled = resultRepair.Data.Cost.ToString();
                 DescriptionFilled = resultRepair.Data.Description;
+                _vehicleId = resultRepair.Data.VehicleId;
 
                 if (RepairTypes.Count > 0) RepairTypes.Clear();
                 RepairTypes.Add(resultRepair.Data.RepairType);
-                SelectedRepairType = RepairTypes.FirstOrDefault(new RepairType());
+                SelectedRepairType = RepairTypes.FirstOrDefault();
             }
             else StatusMessage = result.ErrorMessage;
-        }
+        } //Загрузка ресурсов под редактирования 
 
-        //Загрузка под создания ремонта
-        public async Task Loading()
+        public async Task LoadingCreate()
         {
             if(RepairTypes.Count > 0) RepairTypes.Clear();
             var result = await _dataService.GetVehicleAndRepairTypesAsync(_vehicleId, _cts.Token);
@@ -134,16 +139,66 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 MileageFilled = _vehicle.Mileage;
             }
             else StatusMessage = result.ErrorMessage;
-        }
+        } //Загрузка под создания ремонта
 
-
-        //Создание или редактирование ремонта
         [RelayCommand]
-        public async Task CreateRepair()
+        public async Task ProcessingRepair()
         {
             _validationRepair.ValidationAll(MileageFilled, CostFilled);
             if(HasErrors) return;
-            Repair repairCreate = new Repair()
+
+            if (_isUpdateRepair)
+            {
+                var repair = UpdateRepair();
+
+                var resultUdateRepair = await _dataService.UpdateRepairAsync(repair, _cts.Token);
+                if (resultUdateRepair.Success == false)
+                {
+                    StatusMessage = resultUdateRepair.ErrorMessage;
+                    return;
+                }
+
+                _isUpdateRepair = false;
+                if (resultUdateRepair.Success == false)
+                {
+                    StatusMessage = resultUdateRepair.ErrorMessage;
+                    return;
+                }
+            }
+            else
+            {
+                var repair = CreateRepai();
+
+                var resultCreateRepair = await _dataService.CreateRepairAsync(repair, _cts.Token);
+                if (resultCreateRepair.Success == false)
+                {
+                    StatusMessage = resultCreateRepair.ErrorMessage;
+                    return;
+                }
+            }
+
+            await UpdateDateRepair();
+            await _navigationService.GoToBack();
+        }  //Создание или редактирование ремонта
+
+        private Repair UpdateRepair()
+        {
+            Repair repair = new Repair()
+            {
+                Id = _repairId,
+                DateRepair = DateRepairSelected,
+                SpareParts = SparePartsFilled,
+                Cost = ConverFromInt(CostFilled),
+                Description = DescriptionFilled,
+                RepairTypeId = SelectedRepairType.Id,
+                CurrentMileage = MileageFilled,
+            };
+
+            return repair;
+        } // создание ремонта с обновлеными данными
+        private Repair CreateRepai()
+        {
+            Repair repair = new Repair()
             {
                 DateRepair = DateRepairSelected,
                 SpareParts = SparePartsFilled,
@@ -154,66 +209,50 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 CurrentMileage = MileageFilled,
             };
 
+            return repair;
+        } // создание ремонита
+        private async Task UpdateDateRepair()
+        { 
+            bool IsResultType = false;
+
+            var result = await _dataService.GetVehicleMileageAsync(_vehicleId,_cts.Token);
+            if (result.Success)
+            {
+                var resultVeh = result as Result<Vehicle>;
+                _vehicle = resultVeh.Data;
+            }
             if (MileageFilled > _vehicle.Mileage)
             {
-               var resultMileage =  await _dataService.UpdateVehicleMileageAsync(_vehicleId, MileageFilled, _cts.Token);
-               if (resultMileage.Success == false)
+                var resultMileage = await _dataService.UpdateVehicleMileageAsync(_vehicleId, MileageFilled, _cts.Token);
+                if (resultMileage.Success == false)
                 {
                     StatusMessage = resultMileage.ErrorMessage;
-                    return;
                 }
+
             }
 
-            if (_isUpdateRepair)
+            if (SelectedRepairType.IntervalMileage != IntervalMileageFilled)
             {
-                var resultUdateRepair = await _dataService.UpdateRepairAsync(repairCreate, _cts.Token);
-                if(resultUdateRepair.Success == false)
+                SelectedRepairType.IntervalMileage = IntervalMileageFilled;
+                var resultUpdateTypeRep = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
+                if (resultUpdateTypeRep.Success == false)
                 {
-                    StatusMessage = resultUdateRepair.ErrorMessage;
-                    return;
-                }
-
-
-                if (SelectedRepairType.IntervalMileage != IntervalMileageFilled)
-                {
-                    SelectedRepairType.IntervalMileage = IntervalMileageFilled;
-                    var resultUpdateTypeRep = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
-                    if (resultUpdateTypeRep.Success == false)
+                    if (string.IsNullOrWhiteSpace(StatusMessage) == false)
                     {
-                        StatusMessage = resultUpdateTypeRep.ErrorMessage;
-                        return;
+                        StatusMessage += " " + resultUpdateTypeRep.ErrorMessage;
+                    }
+                    else
+                    {
+                        StatusMessage += " " + resultUpdateTypeRep.ErrorMessage;           
                     }
                 }
-
-                _isUpdateRepair = false;
-                if (resultUdateRepair.Success) await _navigationService.GoToBack();
-                else StatusMessage = resultUdateRepair.ErrorMessage;
             }
-            else
-            {
-                var resultCreateRepair = await _dataService.CreateRepairAsync(repairCreate, _cts.Token);
-                if(resultCreateRepair.Success == false)
-                {
-                    StatusMessage = resultCreateRepair.ErrorMessage;
-                    return;
-                }
+        } // Обновление пробега у авто и интервала пробега
 
-                if (SelectedRepairType.IntervalMileage != IntervalMileageFilled)
-                {
-                    SelectedRepairType.IntervalMileage = IntervalMileageFilled;
-                    var resultUpdate = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
-                    if (resultUpdate.Success == false)
-                    {
-                        StatusMessage = resultUpdate.ErrorMessage;
-                        return;
-                    }
-                }
-
-                if (resultCreateRepair.Success) await _navigationService.GoToBack();
-                else StatusMessage = resultCreateRepair.ErrorMessage;
-            }
+        partial void OnSelectedRepairTypeChanged(RepairType value)
+        {
+            IntervalMileageFilled = value.IntervalMileage;
         }
-
         partial void OnMileageFilledChanged(int value)
         {
             _validationRepair.ValidationMileage(value);
@@ -229,13 +268,18 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             OnPropertyChanged(e.PropertyName);
         }
 
-
         [RelayCommand]
         public void CancelToken()
         {
             _cts.Cancel();
             _cts.Dispose();
             _cts = new CancellationTokenSource();
-        }
+        }  //отмена токена
+
+        [RelayCommand]
+        public void OffEvent()
+        {
+            _validationRepair.ErrorsChanged -= (s, e) => OnErrorsChangedUI(e);
+        }  //отмена токена
     }
 }
