@@ -23,6 +23,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
         [ObservableProperty]
         private bool isButtonEnable = false;
+
+        private bool _isInitialize = false;
         #endregion
 
         public ListRepairViewModel(IDialogService dialog, IDataService data, INavigationService navigate)
@@ -34,7 +36,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         [RelayCommand]
         public async Task StartLoading()
         {
-            if (Vehicles.Count > 0) Vehicles.Clear();
+            Vehicles.Clear();
+            Repairs.Clear();
             var result = await _dataService.ListVehicleForListRepairAsync(_cts.Token);
             if (result.Success)
             {
@@ -43,23 +46,24 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 {
                     Vehicles.Add(addcar);
                 }
+                _isInitialize = true;
             }
-            else IsButtonEnable = false;
+            else
+            {
+                await _dialogService.ShowToastAsync(result.ErrorMessage);
+            }
         } //начало загрузки страницы
 
         private async Task LoadRepairs()
         {
-            if (Repairs.Count > 0) Repairs.Clear();
-            if(SelectedVehicle != null)
+            Repairs.Clear();
+            var result = await _dataService.ListRepairForVehicleAsync(SelectedVehicle.Id, _cts.Token);
+            if (result.Success)
             {
-                var result = await _dataService.ListRepairForVehicleAsync(SelectedVehicle.Id, _cts.Token);
-                if (result.Success)
+                var resultRepairs = result as Result<List<Repair>>;
+                foreach (var repairs in resultRepairs.Data)
                 {
-                    var resultRepairs = result as Result<List<Repair>>;
-                    foreach (var repairs in resultRepairs.Data)
-                    {
-                        Repairs.Add(repairs);
-                    }
+                    Repairs.Add(repairs);
                 }
             }
         } //загрузка ремонта
@@ -76,6 +80,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         [RelayCommand]
         public async Task GoCreateRepair()
         {
+            if(SelectedVehicle == null) return;
+            IsButtonEnable = false;
             var parametr = new Dictionary<string, object>()
             {
                 ["VehicleId"] = SelectedVehicle.Id
@@ -122,8 +128,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
         async partial void OnSelectedVehicleChanged(Vehicle value)
         {
-            if(value != null) IsButtonEnable = true;
-            await LoadRepairs();
+            IsButtonEnable = value != null;
+            if(value != null) await LoadRepairs();
         } //логика при выборе авто
     }
 }

@@ -5,7 +5,7 @@
              Style="{DynamicResource CustomPage}">
 
     <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="20">
+        <VerticalStackLayout Spacing="20" Padding="10">
 
             <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" VerticalOptions="Center">
 
@@ -15,10 +15,10 @@
                 </>-->
 
                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                    <Label Text="{Binding RepairType.Category}" FontSize="12" Style="{DynamicResource LabelSecondaryCustom}"/>
-                    <Label Text="{Binding RepairType.TitleRepair}" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+                    <Label Text="{Binding RepairType.Category}" Style="{DynamicResource LabelSecondaryCustom}"/>
+                    <Label Text="{Binding RepairType.TitleRepair}" FontSize="18" Style="{DynamicResource LabelCustom}"/>
                 </VerticalStackLayout>
-            </Grid>
+            </Grid> <!--Название ремоната и категория-->
 
             <Border Style="{DynamicResource BorderForCardInfo}">
                 <VerticalStackLayout Spacing="5">
@@ -32,50 +32,50 @@
                         <Label Text="{Binding RemainingDaysText}" FontSize="12" Style="{DynamicResource LabelSecondaryCustom}"/>
                     </HorizontalStackLayout>-->
                 </VerticalStackLayout>
-            </Border>
+            </Border> <!--прогресс бар-->
 
             <Border Style="{DynamicResource BorderForCardInfo}">
                 <Grid RowDefinitions="Auto, Auto, auto" ColumnDefinitions="*, *" RowSpacing="15" ColumnSpacing="15">
 
                     <VerticalStackLayout Grid.Row="0" Grid.Column="0">
-                        <Label Text="Дата проведения" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="Дата проведения" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
                         <Label Text="{Binding Repair.DateRepair, StringFormat='{}{0:dd.MM.yyyy}'}" 
                                Style="{DynamicResource LabelCustom}" FontSize="15"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Grid.Row="0" Grid.Column="1">
-                        <Label Text="Пробег авто на момент ремонта" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="Пробег авто на момент ремонта" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
                         <Label Text="{Binding Repair.CurrentMileage, StringFormat='{}{0} км'}" 
                                Style="{DynamicResource LabelCustom}" FontSize="15"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Grid.Row="1" Grid.Column="0">
-                        <Label Text="Интервал замены" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="Интервал замены" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
                         <Label Text="{Binding RepairType.IntervalMileage}" Style="{DynamicResource LabelCustom}" 
                                FontSize="15"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Grid.Row="1" Grid.Column="1">
-                        <Label Text="Стоимость" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="Стоимость" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
                         <Label Text="{Binding Repair.Cost, StringFormat='{}{0} ₽'}" Style="{DynamicResource LabelCustom}" 
                                FontSize="15"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Grid.Row="2" Grid.Column="0">
-                        <Label Text="Замененные запчасти" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Text="Замененные запчасти" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
                         <Label Text="{Binding Repair.SpareParts, StringFormat='{}{0:dd.MM.yyyy}'}" 
                                Style="{DynamicResource LabelCustom}" FontSize="15"/>
                     </VerticalStackLayout>
 
                 </Grid>
-            </Border>
+            </Border> <!--осовные колонки информации ремонта-->
 
             <Border Style="{DynamicResource BorderForCardInfo}">
                 <VerticalStackLayout Grid.Row="1" Grid.Column="1">
                     <Label Text="Описание работы" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
                     <Label Text="{Binding Repair.Description}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
                 </VerticalStackLayout>
-            </Border>
+            </Border> <!--описание работы-->
 
             <!--<Border Style="{DynamicResource BorderForEntryImput}" Padding="15" 
                     IsVisible="{Binding HasDocumentation}">

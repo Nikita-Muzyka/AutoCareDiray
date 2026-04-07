@@ -5,20 +5,19 @@
              Style="{DynamicResource CustomPage}">
 
     <ScrollView>
-        <VerticalStackLayout>
-            <Border Style="{DynamicResource BorderForCardInfo}"> 
+        <VerticalStackLayout Spacing="20" Padding="10">
+            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" VerticalOptions="Center">
+                <VerticalStackLayout VerticalOptions="Center" Grid.Column="1">
+                    <Label Text="Название авто" Style="{DynamicResource LabelForCardInfoCategory}"/>
+                    <Label Text="{Binding  VehicleCard.NameVehicle}" FontSize="18" Style="{DynamicResource LabelCustom}"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Border Style="{DynamicResource BorderForCardInfo}">
                 <Grid ColumnDefinitions="auto,auto" RowDefinitions="auto,auto,auto,auto" ColumnSpacing="10" RowSpacing="15">
 
                     <HorizontalStackLayout Grid.Column="0" Grid.Row="0">
-                        <Image Source="carcard_icon.png" Style="{StaticResource ImageForCardInfo}"/>
-                        <VerticalStackLayout>
-                            <Label Text="Название авто" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                            <Label Grid.Column="1" Text="{Binding VehicleCard.NameVehicle}" Style="{DynamicResource LabelForCardInfoData}"/>
-                        </VerticalStackLayout>
-                    </HorizontalStackLayout> <!--NameVehicle-->
-
-                    <HorizontalStackLayout Grid.Column="1" Grid.Row="0">
-                        <Image Source="mileage_icon.png" Style="{StaticResource ImageForCardInfo}"/>
+                        <!--<Image Source="mileage_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
                         <VerticalStackLayout>
                             <Label Text="Пробег авто" Style="{DynamicResource LabelForCardInfoCategory}"/>
                             <Label Grid.Column="1" Text="{Binding VehicleCard.Mileage,StringFormat='{0:N0} км'}" 
@@ -27,7 +26,7 @@
                     </HorizontalStackLayout> <!--Mileage-->
 
                     <HorizontalStackLayout Grid.Column="0" Grid.Row="1">
-                        <Image Source="date_icon.png" Style="{StaticResource ImageForCardInfo}"/>
+                        <!--<Image Source="date_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
                         <VerticalStackLayout>
                             <Label Text="Дата производства " Style="{DynamicResource LabelForCardInfoCategory}"/>
                             <Label Grid.Column="1" Text="{Binding VehicleCard.YearCreate, StringFormat='{0:d}'}"  Style="{DynamicResource LabelForCardInfoData}"/>
@@ -35,7 +34,7 @@
                     </HorizontalStackLayout> <!--CreateVehicle-->
 
                     <HorizontalStackLayout Grid.Column="1" Grid.Row="1">
-                        <Image Source="date_icon.png" Style="{StaticResource ImageForCardInfo}"/>
+                        <!--<Image Source="date_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
                         <VerticalStackLayout>
                             <Label Text="Дата покупки" Style="{DynamicResource LabelForCardInfoCategory}"/>
                             <Label Grid.Column="1" Text="{Binding VehicleCard.YearPurchase, StringFormat='{0:d}'}" Style="{DynamicResource LabelForCardInfoData}"/>
@@ -43,7 +42,7 @@
                     </HorizontalStackLayout> <!--PurchaseVehicle-->
 
                     <HorizontalStackLayout Grid.Column="0" Grid.Row="2">
-                        <Image Source="vincode_icon.png" Style="{StaticResource ImageForCardInfo}"/>
+                        <!--<Image Source="vincode_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
                         <VerticalStackLayout>
                             <Label Text="VinCode" Style="{DynamicResource LabelForCardInfoCategory}"/>
                             <Label Grid.Column="1" Text="{Binding VehicleCard.VinCode}" Style="{DynamicResource LabelForCardInfoData}"/>
@@ -51,7 +50,7 @@
                     </HorizontalStackLayout> <!--VinCode-->
 
                     <HorizontalStackLayout Grid.Column="1" Grid.Row="2">
-                        <Image Source="flag_icon.png" Style="{StaticResource ImageForCardInfo}"/>
+                        <!--<Image Source="flag_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
                         <VerticalStackLayout>
                             <Label Text="Гос номер" Style="{DynamicResource LabelForCardInfoCategory}"/>
                             <Label Grid.Column="1" Text="{Binding VehicleCard.StateNumber}" Style="{DynamicResource LabelForCardInfoData}"/>
@@ -59,7 +58,7 @@
                     </HorizontalStackLayout> <!--StateNumber-->
 
                     <HorizontalStackLayout Grid.Column="0" Grid.Row="3">
-                        <Image Source="transmission_icon.png" Style="{StaticResource ImageForCardInfo}"/>
+                        <!--<Image Source="transmission_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
                         <VerticalStackLayout>
                             <Label Text="Коробка" Style="{DynamicResource LabelForCardInfoCategory}"/>
                             <Label Grid.Column="1" Text="{Binding VehicleCard.TransmissionType}" Style="{DynamicResource LabelForCardInfoData}"/>
@@ -67,7 +66,7 @@
                     </HorizontalStackLayout> <!--TransmissionType-->
 
                     <HorizontalStackLayout Grid.Column="1" Grid.Row="3">
-                        <Image Source="carcard_icon.png" Style="{StaticResource ImageForCardInfo}"/>
+                        <!--<Image Source="carcard_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
                         <VerticalStackLayout>
                             <Label Text="Тип авто" Style="{DynamicResource LabelForCardInfoCategory}"/>
                             <Label Grid.Column="1" Text="{Binding VehicleCard.VehicleType}" Style="{DynamicResource LabelForCardInfoData}"/>

@@ -90,8 +90,7 @@
 
             <Label Text="{Binding StatusMessage}" 
                Style="{DynamicResource LabelError}" 
-               HorizontalOptions="Center"
-               IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotNullOrEmptyConverter}}"/> <!--код ошибок-->
+               HorizontalOptions="Center"/> <!--код ошибок-->
 
             <VerticalStackLayout Padding="0,0,0,20">
                 <Button Text="{Binding ButtonName}" 
