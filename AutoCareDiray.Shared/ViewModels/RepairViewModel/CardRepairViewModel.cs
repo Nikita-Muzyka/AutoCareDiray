@@ -8,11 +8,18 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 {
     public partial class CardRepairViewModel : BaseViewModel
     {
+        #region основные классы и списки
+
         CancellationTokenSource _cts;
         bool _isinitilize = false;
 
         [ObservableProperty]
-        public Repair repairRespon;
+        private Repair repair;
+        [ObservableProperty]
+        private RepairType repairType;
+
+
+        #endregion
         public CardRepairViewModel(IDialogService dialog, IDataService data, INavigationService navigate)
             : base(dialog, data, navigate)
         {
@@ -27,7 +34,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             if (result.Success)
             {
               var resultRepair = result as Result<Repair>;
-                RepairRespon = resultRepair.Data;
+                Repair = resultRepair.Data;
+                RepairType = resultRepair.Data.RepairType;
                 _isinitilize = true;
             }
         }

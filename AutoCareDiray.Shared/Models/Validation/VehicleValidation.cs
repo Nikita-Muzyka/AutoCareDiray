@@ -7,15 +7,16 @@ namespace AutoCareDiray.Shared.Models.Validation
     {
         string propertyMileage = "MileageError";
         string propertyYearPurchase = "YearPurchaseError";
-        string propertyVehicleType = "VehicpeTypeError";
+        string propertyTypeVehicle = "TypeVehicleError";
 
 
         public VehicleValidation() { }
 
-        public void ValidationAll(string Mileage, DateTime? yearPurchase, DateTime? yearCreate)
+        public void ValidationAll(string Mileage, DateTime? yearPurchase, DateTime? yearCreate,string typeVehicle)
         {
             ValidationMileage(Mileage);
             ValidationDate(yearPurchase,yearCreate);
+            ValidationTypeVehicle(typeVehicle);
         }
         public void ValidationMileage(string Mileage)
         {
@@ -50,6 +51,13 @@ namespace AutoCareDiray.Shared.Models.Validation
             {
                 OnErrorsChanges(propertyYearPurchase);
             }
+        }
+
+        public void ValidationTypeVehicle(string typeVehicle)
+        {
+            ErrorRemove(propertyTypeVehicle);
+            if (String.IsNullOrWhiteSpace(typeVehicle)) ErrorAdd(propertyTypeVehicle, "Обязательно нужно выбрать");
+            else OnErrorsChanges(propertyTypeVehicle);
         }
     }
 }

@@ -6,32 +6,34 @@
 
     <!-- ===== ОСНОВНЫЕ ЦВЕТА ===== -->
     <Color x:Key="PrimaryRed">#E53935</Color>
-    <Color x:Key="PrimaryWhite">#FFFFF4</Color>
+    <Color x:Key="PrimaryWhite">#F9F9F9</Color>
     <Color x:Key="PrimaryBlack">#212121</Color>
 
     <!-- ===== ФОН И ПОВЕРХНОСТИ ===== -->
     <Color x:Key="Background">#FFFFFF</Color>
-    <Color x:Key="Surface">#FFFFFF</Color>
-    <Color x:Key="CardBackground">#FFFFFF</Color>
-    <Color x:Key="CardBorder">#F0F0F0</Color>
+    <Color x:Key="ShadowRedLight">#E45752</Color>
+    <Color x:Key="ShadowDisableButton">#383838</Color>
+    <Color x:Key="CardBorder">#BABABA</Color>
+    <Color x:Key="BorderStroke">#777777</Color>
 
     <!-- ===== ТЕКСТ ===== -->
     <Color x:Key="TextPrimary">#212121</Color>
     <Color x:Key="TextPrimaryRed">#E53935</Color>
     <Color x:Key="TextSecondary">#757575</Color>
+    <Color x:Key="TextPlaceholder">#757575</Color>
     <Color x:Key="TextDisabled">#9E9E9E</Color>
     <Color x:Key="TextError">#E53935</Color>
 
     <!-- ===== КНОПКИ ===== -->
     <Color x:Key="ButtonPrimaryRed">#E53935</Color>
-    <Color x:Key="ButtonPrimaryGray">#FFFFF4</Color>
-    <Color x:Key="ButtonPrimaryPressed">#D32F2F</Color>
-    <Color x:Key="ButtonSecondary">#F5F5F5</Color>
+    <Color x:Key="ButtonDisable">#807F7F</Color>
     <Color x:Key="ButtonTextPrimaryWhite">#FFFFFF</Color>
     <Color x:Key="ButtonTextPrimaryBlack">#000000</Color>
-    <Color x:Key="ButtonTextSecondary">#E53935</Color>
-    <Color x:Key="ButtonTextGray">#757575</Color>
-
+    <Color x:Key="ButtonTextDisable">#FFFFFF</Color>
+    <Color x:Key="ButtonPressed">#FF8888</Color>
+    <Color x:Key="ButtonTextPressed">#E53935</Color>
+    
+    
     <!-- ===== ПОЛЯ ВВОДА ===== -->
     <Color x:Key="InputBackground">#FFFFFF</Color>
     <Color x:Key="InputBorder">#E0E0E0</Color>
@@ -49,30 +51,6 @@
     <Color x:Key="StatusCompleted">#4CAF50</Color>
     <Color x:Key="StatusPending">#FF9800</Color>
     <Color x:Key="StatusOverdue">#F44336</Color>
-
-
-    <Color x:Key="Red50">#FFEBEE</Color>
-    <!-- 
-        📝 ОТВЕЧАЕТ ЗА: Очень светлый красный фон
-        💡 ЗАЧЕМ: Для подсветки при фокусе (легкий красный)
-        🎨 HEX: #FFEBEE - почти белый с красным оттенком
-    -->
-
-    <Color x:Key="Red100">#FFCDD2</Color>
-    <Color x:Key="Red200">#EF9A9A</Color>
-    <Color x:Key="Red300">#E57373</Color>
-    <Color x:Key="Red400">#EF5350</Color>
-    <Color x:Key="Red500">#F44336</Color>
-    <Color x:Key="Red600">#E53935</Color>
-    <!-- 
-        📝 ОТВЕЧАЕТ ЗА: Основной красный цвет
-        💡 ЗАЧЕМ: Ваш брендовый красный
-        🎨 HEX: #E53935 - яркий, но не агрессивный красный
-    -->
-
-    <Color x:Key="Red700">#D32F2F</Color>
-    <Color x:Key="Red800">#C62828</Color>
-    <Color x:Key="Red900">#B71C1C</Color>
 
 
 

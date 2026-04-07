@@ -1,19 +1,21 @@
-﻿using AutoCareDiray.Shared.Data;
+﻿using AutoCareDiray.Service.Dialog;
+using AutoCareDiray.Service.Navigation;
+using AutoCareDiray.Shared.Data;
+using AutoCareDiray.Shared.Interface;
+using AutoCareDiray.Shared.Models.Validation;
 using AutoCareDiray.Shared.Service.Api;
 using AutoCareDiray.Shared.Service.Data;
-using AutoCareDiray.Service.Navigation;
-using AutoCareDiray.Service.Dialog;
-using AutoCareDiray.Shared.Models.Validation;
 using AutoCareDiray.Shared.Service.ValidationService;
-using AutoCareDiray.View.VehicleView;
-using AutoCareDiray.Shared.ViewModels.VehicleViewModel;
 using AutoCareDiray.Shared.ViewModels.RepairViewModel;
+using AutoCareDiray.Shared.ViewModels.VehicleViewModel;
+using AutoCareDiray.View.RepairView;
+using AutoCareDiray.View.VehicleView;
 using CommunityToolkit.Maui;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection; // Добавьте эту строку
 using Microsoft.Extensions.Logging;
-using AutoCareDiray.View.RepairView;
-using AutoCareDiray.Shared.Interface;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using Microsoft.Maui.Platform;
 
 
 namespace AutoCareDiray
@@ -38,15 +40,30 @@ namespace AutoCareDiray
 
             Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
             {
-                #if ANDROID
-                handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
-                #elif IOS
+#if ANDROID
+             handler.PlatformView.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Colors.Transparent.ToPlatform());   
+#elif IOS
                 // Убираем рамку на iOS
                 handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
-                #elif WINDOWS
+#elif WINDOWS
                 // Убираем рамку на Windows
                 handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
-                #endif
+#endif
+            });
+
+
+            Microsoft.Maui.Handlers.PickerHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
+            {
+#if ANDROID
+
+        handler.PlatformView.Background = null;
+        handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+#elif IOS
+
+                handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#elif WINDOWS
+        handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+#endif
             });
 
             var DbPath = Path.Combine(FileSystem.AppDataDirectory, "auto_care_diray.db");

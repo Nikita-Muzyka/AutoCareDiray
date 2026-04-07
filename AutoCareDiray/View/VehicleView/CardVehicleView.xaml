@@ -4,92 +4,116 @@
              x:Class="AutoCareDiray.View.VehicleView.CardVehicleView"
              Style="{DynamicResource CustomPage}">
 
-    <Grid RowDefinitions="*,100"
-          HorizontalOptions="Center">
-        <ScrollView>
-            
-            <VerticalStackLayout Spacing="15">
-                <!-- Поле name car -->
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="10">
+            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" VerticalOptions="Center">
+                <VerticalStackLayout VerticalOptions="Center" Grid.Column="1">
+                    <Label Text="Название авто" Style="{DynamicResource LabelForCardInfoCategory}"/>
+                    <Label Text="{Binding  VehicleCard.NameVehicle}" FontSize="18" Style="{DynamicResource LabelCustom}"/>
+                </VerticalStackLayout>
+            </Grid>
 
-                <!-- LOGO -->
-                <Image Style="{StaticResource ImageLogoApp}"/>
+            <Border Style="{DynamicResource BorderForCardInfo}">
+                <Grid ColumnDefinitions="auto,auto" RowDefinitions="auto,auto,auto,auto" ColumnSpacing="10" RowSpacing="15">
 
-                <Grid ColumnDefinitions="150,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="Название ТС:"
-                                   Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" 
-                                   Text="{Binding VehicleRespon.NameVehicle}"
-                                   Style="{DynamicResource LaberInfo}"/>
+                    <HorizontalStackLayout Grid.Column="0" Grid.Row="0">
+                        <!--<Image Source="mileage_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
+                        <VerticalStackLayout>
+                            <Label Text="Пробег авто" Style="{DynamicResource LabelForCardInfoCategory}"/>
+                            <Label Grid.Column="1" Text="{Binding VehicleCard.Mileage,StringFormat='{0:N0} км'}" 
+                                   Style="{DynamicResource LabelForCardInfoData}"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout> <!--Mileage-->
+
+                    <HorizontalStackLayout Grid.Column="0" Grid.Row="1">
+                        <!--<Image Source="date_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
+                        <VerticalStackLayout>
+                            <Label Text="Дата производства " Style="{DynamicResource LabelForCardInfoCategory}"/>
+                            <Label Grid.Column="1" Text="{Binding VehicleCard.YearCreate, StringFormat='{0:d}'}"  Style="{DynamicResource LabelForCardInfoData}"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout> <!--CreateVehicle-->
+
+                    <HorizontalStackLayout Grid.Column="1" Grid.Row="1">
+                        <!--<Image Source="date_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
+                        <VerticalStackLayout>
+                            <Label Text="Дата покупки" Style="{DynamicResource LabelForCardInfoCategory}"/>
+                            <Label Grid.Column="1" Text="{Binding VehicleCard.YearPurchase, StringFormat='{0:d}'}" Style="{DynamicResource LabelForCardInfoData}"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout> <!--PurchaseVehicle-->
+
+                    <HorizontalStackLayout Grid.Column="0" Grid.Row="2">
+                        <!--<Image Source="vincode_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
+                        <VerticalStackLayout>
+                            <Label Text="VinCode" Style="{DynamicResource LabelForCardInfoCategory}"/>
+                            <Label Grid.Column="1" Text="{Binding VehicleCard.VinCode}" Style="{DynamicResource LabelForCardInfoData}"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout> <!--VinCode-->
+
+                    <HorizontalStackLayout Grid.Column="1" Grid.Row="2">
+                        <!--<Image Source="flag_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
+                        <VerticalStackLayout>
+                            <Label Text="Гос номер" Style="{DynamicResource LabelForCardInfoCategory}"/>
+                            <Label Grid.Column="1" Text="{Binding VehicleCard.StateNumber}" Style="{DynamicResource LabelForCardInfoData}"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout> <!--StateNumber-->
+
+                    <HorizontalStackLayout Grid.Column="0" Grid.Row="3">
+                        <!--<Image Source="transmission_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
+                        <VerticalStackLayout>
+                            <Label Text="Коробка" Style="{DynamicResource LabelForCardInfoCategory}"/>
+                            <Label Grid.Column="1" Text="{Binding VehicleCard.TransmissionType}" Style="{DynamicResource LabelForCardInfoData}"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout> <!--TransmissionType-->
+
+                    <HorizontalStackLayout Grid.Column="1" Grid.Row="3">
+                        <!--<Image Source="carcard_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
+                        <VerticalStackLayout>
+                            <Label Text="Тип авто" Style="{DynamicResource LabelForCardInfoCategory}"/>
+                            <Label Grid.Column="1" Text="{Binding VehicleCard.VehicleType}" Style="{DynamicResource LabelForCardInfoData}"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout> <!--TypeVehicle-->
+
                 </Grid>
+            </Border> <!--шапка данных авто-->
 
-                <Grid ColumnDefinitions="190,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="Дата производства:"
-                    Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" 
-                    Text="{Binding VehicleRespon.YearCreate}"
-                    Style="{DynamicResource LaberInfo}"/>
-                </Grid>
+            <BoxView HeightRequest="1" Color="#E0E0E0" Margin="0,10"/>
+            <Label Text="Информация по диагностики" Style="{DynamicResource LabelCustom}"
+                   HorizontalOptions="Center" Margin="0,5,0,30"/> <!--информация о переходе на предупреждения-->
 
-                <Grid ColumnDefinitions="150,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="Дата покупки:"
-                           Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" 
-                           Text="{Binding VehicleRespon.YearPurchase}"
-                           Style="{DynamicResource LaberInfo}"/>                  
-                </Grid>
+            <CollectionView Grid.Row="1" ItemsSource="{Binding WarningRepairType, Mode=TwoWay}" SelectionMode="None">
 
-                <Grid ColumnDefinitions="150,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="Пробег:"
-                           Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" 
-                           Text="{Binding VehicleRespon.Mileage}"
-                           Style="{DynamicResource LaberInfo}"/>            
-                </Grid>
+                <CollectionView.EmptyView>
+                    <Label Text="По моим подсчетам авто исправно"
+                Style="{DynamicResource LabelInfo}"
+                FontSize="20"/>
+                </CollectionView.EmptyView>
 
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10,5,10,10">
+                            <!--Выдвижение карточки для анимации-->
 
-                <Grid ColumnDefinitions="150,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="Тип ТС:"
-                           Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" 
-                           Text="{Binding VehicleRespon.VehicleType}"
-                           Style="{DynamicResource LaberInfo}"/>            
-                </Grid>
+                            <Border Style="{DynamicResource BorderForCollectionView}">
+                                <Grid ColumnDefinitions="Auto, *" Style="{DynamicResource GridForCardList}">
 
-                <Grid ColumnDefinitions="150,auto"
-                      HorizontalOptions="Center">
-                    <Label Text="VIN:" Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" Text="{Binding VehicleRespon.VinCode}" Style="{DynamicResource LaberInfo}"/>
-                </Grid>
+                                    <Image Source="repair_image.png" Style="{StaticResource ImageForList}"/>
 
-                <Grid ColumnDefinitions="150,auto"
-                    HorizontalOptions="Center">
-                    <Label Text="Гос номер" Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" Text="{Binding VehicleRespon.StateNumber}" Style="{DynamicResource LaberInfo}"/>
-                </Grid>
+                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                            
+                                        <Label Text="{Binding TitleRepair}" Style="{DynamicResource LabelCustom}"/>
 
-                <Grid ColumnDefinitions="150,auto"
-      HorizontalOptions="Center">
-                    <Label Text="Коробка" Style="{DynamicResource LaberInfo}"/>
-                    <Label Grid.Column="1" Text="{Binding VehicleRespon.TransmissionType}" Style="{DynamicResource LaberInfo}"/>
-                </Grid>
+                                        <!--<Label Text="{Binding Mileage, StringFormat='{0:N0} км'}" 
+                                               Style="{DynamicResource LabelSecondaryCustom}"/>-->
 
-
-                <CollectionView ItemsSource="{Binding WarningRepairType,Mode=TwoWay}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <VerticalStackLayout>
-                                <Label Text="{Binding TitleRepair}"/>
-                            </VerticalStackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-
-            </VerticalStackLayout>
-        </ScrollView>
-    </Grid>
+                                    </VerticalStackLayout>
+                                    <!--Данные авто-->
+                                </Grid>
+                            </Border>
+                            <!--Обертка карточки-->
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView> <!--карточки информации о проведении диагностики-->
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

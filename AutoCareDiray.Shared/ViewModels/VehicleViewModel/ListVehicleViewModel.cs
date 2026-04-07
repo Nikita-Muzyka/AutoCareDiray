@@ -12,6 +12,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
     public partial class ListVehicleViewModel : BaseViewModel
     {
+        #region основыне классы и списки
+
         private CancellationTokenSource _cts;
 
         [ObservableProperty]
@@ -21,7 +23,10 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private string errors;
         [ObservableProperty]
         private Vehicle selectedVehicle;
-        
+        [ObservableProperty]
+        private bool labelWarningRepair = false;
+        #endregion
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -36,7 +41,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         public async void GoCreateVehicle()
         {
             await _navigationService.GoNavigation("CreateVehicleView");
-        }
+        } //навигация создания авто
+
         [RelayCommand]
         public async Task GoCarCard(Vehicle VehicleSelected)
         {
@@ -45,12 +51,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 ["VehicleId"] = VehicleSelected.Id
             };
             await _navigationService.GoNavigation("CardVehicleView", property);
-        }
+        } //навигация карточки авто
 
         [RelayCommand]
-        /// <summary>
-        /// Загрузка авто с сервера
-        /// </summary>
         public async Task LoadVehicles()
         {
             if(Vehicles.Count > 0) Vehicles.Clear();
@@ -67,26 +70,29 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 }
             }
             else await _dialogService.ShowToastAsync(result.ErrorMessage);
-        }
-
+        } //загрузка списка авто
         [RelayCommand]
-        public async Task DeleteVehicle(Vehicle vehicleSelected)
+        public async void ShowVehicleOptions(Vehicle selectedVehicle)
         {
-            var respon = await _dialogService.ShowConfirmationAsync(vehicleSelected.NameVehicle);
-            if (respon)
-            {
-                var result = await _dataService.DeleteVehicleAsync(vehicleSelected, _cts.Token);
-                if(result.Success)
-                {
-                    await _dialogService.ShowToastAsync("ТС удалено");
-                    await LoadVehicles();
-                }
-                else await _dialogService.ShowToastAsync(result.ErrorMessage);
-            }
+            if (selectedVehicle == null) return;
+            var respon = await _dialogService.ShowDisplayAction();
+            if (respon == "Отмена") return;
+            if (respon == "Редактировать") await EditVehicle(selectedVehicle);
+            else if (respon == "Удалить") await DeleteVehicle(selectedVehicle);
         }
 
-        [RelayCommand]
-        public async Task EditVehicle(Vehicle vehicleSelected)
+        private async Task DeleteVehicle(Vehicle vehicleSelected)
+        {
+            var result = await _dataService.DeleteVehicleAsync(vehicleSelected, _cts.Token);
+            if (result.Success)
+            {
+                await _dialogService.ShowToastAsync("ТС удалено");
+                await LoadVehicles();
+            }
+            else await _dialogService.ShowToastAsync(result.ErrorMessage);
+        } //удаление авто
+
+        private async Task EditVehicle(Vehicle vehicleSelected)
         {
             var property = new Dictionary<string, object>()
             {
@@ -94,7 +100,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             };
 
             await _navigationService.GoNavigation("CreateVehicleView", property);
-        }
+        } //обновление информации авто
 
         [RelayCommand]
         public void CancelToken()
@@ -102,8 +108,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _cts.Cancel();
             _cts.Dispose();
             _cts = new CancellationTokenSource();
-        }
-
+        } //отмена токена
 
         private void CheckWarningRepair(IEnumerable<Vehicle> cars)
         {
@@ -112,8 +117,18 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 var sortRepairType = list.RepairTypes.Where(c => c.IntervalMileage > 0).ToList();
                var repairsType = sortRepairType.Where(c => list.Mileage - c.LastServiceMileage > c.IntervalMileage).ToList();
                 int count = repairsType.Count;
-                list.WarningRepair = $"Внимание:{count}";
+                if (count > 0)
+                {
+                    list.WarningRepair = $"Ко-во узлов требующих осомтра:{count}";
+                    list.NeedsService = true;
+                    LabelWarningRepair = true;
+                }
+                else
+                { 
+                    list.NeedsService = false;
+                    LabelWarningRepair = false;
+                }
             }
-        }
+        }  //проверка кол предупреждений о ремонте авто
     }
 }

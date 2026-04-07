@@ -11,6 +11,8 @@
 | VehicleType        | `string`    | Нет            | ТИп авто             |
 | Mileage            | `int`       | Да             | Пробег (км)          |
 | VinCode            | `string`    | Нет            | Вин код              |
+| StateNumber        | `string`    | Нет            | Гос номер            |
+| TransmissionType   | `string`    | Нет            | Вин код              |
 | DatePurchase       | `DateOnly`  | default        | Дата покупки         |
 | DateProduction     | `DateOnly`  | default        | Дата производства    |
 

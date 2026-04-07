@@ -3,80 +3,89 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vmVehicle="clr-namespace:AutoCareDiray.Shared.ViewModels.VehicleViewModel;assembly=AutoCareDiray.Shared" 
              x:Class="AutoCareDiray.View.VehicleView.ListVehicleView"
+             xmlns:behaviors="clr-namespace:AutoCareDiray.Controls.Behaviors"
              Style="{StaticResource CustomPage}">
+    
+    <Grid RowDefinitions="Auto, *">
 
-    <Grid RowDefinitions="*,100">
-        <VerticalStackLayout Grid.Row="0">
-            <CollectionView ItemsSource="{Binding Vehicles,Mode=TwoWay}"
-                            SelectedItem="{Binding SelectedVehicle}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command ="{Binding Source={RelativeSource AncestorType= {x:Type vmVehicle:ListVehicleViewModel}},
-                                        Path=GoCarCardCommand}"
-                                                      CommandParameter="{Binding .}">
-                                </TapGestureRecognizer>
-                            </Border.GestureRecognizers>
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="20,15,20,10">
+            <Label Style="{DynamicResource LabelLogo}" 
+                   FontSize="26"/>
+        </Grid> <!--лого-->
 
-                            <VerticalStackLayout HeightRequest="100">
-                                <Grid ColumnDefinitions="80,*,Auto,auto">
-                                    <Image Source="car_icon.png" Grid.Column="0" Margin="0,10,0,0" VerticalOptions="Center"/>
-                                    <VerticalStackLayout Grid.Column="1">
-                                        <Label Text="{Binding NameVehicle}" 
-                                                      FontSize="20"
-                                                      Grid.Row="0"
-                                                      Margin="0,10,0,0"
-                                                      HorizontalOptions="Start"
-                                                      VerticalOptions="Center"
-                                                      TextColor="{DynamicResource TextPrimaryRed}"
-                                                      FontFamily="{StaticResource RubikRegular}"/>
-                                        <Label Text="{Binding Mileage}" 
-                                                               FontSize="20"
-                                                               Grid.Row="1"
-                                                               Margin="0,10,0,0"
-                                                               HorizontalOptions="Start"
-                                                               VerticalOptions="Center"
-                                                               TextColor="{DynamicResource TextPrimaryRed}"
-                                                               FontFamily="{StaticResource RubikRegular}"/>
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Vehicles, Mode=TwoWay}" SelectedItem="{Binding SelectedVehicle}"
+                        SelectionMode="None">
 
-                                    </VerticalStackLayout>
+            <CollectionView.EmptyView>
+                <Label Text="🤷‍♂️ Кажется тут пусто."
+                       Style="{DynamicResource LabelInfo}"
+                       FontSize="20"/>
+            </CollectionView.EmptyView>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10,15,10,10"> <!--Выдвижение карточки для анимации-->
+                        
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"  CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
 
-                                    <VerticalStackLayout Grid.Column="2" VerticalOptions="End">
-                                        <Label Style="{DynamicResource LaberInfo}" Text="{Binding WarningRepair}"/>
-                                    </VerticalStackLayout>
-                                    <HorizontalStackLayout Grid.Column="3">
-                                        <ImageButton Source="edit_image.png"
-                                                   HeightRequest="30"
-                                                   WidthRequest="30"
-                                                   HorizontalOptions="End"
-                                                   Margin="0,10,20,00"
-                                                   Style="{StaticResource ImageButtonStandart}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}},Path=EditVehicleCommand}"
-                                                   CommandParameter="{Binding .}"/>
-                                        <ImageButton Source="delete_image.png"
-                                                      HeightRequest="30"
-                                                      WidthRequest="30"
-                                                      HorizontalOptions="End"
-                                                      Margin="0,10,20,0"
-                                                      Style="{StaticResource ImageButtonStandart}"
-                                                      Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}},Path=DeleteVehicleCommand}"
-                                                      CommandParameter="{Binding .}"/>          
-                                    </HorizontalStackLayout>
-                                </Grid>
-                            </VerticalStackLayout>
+                        <Border Style="{DynamicResource BorderForCollectionView}">
+                            
+                            <Grid ColumnDefinitions="Auto, *, Auto" Style="{DynamicResource GridForCardList}">
+
+                                <Border Grid.Column="0"
+                                        Style="{DynamicResource BorderListIndicator}">
+
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding NeedsService}" Value="False">
+                                            <Setter Property="Stroke" Value="{DynamicResource StatusCompleted}" />
+                                        </DataTrigger>
+
+                                        <DataTrigger TargetType="Border" Binding="{Binding NeedsService}" Value="True">
+                                            <Setter Property="Stroke" Value="{DynamicResource StatusOverdue}"/>
+                                        </DataTrigger>
+                                    </Border.Triggers>
+
+                                    <Image Source="car_icon.png"
+                                           Style="{StaticResource ImageForList}"/>
+                                </Border>
+                                <!--Border индикатор круг для авто-->
+
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                    
+                                    <Label Text="{Binding NameVehicle}" Style="{DynamicResource LabelCustom}"/>
+
+                                    <Label Text="{Binding Mileage, StringFormat='{0:N0} км'}" Style="{DynamicResource LabelSecondaryCustom}"/>
+
+                                    <Grid Shadow="{StaticResource ShadowRedLightForGrid}" IsVisible="{Binding LabelWarningRepair}">
+                                        <Label Text="{Binding WarningRepair}" Style="{StaticResource LabelWarningForCard}"
+                                               IsVisible="{Binding LabelWarningRepair}"/>
+                                    </Grid>
+                                </VerticalStackLayout>
+                                <!--Данные авто-->
+
+                                <ImageButton Grid.Column="2" 
+                                             Style="{DynamicResource ImageKebab}"
+                                             Source="dots_image.png"  
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:ListVehicleViewModel}}, Path=ShowVehicleOptionsCommand}"
+                                             CommandParameter="{Binding .}"/>
+                                <!--Кебаб меню для карточки авто-->
+                            </Grid>
+                            
                         </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
+                        <!--Обертка карточки-->
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+        </CollectionView> <!--карточки-->
 
-        <VerticalStackLayout Grid.Row="1">
-            <ImageButton HeightRequest="80"
-                             WidthRequest="80"
-                             Source="plus_icon.png"
-                             Command="{Binding GoCreateVehicleCommand}"/>
-
-        </VerticalStackLayout>
+        <Grid Grid.Row="1"
+              Style="{StaticResource GridForButtonCreate}">
+            <Button Command="{Binding GoCreateVehicleCommand}"
+                        Style="{DynamicResource ButtonCreate}"/>            
+        </Grid> <!--кнопка создать авто-->
+        
     </Grid>
 </ContentPage>

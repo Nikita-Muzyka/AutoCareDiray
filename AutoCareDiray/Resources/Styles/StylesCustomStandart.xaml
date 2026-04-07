@@ -1,10 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AutoCareDiray.Resources.Styles.StylesCustomStandart">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="AutoCareDiray.Resources.Styles.StylesCustomStandart"
+                    xmlns:behaviors="clr-namespace:AutoCareDiray.Controls.Behaviors">
 
 
-    <!--Лого картинка программы-->
+
+    <Shadow x:Key="ShadowRedLightForBorder" Brush="{DynamicResource ShadowRedLight}" Opacity="0.2" Offset="0,1" Radius="7"/>
+    <Shadow x:Key="ShadowRedLightForButton" Brush="{DynamicResource ShadowRedLight}" Opacity="0.8" Offset="0,6" Radius="10"/>
+    <Shadow x:Key="ShadowRedLightForGrid" Brush="{DynamicResource ShadowRedLight}" Opacity="0.5" Offset="0,2" Radius="5"/>
+
+    <Shadow x:Key="ShadowDisableForButton" Brush="{DynamicResource ShadowDisableButton}" Opacity="0.8" Offset="0,3" Radius="10"/>
+
+    <!-- Image Лого картинка программы-->
     <Style TargetType="Image" x:Key="ImageLogoApp">
         <Setter Property="HeightRequest" Value="300" />
         <Setter Property="WidthRequest" Value="500" />
@@ -14,10 +22,200 @@
         <Setter Property="Source" Value="car_side_view.png" />
     </Style>
 
+    <!--Image Лого картинка для списка авто-->
+    <Style TargetType="Image" x:Key="ImageForList">
+        <Setter Property="HeightRequest" Value="30" />
+        <Setter Property="WidthRequest" Value="30" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Aspect" Value="AspectFill" />
+    </Style>
+
+    <!--Image для картинок на карточке информации -->
+    <Style TargetType="Image" x:Key="ImageForCardInfo">
+        <Setter Property="HeightRequest" Value="30" />
+        <Setter Property="WidthRequest" Value="30" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0,0,5,0" />
+        <Setter Property="Aspect" Value="Fill" />
+    </Style>
+    
+    
+
+    <!--ImageButton кнопка картинка для списка Кебаб меню (удалить редактировать)-->
+    <Style TargetType="ImageButton" x:Key="ImageKebab">
+        <Setter Property="HeightRequest" Value="30" />
+        <Setter Property="WidthRequest" Value="30" />
+        <Setter Property="MinimumWidthRequest" Value="10" />
+        <Setter Property="MinimumHeightRequest" Value="10" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Aspect" Value="AspectFill" />
+        <Style.Behaviors>
+            <behaviors:ImageButtonBounceBehavior/>
+        </Style.Behaviors>
+    </Style>
+
+    <!--ImageButton стандартный-->
+    <Style TargetType="ImageButton" x:Key="ImageButtonStandart">
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="MinimumHeightRequest" Value="10"/>
+        <Setter Property="MinimumWidthRequest" Value="10"/>
+    </Style>
+    
+
+
+    <!--Button  Create + -->
+    <Style TargetType="Button" x:Key="ButtonCreate">
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="MinimumHeightRequest" Value="30"/>
+        <Setter Property="MinimumWidthRequest" Value="30"/>
+        <Setter Property="WidthRequest" Value="70"/>
+        <Setter Property="HeightRequest" Value="70"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="CornerRadius" Value="40"/>
+        <Setter Property="Text" Value="+"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryWhite}"/>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPrimaryRed}" />
+                            <Setter Property="Shadow" Value="{DynamicResource ShadowRedLightForButton}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource ButtonTextDisable}" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonDisable}" />
+                            <Setter Property="Shadow" Value="{DynamicResource ShadowDisableForButton}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+        <Style.Behaviors>
+            <behaviors:ButtonBounceBehavior/>
+        </Style.Behaviors>
+    </Style>
+
+    <!-- Button стандартная красная-->
+    <Style TargetType="Button" x:Key="ButtonCustomStandartRed">
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Padding" Value="5,5"/>
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="MinimumHeightRequest" Value="30"/>
+        <Setter Property="MinimumWidthRequest" Value="30"/>
+        <Setter Property="HeightRequest" Value="50"/>
+        <Setter Property="WidthRequest" Value="300"/>
+        <Setter Property="Shadow" Value="{DynamicResource ShadowRedLightForButton}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryWhite}"/>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPrimaryRed}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryWhite}"/>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPressed}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource ButtonTextDisable}, Dark={DynamicResource ButtonTextDisable}}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource ButtonDisable}, Dark={DynamicResource ButtonDisable}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+        <Style.Behaviors>
+            <behaviors:ButtonBounceBehavior/>
+        </Style.Behaviors>
+    </Style>
+
+    <!--Button  стандартная белая -->
+    <!--<Style TargetType="Button" x:Key="ButtonCustomStandartWhite">
+     <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryBlack}"/>
+     <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPrimaryGray}" />
+     <Setter Property="CharacterSpacing" Value="1.2"/>
+     <Setter Property="FontSize" Value="14"/>
+     <Setter Property="BorderWidth" Value="1"/>
+     <Setter Property="BorderColor" Value="Black"/>
+     <Setter Property="CornerRadius" Value="20"/>
+     <Setter Property="HorizontalOptions" Value="Center" />
+     <Setter Property="VerticalOptions" Value="Center" />
+     <Setter Property="Padding" Value="5,5"/>
+     <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+     <Setter Property="MinimumHeightRequest" Value="30"/>
+     <Setter Property="MinimumWidthRequest" Value="30"/>
+     <Setter Property="HeightRequest" Value="50"/>
+     <Setter Property="WidthRequest" Value="300"/>
+     <Setter Property="VisualStateManager.VisualStateGroups">
+         <VisualStateGroupList>
+             <VisualStateGroup x:Name="CommonStates">
+                 <VisualState x:Name="Normal" />
+                 <VisualState x:Name="Disabled">
+                     <VisualState.Setters>
+                         <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Gray950}, Dark={DynamicResource Gray200}}" />
+                         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource ButtonSecondary}, Dark={DynamicResource ButtonSecondary}}" />
+                     </VisualState.Setters>
+                 </VisualState>
+                 <VisualState x:Name="PointerOver" />
+             </VisualStateGroup>
+         </VisualStateGroupList>
+     </Setter>
+ </Style>-->
+
+    <!--Button предупреждения-->
+    <!--<Style TargetType="Button" x:Key="ButtonCustomWarning">
+     <Setter Property="TextColor" Value="{StaticResource ButtonTextSecondary}"/>
+     <Setter Property="BackgroundColor" Value="{StaticResource ButtonSecondary}" />
+     <Setter Property="FontSize" Value="14"/>
+     <Setter Property="BorderWidth" Value="0"/>
+     <Setter Property="CornerRadius" Value="20"/>
+     <Setter Property="HorizontalOptions" Value="Center" />
+     <Setter Property="VerticalOptions" Value="Center" />
+     <Setter Property="Padding" Value="5,5"/>
+     <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+     <Setter Property="MinimumHeightRequest" Value="30"/>
+     <Setter Property="MinimumWidthRequest" Value="30"/>
+     <Setter Property="VisualStateManager.VisualStateGroups">
+         <VisualStateGroupList>
+             <VisualStateGroup x:Name="CommonStates">
+                 <VisualState x:Name="Normal" />
+                 <VisualState x:Name="Disabled">
+                     <VisualState.Setters>
+                         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
+                         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ButtonSecondary}, Dark={StaticResource ButtonSecondary}}" />
+                     </VisualState.Setters>
+                 </VisualState>
+                 <VisualState x:Name="PointerOver" />
+             </VisualStateGroup>
+         </VisualStateGroupList>
+     </Setter>
+ </Style>-->
+
+
+    <!--Label лого-->
     <Style TargetType="Label" x:Key="LabelLogo">
         <Setter Property="FontSize" Value="38"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="Margin" Value="0, 5, 0, 20"/>
         <Setter Property="FormattedText">
             <FormattedString>
                 <Span Text="AutoCare " 
@@ -32,49 +230,144 @@
         </Setter>
     </Style>
 
-    <!--Ошибки-->
-    <Style TargetType="Label" x:Key="LaberError">
+    <!--Label обычный текст главный-->
+    <Style TargetType="Label" x:Key="LabelCustom">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="HeightRequest" Value="16"/>
-        <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimary}"/>
     </Style>
 
-    <!--Для информации -->
-    <Style TargetType="Label" x:Key="LaberInfo">
+    <!--Label обычный текст для второстепенных задач-->
+    <Style TargetType="Label" x:Key="LabelSecondaryCustom">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
-        <Setter Property="HeightRequest" Value="40"/>
-        <Setter Property="WidthRequest" Value="120"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextSecondary}"/>
     </Style>
 
-
-    <!--Для информации -->
-    <Style TargetType="Label" x:Key="LaberInfoMini">
+    <!-- Label Для информации -->
+    <Style TargetType="Label" x:Key="LabelInfo">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="HorizontalOptions" Value="Center"/>
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="TextColor" Value="{DynamicResource TextSecondary}"/>
-        <Setter Property="HeightRequest" Value="30"/>
-        <Setter Property="WidthRequest" Value="300"/>
-        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontSize" Value="16"/>
     </Style>
+
+    <!-- Label Ошибки-->
+    <Style TargetType="Label" x:Key="LabelError">
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="HorizontalOptions" Value="Start"/>
+        <Setter Property="HeightRequest" Value="16"/>
+        <Setter Property="Margin" Value="10,0,0,10"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
+    </Style>
+
+    <!-- Label Для предупреждения -->
+    <Style TargetType="Label" x:Key="LabelWarningForCard">
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <!--<Setter Property="Shadow" Value="{StaticResource ShadowRedLightForLabel}"/>-->
+    </Style>
+
+    <!--Label для карточек название категории-->
+    <Style TargetType="Label" x:Key="LabelForCardInfoCategory">
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimary}"/>
+    </Style>
+
+    <!--Label для карточек красный для данных -->
+    <Style TargetType="Label" x:Key="LabelForCardInfoData">
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimary}"/>
+    </Style>
+
+    <!--Label для Placeholder -->
+    <Style TargetType="Label" x:Key="LabelPlaceholder">
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextPlaceholder}"/>
+        <Setter Property="Margin" Value="5,5,0,0"/>
+    </Style>
+
+
+
+    <!--Grid для карточки CollectionView, чтобы было отступы между карточками и от краев экрана-->
+    <Style TargetType="Grid" x:Key="GridForCardList">
+        <Setter Property="Padding" Value="15"/>
+        <Setter Property="ColumnSpacing" Value="15"/>
+    </Style>
+
+    <!-- Grid для Button Create + -->
+    <Style TargetType="Grid" x:Key="GridForButtonCreate">
+        <Setter Property="Padding" Value="10,10,10,10"/>
+        <Setter Property="VerticalOptions" Value="End"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,20"/>
+    </Style>
+    
+    
 
     <!--Border для полей ввода под EntryImput-->
     <Style TargetType="Border" x:Key="BorderForEntryImput">
-        <Setter Property="Stroke" Value="{AppThemeBinding Light={DynamicResource InputBorder}, Dark={DynamicResource InputBorder}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={DynamicResource CardBorder}, Dark={DynamicResource CardBorder}}" />
         <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
         <Setter Property="StrokeThickness" Value="1"/>
-        <Setter Property="WidthRequest" Value="300"/>
+       
     </Style>
 
-    <!--Entry для ввода данных стандартный--> 
+    <!--Border для карточек информации -->
+    <Style TargetType="Border" x:Key="BorderForCardInfo">
+        <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
+        <Setter Property="StrokeThickness" Value="0.5"/>
+        <Setter Property="Stroke" Value="{DynamicResource BorderStroke}"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource Background}"/>
+    </Style>
+
+    <!--Border для карточек CollectionView-->
+    <Style TargetType="Border" x:Key="BorderForCollectionView">
+        <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
+        <Setter Property="StrokeThickness" Value="0"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource Background}"/>
+        <Setter Property="Shadow" Value="{DynamicResource ShadowRedLightForBorder}"/>
+    </Style>
+
+    <!--Border для индикатора в  CollectionView конкретно круг задач в авто-->
+    <Style TargetType="Border" x:Key="BorderListIndicator">
+        <Setter Property="StrokeShape" Value="RoundRectangle 35"/>
+        <Setter Property="StrokeThickness" Value="2.3"/>
+        <Setter Property="WidthRequest" Value="60"/>
+        <Setter Property="HeightRequest" Value="60"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+    </Style>
+
+    <!--Border для CollectionView-->
+    <Style TargetType="Border" x:Key="BorderForImageButton">
+        <Setter Property="StrokeShape" Value="RoundRectangle 35"/>
+        <Setter Property="Stroke" Value="{DynamicResource StatusOverdue}"/>
+        <Setter Property="StrokeThickness" Value="2.3"/>
+        <Setter Property="WidthRequest" Value="65"/>
+        <Setter Property="HeightRequest" Value="65"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+    </Style>
+
+    <!--Entry для ввода данных стандартный-->
     <Style TargetType="Entry" x:Key="EntryImput">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource PrimaryBlack}, Dark={DynamicResource PrimaryWhite}}" />
         <Setter Property="FontSize" Value="16" />
@@ -99,147 +392,9 @@
         </Setter>
     </Style>
 
-    <Style TargetType="Picker" x:Key="PickerStandart">
-        <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="HeightRequest" Value="50"/>
-        <Setter Property="WidthRequest" Value="300"/>
-        <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-    </Style>
-
-    <Style TargetType="Label" x:Key="LabelInEntry">
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-        <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="Margin" Value="10,0,0,0"/>
-    </Style>
-
-
-    <!--Кнопка стандартная красная-->
-    <Style TargetType="Button" x:Key="ButtonCustomStandartRed">
-        <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryWhite}"/>
-        <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPrimaryRed}" />
-        <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="BorderWidth" Value="0"/>
-        <Setter Property="CornerRadius" Value="20"/>
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="Padding" Value="5,5"/>
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-        <Setter Property="MinimumHeightRequest" Value="30"/>
-        <Setter Property="MinimumWidthRequest" Value="30"/>
-        <Setter Property="HeightRequest" Value="50"/>
-        <Setter Property="WidthRequest" Value="300"/>
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal" />
-                    <VisualState x:Name="Disabled">
-                        <VisualState.Setters>
-                            <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Gray950}, Dark={DynamicResource Gray200}}" />
-                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource ButtonSecondary}, Dark={DynamicResource ButtonSecondary}}" />
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="PointerOver" />
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </Setter>
-    </Style>
-
-    <!--Кнопка стандартная белая -->
-    <Style TargetType="Button" x:Key="ButtonCustomStandartWhite">
-        <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryBlack}"/>
-        <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPrimaryGray}" />
-        <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="BorderWidth" Value="1"/>
-        <Setter Property="BorderColor" Value="Black"/>
-        <Setter Property="CornerRadius" Value="20"/>
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="Padding" Value="5,5"/>
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-        <Setter Property="MinimumHeightRequest" Value="30"/>
-        <Setter Property="MinimumWidthRequest" Value="30"/>
-        <Setter Property="HeightRequest" Value="50"/>
-        <Setter Property="WidthRequest" Value="300"/>
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal" />
-                    <VisualState x:Name="Disabled">
-                        <VisualState.Setters>
-                            <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource Gray950}, Dark={DynamicResource Gray200}}" />
-                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource ButtonSecondary}, Dark={DynamicResource ButtonSecondary}}" />
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="PointerOver" />
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </Setter>
-    </Style>
-
-    
-    <Style TargetType="Button" x:Key="ButtonCustomWarning">
-        <Setter Property="TextColor" Value="{StaticResource ButtonTextSecondary}"/>
-        <Setter Property="BackgroundColor" Value="{StaticResource ButtonSecondary}" />
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="BorderWidth" Value="0"/>
-        <Setter Property="CornerRadius" Value="20"/>
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="Padding" Value="5,5"/>
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-        <Setter Property="MinimumHeightRequest" Value="30"/>
-        <Setter Property="MinimumWidthRequest" Value="30"/>
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal" />
-                    <VisualState x:Name="Disabled">
-                        <VisualState.Setters>
-                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
-                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ButtonSecondary}, Dark={StaticResource ButtonSecondary}}" />
-                        </VisualState.Setters>
-                    </VisualState>
-                    <VisualState x:Name="PointerOver" />
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </Setter>
-    </Style>
-
-    <Style TargetType="ImageButton" x:Key="ImageButtonStandart">
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="MinimumHeightRequest" Value="10"/>
-        <Setter Property="MinimumWidthRequest" Value="10"/>
-    </Style>
 
     <Style TargetType="CheckBox" x:Key="CheckBoxStandart">
         <Setter Property="Color" Value="{DynamicResource PrimaryRed}"/>
-    </Style>
-
-    <Style TargetType="Label" x:Key="LabelTextCustom">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBlack}, Dark={StaticResource PrimaryWhite}}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-        <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal" />
-                    <VisualState x:Name="Disabled">
-                        <VisualState.Setters>
-                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </Setter>
     </Style>
 
     <Style TargetType="Editor" x:Key="EditorStandart">
@@ -254,7 +409,15 @@
         <Setter Property="WidthRequest" Value="300"/>
     </Style>
 
-
+    <Style TargetType="Picker" x:Key="PickerStandart">
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="HeightRequest" Value="50"/>
+        <Setter Property="WidthRequest" Value="300"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+    </Style>
 
     <Style TargetType="Shell" x:Key="CustomTabBar">
         <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryWhite}, Dark={StaticResource PrimaryBlack}}" />
@@ -268,9 +431,8 @@
         <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource PrimaryRed}, Dark={StaticResource PrimaryRed}}" />
         <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource PrimaryBlack}, Dark={StaticResource PrimaryWhite}}" />
     </Style>
-
-
-
+    
+    <!--Дизайн для всех страниц-->
     <Style TargetType="Page" ApplyToDerivedTypes="True" x:Key="CustomPage">
         <Setter Property="Padding" Value="0"/>
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryWhite}, Dark={StaticResource PrimaryBlack}}" />

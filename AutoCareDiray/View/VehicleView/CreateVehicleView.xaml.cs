@@ -38,6 +38,7 @@ public partial class CreateVehicleView : ContentPage,IQueryAttributable
         if(BindingContext is CreateVehicleViewModel createCar)
         {
             createCar.CancelToken();
+            createCar.OffEventCommand.Execute(null);
         }
     }
 }

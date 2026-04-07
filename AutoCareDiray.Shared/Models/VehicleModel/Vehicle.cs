@@ -1,12 +1,15 @@
 ﻿using AutoCareDiray.Shared.Models.RepairModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 
 
 namespace AutoCareDiray.Shared.Models.VehicleModel
 {
-    public class Vehicle
+    public class Vehicle : INotifyPropertyChanged
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -22,10 +25,26 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         [Required]
         public int Mileage { get; set; }
 
-        public string? WarningRepair {  get; set; } = String.Empty;
-
         public List<Repair> Repairs { get; set; } = new();
         public List<RepairType> RepairTypes { get; set; } = new();
+
+        //по нему выбирается цвет индикатора авто в lIst
+        private bool _needsService;
+        public bool NeedsService
+        {
+            get => _needsService;
+            set
+            {
+                if (_needsService != value)
+                {
+                    _needsService = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        //Кол-во предупреждений по машине
+        public string? WarningRepair { get; set; } = String.Empty;
 
         public Vehicle() { }
 
@@ -49,5 +68,11 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
             Mileage = mileage;
             RepairTypes = repairTypes;
         }
+
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
     }
 }

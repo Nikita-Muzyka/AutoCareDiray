@@ -39,7 +39,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при сохранении машины: {ex.Message}");
             }
 
-        }
+        } // Создание авто
         public async Task<Result> ListVehicleAsync(CancellationToken token)
         {
             try
@@ -48,6 +48,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 var vehicles = await _dbContex.Vehicles
                     .Include(c => c.RepairTypes)
                     .Select(c => new Vehicle { Id = c.Id, Mileage = c.Mileage, NameVehicle = c.NameVehicle,RepairTypes = c.RepairTypes })
+                    .OrderBy(c => c.Mileage)
                     .ToListAsync(token);
                 if(vehicles.Count > 0) return Result<List<Vehicle>>.SuccessCreate(vehicles);
                 else return Result.ErrorCreate("Список машин пуст");
@@ -60,8 +61,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при получении списка машин: {ex.Message}");
             }
-        }
-
+        } // список авто вместе с типоми ремонта
         public async Task<Result> ListVehicleForListRepairAsync(CancellationToken token)
         {
             try
@@ -81,8 +81,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при получении списка машин: {ex.Message}");
             }
-        }
-
+        } // список авто только название и ид
         public async Task<Result> GetVehicleAsync(int Vehicle_Id, CancellationToken token)
         {
             try
@@ -103,8 +102,32 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при получении машины: {ex.Message}");
             }
-        }
+        } // получение авто
+        public async Task<Result> GetVehicleMileageAsync(int Vehicle_Id, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var vehicle = await _dbContex.Vehicles
+                    .Select(c => new Vehicle
+                    {
+                        Id = Vehicle_Id,
+                        Mileage = c.Mileage,
+                    })
+                    .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
 
+                if (vehicle != null) return Result<Vehicle>.SuccessCreate(vehicle);
+                else return Result.ErrorCreate("Машина не найдена");
+            }
+            catch (OperationCanceledException)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при получении машины: {ex.Message}");
+            }
+        } // получение ид и пробега авто
         public async Task<Result> GetVehicleAndRepairTypesAsync(int Vehicle_Id, CancellationToken token)
         {
             try
@@ -125,7 +148,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при получении машины: {ex.Message}");
             }
-        }
+        }  // получение авто вместе с репаир ид
         public async Task<Result> GetVehicleAndRepairTypesForUpdateAsync(int Vehicle_Id, CancellationToken token)
         {
             try
@@ -145,8 +168,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при получении машины: {ex.Message}");
             }
-        }
-
+        } // получение авто для обновления данных
         public async Task<Result> DeleteVehicleAsync(Vehicle vehicle, CancellationToken token)
         {
             try
@@ -172,8 +194,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при удалении машины: {ex.Message}");
             }
-        }
-
+        } // удалить авто
         public async Task<Result> UpdateVehicleAsync(Vehicle vehicle, CancellationToken token)
         {
             try
@@ -206,8 +227,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при обновлении машины: {ex.Message}");
             }
-        }
-
+        } // обновить авто
         public async Task<Result> UpdateVehicleMileageAsync(int vehicleId,int mileage, CancellationToken token)
         {
             try
@@ -230,8 +250,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при обновлении пробега машины: {ex.Message}");
             }
-        }
-
+        } // обновление пробега
 
         //Repair
 
@@ -257,14 +276,15 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при получении списка ремонтов: {ex.Message}");
             }
-        }
-
+        } // саисок ремонта для машины
         public async Task<Result> GetRepairAsync(int repairId, CancellationToken token)
         {
             try
             {
                 token.ThrowIfCancellationRequested();
-                var repairDb = await _dbContex.Repairs.FindAsync(repairId,token);
+                var repairDb = await _dbContex.Repairs
+                    .Include(c => c.RepairType)
+                    .FirstOrDefaultAsync(c => c.Id == repairId);
 
                 if(repairDb != null) return Result<Repair>.SuccessCreate(repairDb);
                 else return Result.ErrorCreate("Ремонт не найден");
@@ -277,7 +297,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при получении ремонта: {ex.Message}"); 
             }
-        }
+        }  // получить список ремонта
         public async Task<Result> CreateRepairAsync(Repair repair, CancellationToken token)
         {
             try
@@ -295,8 +315,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при сохранении ремонта: {ex.Message}");
             }
-        }
-
+        }  // создание ремонта
         public async Task<Result> DeleteRepairAsync(Repair repair, CancellationToken token)
         {
             try
@@ -320,8 +339,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при удалении ремонта: {ex.Message}");
             }
-        }
-
+        }  // удалить ремонт
         public async Task<Result> UpdateRepairAsync(Repair repair, CancellationToken token)
         {
             try
@@ -350,7 +368,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при обновлении ремонта: {ex.Message}");
             }
-        }
+        }  // обновить ремонта
 
 
         //RepairType
@@ -372,8 +390,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при получении списка типов ремонтов: {ex.Message}");
             }
-        }
-
+        } // полуичть тпы ремонта список
         public async Task<Result> UpdateRepairTypeAsync(RepairType repaitType, CancellationToken token)
         {
             try
@@ -398,10 +415,12 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при обновлении типа ремонта: {ex.Message}");
             }
-        }
+        } // обновить тип ремонта
+
+
         public void InitializeDatabase()
         {
             _dbContex.Database.Migrate();
-        }
+        } // инициализация БД при запуске Приложения
     }
 }
