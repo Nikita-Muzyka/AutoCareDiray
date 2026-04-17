@@ -14,6 +14,7 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public string PhotoVehicle { get; set; } = String.Empty;
         public string NameVehicle { get; set; } = String.Empty;
         public DateTime YearCreate { get; set; }
         public DateTime YearPurchase { get; set; }

@@ -25,13 +25,13 @@ namespace AutoCareDiray.Shared.Models.RepairModel
 
         [Required]
         public int IntervalMileage { get; set; } = -1;
+        public int IntervalMonth { get; set; } = 0;
 
         //Последний пробег ремонта авто
         [Required]
         public int LastServiceMileage { get; set; } = 0;
 
         public string TransmissionType {  get; set; } = string.Empty;
-        public DateTime? IntervalDate { get; set; }
 
         //Выбор обслужена категория или нет
         private bool _isServiced = false;
@@ -74,37 +74,37 @@ namespace AutoCareDiray.Shared.Models.RepairModel
 
         public RepairType() { }
 
-        public RepairType(string titleRepair,string category, int intervalMileage, int lastServiceMileage,string transmissionType, DateTime intervalDate)
+        public RepairType(string titleRepair,string category, int intervalMileage, int intervalMonth, int lastServiceMileage,string transmissionType)
         {
             TitleRepair = titleRepair;
             Category = category;
             IntervalMileage = intervalMileage;
-            IntervalDate = intervalDate;
+            IntervalMonth = intervalMonth;
             LastServiceMileage = lastServiceMileage;
             TransmissionType = transmissionType;
         }
      
         public RepairType(string titleRepair, string category, int intervalMileage)
-           : this(titleRepair, category, intervalMileage, default, String.Empty, new DateTime())
+           : this(titleRepair, category, intervalMileage, default, default, String.Empty)
         {
 
         }
 
-        public RepairType(string titleRepair, string category, int intervalMileage,string transmissionType)
-          : this(titleRepair, category, intervalMileage, default, transmissionType, new DateTime())
+        public RepairType(string titleRepair, string category, int intervalMileage, int intervalMonth,string transmissionType)
+          : this(titleRepair, category, intervalMileage, intervalMonth, default, transmissionType)
         {
 
         }
 
         public RepairType(string titleRepair, string category)
-          : this(titleRepair, category, default, default, String.Empty, new DateTime())
+          : this(titleRepair, category, default, default,default, String.Empty)
         {
 
         }
 
 
-        public RepairType(string titleRepair, string category, int intervalMileage, DateTime intervalDate)
-         : this(titleRepair, category, intervalMileage, default, String.Empty, intervalDate)
+        public RepairType(string titleRepair, string category, int intervalMileage, int intervalMonth)
+         : this(titleRepair, category, intervalMileage, intervalMonth , default, String.Empty)
         {
 
         }

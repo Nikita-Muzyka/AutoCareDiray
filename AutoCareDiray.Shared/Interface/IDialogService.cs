@@ -10,5 +10,7 @@
         Task<bool> ShowConfirmationAsync(string vehicleName);
 
         Task<string> ShowDisplayAction();
+
+        Task<string> ShowDisplayAction(string title,string cancel,string text1, string text2);
     }
 }

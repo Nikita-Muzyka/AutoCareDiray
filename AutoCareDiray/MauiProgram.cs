@@ -1,5 +1,6 @@
 ﻿using AutoCareDiray.Service.Dialog;
 using AutoCareDiray.Service.Navigation;
+using AutoCareDiray.Service.PhotoPicker;
 using AutoCareDiray.Shared.Data;
 using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.Shared.Models.Validation;
@@ -99,6 +100,7 @@ namespace AutoCareDiray
             builder.Services.AddTransient<IDialogService,DialogService>();
             builder.Services.AddTransient<IValidatorService, ValidatorService>();
             builder.Services.AddSingleton<INavigationService,NavigationService>();
+            builder.Services.AddSingleton<IPhotoPicker,PhotoPicker>();
 
             //builder.Services.AddTransient<UserValidation>();
             //builder.Services.AddTransient<RecoverValidation>();

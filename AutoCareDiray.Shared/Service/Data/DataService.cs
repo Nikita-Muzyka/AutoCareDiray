@@ -399,7 +399,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 var repairDb = await _dbContex.RepairTypes.FindAsync(repaitType.Id,token);
                 if (repairDb != null)
                 {
-                    repairDb.IntervalDate = repaitType.IntervalDate;
+                    repairDb.IntervalMonth = repaitType.IntervalMonth;
                     repairDb.IntervalMileage = repaitType.IntervalMileage;
 
                     await _dbContex.SaveChangesAsync();
