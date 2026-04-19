@@ -353,11 +353,9 @@
     <!--Border для главных карточек информации в картах ремонта и авто -->
     <Style TargetType="Border" x:Key="BorderForCardInfo">
         <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
-        <Setter Property="StrokeThickness" Value="0.5"/>
-        <Setter Property="Stroke" Value="{DynamicResource BorderStroke}"/>
-        <Setter Property="Margin" Value="5"/>
-        <Setter Property="Padding" Value="10"/>
-        <Setter Property="BackgroundColor" Value="{DynamicResource Background}"/>
+        <Setter Property="Background" Value="{DynamicResource Background}"/>
+        <Setter Property="StrokeThickness" Value="0"/>
+        <Setter Property="Shadow" Value="{StaticResource ShadowForBorderCardEntry}"/>
     </Style>
 
     <!--Border для карточек CollectionView-->
@@ -397,7 +395,7 @@
         <Setter Property="Background" Value="{DynamicResource Background}"/>
     </Style>
 
-    <!--Border для фото круглое-->
+    <!--Border для фото полу круг-->
     <Style TargetType="Border" x:Key="BorderPhoto">
         <Setter Property="StrokeShape" Value="RoundRectangle 35"/>
         <Setter Property="StrokeThickness" Value="2.3"/>
@@ -434,14 +432,10 @@
     <!--Editor для ввода информации обычный-->
     <Style TargetType="Editor" x:Key="EditorStandart">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBlack}, Dark={StaticResource PrimaryWhite}}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="HeightRequest" Value="150"/>
-        <Setter Property="WidthRequest" Value="300"/>
+        <Setter Property="AutoSize" Value="TextChanges"/>
     </Style>
 
     

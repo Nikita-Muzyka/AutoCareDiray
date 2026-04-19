@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vmVehicle="clr-namespace:AutoCareDiray.Shared.ViewModels.VehicleViewModel;assembly=AutoCareDiray.Shared"
              x:Class="AutoCareDiray.View.VehicleView.CardVehicleView"
              Style="{DynamicResource CustomPage}">
 
     <ScrollView>
         <VerticalStackLayout Spacing="20" Padding="10">
-            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" VerticalOptions="Center">
-                <VerticalStackLayout VerticalOptions="Center" Grid.Column="1">
-                    <Label Text="Название авто" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                    <Label Text="{Binding  VehicleCard.NameVehicle}" FontSize="18" Style="{DynamicResource LabelCustom}"/>
-                </VerticalStackLayout>
-            </Grid>
+
+
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
+                <Border Style="{DynamicResource BorderPhoto}" WidthRequest="150" HeightRequest="150" Margin="0,0,0,10">
+                    <Image Source="{Binding VehicleCard.PhotoVehicle}"/>
+                </Border>
+                <Label Text="{Binding  VehicleCard.NameVehicle}" FontSize="18" Style="{DynamicResource LabelCustom}" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
 
             <Border Style="{DynamicResource BorderForCardInfo}">
                 <Grid ColumnDefinitions="auto,auto" RowDefinitions="auto,auto,auto,auto" ColumnSpacing="10" RowSpacing="15">
 
                     <HorizontalStackLayout Grid.Column="0" Grid.Row="0">
-                        <!--<Image Source="mileage_icon.png" Style="{StaticResource ImageForCardInfo}"/>-->
                         <VerticalStackLayout>
                             <Label Text="Пробег авто" Style="{DynamicResource LabelForCardInfoCategory}"/>
                             <Label Grid.Column="1" Text="{Binding VehicleCard.Mileage,StringFormat='{0:N0} км'}" 
@@ -76,12 +78,23 @@
                 </Grid>
             </Border> <!--шапка данных авто-->
 
+            <Border Style="{DynamicResource BorderForCardInfo}">
+                <VerticalStackLayout RadioButtonGroup.GroupName="Mode" RadioButtonGroup.SelectedValue="{Binding SelectedMode}">
+                    <RadioButton Content="Информация по диагностике" x:Name="DiagnosticsButton" Value="Diagnostics" />
+                    <RadioButton Content="Заметки моего авто" x:Name="NotesButton" Value="Notes"/>
+                </VerticalStackLayout>
+            </Border> <!--кнопки режимов-->
+
             <BoxView HeightRequest="1" Color="#E0E0E0" Margin="0,10"/>
-            <Label Text="Информация по диагностики" Style="{DynamicResource LabelCustom}"
-                   HorizontalOptions="Center" Margin="0,5,0,30"/> <!--информация о переходе на предупреждения-->
 
-            <CollectionView Grid.Row="1" ItemsSource="{Binding WarningRepairType, Mode=TwoWay}" SelectionMode="None">
+            <CollectionView ItemsSource="{Binding WarningRepairType, Mode=TwoWay}" SelectionMode="None" 
+                            IsVisible="{Binding Source={x:Reference DiagnosticsButton},Path=IsChecked}">
 
+                <CollectionView.Header>
+                    <Label Text="Информация по диагностики" Style="{DynamicResource LabelCustom}"
+                           HorizontalOptions="Center" Margin="0,5,0,30"/>
+                    <!--информация о переходе на предупреждения-->
+                </CollectionView.Header>
                 <CollectionView.EmptyView>
                     <Label Text="По моим подсчетам авто исправно"
                 Style="{DynamicResource LabelInfo}"
@@ -114,6 +127,48 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView> <!--карточки информации о проведении диагностики-->
+
+            <VerticalStackLayout IsVisible="{Binding Source={x:Reference NotesButton},Path=IsChecked}" Padding="5">
+                
+                <Border Style="{DynamicResource BorderForCardInfo}" Padding="5" Margin="0,0,0,20">
+                    <VerticalStackLayout>
+                        <Entry Text="{Binding NewTitleNote}" Style="{DynamicResource EntryImput}" FontSize="18"/>
+                        <BoxView HeightRequest="1" Color="#E0E0E0" Margin="0,10"/>
+                        <Editor Text="{Binding NewContentNote}" Style="{DynamicResource EditorStandart}"/>
+                        <Button Style="{DynamicResource ButtonCustomStandartRed}" Text="{Binding ButtonName}" Margin="0,20,0,20"
+                                HeightRequest="40" WidthRequest="150" Command="{Binding interactionNoteCommand}"/>
+                    </VerticalStackLayout>
+                </Border> <!--создание заметки-->
+
+                <CollectionView ItemsSource="{Binding VehicleNotes}">
+
+                    <CollectionView.Header>
+                        <Label Text="Ваши заметки" Style="{DynamicResource LabelCustom}"/>
+                    </CollectionView.Header>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout Margin="0,0,0,20" Padding="5">
+                                <Border Style="{DynamicResource BorderForCollectionView}" Padding="5">
+                                    <VerticalStackLayout>
+                                        <ImageButton Grid.Column="2" Style="{DynamicResource ImageKebab}" Source="dots_image.png"  
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vmVehicle:CardVehicleViewModel}}, Path=ShowNotesOptionsCommand}"
+                                                     CommandParameter="{Binding .}" HorizontalOptions="End"/>
+                                        <!--Кебаб меню для карточки авто-->
+                                        <Label Text="{Binding Title}" Style="{DynamicResource LabelCustom}" FontSize="16" Grid.Column="0"/>
+                                        <BoxView HeightRequest="1" Color="#E0E0E0" Margin="0,10"/>
+                                        <Label Text="{Binding Content}" Style="{DynamicResource LabelCustom}" FontSize="14"/>
+                                        <Label Text="{Binding DateCreated,StringFormat= ' Редактированно {0:dd/MM/yy HH:mm}'}" Style="{DynamicResource LabelInfoForEntry}"
+                                               FontSize="10"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

@@ -1,4 +1,5 @@
-﻿using AutoCareDiray.Shared.Models.RepairModel;
+﻿using AutoCareDiray.Shared.Models.Notes;
+using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using AutoCareDiray.Shared.Service.ResultService;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,12 @@ namespace AutoCareDiray.Shared.Interface
         Task<Result> GetListRepairTypeAsync(int vehicleId,CancellationToken token);
         Task<Result> UpdateRepairTypeAsync(RepairType repaitType, CancellationToken token);
 
+
+        //VehicleNote
+        Task<Result> ListVehicleNotesAsync(int Vehicleid, CancellationToken token);
+        Task<Result> CreateVehicleNotesAsync(VehicleNotes note, CancellationToken token);
+        Task<Result> DeleteVehicleNotesAsync(int id, CancellationToken token);
+        Task<Result> UpdateVehileNoteAsync(VehicleNotes note, CancellationToken token);
         void InitializeDatabase();
     }
 }

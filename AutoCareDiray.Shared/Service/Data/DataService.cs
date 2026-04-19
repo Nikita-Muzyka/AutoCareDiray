@@ -5,6 +5,7 @@ using AutoCareDiray.Shared.Models.VehicleModel;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using AutoCareDiray.Shared.Service.ResultService;
+using AutoCareDiray.Shared.Models.Notes;
 
 
 namespace AutoCareDiray.Shared.Service.Data
@@ -416,6 +417,98 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при обновлении типа ремонта: {ex.Message}");
             }
         } // обновить тип ремонта
+
+        //VehicleNotes
+
+        public async Task<Result> ListVehicleNotesAsync(int id,CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var notes = await _dbContex.VehicleNotes.Where(c => c.VehicleId == id).OrderBy(c => c.DateCreated).ToListAsync(token);
+                if (notes != null) return Result<List<VehicleNotes>>.SuccessCreate(notes);
+                else return Result.ErrorCreate("Список заметок пуст");
+            }
+            catch (OperationCanceledException ex)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при получении списка заметок: {ex.Message}");
+            }
+        } // получить список заметок
+
+        public async Task<Result> CreateVehicleNotesAsync(VehicleNotes note, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                await _dbContex.VehicleNotes.AddAsync(note, token);
+                await _dbContex.SaveChangesAsync(token);
+                return Result.SuccessCreate();
+            }
+            catch (OperationCanceledException ex)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при сохранении заметки: {ex.Message}");
+            }
+        }
+
+        public async Task<Result> DeleteVehicleNotesAsync(int id, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var respon = await _dbContex.VehicleNotes.FindAsync(id);
+                if (respon != null)
+                {
+                    _dbContex.VehicleNotes.Remove(respon);
+                    await _dbContex.SaveChangesAsync();
+                    return Result.SuccessCreate();
+                }
+                else return Result.ErrorCreate("заметка не найдена");
+
+            }
+            catch (OperationCanceledException ex)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при удалении заметки: {ex.Message}");
+            }
+        }
+
+        public async Task<Result> UpdateVehileNoteAsync(VehicleNotes note, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var noteDb = await _dbContex.VehicleNotes.FindAsync(note.Id, token);
+                if (noteDb != null)
+                {
+                    noteDb.Title = note.Title;
+                    noteDb.Content = note.Content;
+                    noteDb.DateUpdated = note.DateUpdated;
+
+                    await _dbContex.SaveChangesAsync();
+                    return Result.SuccessCreate();
+                }
+                else return Result.ErrorCreate("Заметка не найдена");
+            }
+            catch (OperationCanceledException ex)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при обновлении заметки: {ex.Message}");
+            }
+        }
 
 
         public void InitializeDatabase()
