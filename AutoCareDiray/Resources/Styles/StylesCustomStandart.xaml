@@ -414,6 +414,7 @@
         <Setter Property="HorizontalOptions" Value="Start" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">

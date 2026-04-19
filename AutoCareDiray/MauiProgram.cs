@@ -67,6 +67,15 @@ namespace AutoCareDiray
 #endif
             });
 
+
+            Microsoft.Maui.Handlers.EditorHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
+            {
+#if ANDROID
+                // Убираем подчеркивание у Editor на Android
+                handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+#endif
+            });
+
             var DbPath = Path.Combine(FileSystem.AppDataDirectory, "auto_care_diray.db");
             builder.Services.AddDbContext<AppDBContex>(options =>
             {
