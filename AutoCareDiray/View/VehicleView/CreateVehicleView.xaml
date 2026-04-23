@@ -29,8 +29,7 @@
 
                                 <Image Source="{Binding PathPhoto}" HeightRequest="250" WidthRequest="250" TranslationY="10"/>
                             </Border>
-                        </VerticalStackLayout>
-                        <!--Photo-->
+                        </VerticalStackLayout> <!--Photo-->
 
                         <BoxView Style="{DynamicResource BoxViewCustom}"/>
 
@@ -80,13 +79,12 @@
                         <VerticalStackLayout Padding="15,10">
                             <Label Style="{DynamicResource LabelInfoForEntry}" Text="Выберите тип вашей коробки"/>
                             <Grid RowDefinitions="auto,auto" HorizontalOptions="Center" RadioButtonGroup.GroupName="Transmission"
-                                      RadioButtonGroup.SelectedValue="{Binding TransmissionType}">
+                                      RadioButtonGroup.SelectedValue="{Binding TransmissionType, Mode=TwoWay}">
                                 <RadioButton  Grid.Row="0" Content="Механическая (МКПП)" Value="Механическая"/>
 
                                 <RadioButton Grid.Row="1" Content="Автоматическая(АКПП)" Value="Автоматическая"/>
                             </Grid>
-                        </VerticalStackLayout>
-                        <!--TransmissionType-->
+                        </VerticalStackLayout> <!--TransmissionType-->
 
                     </VerticalStackLayout>
                 </Border> <!--Карточка основной информации-->

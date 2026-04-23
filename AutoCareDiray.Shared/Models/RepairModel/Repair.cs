@@ -19,6 +19,10 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         public string? SpareParts { get; set; } = String.Empty;
         public int Cost { get; set; } = default;
         public string? Description { get; set; } = String.Empty;
+        public string? ServiceName { get; set; } = String.Empty;
+        public string? CommentMechanic { get; set; } = String.Empty;
+        public string? Job { get; set; } = String.Empty;
+
         public string? ProgressPercent
         {
             get
@@ -26,7 +30,6 @@ namespace AutoCareDiray.Shared.Models.RepairModel
                 return $"До след ремонта {Math.Round(ProgressMileage,1) * 100} %";
             }
         }
-
         public double ProgressMileage
         {
             get

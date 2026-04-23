@@ -34,6 +34,7 @@ namespace AutoCareDiray.Shared.Interface
         //RepairType
         Task<Result> GetListRepairTypeAsync(int vehicleId,CancellationToken token);
         Task<Result> UpdateRepairTypeAsync(RepairType repaitType, CancellationToken token);
+        Task<Result> UpdateLastServiceRepairTypeAsync(RepairType repairType, CancellationToken token);
 
 
         //VehicleNote

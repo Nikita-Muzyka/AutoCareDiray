@@ -417,6 +417,27 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при обновлении типа ремонта: {ex.Message}");
             }
         } // обновить тип ремонта
+        public async Task<Result> UpdateLastServiceRepairTypeAsync(RepairType repairType, CancellationToken token) {             try
+            {
+                token.ThrowIfCancellationRequested();
+                var repairDb = await _dbContex.RepairTypes.FindAsync(repairType.Id, token);
+                if (repairDb != null)
+                {
+                    repairDb.LastServiceMileage = repairType.LastServiceMileage;
+                    await _dbContex.SaveChangesAsync();
+                    return Result.SuccessCreate();
+                }
+                else return Result.ErrorCreate("Тип ремонта не найден");
+            }
+            catch (OperationCanceledException ex)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при обновлении последнего обслуживания типа ремонта: {ex.Message}");
+            }
+        } // обновить дату и пробег последнего обслуживания типа ремонта
 
         //VehicleNotes
 

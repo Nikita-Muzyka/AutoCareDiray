@@ -25,14 +25,18 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private bool _isUpdateRepair = false;
         private Vehicle _vehicle;
 
-        [ObservableProperty]
-        private string buttonName = "Создать";
+        #endregion
+
+        #region классы и свойства для работы UI
+
         public ObservableCollection<RepairType> RepairTypes { get; set; } = new ObservableCollection<RepairType>();
 
         [ObservableProperty]
         private RepairType selectedRepairType;
         [ObservableProperty]
         private int intervalMileageFilled;
+        [ObservableProperty]
+        private int intervalMonthsFilled;
         [ObservableProperty]
         private DateTime dateRepairSelected = DateTime.UtcNow;
         [ObservableProperty]
@@ -45,6 +49,19 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private string descriptionFilled;
         [ObservableProperty]
         private string statusMessage;
+        [ObservableProperty]
+        private string buttonName = "Создать";
+
+        [ObservableProperty]
+        private bool isMileageError = false;
+        [ObservableProperty]
+        private bool isCostError = false;
+        [ObservableProperty]
+        private string selectedJob;
+        [ObservableProperty]
+        private string serviceName;
+        [ObservableProperty]
+        private string commentMechanic;
 
         #endregion
 
@@ -136,6 +153,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 }
                 SelectedRepairType = RepairTypes.FirstOrDefault(new RepairType());
                 IntervalMileageFilled = SelectedRepairType.IntervalMileage;
+                IntervalMonthsFilled = SelectedRepairType.IntervalMonth;
                 MileageFilled = _vehicle.Mileage;
             }
             else StatusMessage = result.ErrorMessage;
@@ -157,13 +175,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                     StatusMessage = resultUdateRepair.ErrorMessage;
                     return;
                 }
-
                 _isUpdateRepair = false;
-                if (resultUdateRepair.Success == false)
-                {
-                    StatusMessage = resultUdateRepair.ErrorMessage;
-                    return;
-                }
             }
             else
             {
@@ -177,6 +189,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 }
             }
 
+            await UpdateLastServiceMileage();
             await UpdateDateRepair();
             await _navigationService.GoToBack();
         }  //Создание или редактирование ремонта
@@ -192,6 +205,9 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 Description = DescriptionFilled,
                 RepairTypeId = SelectedRepairType.Id,
                 CurrentMileage = MileageFilled,
+                CommentMechanic = CommentMechanic,
+                Job = SelectedJob,
+                ServiceName = ServiceName,
             };
 
             return repair;
@@ -207,14 +223,15 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 VehicleId = _vehicleId,
                 RepairTypeId = SelectedRepairType.Id,
                 CurrentMileage = MileageFilled,
+                CommentMechanic = CommentMechanic,
+                ServiceName = ServiceName,
+                Job = SelectedJob,
             };
 
             return repair;
         } // создание ремонита
         private async Task UpdateDateRepair()
         { 
-            bool IsResultType = false;
-
             var result = await _dataService.GetVehicleMileageAsync(_vehicleId,_cts.Token);
             if (result.Success)
             {
@@ -231,9 +248,10 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
             }
 
-            if (SelectedRepairType.IntervalMileage != IntervalMileageFilled)
+            if (SelectedRepairType.IntervalMileage != IntervalMileageFilled || SelectedRepairType.IntervalMonth != IntervalMonthsFilled)
             {
                 SelectedRepairType.IntervalMileage = IntervalMileageFilled;
+                SelectedRepairType.IntervalMonth = IntervalMonthsFilled;
                 var resultUpdateTypeRep = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
                 if (resultUpdateTypeRep.Success == false)
                 {
@@ -243,10 +261,15 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                     }
                     else
                     {
-                        StatusMessage += " " + resultUpdateTypeRep.ErrorMessage;           
+                        StatusMessage = resultUpdateTypeRep.ErrorMessage;
                     }
                 }
             }
+        } // Обновление пробега у авто и интервала пробега
+        private async Task UpdateLastServiceMileage()
+        {
+            SelectedRepairType.LastServiceMileage = MileageFilled;
+            var result = await _dataService.UpdateLastServiceRepairTypeAsync(SelectedRepairType, _cts.Token);
         } // Обновление пробега у авто и интервала пробега
 
         partial void OnSelectedRepairTypeChanged(RepairType value)
@@ -267,7 +290,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             OnPropertyChanged(nameof(HasErrors));
             OnPropertyChanged(e.PropertyName);
         }
-
+        
         [RelayCommand]
         public void CancelToken()
         {
@@ -280,6 +303,6 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         public void OffEvent()
         {
             _validationRepair.ErrorsChanged -= (s, e) => OnErrorsChangedUI(e);
-        }  //отмена токена
+        }  //отмена подписки на событие
     }
 }

@@ -157,12 +157,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         {
             if (_isInitilized) return;
 
-            await Task.Delay(100);
-            var groups = await Task.Run(() => CreateRepairTypeGroups());
+            var groups = CreateRepairTypeGroups();
 
             RepairGrouped = new ObservableCollection<RepairGroup>(groups);
-
-            await Task.Delay(1000);
 
             _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
             _isInitilized = true;
@@ -260,32 +257,11 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
         partial void OnTransmissionTypeChanged(string value)
         {
-            if (value == "Автоматическая")
+            foreach (var item in _listRepairType)
             {
-                foreach (var list in _listRepairType.Where(c => c.Category == "Трансмиссия и Жидкости").ToList())
+                if (item.TransmissionType == "Автоматическая" || item.TransmissionType == "Механическая")
                 {
-                    if(list.TransmissionType == "Автоматическая")
-                    {
-                        list.IsRemoveMaintenance = false;
-                    }
-                    if (list.TransmissionType == "Механическая")
-                    {
-                        list.IsRemoveMaintenance = true;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var list in _listRepairType.Where(c => c.Category == "Трансмиссия и Жидкости").ToList())
-                {
-                    if (list.TransmissionType == "Механическая")
-                    {
-                        list.IsRemoveMaintenance = false;
-                    }
-                    if (list.TransmissionType == "Автоматическая")
-                    {
-                        list.IsRemoveMaintenance = true;
-                    }
+                    item.IsRemoveMaintenance = item.TransmissionType != value;
                 }
             }
         }
@@ -362,8 +338,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         new RepairGroup("Регулярное ТО (Расходники)", new List<RepairType>
         {
             // Самое частое. Масло - раз в год или 10к, Фильтры - вместе с ним
-            new("Масло в двигателе", "Регулярное ТО", 10000, 12),
-            new("Масляный фильтр", "Регулярное ТО", 10000, 12),
+            new("Масло в двигателе и Масляный фильтр", "Регулярное ТО", 10000, 12),
             new("Воздушный фильтр двигателя", "Регулярное ТО", 20000, 24),
             new("Салонный фильтр", "Регулярное ТО", 15000, 12),
             new("Топливный фильтр", "Регулярное ТО", 40000, 48)

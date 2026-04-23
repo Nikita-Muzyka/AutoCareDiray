@@ -249,7 +249,7 @@
         <Setter Property="TextColor" Value="{DynamicResource TextSecondary}"/>
     </Style>
 
-    <!--Label обычный текст для второстепенных задач-->
+    <!--Label обычный текст для названия полей для entry серый-->
     <Style TargetType="Label" x:Key="LabelInfoForEntry">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
@@ -293,15 +293,6 @@
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="TextColor" Value="{DynamicResource TextPrimary}"/>
-    </Style>
-
-    <!--Label для карточек красный для данных -->
-    <Style TargetType="Label" x:Key="LabelForCardInfoData">
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-        <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
         <Setter Property="TextColor" Value="{DynamicResource TextPrimary}"/>
     </Style>
 
