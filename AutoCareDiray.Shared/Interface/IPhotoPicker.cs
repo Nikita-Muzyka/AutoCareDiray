@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoCareDiray.Shared.Service.ResultService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,11 @@ namespace AutoCareDiray.Shared.Interface
 {
     public interface IPhotoPicker
     {
-        Task<string> PickPhotoAsync();
+        Task<Result> PickPhotoAsync(); //выбрать фото
+        Task<Result> SavePhotoAsync(string photstringoLink,CancellationToken token); //сохранить фото
+
+        Task<Result> SavePhotosAsync(IEnumerable<string> photstringoLink, CancellationToken token); //сохранить фото
+        Task<Result> PickPhotosAsync(); //выбрать много фото
     }
 }
+

@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.IO;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
 namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
@@ -170,43 +171,53 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         /// </summary>
         /// <returns></returns>
         [RelayCommand]
-        public async Task CreateVehicle()
+        public async Task ProcessingAsync()
         {
             _vehicleValidation.ValidationAll(Mileage, YearPurchaseSelected, YearCreateSelected, SelectedTypeVehicle);
-            if (!HasErrors)
+            if (HasErrors)
             {
-                int MileageInt = ConverFromInt(Mileage);
-                _listRepairType.RemoveAll(c => c.IsRemoveMaintenance == true);
-
-
-                var vehicle = new Vehicle
-                    (
-                    NameVehicle, YearCreateSelected,
-                    YearPurchaseSelected, VinCode,
-                    StateNumber, TransmissionType,
-                    SelectedTypeVehicle, MileageInt,
-                    _listRepairType
-                    );
-                vehicle.PhotoVehicle = _photoVehicle ?? String.Empty;
-
-                if (_isUpdateVehicle)
-                {
-                    vehicle.Id = _vehicle.Id;
-                    await EditVehicle(vehicle);
-                }
-                else
-                {
-                    var result = await _dataService.CreateVehicleAsync(vehicle, _cts.Token);
-
-                    if (result.Success)
-                    {
-                        await _dialogService.ShowToastAsync("ТС создано");
-                        await _navigationService.GoToBack();
-                    }
-                    else StatusMessage = result.ErrorMessage;
-                }
+                await _dialogService.ShowToastAsync("Ошибка. Проверте все поля");
+                return;
             }
-            else await _dialogService.ShowToastAsync("Ошибка. Проверте все поля");
+
+            int MileageInt = ConverFromInt(Mileage);
+            _listRepairType.RemoveAll(c => c.IsRemoveMaintenance == true);
+
+
+            var vehicle = new Vehicle
+                (NameVehicle, YearCreateSelected,
+                YearPurchaseSelected, VinCode,
+                StateNumber, TransmissionType,
+                SelectedTypeVehicle, MileageInt,
+                _listRepairType);
+
+            if (_photoVehicle != null && Path.Exists(_photoVehicle) == false)
+            {
+                var result = await _photoPicker.SavePhotoAsync(_photoVehicle, _cts.Token);
+                if (result.Success)
+                {
+                    var resultPhoto = result as Result<string>;
+                    vehicle.PhotoVehicle = resultPhoto.Data;
+                }
+                else await _dialogService.ShowToastAsync(result.ErrorMessage);
+            } //save photo
+
+            if (_isUpdateVehicle)
+            {
+                vehicle.Id = _vehicle.Id;
+                await EditVehicle(vehicle);
+            } // переход на обновление данных авто
+            else
+            {
+                var result = await _dataService.CreateVehicleAsync(vehicle, _cts.Token);
+
+                if (result.Success)
+                {
+                    await _dialogService.ShowToastAsync("ТС создано");
+                    await _navigationService.GoToBack();
+                }
+                else StatusMessage = result.ErrorMessage;
+            }
         }
 
         /// <summary>
@@ -243,12 +254,11 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [RelayCommand]
         public async void PickPhoto()
         {
-            var photoLocation = await _photoPicker.PickPhotoAsync();
-            if (photoLocation == string.Empty) { }
-            else
+            var result = await _photoPicker.PickPhotoAsync();
+            if (result.Success)
             {
-                PathPhoto = photoLocation;
-                _photoVehicle = photoLocation;
+                var photoLocation = result as Result<string>;
+                PathPhoto = photoLocation.Data;
             }
         }
 

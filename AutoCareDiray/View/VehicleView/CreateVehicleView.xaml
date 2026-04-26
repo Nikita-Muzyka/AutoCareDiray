@@ -235,7 +235,7 @@
             <VerticalStackLayout Padding="20,15,20,40">
                 <Button Text="{Binding ButtonName}" 
                             Style="{StaticResource ButtonCustomStandartRed}"
-                            Command="{Binding CreateVehicleCommand}"/>
+                            Command="{Binding ProcessingCommand}"/>
             </VerticalStackLayout> <!--кнопка создания-->
 
         </VerticalStackLayout>

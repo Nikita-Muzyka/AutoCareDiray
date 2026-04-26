@@ -386,6 +386,16 @@
         <Setter Property="Background" Value="{DynamicResource Background}"/>
     </Style>
 
+    <!--Border карточки картинок красная -->
+    <Style TargetType="Border" x:Key="BorderForCardImage">
+        <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
+        <Setter Property="StrokeThickness" Value="0"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Background" Value="{DynamicResource BackgroundGray}"/>
+        <Setter Property="Opacity" Value="1"/>
+    </Style>
+
+
     <!--Border для фото полу круг-->
     <Style TargetType="Border" x:Key="BorderPhoto">
         <Setter Property="StrokeShape" Value="RoundRectangle 35"/>

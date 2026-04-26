@@ -22,6 +22,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         public string? ServiceName { get; set; } = String.Empty;
         public string? CommentMechanic { get; set; } = String.Empty;
         public string? Job { get; set; } = String.Empty;
+        public List<string>? Photos { get; set; }
 
         public string? ProgressPercent
         {

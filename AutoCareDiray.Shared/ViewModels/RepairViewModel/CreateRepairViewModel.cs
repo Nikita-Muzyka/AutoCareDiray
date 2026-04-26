@@ -16,9 +16,11 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
     {
         #region основные классы и списки
 
-        CancellationTokenSource _cts;
-        RepairValidation _validationRepair;
+        private CancellationTokenSource _cts;
+        private RepairValidation _validationRepair;
+        private IPhotoPicker _photoPicker;
 
+        private Repair Repair;
         private int _vehicleId = -1;
         private int _repairId = -1;
         private bool isInitialize = false;
@@ -62,15 +64,18 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private string serviceName;
         [ObservableProperty]
         private string commentMechanic;
+        [ObservableProperty]
+        ObservableCollection<string> attachedPhotosRepairs;
 
         #endregion
 
-        public CreateRepairViewModel(IDialogService dialog,IDataService data,INavigationService navigate,RepairValidation validation) 
+        public CreateRepairViewModel(IDialogService dialog,IDataService data,INavigationService navigate,RepairValidation validation,IPhotoPicker photoPicker) 
             : base(dialog, data, navigate)
         {
             _cts = new CancellationTokenSource();
             _validationRepair = validation;
             _validationRepair.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
+            _photoPicker = photoPicker;
         }
 
         #region свойства для ошибок в реальном времени
@@ -134,6 +139,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
                 if (RepairTypes.Count > 0) RepairTypes.Clear();
                 RepairTypes.Add(resultRepair.Data.RepairType);
+                foreach(var photo in resultRepair.Data.Photos)
+                AttachedPhotosRepairs.Add(photo);
                 SelectedRepairType = RepairTypes.FirstOrDefault();
             }
             else StatusMessage = result.ErrorMessage;
@@ -167,9 +174,9 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
             if (_isUpdateRepair)
             {
-                var repair = UpdateRepair();
+                Repair = UpdateRepair();
 
-                var resultUdateRepair = await _dataService.UpdateRepairAsync(repair, _cts.Token);
+                var resultUdateRepair = await _dataService.UpdateRepairAsync(Repair, _cts.Token);
                 if (resultUdateRepair.Success == false)
                 {
                     StatusMessage = resultUdateRepair.ErrorMessage;
@@ -179,9 +186,9 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             }
             else
             {
-                var repair = CreateRepai();
+                Repair = CreateRepai();
 
-                var resultCreateRepair = await _dataService.CreateRepairAsync(repair, _cts.Token);
+                var resultCreateRepair = await _dataService.CreateRepairAsync(Repair, _cts.Token);
                 if (resultCreateRepair.Success == false)
                 {
                     StatusMessage = resultCreateRepair.ErrorMessage;
@@ -189,10 +196,42 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 }
             }
 
+            var result = await _photoPicker.SavePhotosAsync(AttachedPhotosRepairs,_cts.Token);
+            if (result.Success)
+            {
+                var resultPhotos = result as Result<List<string>>;
+                Repair.Photos = resultPhotos.Data;
+            }
             await UpdateLastServiceMileage();
             await UpdateDateRepair();
             await _navigationService.GoToBack();
         }  //Создание или редактирование ремонта
+
+        [RelayCommand]
+        public async Task AttachPhoto()
+        {
+            var result = await _photoPicker.PickPhotosAsync();
+
+            if (result.Success == false)
+            {
+                await _dialogService.ShowToastAsync(result.ErrorMessage);
+                return;
+            }
+
+            var resultPhoto = result as Result<List<string>>;
+            AttachedPhotosRepairs ??= new();
+
+            foreach (var listPhoto in resultPhoto.Data)
+                {
+                    AttachedPhotosRepairs.Add(listPhoto);
+                }
+
+        } //выбор фото
+        [RelayCommand]
+        public async Task DeleteAttachPhoto(string photo)
+        {
+            AttachedPhotosRepairs?.Remove(photo);
+        } //удаление фото
 
         private Repair UpdateRepair()
         {

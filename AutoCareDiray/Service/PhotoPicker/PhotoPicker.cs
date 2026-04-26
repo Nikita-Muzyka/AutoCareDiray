@@ -1,5 +1,7 @@
-﻿using AutoCareDiray.Service.Dialog;
+﻿using AutoCareDiray.Shared.Service.ResultService;
+using AutoCareDiray.Service.Dialog;
 using AutoCareDiray.Shared.Interface;
+using AutoCareDiray.Shared.Service.ResultService;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,7 +18,7 @@ namespace AutoCareDiray.Service.PhotoPicker
         {
             _dialogService = dialogService;
         }
-        public async Task<string> PickPhotoAsync()
+        public async Task<Result> PickPhotoAsync()
         {
             string resultaction = await _dialogService.ShowDisplayAction("Выберите действие", "Отмена", "Сделать снимок", "Выбрать из галереи");
 
@@ -54,16 +56,29 @@ namespace AutoCareDiray.Service.PhotoPicker
                     else
                     {
                         await Shell.Current.DisplayAlert("Отказ", "Без разрешения мы не сможем загрузить фото машины", "ОК");
-                        return null;
                     }
                 }
 
-                if (photo == null) return string.Empty;
+                return photo?.FullPath != null ? Result<string>.SuccessCreate(photo.FullPath) : Result.ErrorCreate("Фото не найдено");
+            }
+            catch (Exception ex)
+            {
+                await _dialogService.ShowToastAsync($"Ошибка при добавлении фото {ex}");
+                return Result.ErrorCreate($"Ошибка при добавлении фото {ex}");
+            }
+        } //выбрать фото
 
-                string newFileName = $"vehiclePhoto_{Guid.NewGuid()}{Path.GetExtension(photo.FileName)}";
+        public async Task<Result> SavePhotoAsync(string photoLink, CancellationToken token)
+        {
+            try
+            {
+                if (photoLink == null) return Result.ErrorCreate("Фото не найдено");
+
+                string newFileName = $"vehiclePhoto_{Guid.NewGuid()}{Path.GetExtension(photoLink)}";
                 string locationPhoto = Path.Combine(FileSystem.AppDataDirectory, newFileName);
 
-                using (Stream source = await photo.OpenReadAsync())
+                token.ThrowIfCancellationRequested();
+                using (Stream source = File.OpenRead(photoLink))
                 {
                     using (FileStream locationFile = File.OpenWrite(locationPhoto))
                     {
@@ -71,13 +86,71 @@ namespace AutoCareDiray.Service.PhotoPicker
                     }
                 }
 
-                return locationPhoto;
+                return Result<string>.SuccessCreate(locationPhoto);
+            }
+            catch(Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при сохранении фото {ex}");
+            }
+        } //сохранить фото
 
+        public async Task<Result> SavePhotosAsync(IEnumerable<string> photstringoLink, CancellationToken token) 
+        {
+            try
+            {
+                if (photstringoLink == null) return Result.ErrorCreate("Фотографии не найдены");
+
+                var photosList = new List<string>();
+
+                token.ThrowIfCancellationRequested();
+
+                foreach (var photo in photstringoLink)
+                {
+                    string newFileName = $"PhotosRepair{Guid.NewGuid()}{Path.GetExtension(photo)}";
+                    string locationPhoto = Path.Combine(FileSystem.AppDataDirectory, newFileName);
+
+                    using (Stream source = File.OpenRead(locationPhoto))
+                    {
+                        using (FileStream locationFile = File.OpenWrite(locationPhoto))
+                        {
+                            await source.CopyToAsync(locationFile,token);
+                            photosList.Add(locationPhoto);
+                        }
+                    }
+                }
+
+                
+                return Result<List<string>>.SuccessCreate(photosList);
             }
             catch (Exception ex)
             {
-                await _dialogService.ShowToastAsync($"Ошибка при добавлении фото {ex}");
-                return string.Empty;
+                return Result.ErrorCreate($"Произошла ошибка при сохранении фотографий {ex}");
+            }
+        } //сохранить фото
+
+        public async Task<Result> PickPhotosAsync()
+        {
+            try
+            {
+                var list = new List<string>();
+                var result = await FilePicker.Default.PickMultipleAsync(new PickOptions
+                {
+                    PickerTitle = "Выберите фотографии",
+                    FileTypes = FilePickerFileType.Images
+                });
+
+                if (result == null) return Result.ErrorCreate("Ошибка при выборе фото");
+
+                foreach (var photo in result)
+                {
+                    list.Add(photo.FullPath);
+                }
+
+                return Result<List<string>>.SuccessCreate(list);
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Ошибка при выборе фото {ex}");
             }
         }
     }

@@ -15,6 +15,7 @@
     <Color x:Key="ShadowDisableButton">#383838</Color>
     <Color x:Key="CardBorder">#BABABA</Color>
     <Color x:Key="BorderStroke">#777777</Color>
+    <Color x:Key="BackgroundGray">#acb2b0</Color>
 
     <Color x:Key="BoxViewColor">#E0E0E0</Color>
 
