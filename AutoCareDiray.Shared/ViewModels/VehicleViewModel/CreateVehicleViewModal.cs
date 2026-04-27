@@ -78,7 +78,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string statusMessage;
 
-        private string _photoVehicle = String.Empty;
+        private string _newPhoto;
+       
         #endregion
 
 
@@ -139,7 +140,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 _isInitilized = true;
                 ButtonName = "Изменить";
 
-                if (System.IO.File.Exists(_vehicle.PhotoVehicle)) PathPhoto = _vehicle.PhotoVehicle;
+                if (File.Exists(_vehicle.PhotoVehicle)) PathPhoto = _vehicle.PhotoVehicle;
                 NameVehicle = _vehicle.NameVehicle;
                 YearCreateSelected = _vehicle.YearCreate;
                 YearPurchaseSelected = _vehicle.YearPurchase;
@@ -191,13 +192,15 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 SelectedTypeVehicle, MileageInt,
                 _listRepairType);
 
-            if (_photoVehicle != null && Path.Exists(_photoVehicle) == false)
+            if (_newPhoto != null)
             {
-                var result = await _photoPicker.SavePhotoAsync(_photoVehicle, _cts.Token);
+                var result = await _photoPicker.SavePhotoAsync(_newPhoto, _cts.Token);
                 if (result.Success)
                 {
                     var resultPhoto = result as Result<string>;
                     vehicle.PhotoVehicle = resultPhoto.Data;
+
+                    if(_isUpdateVehicle) await _photoPicker.DeletePhoto(_vehicle.PhotoVehicle);
                 }
                 else await _dialogService.ShowToastAsync(result.ErrorMessage);
             } //save photo
@@ -259,6 +262,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             {
                 var photoLocation = result as Result<string>;
                 PathPhoto = photoLocation.Data;
+                _newPhoto = PathPhoto;
             }
         }
 

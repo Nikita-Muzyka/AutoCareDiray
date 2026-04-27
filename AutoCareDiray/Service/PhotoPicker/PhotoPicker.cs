@@ -153,5 +153,21 @@ namespace AutoCareDiray.Service.PhotoPicker
                 return Result.ErrorCreate($"Ошибка при выборе фото {ex}");
             }
         }
+
+        public async Task<Result> DeletePhoto(string oldPhoto)
+        {
+            if (oldPhoto == null && string.IsNullOrWhiteSpace(oldPhoto)) return Result.ErrorCreate("");
+            if(File.Exists(oldPhoto) == false) return Result.ErrorCreate("");
+
+            try
+            {
+                File.Delete(oldPhoto);
+                return Result.SuccessCreate();
+            }
+            catch(Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при удалении старого фото {ex}");
+            }
+        }
     }
 }

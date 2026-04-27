@@ -14,6 +14,8 @@ namespace AutoCareDiray.Shared.Interface
 
         Task<Result> SavePhotosAsync(IEnumerable<string> photstringoLink, CancellationToken token); //сохранить фото
         Task<Result> PickPhotosAsync(); //выбрать много фото
+
+        Task<Result> DeletePhoto(string oldPhoto);
     }
 }
 

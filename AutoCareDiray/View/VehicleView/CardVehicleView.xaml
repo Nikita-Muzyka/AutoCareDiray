@@ -10,8 +10,8 @@
 
 
             <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1">
-                <Border Style="{DynamicResource BorderPhoto}" WidthRequest="150" HeightRequest="150" Margin="0,0,0,10">
-                    <Image Source="{Binding VehicleCard.PhotoVehicle}"/>
+                <Border Style="{DynamicResource BorderPhoto}" WidthRequest="150" HeightRequest="150" Margin="0,0,0,10" >
+                    <Image Source="{Binding VehicleCard.PhotoVehicle}" Aspect="AspectFill"/>
                 </Border>
                 <Label Text="{Binding  VehicleCard.NameVehicle}" FontSize="18" Style="{DynamicResource LabelCustom}" HorizontalOptions="Center"/>
             </VerticalStackLayout> <!--фото и название авто-->
