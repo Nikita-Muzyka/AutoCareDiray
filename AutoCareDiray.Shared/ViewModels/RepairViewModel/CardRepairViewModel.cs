@@ -13,11 +13,15 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         CancellationTokenSource _cts;
         bool _isinitilize = false;
 
+        #endregion
+
+
+        #region клссы и свойства для UI
+
         [ObservableProperty]
         private Repair repair;
         [ObservableProperty]
         private RepairType repairType;
-
 
         #endregion
         public CardRepairViewModel(IDialogService dialog, IDataService data, INavigationService navigate)

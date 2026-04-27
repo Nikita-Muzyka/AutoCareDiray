@@ -109,7 +109,7 @@ namespace AutoCareDiray.Service.PhotoPicker
                     string newFileName = $"PhotosRepair{Guid.NewGuid()}{Path.GetExtension(photo)}";
                     string locationPhoto = Path.Combine(FileSystem.AppDataDirectory, newFileName);
 
-                    using (Stream source = File.OpenRead(locationPhoto))
+                    using (Stream source = File.OpenRead(photo))
                     {
                         using (FileStream locationFile = File.OpenWrite(locationPhoto))
                         {
