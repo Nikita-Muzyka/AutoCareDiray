@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,11 +25,18 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         public string? Job { get; set; } = String.Empty;
         public List<string>? Photos { get; set; }
 
-        public string? ProgressPercent
+        public string? ProgressPercentMileage
         {
             get
             {
-                return $"До след ремонта {Math.Round(ProgressMileage,1) * 100} %";
+                return $"Интервал по пробегу {Math.Round(ProgressMileage,1) * 100} %";
+            }
+        }
+        public string? ProgressPercentMonth
+        {
+            get
+            {
+                return $"Интервал по месяцам {Math.Round(ProgressMonth, 1) * 100} %";
             }
         }
         public double ProgressMileage
@@ -39,7 +47,21 @@ namespace AutoCareDiray.Shared.Models.RepairModel
                 {
                     var newMileage = Vehicle.Mileage - CurrentMileage;
                     var progress = (double)newMileage / (double)RepairType.IntervalMileage;
-
+                    var result = Math.Min(progress, 1);
+                    return result;
+                }
+                else return 0;
+            }
+        }
+        public double ProgressMonth
+        {
+            get
+            {
+                if (RepairType.IntervalMonth > 0)
+                {
+                    DateTime date = DateTime.UtcNow;
+                    var monthsBeen = date.Month - DateRepair.Month;
+                    var progress = (double)monthsBeen / (double)RepairType.IntervalMonth;
                     var result = Math.Min(progress, 1);
                     return result;
                 }

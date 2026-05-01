@@ -10,11 +10,6 @@
 
             <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" VerticalOptions="Center">
 
-                <!--<Border Grid.Column="0" HeightRequest="50" WidthRequest="50" CornerRadius="25" 
-                       Padding="10" BackgroundColor="#F0F0F0" HasShadow="False">
-                    <Image Source="car_icon.png" Aspect="AspectFit"/>
-                </>-->
-
                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
                     <Label Text="{Binding RepairType.Category}" Style="{DynamicResource LabelSecondaryCustom}"/>
                     <Label Text="{Binding RepairType.TitleRepair}" FontSize="18" Style="{DynamicResource LabelCustom}"/>
@@ -24,14 +19,12 @@
             <Border Style="{DynamicResource BorderForCardInfo}" Padding="10">
                 <VerticalStackLayout Spacing="5">
 
-                    <Label Text="{Binding Repair.ProgressPercent}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
-
+                    <Label Text="{Binding Repair.ProgressPercentMileage}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
                     <ProgressBar Progress="{Binding Repair.ProgressMileage}" ProgressColor="Red"/>
 
-                    <!--<HorizontalStackLayout HorizontalOptions="Center" Margin="0,5,0,0">
-                        <Label Text="{Binding RemainingMileageText}" FontSize="12" Style="{DynamicResource LabelSecondaryCustom}"/>
-                        <Label Text="{Binding RemainingDaysText}" FontSize="12" Style="{DynamicResource LabelSecondaryCustom}"/>
-                    </HorizontalStackLayout>-->
+                    <Label Text="{Binding Repair.ProgressPercentMonth}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
+                    <ProgressBar Progress="{Binding Repair.ProgressMonth}" ProgressColor="Red"/>
+
                 </VerticalStackLayout>
             </Border> <!--прогресс бар-->
 
