@@ -84,7 +84,7 @@
 
                     <VerticalStackLayout Padding="15,10">
                         <Label Text="Стоимость запчастей (Руб)" Style="{DynamicResource LabelInfoForEntry}"/>
-                        <Entry Text="{Binding CostFilled}" Placeholder="Например 1000" Style="{DynamicResource EntryImput}"/>
+                        <Entry Text="{Binding CostFilled}" Placeholder="Например 1000" Style="{DynamicResource EntryImput}" Keyboard="Numeric"/>
                         <Label Text="{Binding CostError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsCostError}"/>
                     </VerticalStackLayout> <!--стоимость-->
 

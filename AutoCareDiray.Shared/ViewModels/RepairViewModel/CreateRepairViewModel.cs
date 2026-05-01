@@ -139,8 +139,12 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
                 if (RepairTypes.Count > 0) RepairTypes.Clear();
                 RepairTypes.Add(resultRepair.Data.RepairType);
+
+                AttachedPhotosRepairs ??= new ObservableCollection<string>();
                 foreach(var photo in resultRepair.Data.Photos)
-                AttachedPhotosRepairs.Add(photo);
+                {
+                    if(File.Exists(photo)) AttachedPhotosRepairs.Add(photo);
+                }
                 SelectedRepairType = RepairTypes.FirstOrDefault();
             }
             else StatusMessage = result.ErrorMessage;
@@ -171,11 +175,18 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         {
             _validationRepair.ValidationAll(MileageFilled, CostFilled);
             if(HasErrors) return;
+            Repair = CreateRepai();
+
+            var result = await _photoPicker.SavePhotosAsync(AttachedPhotosRepairs, _cts.Token);
+            if (result.Success)
+            {
+                var resultPhotos = result as Result<List<string>>;
+                Repair.Photos = resultPhotos.Data;
+            }
 
             if (_isUpdateRepair)
             {
-                Repair = UpdateRepair();
-
+                Repair.Id = _repairId;
                 var resultUdateRepair = await _dataService.UpdateRepairAsync(Repair, _cts.Token);
                 if (resultUdateRepair.Success == false)
                 {
@@ -186,8 +197,6 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             }
             else
             {
-                Repair = CreateRepai();
-
                 var resultCreateRepair = await _dataService.CreateRepairAsync(Repair, _cts.Token);
                 if (resultCreateRepair.Success == false)
                 {
@@ -196,12 +205,6 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 }
             }
 
-            var result = await _photoPicker.SavePhotosAsync(AttachedPhotosRepairs,_cts.Token);
-            if (result.Success)
-            {
-                var resultPhotos = result as Result<List<string>>;
-                Repair.Photos = resultPhotos.Data;
-            }
             await UpdateLastServiceMileage();
             await UpdateDateRepair();
             await _navigationService.GoToBack();
@@ -233,24 +236,6 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             AttachedPhotosRepairs?.Remove(photo);
         } //удаление фото
 
-        private Repair UpdateRepair()
-        {
-            Repair repair = new Repair()
-            {
-                Id = _repairId,
-                DateRepair = DateRepairSelected,
-                SpareParts = SparePartsFilled,
-                Cost = ConverFromInt(CostFilled),
-                Description = DescriptionFilled,
-                RepairTypeId = SelectedRepairType.Id,
-                CurrentMileage = MileageFilled,
-                CommentMechanic = CommentMechanic,
-                Job = SelectedJob,
-                ServiceName = ServiceName,
-            };
-
-            return repair;
-        } // создание ремонта с обновлеными данными
         private Repair CreateRepai()
         {
             Repair repair = new Repair()

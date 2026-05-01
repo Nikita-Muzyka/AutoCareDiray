@@ -209,12 +209,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 }
                 else
                 {
-                    vehicleDb.YearPurchase = vehicle.YearPurchase;
-                    vehicleDb.YearCreate = vehicle.YearCreate;
-                    vehicleDb.NameVehicle = vehicle.NameVehicle;
-                    vehicleDb.VehicleType = vehicle.VehicleType;
-                    vehicleDb.Mileage = vehicle.Mileage;
-
+                    _dbContex.Entry(vehicleDb).CurrentValues.SetValues(vehicle);
                     await _dbContex.SaveChangesAsync(token);
 
                     return Result.SuccessCreate();
@@ -351,11 +346,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 if (repairDb == null) return Result.ErrorCreate("Ремонт не найден");
                 else
                 {
-                    repairDb.SpareParts = repair.SpareParts;
-                    repairDb.CurrentMileage = repair.CurrentMileage;
-                    repairDb.DateRepair = repair.DateRepair;
-                    repairDb.Description = repair.Description;
-                    repairDb.Cost = repair.Cost;
+                    _dbContex.Entry(repairDb).CurrentValues.SetValues(repair);
 
                     await _dbContex.SaveChangesAsync(token);
                     return Result.SuccessCreate();
@@ -439,6 +430,8 @@ namespace AutoCareDiray.Shared.Service.Data
             }
         } // обновить дату и пробег последнего обслуживания типа ремонта
 
+
+
         //VehicleNotes
 
         public async Task<Result> ListVehicleNotesAsync(int id,CancellationToken token)
@@ -459,7 +452,6 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при получении списка заметок: {ex.Message}");
             }
         } // получить список заметок
-
         public async Task<Result> CreateVehicleNotesAsync(VehicleNotes note, CancellationToken token)
         {
             try
@@ -478,7 +470,6 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при сохранении заметки: {ex.Message}");
             }
         }
-
         public async Task<Result> DeleteVehicleNotesAsync(int id, CancellationToken token)
         {
             try
@@ -503,7 +494,6 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при удалении заметки: {ex.Message}");
             }
         }
-
         public async Task<Result> UpdateVehileNoteAsync(VehicleNotes note, CancellationToken token)
         {
             try
@@ -512,9 +502,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 var noteDb = await _dbContex.VehicleNotes.FindAsync(note.Id, token);
                 if (noteDb != null)
                 {
-                    noteDb.Title = note.Title;
-                    noteDb.Content = note.Content;
-                    noteDb.DateUpdated = note.DateUpdated;
+                    _dbContex.Entry(noteDb).CurrentValues.SetValues(note);
 
                     await _dbContex.SaveChangesAsync();
                     return Result.SuccessCreate();
