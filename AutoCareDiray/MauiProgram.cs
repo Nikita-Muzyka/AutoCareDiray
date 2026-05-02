@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection; // Добавьте эту ст�
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Platform;
+using QuestPDF.Infrastructure;
 
 
 namespace AutoCareDiray
@@ -25,6 +26,9 @@ namespace AutoCareDiray
     {
         public static MauiApp CreateMauiApp()
         {
+
+            #region builder + settings Nug
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -38,6 +42,11 @@ namespace AutoCareDiray
                     fonts.AddFont("Rubik-Bold.ttf", "RubikBold");
                 });
 
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            #endregion
+
+            #region Settings UI
 
             Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
             {
@@ -76,6 +85,10 @@ namespace AutoCareDiray
 #endif
             });
 
+            #endregion
+
+            #region Sqlite
+
             var DbPath = Path.Combine(FileSystem.AppDataDirectory, "auto_care_diray.db");
             builder.Services.AddDbContext<AppDBContex>(options =>
             {
@@ -103,6 +116,10 @@ namespace AutoCareDiray
 
                 return client;
             });
+
+            #endregion
+
+            #region DI
 
             //builder.Services.AddScoped<IApiService, ApiService>();
             builder.Services.AddScoped<IDataService,DataService>();
@@ -140,13 +157,13 @@ namespace AutoCareDiray
             builder.Services.AddTransient<CardRepairView>();
             builder.Services.AddTransient<CardRepairViewModel>();
 
+            #endregion
 
-
-            // Регистрация сервиса
-
+            #region debugsettings
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+            #endregion
 
             return builder.Build();
         }

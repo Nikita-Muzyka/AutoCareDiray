@@ -18,6 +18,7 @@ namespace AutoCareDiray.Shared.Service.Data
             _dbContex = db;
         }
 
+
         //Vehicle
         public async Task<Result> CreateVehicleAsync(Vehicle vehicle, CancellationToken token)
         {
@@ -89,7 +90,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 token.ThrowIfCancellationRequested();
                 var vehicle = await _dbContex.Vehicles
-                    .Include(c=> c.RepairTypes)
+                    .Include(c=> c.RepairTypes) 
                     .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
 
                 if (vehicle != null) return Result<Vehicle>.SuccessCreate(vehicle);

@@ -171,6 +171,10 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView> <!--заметки-->
 
+            </VerticalStackLayout> <!--заметки-->
+
+            <VerticalStackLayout>
+                <Button Text="Create" Command="{Binding CreatePdfStatVehicleCommand}"/>
             </VerticalStackLayout>
             
         </VerticalStackLayout>

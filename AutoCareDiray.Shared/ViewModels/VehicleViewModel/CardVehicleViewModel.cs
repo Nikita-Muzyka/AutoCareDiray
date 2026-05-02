@@ -52,6 +52,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _cts = new CancellationTokenSource();
         }
 
+
         [RelayCommand]
         public async Task InitilizeAsync(int vehicleId)
         {
@@ -102,6 +103,22 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             }
         } //Создание заметок
 
+        [RelayCommand]
+        public async void ShowNotesOptions(VehicleNotes selectedNotes)
+        {
+            if (selectedNotes == null) return;
+            var respon = await _dialogService.ShowDisplayAction();
+            if (respon == "Отмена") return;
+            if (respon == "Редактировать") await EditNotesAsync(selectedNotes);
+            else if (respon == "Удалить") await DeleteNotesAsync(selectedNotes);
+        }
+
+        [RelayCommand]
+        public async void CreatePdfStatVehicle() //create pdf
+        {
+            
+        }
+
 
         private async Task LoadVehicleAsync()
         {
@@ -132,16 +149,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 }
             }
         } //логика инициализации заметки
-
-        [RelayCommand]
-        public async void ShowNotesOptions(VehicleNotes selectedNotes)
-        {
-            if (selectedNotes == null) return;
-            var respon = await _dialogService.ShowDisplayAction();
-            if (respon == "Отмена") return;
-            if (respon == "Редактировать") await EditNotesAsync(selectedNotes);
-            else if (respon == "Удалить") await DeleteNotesAsync(selectedNotes);
-        }
 
         private async Task EditNotesAsync(VehicleNotes note)
         {
