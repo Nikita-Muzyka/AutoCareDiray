@@ -26,6 +26,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private bool isInitialize = false;
         private bool _isUpdateRepair = false;
         private Vehicle _vehicle;
+        private string _job = String.Empty;
 
         #endregion
 
@@ -64,6 +65,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private string serviceName;
         [ObservableProperty]
         private string commentMechanic;
+
         [ObservableProperty]
         ObservableCollection<string> attachedPhotosRepairs;
 

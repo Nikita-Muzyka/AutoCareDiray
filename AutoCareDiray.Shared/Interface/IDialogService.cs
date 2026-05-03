@@ -2,15 +2,14 @@
 {
     public interface IDialogService
     {
-        Task ShowMessageAsync(string message);
+        Task ShowMessageAsync(string message); //Сообщение обычное
+        Task ShowWarningLogInAsync(); //Предупреждение 
+        Task ShowToastAsync(string message); // Тоаст для андроида
+        Task<string> ShowDisplayAction(); //Кебаб меню
+        Task<string> ShowDisplayAction(string title,string cancel,string text1, string text2); // ActionSheet возврат стринг
+        Task<bool> ShowChoiceDisplayAlertAsync(string title, string question, string text1, string text2); // Alert возврат bool 
 
-        Task ShowWarningLogInAsync();
-        Task ShowToastAsync(string message);
 
-        Task<bool> ShowConfirmationAsync(string vehicleName);
-
-        Task<string> ShowDisplayAction();
-
-        Task<string> ShowDisplayAction(string title,string cancel,string text1, string text2);
+        //Task<bool> ShowConfirmationAsync(string vehicleName);
     }
 }

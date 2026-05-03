@@ -19,7 +19,7 @@ class DialogService : IDialogService
     public async Task ShowMessageAsync(string message)
     {
         await Shell.Current.DisplayAlert("",message,"Ok");
-    }
+    } //Сообщение обычное
 
     public async Task ShowWarningLogInAsync()
     {
@@ -31,7 +31,7 @@ class DialogService : IDialogService
             CanBeDismissedByTappingOutsideOfPopup = false
         });
 
-    }
+    } //Предупреждение 
 
     public async Task ShowToastAsync(string message)
     {
@@ -46,32 +46,39 @@ class DialogService : IDialogService
 
             await toast.Show(cancellationTokenSource.Token);
         }
-    }
-
-    public async Task<bool> ShowConfirmationAsync(string vehicleName)
-    {
-        var popup = new ConfirmationPopUp(vehicleName);
-
-        var result = await Application.Current.MainPage.ShowPopupAsync<bool>(popup, new PopupOptions
-        {
-            PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
-            Shape = null,
-            CanBeDismissedByTappingOutsideOfPopup = false
-        });
-
-        if (result.Result == true) return true;
-        else return false;
-    }
+    } // Тоаст для андроида
 
     public async Task<string> ShowDisplayAction()
     {
         string response = await Application.Current.MainPage.DisplayActionSheet("Выберите действие", "Отмена", null, "Редактировать", "Удалить");
         return response;
-    }
+    } //Кебаб меню
 
     public async Task<string> ShowDisplayAction(string title, string cancel, string text1, string text2)
     {
         string response = await Application.Current.MainPage.DisplayActionSheet(title, cancel, null, text1, text2);
         return response;
-    }
+    }  // ActionSheet возврат стринг
+
+    public async Task<bool> ShowChoiceDisplayAlertAsync(string title, string question, string text1, string text2)
+    {
+        var answer = await Shell.Current.DisplayAlert(title, question, text1, text2);
+        return answer;
+    } // Alert возврат bool 
+
+    //public async Task<bool> ShowConfirmationAsync(string vehicleName)
+    //{
+    //    var popup = new ConfirmationPopUp(vehicleName);
+
+    //    var result = await Application.Current.MainPage.ShowPopupAsync<bool>(popup, new PopupOptions
+    //    {
+    //        PageOverlayColor = Colors.Transparent.WithAlpha(0.0f),
+    //        Shape = null,
+    //        CanBeDismissedByTappingOutsideOfPopup = false
+    //    });
+
+    //    if (result.Result == true) return true;
+    //    else return false;
+    //} 
 }
+

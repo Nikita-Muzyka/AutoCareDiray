@@ -82,6 +82,7 @@
                 <VerticalStackLayout RadioButtonGroup.GroupName="Mode" RadioButtonGroup.SelectedValue="{Binding SelectedMode}">
                     <RadioButton Content="Информация по диагностике" x:Name="DiagnosticsButton" Value="Diagnostics" />
                     <RadioButton Content="Заметки моего авто" x:Name="NotesButton" Value="Notes"/>
+                    <RadioButton Content="Отчет авто" x:Name="ReportVehicle" Value="Report"/>
                 </VerticalStackLayout>
             </Border> <!--кнопки режимов-->
 
@@ -173,8 +174,24 @@
 
             </VerticalStackLayout> <!--заметки-->
 
-            <VerticalStackLayout>
-                <Button Text="Create" Command="{Binding CreatePdfStatVehicleCommand}"/>
+            <VerticalStackLayout IsVisible="{Binding Source={x:Reference ReportVehicle},Path=IsChecked}" Padding="5">
+                
+                <Border Style="{DynamicResource BorderForCardInfo}">
+                    <VerticalStackLayout RadioButtonGroup.GroupName="YearRepair" RadioButtonGroup.SelectedValue="{Binding SelectedYearReport}"
+                                         Padding="0" Spacing="10">
+                        <Label Text="{Binding VehicleCard.PdfFile}"/>
+                        <Button Text="Открыть отчет" Command="{Binding OpenPdfFileCommand}" Style="{DynamicResource ButtonCustomStandartRed}"
+         HeightRequest="20" WidthRequest="150" Margin="0,0,10,20"/>
+                        
+                        <Label Text="Выберите данные формирования отчета" Padding="5"/>
+                        <RadioButton Content="Отчет за этот год" Value="NowYear" />
+                        <RadioButton Content="Отчет за прошлый год" Value="PastYear" />
+                        <RadioButton Content="Отчет c момента покупки авто" Value="Full"/>
+                        <Button Text="Сформировать отчет" Command="{Binding CreatePdfStatVehicleCommand}" Style="{DynamicResource ButtonCustomStandartRed}"
+                                HeightRequest="40" WidthRequest="200" Margin="0,10,0,30"/>
+                    </VerticalStackLayout>
+                </Border>
+                
             </VerticalStackLayout>
             
         </VerticalStackLayout>

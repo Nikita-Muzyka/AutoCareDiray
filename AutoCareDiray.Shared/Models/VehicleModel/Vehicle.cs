@@ -18,9 +18,11 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         public string NameVehicle { get; set; } = String.Empty;
         public DateTime YearCreate { get; set; }
         public DateTime YearPurchase { get; set; }
-        public string VinCode { get; set; } = String.Empty;
-        public string StateNumber { get; set; } = String.Empty;
-        public string TransmissionType { get; set; } = String.Empty;
+        public string VinCode { get; set; } = String.Empty; //вин код
+        public string StateNumber { get; set; } = String.Empty; //нормер гос
+        public string TransmissionType { get; set; } = String.Empty; //тип трансмиссии
+        public string? WarningRepair { get; set; } = String.Empty;    //Кол-во предупреждений по машине
+
         [Required]
         public string VehicleType { get; set; } = String.Empty;
         [Required]
@@ -29,7 +31,21 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         public List<Repair> Repairs { get; set; } = new();
         public List<RepairType> RepairTypes { get; set; } = new();
 
-        //по нему выбирается цвет индикатора авто в lIst
+
+        private string _pdfFile = String.Empty;
+        public string PdfFile 
+        {
+            get => _pdfFile;
+            set
+            {
+                if (_pdfFile != value)
+                {
+                    _pdfFile = value;
+                    OnPropertyChanged();
+                }
+            }
+        } //Pdf file путь}
+
         private bool _needsService;
         public bool NeedsService
         {
@@ -42,10 +58,7 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
                     OnPropertyChanged();
                 }
             }
-        }
-
-        //Кол-во предупреждений по машине
-        public string? WarningRepair { get; set; } = String.Empty;
+        } //по нему выбирается цвет индикатора авто в lIst
 
         public Vehicle() { }
 

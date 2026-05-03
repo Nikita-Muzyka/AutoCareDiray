@@ -72,11 +72,11 @@
 
                     <VerticalStackLayout Padding="15,10">
                         <Label Style="{DynamicResource LabelInfoForEntry}" Text="Выполнение работ"/>
-                        <VerticalStackLayout RadioButtonGroup.SelectedValue="{Binding SelectedJob}">
+                        <VerticalStackLayout RadioButtonGroup.GroupName="Job" RadioButtonGroup.SelectedValue="{Binding SelectedJob, Mode=TwoWay}">
 
-                            <RadioButton  x:Name="ServiceButton" Grid.Row="0" Content="Сервис" Value="Сервис" />
+                            <RadioButton  x:Name="ServiceButton" Content="Сервис" Value="Сервис" />
 
-                            <RadioButton Grid.Row="1" Content="Самостоятельно" Value="Самостоятельно"/>
+                            <RadioButton  Content="Самостоятельно" Value="Самостоятельно"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout> <!--Где выполнялись работы-->
 

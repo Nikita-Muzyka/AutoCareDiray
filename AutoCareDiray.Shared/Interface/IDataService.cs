@@ -9,39 +9,44 @@ namespace AutoCareDiray.Shared.Interface
     public interface IDataService
     {
 
-        //Vehicle
-        Task<Result> CreateVehicleAsync(Vehicle vehicle,CancellationToken token);
-        Task<Result> ListVehicleAsync(CancellationToken token);
-        Task<Result> ListVehicleForListRepairAsync(CancellationToken token);
-        Task<Result> GetVehicleAsync(int Vehicle_Id, CancellationToken token);
-        Task<Result> GetVehicleMileageAsync(int Vehicle_Id, CancellationToken token);
-        Task<Result> GetVehicleAndRepairTypesAsync(int Vehicle_Id, CancellationToken token);
-        Task<Result> GetVehicleAndRepairTypesForUpdateAsync(int Vehicle_Id, CancellationToken token);
-        Task<Result> DeleteVehicleAsync(Vehicle vehicle, CancellationToken token);
-        Task<Result> UpdateVehicleAsync(Vehicle vehicle, CancellationToken token);
-        Task<Result> UpdateVehicleMileageAsync(int vehicleId,int Mileage, CancellationToken token);
+        //Vehicle 
+        Task<Result> CreateVehicleAsync(Vehicle vehicle,CancellationToken token); // Создание авто
+        Task<Result> ListVehicleAsync(CancellationToken token); // список авто вместе с типоми ремонта
+        Task<Result> ListVehicleForListRepairAsync(CancellationToken token); // список авто только название и ид
+        Task<Result> GetVehicleAsync(int Vehicle_Id, CancellationToken token); // получение авто
+        Task<Result> GetVehicleMileageAsync(int Vehicle_Id, CancellationToken token); // получение ид и пробега авто
+        Task<Result> GetVehicleAndRepairTypesAsync(int Vehicle_Id, CancellationToken token); // получение авто вместе с репаир ид
+        Task<Result> GetVehicleAndRepairTypesForUpdateAsync(int Vehicle_Id, CancellationToken token); // получение авто для обновления данных
+        Task<Result> DeleteVehicleAsync(Vehicle vehicle, CancellationToken token); // удалить авто
+        Task<Result> UpdateVehicleAsync(Vehicle vehicle, CancellationToken token); // обновить авто
+        Task<Result> UpdateVehicleMileageAsync(int vehicleId,int Mileage, CancellationToken token); // обновление пробега
+        Task<Result> UpdateVehiclePdfAsync(int vehicleId, string pdfFile, CancellationToken token); // обновление PDF
+
 
         //Repair
 
-        Task<Result> ListRepairForVehicleAsync(int VehicleId, CancellationToken token);
-        Task<Result> GetRepairAsync(int repairId, CancellationToken token);
-        Task<Result> CreateRepairAsync(Repair repair, CancellationToken token);
-        Task<Result> DeleteRepairAsync(Repair repair, CancellationToken token);
-        Task<Result> UpdateRepairAsync(Repair repair, CancellationToken token);
+        Task<Result> ListRepairForVehicleAsync(int VehicleId, CancellationToken token); // саисок ремонта для машины
+        Task<Result> GetRepairAsync(int repairId, CancellationToken token); // получить список ремонта
+        Task<Result> CreateRepairAsync(Repair repair, CancellationToken token); // создание ремонта
+        Task<Result> DeleteRepairAsync(Repair repair, CancellationToken token); // удалить ремонт
+        Task<Result> UpdateRepairAsync(Repair repair, CancellationToken token);  // обновить ремонта
 
 
 
         //RepairType
-        Task<Result> GetListRepairTypeAsync(int vehicleId,CancellationToken token);
-        Task<Result> UpdateRepairTypeAsync(RepairType repaitType, CancellationToken token);
-        Task<Result> UpdateLastServiceRepairTypeAsync(RepairType repairType, CancellationToken token);
+        Task<Result> GetListRepairTypeAsync(int vehicleId,CancellationToken token); // полуичть тпы ремонта список
+        Task<Result> UpdateRepairTypeAsync(RepairType repaitType, CancellationToken token); // обновить тип ремонта
+        Task<Result> UpdateLastServiceRepairTypeAsync(RepairType repairType, CancellationToken token); // обновить дату и пробег последнего обслуживания типа ремонта
 
 
         //VehicleNote
-        Task<Result> ListVehicleNotesAsync(int Vehicleid, CancellationToken token);
-        Task<Result> CreateVehicleNotesAsync(VehicleNotes note, CancellationToken token);
-        Task<Result> DeleteVehicleNotesAsync(int id, CancellationToken token);
-        Task<Result> UpdateVehileNoteAsync(VehicleNotes note, CancellationToken token);
-        void InitializeDatabase();
+        Task<Result> ListVehicleNotesAsync(int Vehicleid, CancellationToken token); // получить список заметок
+        Task<Result> CreateVehicleNotesAsync(VehicleNotes note, CancellationToken token); // Создать заметку
+        Task<Result> DeleteVehicleNotesAsync(int id, CancellationToken token); // удалить заметку
+        Task<Result> UpdateVehileNoteAsync(VehicleNotes note, CancellationToken token); // обновить заметку
+
+
+
+        void InitializeDatabase(); // инициализация БД при запуске Приложения
     }
 }

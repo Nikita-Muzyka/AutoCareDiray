@@ -8,6 +8,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
 
 namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
@@ -15,6 +17,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
     {
         #region Основые классы и списки
 
+        IPdfService _pdfService;
         private int _vehicleId;
         private bool _isInitilize = false;
         private bool _isNoteUpdate = false;
@@ -22,10 +25,12 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private VehicleNotes _noteForUpdate;
         CancellationTokenSource _cts;
 
+        private DateTime _startDate;
+
         #endregion
 
         #region Классы для UI
-       
+
         [ObservableProperty]
         private ObservableCollection<RepairType> warningRepairType;
         [ObservableProperty]
@@ -40,16 +45,19 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private string newTitleNote;
         [ObservableProperty]
         private string newContentNote;
+        [ObservableProperty]
+        private string selectedYearReport;
 
         [ObservableProperty]
         private string buttonName = "Добавить";
 
         #endregion
 
-        public CardVehicleViewModel(IDialogService dialog, IDataService data, INavigationService navigate)
+        public CardVehicleViewModel(IDialogService dialog, IDataService data, INavigationService navigate,IPdfService pdf)
             : base(dialog, data, navigate)
         {
             _cts = new CancellationTokenSource();
+            _pdfService = pdf;
         }
 
 
@@ -114,9 +122,39 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         }
 
         [RelayCommand]
-        public async void CreatePdfStatVehicle() //create pdf
+        public async void CreatePdfStatVehicle() 
         {
-            
+            if(VehicleCard.PdfFile != null)
+            {
+                _pdfService.DeletePdf(VehicleCard.PdfFile);
+            }
+            var result = await _pdfService.CreatePdfStateAsync(VehicleCard, _startDate, DateTime.UtcNow);
+            if (result.Success == false) return;
+            var resultFile = result as Result<string>;
+            var resultSave = await _dialogService.ShowChoiceDisplayAlertAsync("Сохранение", "Вы хотите сохранить данный PDF ?", "Да", "Нет");
+            if (resultSave)
+            {
+                VehicleCard.PdfFile = resultFile.Data;
+                var resultUpdate = await _dataService.UpdateVehiclePdfAsync(VehicleCard.Id,VehicleCard.PdfFile,_cts.Token);
+                if(resultUpdate.Success)
+                {
+                    await _dialogService.ShowToastAsync("PDF сохранен");
+                }
+                else
+                {
+                    await _dialogService.ShowToastAsync("Ошибка при сохранении PDF");
+                }
+            }
+            else
+            {
+               _pdfService.DeletePdf(resultFile.Data);
+            }
+        } //create pdf
+
+        [RelayCommand]
+        public async void OpenPdfFile()
+        {
+            await _pdfService.OpenPdfAsync(vehicleCard.PdfFile);
         }
 
 
@@ -173,6 +211,28 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             var result = await _dataService.DeleteVehicleNotesAsync(note.Id,_cts.Token);
             VehicleNotes.Remove(note);
             if (result.Success) await _dialogService.ShowToastAsync("Заметка удалена");
+        }
+
+
+        partial void OnSelectedYearReportChanged(string value)
+        {
+            if(value == "NowYear")
+            {
+                DateTime nowDate = DateTime.UtcNow;
+                _startDate = new DateTime(nowDate.Year, 1, 1);
+            }
+            if(value == "PastYear")
+            {
+                DateTime nowDate = DateTime.UtcNow;
+                _startDate = new DateTime(nowDate.Year - 1, 1, 1);
+            }
+            else
+            {
+                if(vehicleCard.YearPurchase != null)
+                {
+                    _startDate = vehicleCard.YearPurchase;
+                }
+            }
         }
 
     }

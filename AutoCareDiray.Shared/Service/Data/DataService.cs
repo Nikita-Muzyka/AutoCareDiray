@@ -90,7 +90,8 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 token.ThrowIfCancellationRequested();
                 var vehicle = await _dbContex.Vehicles
-                    .Include(c=> c.RepairTypes) 
+                    .Include(c=> c.RepairTypes)
+                    .Include(c => c.Repairs)
                     .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
 
                 if (vehicle != null) return Result<Vehicle>.SuccessCreate(vehicle);
@@ -248,6 +249,29 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при обновлении пробега машины: {ex.Message}");
             }
         } // обновление пробега
+        public async Task<Result> UpdateVehiclePdfAsync(int vehicleId, string pdfFile, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var vehicleDB = await _dbContex.Vehicles.FindAsync(vehicleId, token);
+                if (vehicleDB != null)
+                {
+                    vehicleDB.PdfFile = pdfFile;
+                    await _dbContex.SaveChangesAsync(token);
+                    return Result.SuccessCreate();
+                }
+                else return Result.ErrorCreate("Машина не найдена");
+            }
+            catch (OperationCanceledException)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при обновлении PDF: {ex.Message}");
+            }
+        } // обновление PDF
 
         //Repair
 
@@ -470,7 +494,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при сохранении заметки: {ex.Message}");
             }
-        }
+        } // Создать заметку
         public async Task<Result> DeleteVehicleNotesAsync(int id, CancellationToken token)
         {
             try
@@ -494,7 +518,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при удалении заметки: {ex.Message}");
             }
-        }
+        } // удалить заметку
         public async Task<Result> UpdateVehileNoteAsync(VehicleNotes note, CancellationToken token)
         {
             try
@@ -518,7 +542,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при обновлении заметки: {ex.Message}");
             }
-        }
+        } // обновить заметку
 
 
         public void InitializeDatabase()
