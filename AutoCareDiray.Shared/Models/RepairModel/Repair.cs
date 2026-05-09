@@ -17,26 +17,26 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         public int Id { get; set; }
         public int CurrentMileage { get; set; }
         public DateTime DateRepair { get; set; }
-        public string? SpareParts { get; set; } = String.Empty;
+        public string? SpareParts { get; set; }
         public int Cost { get; set; } = default;
-        public string? Description { get; set; } = String.Empty;
-        public string? ServiceName { get; set; } = String.Empty;
-        public string? CommentMechanic { get; set; } = String.Empty;
-        public string? Job { get; set; } = String.Empty;
+        public string? Description { get; set; }
+        public string? ServiceName { get; set; }
+        public string? CommentMechanic { get; set; }
+        public string? Job { get; set; }
         public List<string>? Photos { get; set; }
 
         public string? ProgressPercentMileage
         {
             get
             {
-                return $"Интервал по пробегу {Math.Round(ProgressMileage,1) * 100} %";
+                return $"Износ по пробегу {Math.Round(ProgressMileage,1) * 100} %";
             }
         }
         public string? ProgressPercentMonth
         {
             get
             {
-                return $"Интервал по месяцам {Math.Round(ProgressMonth, 1) * 100} %";
+                return $"Износ по времени {Math.Round(ProgressMonth, 1) * 100} %";
             }
         }
         public double ProgressMileage

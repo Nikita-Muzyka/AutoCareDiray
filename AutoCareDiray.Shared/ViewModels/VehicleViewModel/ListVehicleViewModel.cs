@@ -6,7 +6,9 @@ using AutoCareDiray.Shared.Service.Data;
 using Microsoft.EntityFrameworkCore.Metadata;
 using AutoCareDiray.Shared.Service.ResultService;
 using AutoCareDiray.Shared.Interface;
+using AutoCareDiray.Shared.Models.RepairModel;
 using System.Diagnostics;
+using AutoCareDiray.Shared.Service.IntervalCalculator;
 
 namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
@@ -114,12 +116,10 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         {
             foreach (var list in cars)
             {
-                var sortRepairType = list.RepairTypes.Where(c => c.IntervalMileage > 0).ToList();
-               var repairsType = sortRepairType.Where(c => list.Mileage - c.LastServiceMileage > c.IntervalMileage).ToList();
-                int count = repairsType.Count;
-                if (count > 0)
+                var warningCount = IntervalCalculatroService.CalculatingWarning(list);
+                if (warningCount > 0)
                 {
-                    list.WarningRepair = $"Ко-во узлов требующих осомтра:{count}";
+                    list.WarningRepair = $"Ко-во узлов требующих осомтра:{warningCount}";
                     list.NeedsService = true;
                     LabelWarningRepair = true;
                 }

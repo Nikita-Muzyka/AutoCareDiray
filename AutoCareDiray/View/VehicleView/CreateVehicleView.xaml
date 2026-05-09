@@ -46,7 +46,7 @@
                                 <Label Text="По паспорту ТС" Style="{DynamicResource LabelInfoForEntry}"/>
                             </VerticalStackLayout>
 
-                            <DatePicker Grid.Column="1" Format="yyyy" Date="{Binding YearCreateSelected}" VerticalOptions="Center" />
+                            <DatePicker Grid.Column="1" Format="M.yyyy" Date="{Binding YearCreateSelected}" VerticalOptions="Center" />
                         </Grid> <!--YearCreateVehicle-->
 
                         <BoxView Style="{DynamicResource BoxViewCustom}"/>
@@ -90,6 +90,7 @@
                 </Border> <!--Карточка основной информации-->
                 
                 <toolkit:Expander Margin="0,10">
+                    
                     <toolkit:Expander.Header>
                         <Border Style="{DynamicResource BorderForExpanderAddInfo}">
                             <Grid ColumnDefinitions="*, Auto">
@@ -120,7 +121,7 @@
                                             <Label Text="Год покупки ТС" Style="{DynamicResource LabelInfoForEntry}"/>
                                         </VerticalStackLayout>
 
-                                        <DatePicker Grid.Column="1" Format="yyyy" Date="{Binding YearPurchaseSelected}" VerticalOptions="Center" />
+                                        <DatePicker Grid.Column="1" Format="M.yyyy" Date="{Binding YearPurchaseSelected}" VerticalOptions="Center" />
                                     </Grid>
                                     <!--YearPurchaseVehicle-->
 
@@ -140,13 +141,14 @@
                                         <Entry Style="{DynamicResource EntryImput}" Placeholder="номер" 
                                                Text="{Binding StateNumber}" Keyboard="Text"/>
                                     </VerticalStackLayout>
-                                    <!--VinCOde-->
+                                    <!--StateNumber-->
                                 </VerticalStackLayout>
                             </Border>
                             <!--Карточка основной информации-->
 
                         </VerticalStackLayout>
                     </toolkit:Expander.Content> <!--Контент доп информации-->
+                    
                 </toolkit:Expander> <!--доп информация-->
 
                 <BoxView Style="{DynamicResource BoxViewCustom}"/>

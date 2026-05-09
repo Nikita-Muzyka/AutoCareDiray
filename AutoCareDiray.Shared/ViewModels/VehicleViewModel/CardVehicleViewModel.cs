@@ -3,6 +3,7 @@ using AutoCareDiray.Shared.Models.Notes;
 using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using AutoCareDiray.Shared.Service.Data;
+using AutoCareDiray.Shared.Service.IntervalCalculator;
 using AutoCareDiray.Shared.Service.ResultService;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -165,9 +166,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             {
                 var resultVehicle = result as Result<Vehicle>;
                 VehicleCard = resultVehicle.Data ?? new Vehicle();
-                var sortRepairType = VehicleCard.RepairTypes.Where(c => c.IntervalMileage > 0).ToList();
-                var warning = sortRepairType.Where(c => VehicleCard.Mileage - c.LastServiceMileage > c.IntervalMileage).ToList();
-                WarningRepairType = new ObservableCollection<RepairType>(warning);
+                var resultWarning = IntervalCalculatroService.CalculatingWarningList(VehicleCard);
+                WarningRepairType = new ObservableCollection<RepairType>(resultWarning);
             }
         } // загрузка информации по авто
 

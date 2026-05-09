@@ -58,7 +58,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string nameVehicle = String.Empty;
         [ObservableProperty]
-        private DateTime yearCreateSelected = DateTime.Today;
+        private DateTime yearCreateSelected = new DateTime(1970, 1, 1);
         [ObservableProperty]
         private string mileage = String.Empty;
         [ObservableProperty]
@@ -66,7 +66,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string stateNumber = String.Empty;
         [ObservableProperty]
-        private DateTime yearPurchaseSelected = DateTime.Today;
+        private DateTime yearPurchaseSelected = new DateTime(1970,1,1);
         [ObservableProperty]
         private string selectedTypeVehicle = String.Empty;
         [ObservableProperty]
@@ -248,6 +248,13 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             foreach (var list in _listRepairType)
             {
                 list.IsServiced = !list.IsServiced;
+                if(list.IsServiced == true)
+                {
+                    if (string.IsNullOrWhiteSpace(Mileage)) continue;
+
+                    var mileageInt = ConverFromInt(Mileage);
+                    list.LastServiceMileage = mileageInt;
+                }
             }
         }
 

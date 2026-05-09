@@ -14,26 +14,26 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string PhotoVehicle { get; set; } = String.Empty;
-        public string NameVehicle { get; set; } = String.Empty;
-        public DateTime YearCreate { get; set; }
-        public DateTime YearPurchase { get; set; }
-        public string VinCode { get; set; } = String.Empty; //вин код
-        public string StateNumber { get; set; } = String.Empty; //нормер гос
-        public string TransmissionType { get; set; } = String.Empty; //тип трансмиссии
-        public string? WarningRepair { get; set; } = String.Empty;    //Кол-во предупреждений по машине
+        public string? PhotoVehicle { get; set; }
+        public string? NameVehicle { get; set; }
+        public DateTime YearCreate { get; set; } = new DateTime(1970, 1, 1);
+        public DateTime YearPurchase { get; set; } = new DateTime(1970, 1, 1);
+        public string? VinCode { get; set; } //вин код
+        public string? StateNumber { get; set; } //нормер гос
+        public string? TransmissionType { get; set; } //тип трансмиссии
+        public string? WarningRepair { get; set; }    //Кол-во предупреждений по машине
 
         [Required]
-        public string VehicleType { get; set; } = String.Empty;
+        public string? VehicleType { get; set; }
         [Required]
-        public int Mileage { get; set; }
+        public int Mileage { get; set; } = 0;
 
-        public List<Repair> Repairs { get; set; } = new();
-        public List<RepairType> RepairTypes { get; set; } = new();
+        public List<Repair>? Repairs { get; set; } = new();
+        public List<RepairType>? RepairTypes { get; set; } = new();
 
 
-        private string _pdfFile = String.Empty;
-        public string PdfFile 
+        private string? _pdfFile;
+        public string? PdfFile 
         {
             get => _pdfFile;
             set
