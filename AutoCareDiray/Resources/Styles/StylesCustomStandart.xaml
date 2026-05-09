@@ -152,6 +152,50 @@
         </Style.Behaviors>
     </Style>
 
+    <!-- Button стандартная красная маленькая -->
+    <Style TargetType="Button" x:Key="ButtonCustomStandartRedMini">
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Padding" Value="5,5"/>
+        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="MinimumHeightRequest" Value="30"/>
+        <Setter Property="MinimumWidthRequest" Value="30"/>
+        <Setter Property="HeightRequest" Value="35"/>
+        <Setter Property="WidthRequest" Value="200"/>
+        <Setter Property="Shadow" Value="{DynamicResource ShadowRedLightForButton}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryWhite}"/>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPrimaryRed}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryWhite}"/>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPressed}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource ButtonTextDisable}, Dark={DynamicResource ButtonTextDisable}}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={DynamicResource ButtonDisable}, Dark={DynamicResource ButtonDisable}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+        <Style.Behaviors>
+            <behaviors:ButtonBounceBehavior/>
+        </Style.Behaviors>
+    </Style>
+
     <!--Button  стандартная белая -->
     <!--<Style TargetType="Button" x:Key="ButtonCustomStandartWhite">
      <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryBlack}"/>

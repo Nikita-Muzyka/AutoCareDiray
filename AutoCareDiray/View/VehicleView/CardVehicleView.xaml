@@ -136,8 +136,8 @@
                         <Entry Text="{Binding NewTitleNote}" Style="{DynamicResource EntryImput}" FontSize="18" Placeholder="Заголовок"/>
                         <BoxView Style="{DynamicResource BoxViewCustom}" WidthRequest="600"/>
                         <Editor Text="{Binding NewContentNote}" Style="{DynamicResource EditorStandart}" Placeholder="текст заметки"/>
-                        <Button Style="{DynamicResource ButtonCustomStandartRed}" Text="{Binding ButtonName}" Margin="0,20,0,20"
-                                HeightRequest="40" WidthRequest="150" Command="{Binding interactionNoteCommand}"/>
+                        <Button Style="{DynamicResource ButtonCustomStandartRedMini}" Text="{Binding ButtonName}" Margin="0,20,0,20"
+                                Command="{Binding interactionNoteCommand}"/>
                     </VerticalStackLayout>
                 </Border> <!--создание заметки-->
 
@@ -177,22 +177,28 @@
             <VerticalStackLayout IsVisible="{Binding Source={x:Reference ReportVehicle},Path=IsChecked}" Padding="5">
                 
                 <Border Style="{DynamicResource BorderForCardInfo}">
-                    <VerticalStackLayout RadioButtonGroup.GroupName="YearRepair" RadioButtonGroup.SelectedValue="{Binding SelectedYearReport}"
-                                         Padding="0" Spacing="10">
-                        <Label Text="{Binding VehicleCard.PdfFile}"/>
-                        <Button Text="Открыть отчет" Command="{Binding OpenPdfFileCommand}" Style="{DynamicResource ButtonCustomStandartRed}"
-         HeightRequest="20" WidthRequest="150" Margin="0,0,10,20"/>
-                        
-                        <Label Text="Выберите данные формирования отчета" Padding="5"/>
-                        <RadioButton Content="Отчет за этот год" Value="NowYear" />
-                        <RadioButton Content="Отчет за прошлый год" Value="PastYear" />
-                        <RadioButton Content="Отчет c момента покупки авто" Value="Full"/>
-                        <Button Text="Сформировать отчет" Command="{Binding CreatePdfStatVehicleCommand}" Style="{DynamicResource ButtonCustomStandartRed}"
-                                HeightRequest="40" WidthRequest="200" Margin="0,10,0,30"/>
-                    </VerticalStackLayout>
+                    <Grid RowDefinitions="auto,*">
+                        <VerticalStackLayout RadioButtonGroup.GroupName="YearRepair" RadioButtonGroup.SelectedValue="{Binding SelectedYearReport}"
+                     Padding="0" Spacing="10" Grid.Row="0">
+                            <Label Text="{Binding VehicleCard.PdfFile}"/>
+
+                            <Label Text="Выберите данные формирования отчета" Padding="5"/>
+                            <RadioButton Content="Отчет за этот год" Value="NowYear" />
+                            <RadioButton Content="Отчет за прошлый год" Value="PastYear" />
+                            <RadioButton Content="Отчет c момента покупки авто" Value="Full"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Row="1">
+                            <Button Text="Открыть отчет" Command="{Binding OpenPdfFileCommand}" Style="{DynamicResource ButtonCustomStandartRedMini}"
+                                    Margin="0,0,10,20"/>
+                            <Button Text="Сформировать отчет" Command="{Binding CreatePdfStatVehicleCommand}" Style="{DynamicResource ButtonCustomStandartRedMini}"
+                                    Margin="0,0,10,20"/>
+                            <Label Text="Для того чтобы посмотреть отчет советую скачать программы для чтения PDF файлов если в системе таких нету" Padding="5"/>
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
                 
-            </VerticalStackLayout>
+            </VerticalStackLayout> <!--отчет пдф-->
             
         </VerticalStackLayout>
     </ScrollView>

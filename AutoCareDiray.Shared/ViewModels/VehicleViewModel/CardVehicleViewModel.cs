@@ -130,7 +130,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 _pdfService.DeletePdf(VehicleCard.PdfFile);
             }
             var result = await _pdfService.CreatePdfStateAsync(VehicleCard, _startDate, DateTime.UtcNow);
-            if (result.Success == false) return;
+            if (result.Success == false) await _dialogService.ShowToastAsync(result.ErrorMessage);
             var resultFile = result as Result<string>;
             var resultSave = await _dialogService.ShowChoiceDisplayAlertAsync("Сохранение", "Вы хотите сохранить данный PDF ?", "Да", "Нет");
             if (resultSave)

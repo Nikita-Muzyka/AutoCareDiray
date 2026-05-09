@@ -98,7 +98,7 @@
 
                     <VerticalStackLayout Padding="15,10">
                         <Label Text="Сюда можете прикрепить заказ наряды и чеки работы" Style="{DynamicResource LabelInfoForEntry}"/>
-                        <Button Text="Прикрепить" Style="{DynamicResource ButtonCustomStandartRed}" WidthRequest="110" HeightRequest="20"
+                        <Button Text="Прикрепить" Style="{DynamicResource ButtonCustomStandartRedMini}"
                                 Command="{Binding AttachPhotoCommand}" Margin="0,10,0,30"/>
                         <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                             <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AttachedPhotosRepairs}">
