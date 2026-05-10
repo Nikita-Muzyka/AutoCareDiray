@@ -15,10 +15,10 @@
 
                     <VerticalStackLayout Padding="15,10">
                         <Label Text="Тип обслуживания" Style="{DynamicResource LabelInfoForEntry}"/>
-                        <Grid>
-                            <Picker Title="Выберите тип..." ItemsSource="{Binding RepairTypes}" ItemDisplayBinding="{Binding TitleRepair}" 
+                        <Grid ColumnDefinitions="*,auto">
+                            <Picker Grid.Column="0" Title="Выберите тип..." ItemsSource="{Binding RepairTypes}" ItemDisplayBinding="{Binding TitleRepair}" 
                                     SelectedItem="{Binding SelectedRepairType}" Style="{DynamicResource PickerStandart}"/>
-                            <Label Text="▼" Style="{DynamicResource LabelArrowDown}"/>
+                            <Label Grid.Column="1" Text="▼" Style="{DynamicResource LabelArrowDown}"/>
                         </Grid>
                     </VerticalStackLayout> <!--Picker выбора категории-->
 
@@ -100,6 +100,7 @@
                         <Label Text="Сюда можете прикрепить заказ наряды и чеки работы" Style="{DynamicResource LabelInfoForEntry}"/>
                         <Button Text="Прикрепить" Style="{DynamicResource ButtonCustomStandartRedMini}"
                                 Command="{Binding AttachPhotoCommand}" Margin="0,10,0,30"/>
+                        
                         <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                             <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AttachedPhotosRepairs}">
                                 <BindableLayout.ItemTemplate>
@@ -108,7 +109,7 @@
                                             <Grid ColumnDefinitions="auto,auto" >
                                                 <Image Source="{Binding .}" Aspect="AspectFill" HeightRequest="100" WidthRequest="100"/>
                                                 <Button Text="X" TextColor="{DynamicResource ButtonPrimaryRed}" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CreateRepairViewModel}}, Path=DeleteAttachPhotoCommand}"
-                             CommandParameter="{Binding .}" Background="Transparent"/>
+                                                        CommandParameter="{Binding .}" Background="Transparent"/>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>

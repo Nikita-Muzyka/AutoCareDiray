@@ -59,9 +59,8 @@ namespace AutoCareDiray.Shared.Models.RepairModel
             {
                 if (RepairType.IntervalMonth > 0)
                 {
-                    DateTime date = DateTime.UtcNow;
-                    var monthsBeen = date.Month - DateRepair.Month;
-                    var progress = (double)monthsBeen / (double)RepairType.IntervalMonth;
+                    var day = DateTime.UtcNow - DateRepair;
+                    var progress = ((double)day.Days / 30) / (double)RepairType.IntervalMonth;
                     var result = Math.Min(progress, 1);
                     return result;
                 }

@@ -22,4 +22,11 @@ public partial class CardVehicleView : ContentPage,IQueryAttributable
 			}
 		}
 	}
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+		var vm = _viewModel as CardVehicleViewModel;
+		vm.CancelTokenCommand.Execute(null);
+    }
 }

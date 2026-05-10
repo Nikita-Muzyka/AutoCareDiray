@@ -59,7 +59,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         public async Task LoadVehicles()
         {
             if(Vehicles.Count > 0) Vehicles.Clear();
-            var result = await _dataService.ListVehicleAsync(_cts.Token);
+            var result = await _dataService.GetListVehicleAsync(_cts.Token);
             if (result.Success)
             {
                 var resultVehicles = result as Result<List<Vehicle>>;

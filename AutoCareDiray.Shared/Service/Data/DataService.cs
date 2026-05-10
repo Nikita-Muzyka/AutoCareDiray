@@ -42,12 +42,13 @@ namespace AutoCareDiray.Shared.Service.Data
             }
 
         } // Создание авто
-        public async Task<Result> ListVehicleAsync(CancellationToken token)
+        public async Task<Result> GetListVehicleAsync(CancellationToken token)
         {
             try
             {
                 token.ThrowIfCancellationRequested();
                 var vehicles = await _dbContex.Vehicles
+                    .AsNoTracking()
                     .Include(c => c.RepairTypes)
                     .Select(c => new Vehicle { Id = c.Id, Mileage = c.Mileage, NameVehicle = c.NameVehicle,RepairTypes = c.RepairTypes })
                     .OrderBy(c => c.Mileage)
@@ -64,12 +65,13 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при получении списка машин: {ex.Message}");
             }
         } // список авто вместе с типоми ремонта
-        public async Task<Result> ListVehicleForListRepairAsync(CancellationToken token)
+        public async Task<Result> GetListVehicleForListRepairAsync(CancellationToken token)
         {
             try
             {
                 token.ThrowIfCancellationRequested();
                 var vehicles = await _dbContex.Vehicles
+                    .AsNoTracking()
                     .Select(c => new Vehicle { Id = c.Id,NameVehicle = c.NameVehicle })
                     .ToListAsync(token);
                 if(vehicles.Count > 0) return Result<List<Vehicle>>.SuccessCreate(vehicles);
@@ -90,6 +92,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 token.ThrowIfCancellationRequested();
                 var vehicle = await _dbContex.Vehicles
+                    .AsNoTracking()
                     .Include(c=> c.RepairTypes)
                     .Include(c => c.Repairs)
                     .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
@@ -112,6 +115,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 token.ThrowIfCancellationRequested();
                 var vehicle = await _dbContex.Vehicles
+                    .AsNoTracking()
                     .Select(c => new Vehicle
                     {
                         Id = Vehicle_Id,
@@ -137,6 +141,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 token.ThrowIfCancellationRequested();
                 var vehicle = await _dbContex.Vehicles
+                    .AsNoTracking()
                     .Include(c => c.RepairTypes)
                     .Select(c => new Vehicle {Id = c.Id, Mileage = c.Mileage,RepairTypes = c.RepairTypes})
                     .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
@@ -158,6 +163,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 token.ThrowIfCancellationRequested();
                 var vehicle = await _dbContex.Vehicles
+                    .AsNoTracking()
                     .Include(c => c.RepairTypes)
                     .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
                 if (vehicle != null) return Result<Vehicle>.SuccessCreate(vehicle);
@@ -231,14 +237,12 @@ namespace AutoCareDiray.Shared.Service.Data
             try
             {
                 token.ThrowIfCancellationRequested();
-                var vehicleDB = await _dbContex.Vehicles.FindAsync(vehicleId, token);
-                if (vehicleDB != null)
-                {
-                    vehicleDB.Mileage = mileage;
-                    await _dbContex.SaveChangesAsync(token);
-                    return Result.SuccessCreate();
-                }
-                else return Result.ErrorCreate("Машина не найдена");
+                int countUpdate = await _dbContex.Vehicles
+                    .Where(c => c.Id == vehicleId)
+                    .ExecuteUpdateAsync(s => s.SetProperty(r => r.Mileage, mileage), token);
+
+                if (countUpdate > 0) return Result.SuccessCreate();
+                else return Result.ErrorCreate("Ошибка обновления пробега авто");
             }
             catch (OperationCanceledException)
             {
@@ -254,14 +258,15 @@ namespace AutoCareDiray.Shared.Service.Data
             try
             {
                 token.ThrowIfCancellationRequested();
-                var vehicleDB = await _dbContex.Vehicles.FindAsync(vehicleId, token);
-                if (vehicleDB != null)
+                int countUpdate = await _dbContex.Vehicles
+                    .Where(c => c.Id == vehicleId)
+                    .ExecuteUpdateAsync(s => s.SetProperty(r => r.PdfFile, pdfFile),token);
+
+                if (countUpdate > 0)
                 {
-                    vehicleDB.PdfFile = pdfFile;
-                    await _dbContex.SaveChangesAsync(token);
                     return Result.SuccessCreate();
                 }
-                else return Result.ErrorCreate("Машина не найдена");
+                else return Result.ErrorCreate("Ошибка при обновлении");
             }
             catch (OperationCanceledException)
             {
@@ -275,12 +280,13 @@ namespace AutoCareDiray.Shared.Service.Data
 
         //Repair
 
-        public async Task<Result> ListRepairForVehicleAsync(int VehicleId, CancellationToken token)
+        public async Task<Result> GetListRepairForVehicleAsync(int VehicleId, CancellationToken token)
         {
             try
             {
                 token.ThrowIfCancellationRequested();
                 var repairs = await _dbContex.Repairs
+                    .AsNoTracking()
                     .Where(c => c.VehicleId == VehicleId)
                     .Select(c => new Repair { Id = c.Id,DateRepair = c.DateRepair,CurrentMileage = c.CurrentMileage,RepairType = c.RepairType,Vehicle = c.Vehicle })
                     .OrderBy(c => c.DateRepair)
@@ -304,7 +310,9 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 token.ThrowIfCancellationRequested();
                 var repairDb = await _dbContex.Repairs
+                    .AsNoTracking()
                     .Include(c => c.RepairType)
+                    .Include(c => c.Vehicle)
                     .FirstOrDefaultAsync(c => c.Id == repairId);
 
                 if(repairDb != null) return Result<Repair>.SuccessCreate(repairDb);
@@ -318,7 +326,7 @@ namespace AutoCareDiray.Shared.Service.Data
             {
                 return Result.ErrorCreate($"Произошла ошибка при получении ремонта: {ex.Message}"); 
             }
-        }  // получить список ремонта
+        }  // получить ремонт со списком типов ремонтов
         public async Task<Result> CreateRepairAsync(Repair repair, CancellationToken token)
         {
             try
@@ -395,7 +403,11 @@ namespace AutoCareDiray.Shared.Service.Data
             try
             {
                 token.ThrowIfCancellationRequested();
-                var repairTypes = await _dbContex.RepairTypes.Where(c => c.VehicleId == vehicleId).ToListAsync();
+                var repairTypes = await _dbContex.RepairTypes
+                    .AsNoTracking()
+                    .Where(c => c.VehicleId == vehicleId)
+                    .AsNoTracking()
+                    .ToListAsync();
                 if(repairTypes != null) return Result<List<RepairType>>.SuccessCreate(repairTypes);
                 else return Result.ErrorCreate("Список типов ремонтов пуст");
             }
@@ -416,8 +428,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 var repairDb = await _dbContex.RepairTypes.FindAsync(repaitType.Id,token);
                 if (repairDb != null)
                 {
-                    repairDb.IntervalMonth = repaitType.IntervalMonth;
-                    repairDb.IntervalMileage = repaitType.IntervalMileage;
+                    _dbContex.Entry(repairDb).CurrentValues.SetValues(repaitType);
 
                     await _dbContex.SaveChangesAsync();
                     return Result.SuccessCreate();
@@ -433,38 +444,21 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при обновлении типа ремонта: {ex.Message}");
             }
         } // обновить тип ремонта
-        public async Task<Result> UpdateLastServiceRepairTypeAsync(RepairType repairType, CancellationToken token) {             try
-            {
-                token.ThrowIfCancellationRequested();
-                var repairDb = await _dbContex.RepairTypes.FindAsync(repairType.Id, token);
-                if (repairDb != null)
-                {
-                    repairDb.LastServiceMileage = repairType.LastServiceMileage;
-                    await _dbContex.SaveChangesAsync();
-                    return Result.SuccessCreate();
-                }
-                else return Result.ErrorCreate("Тип ремонта не найден");
-            }
-            catch (OperationCanceledException ex)
-            {
-                return Result.ErrorCreate("Операция была отменена");
-            }
-            catch (Exception ex)
-            {
-                return Result.ErrorCreate($"Произошла ошибка при обновлении последнего обслуживания типа ремонта: {ex.Message}");
-            }
-        } // обновить дату и пробег последнего обслуживания типа ремонта
 
 
 
         //VehicleNotes
 
-        public async Task<Result> ListVehicleNotesAsync(int id,CancellationToken token)
+        public async Task<Result> GetListVehicleNotesAsync(int id,CancellationToken token)
         {
             try
             {
                 token.ThrowIfCancellationRequested();
-                var notes = await _dbContex.VehicleNotes.Where(c => c.VehicleId == id).OrderBy(c => c.DateCreated).ToListAsync(token);
+                var notes = await _dbContex.VehicleNotes
+                    .AsNoTracking()
+                    .Where(c => c.VehicleId == id)
+                    .OrderBy(c => c.DateCreated)
+                    .ToListAsync(token);
                 if (notes != null) return Result<List<VehicleNotes>>.SuccessCreate(notes);
                 else return Result.ErrorCreate("Список заметок пуст");
             }

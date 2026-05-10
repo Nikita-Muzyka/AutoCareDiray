@@ -132,6 +132,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
                 SelectedRepairType = resultRepair.Data.RepairType;
                 IntervalMileageFilled = resultRepair.Data.RepairType.IntervalMileage;
+                IntervalMonthsFilled = resultRepair.Data.RepairType.IntervalMonth;
                 DateRepairSelected = resultRepair.Data.DateRepair;
                 MileageFilled = resultRepair.Data.CurrentMileage;
                 SparePartsFilled = resultRepair.Data.SpareParts;
@@ -142,10 +143,13 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 if (RepairTypes.Count > 0) RepairTypes.Clear();
                 RepairTypes.Add(resultRepair.Data.RepairType);
 
-                AttachedPhotosRepairs ??= new ObservableCollection<string>();
-                foreach(var photo in resultRepair.Data.Photos)
+                if (resultRepair.Data.Photos != null)
                 {
-                    if(File.Exists(photo)) AttachedPhotosRepairs.Add(photo);
+                    AttachedPhotosRepairs ??= new ObservableCollection<string>();
+                    foreach (var photo in resultRepair.Data.Photos)
+                    {
+                        if (File.Exists(photo)) AttachedPhotosRepairs.Add(photo);
+                    }
                 }
                 SelectedRepairType = RepairTypes.FirstOrDefault();
             }
@@ -207,8 +211,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 }
             }
 
-            await UpdateLastServiceMileage();
-            await UpdateDateRepair();
+            await UpdateDate();
             await _navigationService.GoToBack();
         }  //Создание или редактирование ремонта
 
@@ -256,8 +259,12 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
             return repair;
         } // создание ремонита
-        private async Task UpdateDateRepair()
-        { 
+        private async Task UpdateDate()
+        {
+
+            SelectedRepairType.LastServiceMileage = MileageFilled;
+            SelectedRepairType.LastServiceDate = DateRepairSelected;
+
             var result = await _dataService.GetVehicleMileageAsync(_vehicleId,_cts.Token);
             if (result.Success)
             {
@@ -291,12 +298,9 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                     }
                 }
             }
+
         } // Обновление пробега у авто и интервала пробега
-        private async Task UpdateLastServiceMileage()
-        {
-            SelectedRepairType.LastServiceMileage = MileageFilled;
-            var result = await _dataService.UpdateLastServiceRepairTypeAsync(SelectedRepairType, _cts.Token);
-        } // Обновление пробега у авто и интервала пробега
+       
 
         partial void OnSelectedRepairTypeChanged(RepairType value)
         {

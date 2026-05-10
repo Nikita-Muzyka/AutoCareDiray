@@ -175,7 +175,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         {
             if (value == "Notes")
             {
-                var result = await _dataService.ListVehicleNotesAsync(_vehicleId, _cts.Token);
+                var result = await _dataService.GetListVehicleNotesAsync(_vehicleId, _cts.Token);
                 if (result.Success)
                 {
                     var resultNotes = result as Result<List<VehicleNotes>>;
@@ -212,8 +212,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             VehicleNotes.Remove(note);
             if (result.Success) await _dialogService.ShowToastAsync("Заметка удалена");
         }
-
-
         partial void OnSelectedYearReportChanged(string value)
         {
             if(value == "NowYear")
@@ -234,6 +232,14 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 }
             }
         }
+
+        [RelayCommand]
+        public void CancelToken()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
+            _cts = new CancellationTokenSource();
+        }  //отмена токена
 
     }
 }

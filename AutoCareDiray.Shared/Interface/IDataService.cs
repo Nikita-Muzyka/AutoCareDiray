@@ -11,8 +11,8 @@ namespace AutoCareDiray.Shared.Interface
 
         //Vehicle 
         Task<Result> CreateVehicleAsync(Vehicle vehicle,CancellationToken token); // Создание авто
-        Task<Result> ListVehicleAsync(CancellationToken token); // список авто вместе с типоми ремонта
-        Task<Result> ListVehicleForListRepairAsync(CancellationToken token); // список авто только название и ид
+        Task<Result> GetListVehicleAsync(CancellationToken token); // список авто вместе с типоми ремонта
+        Task<Result> GetListVehicleForListRepairAsync(CancellationToken token); // список авто только название и ид
         Task<Result> GetVehicleAsync(int Vehicle_Id, CancellationToken token); // получение авто
         Task<Result> GetVehicleMileageAsync(int Vehicle_Id, CancellationToken token); // получение ид и пробега авто
         Task<Result> GetVehicleAndRepairTypesAsync(int Vehicle_Id, CancellationToken token); // получение авто вместе с репаир ид
@@ -25,7 +25,7 @@ namespace AutoCareDiray.Shared.Interface
 
         //Repair
 
-        Task<Result> ListRepairForVehicleAsync(int VehicleId, CancellationToken token); // саисок ремонта для машины
+        Task<Result> GetListRepairForVehicleAsync(int VehicleId, CancellationToken token); // саисок ремонта для машины
         Task<Result> GetRepairAsync(int repairId, CancellationToken token); // получить список ремонта
         Task<Result> CreateRepairAsync(Repair repair, CancellationToken token); // создание ремонта
         Task<Result> DeleteRepairAsync(Repair repair, CancellationToken token); // удалить ремонт
@@ -36,11 +36,10 @@ namespace AutoCareDiray.Shared.Interface
         //RepairType
         Task<Result> GetListRepairTypeAsync(int vehicleId,CancellationToken token); // полуичть тпы ремонта список
         Task<Result> UpdateRepairTypeAsync(RepairType repaitType, CancellationToken token); // обновить тип ремонта
-        Task<Result> UpdateLastServiceRepairTypeAsync(RepairType repairType, CancellationToken token); // обновить дату и пробег последнего обслуживания типа ремонта
 
 
         //VehicleNote
-        Task<Result> ListVehicleNotesAsync(int Vehicleid, CancellationToken token); // получить список заметок
+        Task<Result> GetListVehicleNotesAsync(int Vehicleid, CancellationToken token); // получить список заметок
         Task<Result> CreateVehicleNotesAsync(VehicleNotes note, CancellationToken token); // Создать заметку
         Task<Result> DeleteVehicleNotesAsync(int id, CancellationToken token); // удалить заметку
         Task<Result> UpdateVehileNoteAsync(VehicleNotes note, CancellationToken token); // обновить заметку

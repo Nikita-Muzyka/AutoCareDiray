@@ -37,7 +37,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             var result = await _dataService.GetRepairAsync(repairId,_cts.Token);
             if (result.Success)
             {
-              var resultRepair = result as Result<Repair>;
+                var resultRepair = result as Result<Repair>;
                 Repair = resultRepair.Data;
                 RepairType = resultRepair.Data.RepairType;
                 _isinitilize = true;
