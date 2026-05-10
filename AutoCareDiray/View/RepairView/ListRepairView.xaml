@@ -41,8 +41,11 @@
                                     <Label Text="{Binding RepairType.TitleRepair}" Style="{DynamicResource LabelCustom}"/>
                                     <Label Text="{Binding DateRepair,StringFormat='{}{0:d}'}" Style="{DynamicResource LabelSecondaryCustom}"/>
 
-                                    <Label Text="{Binding ProgressPercent}" Style="{DynamicResource LabelWarningForCard}"/>
+                                    <Label Text="{Binding ProgressPercentMileage}" Style="{DynamicResource LabelWarningForCard}"/>
                                     <ProgressBar ProgressColor="Red" Progress="{Binding ProgressMileage}"/>
+
+                                    <Label Text="{Binding ProgressPercentMonth}" Style="{DynamicResource LabelWarningForCard}"/>
+                                    <ProgressBar ProgressColor="Red" Progress="{Binding ProgressMonth}"/>
                                 </VerticalStackLayout>
 
                                 <ImageButton Grid.Column="2" 

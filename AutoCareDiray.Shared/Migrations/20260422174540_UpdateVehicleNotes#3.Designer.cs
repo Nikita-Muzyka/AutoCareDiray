@@ -3,6 +3,7 @@ using System;
 using AutoCareDiray.Shared.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoCareDiray.Shared.Migrations
 {
     [DbContext(typeof(AppDBContex))]
-    partial class AppDBContexModelSnapshot : ModelSnapshot
+    [Migration("20260422174540_UpdateVehicleNotes#3")]
+    partial class UpdateVehicleNotes3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.13");
@@ -69,9 +72,6 @@ namespace AutoCareDiray.Shared.Migrations
                     b.Property<string>("Job")
                         .HasColumnType("TEXT");
 
-                    b.PrimitiveCollection<string>("Photos")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("RepairTypeId")
                         .HasColumnType("INTEGER");
 
@@ -115,9 +115,6 @@ namespace AutoCareDiray.Shared.Migrations
                     b.Property<bool>("IsServiced")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("LastServiceDate")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("LastServiceMileage")
                         .HasColumnType("INTEGER");
 
@@ -149,21 +146,22 @@ namespace AutoCareDiray.Shared.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("NameVehicle")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("NeedsService")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("PdfFile")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("PhotoVehicle")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("StateNumber")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TransmissionType")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("VehicleType")
@@ -171,6 +169,7 @@ namespace AutoCareDiray.Shared.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("VinCode")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WarningRepair")

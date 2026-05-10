@@ -1,9 +1,10 @@
 ﻿using AutoCareDiray.Service.Dialog;
 using AutoCareDiray.Service.Navigation;
+using AutoCareDiray.Service.PhotoPicker;
 using AutoCareDiray.Shared.Data;
 using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.Shared.Models.Validation;
-using AutoCareDiray.Shared.Service.Api;
+using AutoCareDiray.Service.PDF;
 using AutoCareDiray.Shared.Service.Data;
 using AutoCareDiray.Shared.Service.ValidationService;
 using AutoCareDiray.Shared.ViewModels.RepairViewModel;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection; // Добавьте эту ст�
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Platform;
+using QuestPDF.Infrastructure;
 
 
 namespace AutoCareDiray
@@ -24,6 +26,9 @@ namespace AutoCareDiray
     {
         public static MauiApp CreateMauiApp()
         {
+
+            #region builder + settings Nug
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -37,6 +42,11 @@ namespace AutoCareDiray
                     fonts.AddFont("Rubik-Bold.ttf", "RubikBold");
                 });
 
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            #endregion
+
+            #region Settings UI
 
             Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
             {
@@ -66,6 +76,19 @@ namespace AutoCareDiray
 #endif
             });
 
+
+            Microsoft.Maui.Handlers.EditorHandler.Mapper.AppendToMapping("NoUnderline", (handler, view) =>
+            {
+#if ANDROID
+                // Убираем подчеркивание у Editor на Android
+                handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+#endif
+            });
+
+            #endregion
+
+            #region Sqlite
+
             var DbPath = Path.Combine(FileSystem.AppDataDirectory, "auto_care_diray.db");
             builder.Services.AddDbContext<AppDBContex>(options =>
             {
@@ -94,11 +117,17 @@ namespace AutoCareDiray
                 return client;
             });
 
+            #endregion
+
+            #region DI
+
             //builder.Services.AddScoped<IApiService, ApiService>();
             builder.Services.AddScoped<IDataService,DataService>();
             builder.Services.AddTransient<IDialogService,DialogService>();
             builder.Services.AddTransient<IValidatorService, ValidatorService>();
             builder.Services.AddSingleton<INavigationService,NavigationService>();
+            builder.Services.AddTransient<IPhotoPicker,PhotoPicker>();
+            builder.Services.AddTransient<IPdfService,PdfService>();
 
             //builder.Services.AddTransient<UserValidation>();
             //builder.Services.AddTransient<RecoverValidation>();
@@ -129,13 +158,13 @@ namespace AutoCareDiray
             builder.Services.AddTransient<CardRepairView>();
             builder.Services.AddTransient<CardRepairViewModel>();
 
+            #endregion
 
-
-            // Регистрация сервиса
-
+            #region debugsettings
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+            #endregion
 
             return builder.Build();
         }

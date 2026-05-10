@@ -2,101 +2,150 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.RepairView.CreateRepairView"
+             xmlns:vm="clr-namespace:AutoCareDiray.Shared.ViewModels.RepairViewModel;assembly=AutoCareDiray.Shared"
              Style="{StaticResource CustomPage}">
 
     <ScrollView>
-        <VerticalStackLayout Spacing="15" Padding="20">
+        <VerticalStackLayout Spacing="15" Padding="15">
 
-            <Label Text="Информация о ремонте" FontSize="18" Margin="0,10,0,0"
-               Style="{DynamicResource LabelCustom}" HorizontalOptions="Center"/>
+            <Label Text="Информация о ремонте" FontSize="18" Margin="0,10,0,0" Style="{DynamicResource LabelCustom}" HorizontalOptions="Center"/>
 
-            <Border Style="{DynamicResource BorderForEntryImput}" Padding="5">
-                <Picker Title="Выберите тип обслуживания...  ▼" 
-                    ItemsSource="{Binding RepairTypes}" ItemDisplayBinding="{Binding TitleRepair}" 
-                    SelectedItem="{Binding SelectedRepairType}" FontAttributes="Bold" HorizontalOptions="Center"/>
-            </Border> <!--тип обслуживания-->
+            <Border Style="{DynamicResource BorderForEntryCard}">
+                <VerticalStackLayout Spacing="0">
 
-            <Label Text="Интервал в КМ на вашем авто для замены или повторного обслуживания"
-               Style="{DynamicResource LabelSecondaryCustom}" FontSize="12" HorizontalOptions="Center"/>
+                    <VerticalStackLayout Padding="15,10">
+                        <Label Text="Тип обслуживания" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Grid ColumnDefinitions="*,auto">
+                            <Picker Grid.Column="0" Title="Выберите тип..." ItemsSource="{Binding RepairTypes}" ItemDisplayBinding="{Binding TitleRepair}" 
+                                    SelectedItem="{Binding SelectedRepairType}" Style="{DynamicResource PickerStandart}"/>
+                            <Label Grid.Column="1" Text="▼" Style="{DynamicResource LabelArrowDown}"/>
+                        </Grid>
+                    </VerticalStackLayout> <!--Picker выбора категории-->
 
-            <Border Style="{DynamicResource BorderForEntryImput}">
-                <Entry Style="{DynamicResource EntryImput}"
-                   Placeholder="Интервал пробега"
-                   Text="{Binding IntervalMileageFilled}"
-                   Keyboard="Numeric"/>
-            </Border> <!--интервал пробега типа ремонта-->
+                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
 
-            <Border Style="{DynamicResource BorderForEntryImput}">
-                <VerticalStackLayout>
-                    <Label Text="Выберите дату ремонта" Style="{DynamicResource LabelPlaceholder}"/>
-                    <DatePicker Format="d" Date="{Binding DateRepairSelected}" MaximumDate="{Binding DateNow}" />
+                    <Grid ColumnDefinitions="*, Auto" Padding="15,10">
+                        <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                            <Label Text="Дата ремонта" Style="{DynamicResource LabelInfoForEntry}"/>
+                        </VerticalStackLayout>
+                        <DatePicker Grid.Column="1" Format="d" Date="{Binding DateRepairSelected}" 
+                                    MaximumDate="{Binding DateNow}" VerticalOptions="Center" />
+                    </Grid> <!--Дата ремонта-->
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
+
+                    <VerticalStackLayout Padding="15,10">
+                        <Label Text="Интервал замены (км)" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Label Text="Для повторного обслуживания" Style="{DynamicResource LabelSecondaryCustom}" FontSize="11" Margin="0,0,0,5"/>
+                        <Entry Text="{Binding IntervalMileageFilled}" Placeholder="Например: 10000" 
+                               Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
+                    </VerticalStackLayout> <!--интервал замены пробега-->
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
+
+                    <VerticalStackLayout Padding="15,10">
+                        <Label Text="Интервал замены (мес)" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Label Text="Для повторного обслуживания" Style="{DynamicResource LabelSecondaryCustom}" FontSize="11" Margin="0,0,0,5"/>
+                        <Entry Text="{Binding IntervalMonthsFilled}" Placeholder="Например: 24" 
+                               Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
+                    </VerticalStackLayout> <!--интервал замены по месяцам-->
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
+
+                    <VerticalStackLayout Padding="15,10">
+                        <Label Text="Текущий пробег (КМ)" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Label Text="Нужен для отчета" Style="{DynamicResource LabelSecondaryCustom}" FontSize="11" Margin="0,0,0,5"/>
+                        <Entry Text="{Binding MileageFilled}" Placeholder="Например: 155000" 
+                               Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
+                        <Label Text="{Binding MileageError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsMileageError}"/>
+                    </VerticalStackLayout> <!--текущий пробег авто-->
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
+
+                    <VerticalStackLayout Padding="15,10">
+                        <Label Text="Замененные запчасти" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Entry Text="{Binding SparePartsFilled}" Placeholder="Через запятую (Масло, Фильтр...)" 
+                               Style="{DynamicResource EntryImput}"/>
+                    </VerticalStackLayout> <!--замененный запчасти-->
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
+
+                    <VerticalStackLayout Padding="15,10">
+                        <Label Style="{DynamicResource LabelInfoForEntry}" Text="Выполнение работ"/>
+                        <VerticalStackLayout RadioButtonGroup.GroupName="Job" RadioButtonGroup.SelectedValue="{Binding SelectedJob, Mode=TwoWay}">
+
+                            <RadioButton  x:Name="ServiceButton" Content="Сервис" Value="Сервис" />
+
+                            <RadioButton  Content="Самостоятельно" Value="Самостоятельно"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout> <!--Где выполнялись работы-->
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
+
+                    <VerticalStackLayout Padding="15,10">
+                        <Label Text="Стоимость запчастей (Руб)" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Entry Text="{Binding CostFilled}" Placeholder="Например 1000" Style="{DynamicResource EntryImput}" Keyboard="Numeric"/>
+                        <Label Text="{Binding CostError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsCostError}"/>
+                    </VerticalStackLayout> <!--стоимость-->
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
+
+                    <VerticalStackLayout Padding="15,10">
+                        <Label Text="Описание выполненных работ" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Editor Text="{Binding DescriptionFilled}" Placeholder="Что именно сделали..." 
+                                AutoSize="TextChanges" Style="{DynamicResource EditorStandart}"/>
+                    </VerticalStackLayout> <!--описание выполненных работ-->
+
+                    <VerticalStackLayout Padding="15,10">
+                        <Label Text="Сюда можете прикрепить заказ наряды и чеки работы" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Button Text="Прикрепить" Style="{DynamicResource ButtonCustomStandartRedMini}"
+                                Command="{Binding AttachPhotoCommand}" Margin="0,10,0,30"/>
+                        
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AttachedPhotosRepairs}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <Border Padding="0" Margin="0,0,5,0" Style="{DynamicResource BorderForCardImage}">
+                                            <Grid ColumnDefinitions="auto,auto" >
+                                                <Image Source="{Binding .}" Aspect="AspectFill" HeightRequest="100" WidthRequest="100"/>
+                                                <Button Text="X" TextColor="{DynamicResource ButtonPrimaryRed}" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CreateRepairViewModel}}, Path=DeleteAttachPhotoCommand}"
+                                                        CommandParameter="{Binding .}" Background="Transparent"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </HorizontalStackLayout>
+                        </ScrollView>
+                    </VerticalStackLayout>
+                    <!--фотографии чеков и ремонта-->
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}" IsVisible="{Binding Source={x:Reference ServiceButton},Path=IsChecked}"/>
+
+                    <VerticalStackLayout Padding="15,10" IsVisible="{Binding Source={x:Reference ServiceButton},Path=IsChecked}">
+                        <Label Text="Название сервиса" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Entry Text="{Binding ServiceName}" Placeholder="Автосервис Игорек" Style="{DynamicResource EntryImput}"/>
+                    </VerticalStackLayout>
+                    <!-- Название сервиса -->
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}" IsVisible="{Binding Source={x:Reference ServiceButton},Path=IsChecked}"/>
+
+                    <VerticalStackLayout Padding="15,10" IsVisible="{Binding Source={x:Reference ServiceButton},Path=IsChecked}">
+                        <Label Text="Комментарий мастера" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Editor Text="{Binding CommentMechanic}" Placeholder="Например: в след раз заменить ступицу." AutoSize="TextChanges" 
+                                Style="{DynamicResource EditorStandart}"/>
+                    </VerticalStackLayout>
+                    <!--комментайри мастера-->
+
                 </VerticalStackLayout>
-            </Border> <!--дата ремонта-->
+            </Border> <!--Основная информация-->
+            
+            <Label Text="{Binding StatusMessage}" Style="{DynamicResource LabelError}" HorizontalOptions="Center"/>
 
-            <Label Text="Текущий пробег вашего авто нужен для отчетности"
-               Style="{DynamicResource LabelSecondaryCustom}" FontSize="12" HorizontalOptions="Center"/>
-
-            <Border Style="{DynamicResource BorderForEntryImput}">
-                <Border.Triggers>
-                    <DataTrigger TargetType="Border" Binding="{Binding IsMileageError}" Value="True">
-                        <Setter Property="Stroke" Value="{DynamicResource StatusOverdue}"/>
-                    </DataTrigger>
-                    <DataTrigger TargetType="Border" Binding="{Binding IsMileageError}" Value="False">
-                        <Setter Property="Stroke" Value="{DynamicResource CardBorder}" />
-                    </DataTrigger>
-                </Border.Triggers>
-
-                <VerticalStackLayout>
-                    <Entry Style="{DynamicResource EntryImput}"
-                       Placeholder="Текущий пробег ТС"
-                       Text="{Binding MileageFilled}"
-                       Keyboard="Numeric"/>
-                    <Label Text="{Binding MileageError}" Style="{DynamicResource LabelError}"
-                       IsVisible="{Binding IsMileageError}"/>
-                </VerticalStackLayout>
-            </Border> <!--текущий пробег тс-->
-
-            <Border Style="{DynamicResource BorderForEntryImput}">
-                <Entry Style="{DynamicResource EntryImput}"
-                   Placeholder="Замененные запчасти (через запятую)"
-                   Text="{Binding SparePartsFilled}"/>
-            </Border> <!--замененные запчасти-->
-
-            <Border Style="{DynamicResource BorderForEntryImput}">
-                <Border.Triggers>
-                    <DataTrigger TargetType="Border" Binding="{Binding IsCostError}" Value="True">
-                        <Setter Property="Stroke" Value="{DynamicResource StatusOverdue}"/>
-                    </DataTrigger>
-                </Border.Triggers>
-
-                <VerticalStackLayout>
-                    <Entry Style="{DynamicResource EntryImput}"
-                       Placeholder="Стоимость запчастей и ремонта"
-                       Text="{Binding CostFilled}"
-                       Keyboard="Numeric"/>
-                    <Label Text="{Binding CostError}" Style="{DynamicResource LabelError}"
-                       IsVisible="{Binding IsCostError}"/>
-                </VerticalStackLayout>
-            </Border> <!--стоимость запчастей и ремонта-->
-
-            <Border Style="{DynamicResource BorderForEntryImput}">
-                <Editor Style="{DynamicResource EditorStandart}"
-                    Placeholder="Описание выполненных работ"
-                    AutoSize="TextChanges"
-                    Text="{Binding DescriptionFilled}"/>
-            </Border> <!--описания работ-->
-
-            <BoxView HeightRequest="1" Color="#E0E0E0" Margin="0,10"/>
-
-            <Label Text="{Binding StatusMessage}" 
-               Style="{DynamicResource LabelError}" 
-               HorizontalOptions="Center"/> <!--код ошибок-->
-
-            <VerticalStackLayout Padding="0,0,0,20">
+            <VerticalStackLayout Padding="20,10,20,40">
                 <Button Text="{Binding ButtonName}" 
-                    Style="{StaticResource ButtonCustomStandartRed}"
-                    Command="{Binding ProcessingRepairCommand}"/>
-            </VerticalStackLayout> <!--кнопка создания ремонта-->
+                        Style="{StaticResource ButtonCustomStandartRed}"
+                        Command="{Binding ProcessingRepairCommand}"/>
+            </VerticalStackLayout> <!--кнопка создания/редактирования-->
 
         </VerticalStackLayout>
     </ScrollView>

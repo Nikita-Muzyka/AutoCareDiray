@@ -10,6 +10,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.IO;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
 namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
@@ -19,6 +21,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         #region Основные поля для работы
 
         private VehicleValidation _vehicleValidation;
+        private IPhotoPicker _photoPicker;
         private CancellationTokenSource _cts;
         private Vehicle _vehicle;
         private List<RepairType> _listRepairType;
@@ -55,7 +58,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string nameVehicle = String.Empty;
         [ObservableProperty]
-        private DateTime yearCreateSelected = DateTime.Today;
+        private DateTime yearCreateSelected = new DateTime(1970, 1, 1);
         [ObservableProperty]
         private string mileage = String.Empty;
         [ObservableProperty]
@@ -63,7 +66,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string stateNumber = String.Empty;
         [ObservableProperty]
-        private DateTime yearPurchaseSelected = DateTime.Today;
+        private DateTime yearPurchaseSelected = new DateTime(1970,1,1);
         [ObservableProperty]
         private string selectedTypeVehicle = String.Empty;
         [ObservableProperty]
@@ -71,14 +74,20 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string transmissionType = String.Empty;
         [ObservableProperty]
+        private string pathPhoto = "car_add_icon.png";
+        [ObservableProperty]
         private string statusMessage;
+
+        private string _newPhoto;
+       
         #endregion
 
 
-        public CreateVehicleViewModel(IDialogService dialogService,IDataService dataService,INavigationService navigation,
+        public CreateVehicleViewModel(IDialogService dialogService,IDataService dataService,INavigationService navigation,IPhotoPicker photoPicker,
             VehicleValidation vehicleValidation) : base(dialogService,dataService,navigation)
         {
             _vehicleValidation = vehicleValidation;
+            _photoPicker = photoPicker;
             _vehicleValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
             _cts = new CancellationTokenSource();
         }
@@ -131,6 +140,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 _isInitilized = true;
                 ButtonName = "Изменить";
 
+                if (File.Exists(_vehicle.PhotoVehicle)) PathPhoto = _vehicle.PhotoVehicle;
                 NameVehicle = _vehicle.NameVehicle;
                 YearCreateSelected = _vehicle.YearCreate;
                 YearPurchaseSelected = _vehicle.YearPurchase;
@@ -149,12 +159,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         {
             if (_isInitilized) return;
 
-            await Task.Delay(100);
-            var groups = await Task.Run(() => CreateRepairTypeGroups());
+            var groups = CreateRepairTypeGroups();
 
             RepairGrouped = new ObservableCollection<RepairGroup>(groups);
-
-            await Task.Delay(1000);
 
             _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
             _isInitilized = true;
@@ -165,39 +172,55 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         /// </summary>
         /// <returns></returns>
         [RelayCommand]
-        public async Task CreateVehicle()
+        public async Task ProcessingAsync()
         {
             _vehicleValidation.ValidationAll(Mileage, YearPurchaseSelected, YearCreateSelected, SelectedTypeVehicle);
-            if (!HasErrors)
+            if (HasErrors)
             {
-                int MileageInt = ConverFromInt(Mileage);
-                _listRepairType.RemoveAll(c => c.IsRemoveMaintenance == true);
-
-
-                var vehicle = new Vehicle(NameVehicle, YearCreateSelected,
-                    YearPurchaseSelected, VinCode,
-                    StateNumber, TransmissionType,
-                    SelectedTypeVehicle, MileageInt,
-                    _listRepairType);
-
-                if (_isUpdateVehicle)
-                {
-                    vehicle.Id = _vehicle.Id;
-                    await EditVehicle(vehicle);
-                }
-                else
-                {
-                    var result = await _dataService.CreateVehicleAsync(vehicle, _cts.Token);
-
-                    if (result.Success)
-                    {
-                        await _dialogService.ShowToastAsync("ТС создано");
-                        await _navigationService.GoToBack();
-                    }
-                    else StatusMessage = result.ErrorMessage;
-                }
+                await _dialogService.ShowToastAsync("Ошибка. Проверте все поля");
+                return;
             }
-            else await _dialogService.ShowToastAsync("Ошибка. Проверте все поля");
+
+            int MileageInt = ConverFromInt(Mileage);
+            _listRepairType.RemoveAll(c => c.IsRemoveMaintenance == true);
+
+
+            var vehicle = new Vehicle
+                (NameVehicle, YearCreateSelected,
+                YearPurchaseSelected, VinCode,
+                StateNumber, TransmissionType,
+                SelectedTypeVehicle, MileageInt,
+                _listRepairType);
+
+            if (_newPhoto != null)
+            {
+                var result = await _photoPicker.SavePhotoAsync(_newPhoto, _cts.Token);
+                if (result.Success)
+                {
+                    var resultPhoto = result as Result<string>;
+                    vehicle.PhotoVehicle = resultPhoto.Data;
+
+                    if(_isUpdateVehicle) await _photoPicker.DeletePhoto(_vehicle.PhotoVehicle);
+                }
+                else await _dialogService.ShowToastAsync(result.ErrorMessage);
+            } //save photo
+
+            if (_isUpdateVehicle)
+            {
+                vehicle.Id = _vehicle.Id;
+                await EditVehicle(vehicle);
+            } // переход на обновление данных авто
+            else
+            {
+                var result = await _dataService.CreateVehicleAsync(vehicle, _cts.Token);
+
+                if (result.Success)
+                {
+                    await _dialogService.ShowToastAsync("ТС создано");
+                    await _navigationService.GoToBack();
+                }
+                else StatusMessage = result.ErrorMessage;
+            }
         }
 
         /// <summary>
@@ -225,6 +248,28 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             foreach (var list in _listRepairType)
             {
                 list.IsServiced = !list.IsServiced;
+                if(list.IsServiced == true)
+                {
+                    if (string.IsNullOrWhiteSpace(Mileage)) continue;
+
+                    var mileageInt = ConverFromInt(Mileage);
+                    list.LastServiceMileage = mileageInt;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Добавление фото для авто
+        /// </summary>
+        [RelayCommand]
+        public async void PickPhoto()
+        {
+            var result = await _photoPicker.PickPhotoAsync();
+            if (result.Success)
+            {
+                var photoLocation = result as Result<string>;
+                PathPhoto = photoLocation.Data;
+                _newPhoto = PathPhoto;
             }
         }
 
@@ -233,32 +278,11 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
         partial void OnTransmissionTypeChanged(string value)
         {
-            if (value == "Автоматическая")
+            foreach (var item in _listRepairType)
             {
-                foreach (var list in _listRepairType.Where(c => c.Category == "Трансмиссия и Жидкости").ToList())
+                if (item.TransmissionType == "Автоматическая" || item.TransmissionType == "Механическая")
                 {
-                    if(list.TransmissionType == "Автоматическая")
-                    {
-                        list.IsRemoveMaintenance = false;
-                    }
-                    if (list.TransmissionType == "Механическая")
-                    {
-                        list.IsRemoveMaintenance = true;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var list in _listRepairType.Where(c => c.Category == "Трансмиссия и Жидкости").ToList())
-                {
-                    if (list.TransmissionType == "Механическая")
-                    {
-                        list.IsRemoveMaintenance = false;
-                    }
-                    if (list.TransmissionType == "Автоматическая")
-                    {
-                        list.IsRemoveMaintenance = true;
-                    }
+                    item.IsRemoveMaintenance = item.TransmissionType != value;
                 }
             }
         }
@@ -331,92 +355,86 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private ObservableCollection<RepairGroup> CreateRepairTypeGroups()
         {
             var groups = new ObservableCollection<RepairGroup>
-            {
-                new RepairGroup("Регламентное ТО", new List<RepairType>
-                {
-                    new("ТО (Общее)","ТО", 15000),
-                    new("Масло и масляный фильтр","ТО", 8000),
-                    new("Воздушный фильтр","ТО", 20000),
-                    new("Салонный фильтр","ТО", 15000),
-                    new("Топливный фильтр","ТО", 40000)
-                }),
+    {
+        new RepairGroup("Регулярное ТО (Расходники)", new List<RepairType>
+        {
+            // Самое частое. Масло - раз в год или 10к, Фильтры - вместе с ним
+            new("Масло в двигателе и Масляный фильтр", "Регулярное ТО", 10000, 12),
+            new("Воздушный фильтр двигателя", "Регулярное ТО", 20000, 24),
+            new("Салонный фильтр", "Регулярное ТО", 15000, 12),
+            new("Топливный фильтр", "Регулярное ТО", 40000, 48)
+        }),
 
-                new RepairGroup("Тормозная система", new List<RepairType>
-                {
-                    new("Тормозные колодки передние","Тормозная система", 30000),
-                    new("Тормозные колодки задние","Тормозная система", 50000),
-                    new("Тормозные диски передние","Тормозная система", 60000),
-                    new("Тормозные диски задние","Тормозная система", 80000),
-                    new("Обслуживвание задних тормозов","Тормозная система"),
-                    new("Обслуживвание передних тормозов","Тормозная система")
-                }),
+        new RepairGroup("Тормозная система", new List<RepairType>
+        {
+            // Тормозная жидкость стареет именно от ВРЕМЕНИ (впитывает влагу)
+            new("Тормозная жидкость", "Тормозная система", 40000, 24),
+            new("Передние тормозные колодки", "Тормозная система", 30000),
+            new("Задние тормозные колодки", "Тормозная система", 50000),
+            new("Передние тормозные диски + колодки", "Тормозная система", 70000),
+            new("Задние тормозные диски + колодки", "Тормозная система", 90000),
+            new("Задние барабаны + колодки + тормозной цилиндр", "Тормозная система", 90000),
+            new("Обслуживание суппортов (смазка)", "Тормозная система", 30000, 24),
+            new("Обслуживание передних тормозов", "Тормозная система", 0),
+            new("Обслуживание задних тормозов", "Тормозная система", 0)
+        }),
 
-                new RepairGroup("Двигатель и ГРМ", new List<RepairType>
-                {
-                    new("Свечи зажигания","Двигатель и ГРМ", 30000),
-                    new("Ремень ГРМ","Двигатель и ГРМ", 90000),
-                    new("Ремень ГРМ + Помпа","Двигатель и ГРМ", 90000),
-                    new("Цепь ГРМ","Двигатель и ГРМ", 150000),
-                    new("Ремень генератора","Двигатель и ГРМ", 60000),
-                    new("Катушки зажигания","Двигатель и ГРМ", 100000)
-                }),
+        new RepairGroup("Двигатель и Зажигание", new List<RepairType>
+        {
+            // Обобщаем ремни и цепи
+            new("Свечи зажигания / накаливания", "Двигатель и Зажигание", 40000, 48),
+            new("Привод ГРМ (Ремень / Цепь)", "Двигатель и Зажигание", 90000, 60),
+            new("Ремни навесного оборудования", "Двигатель и Зажигание", 60000, 60),
+            new("Регулировка клапанов", "Двигатель и Зажигание", 80000)
+        }),
 
-                new RepairGroup("Подвеска и Рулевое", new List<RepairType>
-                {
-                    new("Стойки амортизаторов передние","Подвеска и Рулевое", 80000),
-                    new("Стойки амортизаторов задние","Подвеска и Рулевое", 100000),
-                    new("Сайлентблоки","Подвеска и Рулевое", 80000),
-                    new("Шаровые опоры","Подвеска и Рулевое", 80000),
-                    new("Стойки стабилизатора","Подвеска и Рулевое", 50000),
-                    new("Рулевые наконечники","Подвеска и Рулевое", 60000),
-                    new("Ступичный подшипник","Подвеска и Рулевое", 100000),
-                    new("Обслуживание передней подвески","Подвеска и Рулевое"),
-                    new("Обслуживание задний подвески","Подвеска и Рулевое"),
-                }),
+        new RepairGroup("Охлаждение и Климат", new List<RepairType>
+        {
+            // Разделили помпу и антифриз
+            new("Охлаждающая жидкость", "Охлаждение и Климат", 60000, 36),
+            new("Водяная помпа (Насос)", "Охлаждение и Климат", 90000, 60),
+            new("Промывка радиаторов", "Охлаждение и Климат", 60000, 24),
+            new("Обслуживание кондиционера (фреон)", "Охлаждение и Климат", 40000, 24)
+        }),
 
-                new RepairGroup("Трансмиссия и Жидкости", new List<RepairType>
-                {
-                    new("Масло в АКПП/CVT","Трансмиссия и Жидкости", 60000,"Автоматическая"),
-                    new("Масло в МКПП","Трансмиссия и Жидкости", 80000),
-                    new("Ремонт коробки","Трансмиссия и Жидкости", 60000),
-                    new("Сцепление","Трансмиссия и Жидкости", 100000,"Механическая"),
-                    new("Замена ремня АКПП","Трансмиссия и Жидкости", 100000,"Автоматическая"),
-                    new("ГУР жидкость","Трансмиссия и Жидкости", 60000, new DateTime(2)),
-                    new("Антифриз","Трансмиссия и Жидкости", 60000, new DateTime(3)),
-                    new("Тосол","Трансмиссия и Жидкости", 60000, new DateTime(2)),
-                    new("Тормозная жидкость","Трансмиссия и Жидкости", 60000, new DateTime(4))
-                }),
+        new RepairGroup("Трансмиссия (Коробка и Привод)", new List<RepairType>
+        {
+            // Универсальные названия
+            new("Масло в коробке передач", "Трансмиссия", 60000, 48),
+            new("Фильтр коробки передач", "Трансмиссия", 60000, 48,"Автоматическая"),
+            new("Сброс адаптации", "Трансмиссия", 60000, 48,"Автоматическая"),
+            new("Масло в редукторе / мосту", "Трансмиссия", 60000, 48),
+            new("Масло в раздаточной коробке", "Трансмиссия", 60000, 48),
+            new("Сцепление", "Трансмиссия", 100000)
+        }),
 
-                new RepairGroup("Электрика и Охлаждение", new List<RepairType>
-                {
-                    new("Аккумулятор (АКБ)","Электрика и Охлаждение", 70000),
-                    new("Генератор","Электрика и Охлаждение", 150000),
-                    new("Стартер","Электрика и Охлаждение", 150000),
-                    new("Помпа","Электрика и Охлаждение", 90000),
-                    new("Термостат","Электрика и Охлаждение"),
-                }),
+        new RepairGroup("Подвеска и Рулевое", new List<RepairType>
+        {
+            new("Жидкость ГУР", "Подвеска и Рулевое", 50000, 36),
+            new("Передние амортизаторы", "Подвеска и Рулевое", 80000),
+            new("Задние амортизаторы", "Подвеска и Рулевое", 90000),
+            new("Стойки и втулки стабилизатора", "Подвеска и Рулевое", 40000),
+            new("Сайлентблоки (комплект)", "Подвеска и Рулевое", 80000),
+            new("Шаровые опоры", "Подвеска и Рулевое", 70000),
+            new("Рулевые наконечники и тяги", "Подвеска и Рулевое", 70000)
+        }),
 
-                new RepairGroup("Шины и Колеса", new List<RepairType>
-                {
-                    new("Развал-схождение","Шины и Колеса", 15000),
-                    new("Балансировка колёс","Шины и Колеса", 15000),
-                    new("Переобувка","Шины и Колеса") // Здесь можно добавить логику по дате
-                }),
+        new RepairGroup("Шины и Колеса", new List<RepairType>
+        {
+            new("Сход-развал", "Шины и Колеса", 20000, 12),
+            new("Балансировка колес", "Шины и Колеса", 10000, 6),
+            new("Сезонная смена шин", "Шины и Колеса", 0, 6)
+        }),
 
-                new RepairGroup("Выхлопная система", new List<RepairType>
-                {
-                    new("Катализатор","Выхлопная система"),
-                    new("Выпускной коллектор","Выхлопная система"),
-                }),
+        new RepairGroup("Кузов и Оптика", new List<RepairType>
+        {
+            new("Щетки стеклоочистителя", "Кузов и Оптика", 15000, 12),
+            new("Обработка кузова (Антикор)", "Кузов и Оптика", 0, 36),
+            new("Замена ламп", "Кузов и Оптика")
+        })
+    };
 
-                new RepairGroup("Прочее", new List<RepairType>
-                {
-                    new("Дворники (щётки)","Прочее"),
-                    new("Лампы (фары/габариты)","Прочее"),
-                    new("Кондиционер (заправка)", "Прочее")
-                })
-            };
             return groups;
-        } 
+        }
     }
 }

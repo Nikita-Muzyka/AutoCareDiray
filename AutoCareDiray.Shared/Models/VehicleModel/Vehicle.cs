@@ -14,21 +14,38 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string NameVehicle { get; set; } = String.Empty;
-        public DateTime YearCreate { get; set; }
-        public DateTime YearPurchase { get; set; }
-        public string VinCode { get; set; } = String.Empty;
-        public string StateNumber { get; set; } = String.Empty;
-        public string TransmissionType { get; set; } = String.Empty;
-        [Required]
-        public string VehicleType { get; set; } = String.Empty;
-        [Required]
-        public int Mileage { get; set; }
+        public string? PhotoVehicle { get; set; }
+        public string? NameVehicle { get; set; }
+        public DateTime YearCreate { get; set; } = new DateTime(1970, 1, 1);
+        public DateTime YearPurchase { get; set; } = new DateTime(1970, 1, 1);
+        public string? VinCode { get; set; } //вин код
+        public string? StateNumber { get; set; } //нормер гос
+        public string? TransmissionType { get; set; } //тип трансмиссии
+        public string? WarningRepair { get; set; }    //Кол-во предупреждений по машине
 
-        public List<Repair> Repairs { get; set; } = new();
-        public List<RepairType> RepairTypes { get; set; } = new();
+        [Required]
+        public string? VehicleType { get; set; }
+        [Required]
+        public int Mileage { get; set; } = 0;
 
-        //по нему выбирается цвет индикатора авто в lIst
+        public List<Repair>? Repairs { get; set; } = new();
+        public List<RepairType>? RepairTypes { get; set; } = new();
+
+
+        private string? _pdfFile;
+        public string? PdfFile 
+        {
+            get => _pdfFile;
+            set
+            {
+                if (_pdfFile != value)
+                {
+                    _pdfFile = value;
+                    OnPropertyChanged();
+                }
+            }
+        } //Pdf file путь}
+
         private bool _needsService;
         public bool NeedsService
         {
@@ -41,10 +58,7 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
                     OnPropertyChanged();
                 }
             }
-        }
-
-        //Кол-во предупреждений по машине
-        public string? WarningRepair { get; set; } = String.Empty;
+        } //по нему выбирается цвет индикатора авто в lIst
 
         public Vehicle() { }
 
