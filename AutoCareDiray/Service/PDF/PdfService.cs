@@ -68,7 +68,6 @@ namespace AutoCareDiray.Service.PDF
                                 {
                                     info.Item().Text("Информация об автомобиле").SemiBold().FontSize(16).FontColor(QuestPDF.Helpers.Colors.Blue.Darken2);
                                     info.Item().PaddingTop(5).Text($"Название авто: {vehicle.NameVehicle}");
-                                    info.Item().Text($"Год выпуска: {vehicle.YearCreate.Year}");
                                     info.Item().Text($"VIN: {vehicle.VinCode}");
                                     info.Item().Text($"Гос. номер: {vehicle.StateNumber}");
                                     info.Item().Text($"Тип кузова: {vehicle.VehicleType}");

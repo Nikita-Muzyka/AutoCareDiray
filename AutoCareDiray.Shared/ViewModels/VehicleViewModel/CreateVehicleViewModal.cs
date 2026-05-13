@@ -33,6 +33,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
 
         #region Свойства для работы UI
+
         [ObservableProperty]
         private ObservableCollection<RepairGroup> repairGrouped;
         [ObservableProperty]
@@ -43,22 +44,17 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private bool isYearPurchaseError = false;
         [ObservableProperty]
-        private bool isVinCode = false;
-        [ObservableProperty]
-        private bool isStateNumber = false;
-        [ObservableProperty]
         private bool isMileageError = false;
         [ObservableProperty]
         private bool isMileage = false;
         [ObservableProperty]
         private bool isTypeVehicleError = false;
         [ObservableProperty]
-        private string buttonName = "Создать";
+        private bool isNameVehicleError = false;
+
 
         [ObservableProperty]
         private string nameVehicle = String.Empty;
-        [ObservableProperty]
-        private DateTime yearCreateSelected = new DateTime(1970, 1, 1);
         [ObservableProperty]
         private string mileage = String.Empty;
         [ObservableProperty]
@@ -66,17 +62,21 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string stateNumber = String.Empty;
         [ObservableProperty]
-        private DateTime yearPurchaseSelected = new DateTime(1970,1,1);
-        [ObservableProperty]
         private string selectedTypeVehicle = String.Empty;
-        [ObservableProperty]
-        private DateTime dateNow = DateTime.Today;
         [ObservableProperty]
         private string transmissionType = String.Empty;
         [ObservableProperty]
         private string pathPhoto = "car_add_icon.png";
         [ObservableProperty]
+        private string buttonName = "Создать";
+        [ObservableProperty]
         private string statusMessage;
+
+
+        [ObservableProperty]
+        private DateTime dateNow = DateTime.Today;
+        [ObservableProperty]
+        private DateTime yearPurchaseSelected = new DateTime(1970, 1, 1);
 
         private string _newPhoto;
        
@@ -93,12 +93,14 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         }
 
 
-        #region получение текса ошибок
+        #region Получение текса ошибок
         public bool HasErrors => _vehicleValidation.HasErrors;
         public string MileageError => _vehicleValidation.GetErrors(nameof(MileageError)) as string ?? String.Empty;
         public string YearPurchaseError => _vehicleValidation.GetErrors(nameof(YearPurchaseError)) as string ?? String.Empty;
         public string TypeVehicleError => _vehicleValidation.GetErrors(nameof(TypeVehicleError)) as string ?? String.Empty;
+        public string NameVehicleError => _vehicleValidation.GetErrors(nameof(NameVehicleError)) as string ?? String.Empty;
         #endregion
+
 
 
         /// <summary>
@@ -142,7 +144,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
                 if (File.Exists(_vehicle.PhotoVehicle)) PathPhoto = _vehicle.PhotoVehicle;
                 NameVehicle = _vehicle.NameVehicle;
-                YearCreateSelected = _vehicle.YearCreate;
                 YearPurchaseSelected = _vehicle.YearPurchase;
                 Mileage = _vehicle.Mileage.ToString();
                 SelectedTypeVehicle = _vehicle.VehicleType;
@@ -174,7 +175,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [RelayCommand]
         public async Task ProcessingAsync()
         {
-            _vehicleValidation.ValidationAll(Mileage, YearPurchaseSelected, YearCreateSelected, SelectedTypeVehicle);
+            _vehicleValidation.ValidationAll(Mileage, YearPurchaseSelected, SelectedTypeVehicle,NameVehicle);
             if (HasErrors)
             {
                 await _dialogService.ShowToastAsync("Ошибка. Проверте все поля");
@@ -186,7 +187,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
 
             var vehicle = new Vehicle
-                (NameVehicle, YearCreateSelected,
+                (NameVehicle,
                 YearPurchaseSelected, VinCode,
                 StateNumber, TransmissionType,
                 SelectedTypeVehicle, MileageInt,
@@ -290,18 +291,19 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         {
             _vehicleValidation.ValidationMileage(value);
         }
-        partial void OnYearCreateSelectedChanged(DateTime value)
-        {
-            _vehicleValidation.ValidationDate(YearPurchaseSelected, YearCreateSelected);
-        }
         partial void OnYearPurchaseSelectedChanged(DateTime value)
         {
-            _vehicleValidation.ValidationDate(YearPurchaseSelected, YearCreateSelected);
+            _vehicleValidation.ValidationDate(YearPurchaseSelected);
         }
         partial void OnSelectedTypeVehicleChanged(string value)
         {
             _vehicleValidation.ValidationTypeVehicle(value);
         }
+        partial void OnNameVehicleChanged(string value)
+        {
+            _vehicleValidation.ValidationNameVehicle(value);
+        }
+
         #endregion
 
 
@@ -323,10 +325,15 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         {
             if(MileageError.Any()) IsMileageError = true;
             else IsMileageError = false;
+
             if(YearPurchaseError.Any()) IsYearPurchaseError = true;
             else IsYearPurchaseError = false;
+
             if(TypeVehicleError.Any()) IsTypeVehicleError = true;
             else IsTypeVehicleError = false;
+
+            if (NameVehicleError.Any()) IsNameVehicleError = true;
+            else IsNameVehicleError = false;
         }
 
         /// <summary>
@@ -356,7 +363,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         {
             var groups = new ObservableCollection<RepairGroup>
     {
-        new RepairGroup("Регулярное ТО (Расходники)", new List<RepairType>
+        new RepairGroup("Регулярное ТО", new List<RepairType>
         {
             // Самое частое. Масло - раз в год или 10к, Фильтры - вместе с ним
             new("Масло в двигателе и Масляный фильтр", "Регулярное ТО", 10000, 12),
@@ -367,7 +374,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
         new RepairGroup("Тормозная система", new List<RepairType>
         {
-            // Тормозная жидкость стареет именно от ВРЕМЕНИ (впитывает влагу)
             new("Тормозная жидкость", "Тормозная система", 40000, 24),
             new("Передние тормозные колодки", "Тормозная система", 30000),
             new("Задние тормозные колодки", "Тормозная система", 50000),
@@ -379,13 +385,12 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             new("Обслуживание задних тормозов", "Тормозная система", 0)
         }),
 
-        new RepairGroup("Двигатель и Зажигание", new List<RepairType>
+        new RepairGroup("Двигатель", new List<RepairType>
         {
             // Обобщаем ремни и цепи
             new("Свечи зажигания / накаливания", "Двигатель и Зажигание", 40000, 48),
             new("Привод ГРМ (Ремень / Цепь)", "Двигатель и Зажигание", 90000, 60),
             new("Ремни навесного оборудования", "Двигатель и Зажигание", 60000, 60),
-            new("Регулировка клапанов", "Двигатель и Зажигание", 80000)
         }),
 
         new RepairGroup("Охлаждение и Климат", new List<RepairType>
@@ -417,6 +422,11 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             new("Сайлентблоки (комплект)", "Подвеска и Рулевое", 80000),
             new("Шаровые опоры", "Подвеска и Рулевое", 70000),
             new("Рулевые наконечники и тяги", "Подвеска и Рулевое", 70000)
+        }),
+
+         new RepairGroup("Электрика", new List<RepairType>
+        {
+            new("Замена/Ремонт ЭБУ", "Электрика", 15000, 12),
         }),
 
         new RepairGroup("Шины и Колеса", new List<RepairType>

@@ -8,15 +8,18 @@ namespace AutoCareDiray.Shared.Models.Validation
         string propertyMileage = "MileageError";
         string propertyYearPurchase = "YearPurchaseError";
         string propertyTypeVehicle = "TypeVehicleError";
+        string propertyNameVehicle = "NameVehicleError";
+
 
 
         public VehicleValidation() { }
 
-        public void ValidationAll(string Mileage, DateTime? yearPurchase, DateTime? yearCreate,string typeVehicle)
+        public void ValidationAll(string Mileage, DateTime yearPurchase,string typeVehicle,string nameVehicle)
         {
             ValidationMileage(Mileage);
-            ValidationDate(yearPurchase,yearCreate);
+            ValidationDate(yearPurchase);
             ValidationTypeVehicle(typeVehicle);
+            ValidationNameVehicle(nameVehicle);
         }
         public void ValidationMileage(string Mileage)
         {
@@ -39,25 +42,33 @@ namespace AutoCareDiray.Shared.Models.Validation
 
             else ErrorAdd(propertyMileage, "Поле обязательно к заполнению");
         }
-
-        public void ValidationDate(DateTime? yearPurchase, DateTime? yearCreate)
+        public void ValidationDate(DateTime yearPurchase)
         {
             ErrorRemove(propertyYearPurchase);
-            if (yearPurchase < yearCreate)
-            {
-                ErrorAdd(propertyYearPurchase, "Дата покупки не может быть раньше чем производство");
-            }
-            else
+            if (yearPurchase > new DateTime(1970,1,1))
             {
                 OnErrorsChanges(propertyYearPurchase);
             }
-        }
+            else
+            {
+                ErrorAdd(propertyYearPurchase, "Дата покупки обязательна");
+            }
 
+        }
         public void ValidationTypeVehicle(string typeVehicle)
         {
             ErrorRemove(propertyTypeVehicle);
-            if (String.IsNullOrWhiteSpace(typeVehicle)) ErrorAdd(propertyTypeVehicle, "Обязательно нужно выбрать");
+            if (String.IsNullOrWhiteSpace(typeVehicle)) ErrorAdd(propertyTypeVehicle, "Обязательно нужно выбрать тип ТС");
             else OnErrorsChanges(propertyTypeVehicle);
         }
+        public void ValidationNameVehicle(string nameVehicle)
+        {
+            ErrorRemove(propertyNameVehicle);
+            if (String.IsNullOrWhiteSpace(nameVehicle)) ErrorAdd(propertyNameVehicle, "Обязательно нужно ввести имя");
+            else OnErrorsChanges(propertyNameVehicle);
+        }
+
+
+
     }
 }

@@ -16,7 +16,6 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         public int Id { get; set; }
         public string? PhotoVehicle { get; set; }
         public string? NameVehicle { get; set; }
-        public DateTime YearCreate { get; set; } = new DateTime(1970, 1, 1);
         public DateTime YearPurchase { get; set; } = new DateTime(1970, 1, 1);
         public string? VinCode { get; set; } //вин код
         public string? StateNumber { get; set; } //нормер гос
@@ -63,7 +62,6 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         public Vehicle() { }
 
         public Vehicle(string name,
-            DateTime yearCreate, 
             DateTime yearPurchase,
             string vinCode,
             string stateNumber,
@@ -73,7 +71,6 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
             List<RepairType> repairTypes) 
         {
             NameVehicle = name;
-            YearCreate = yearCreate;
             YearPurchase = yearPurchase;
             VinCode = vinCode;
             StateNumber = stateNumber;

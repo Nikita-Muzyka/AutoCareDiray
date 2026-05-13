@@ -36,18 +36,20 @@
                         <VerticalStackLayout Padding="15,10">
                             <Label Text="Название ТС (например, Моя BMW)" Style="{DynamicResource LabelInfoForEntry}"/>
                             <Entry Text="{Binding NameVehicle}" Placeholder="Например, Моя BMW" Style="{DynamicResource EntryImput}" />
+                            <Label Text="{Binding NameVehicleError}" IsVisible="{Binding IsNameVehicleError}" Style="{DynamicResource LabelError}"/>
                         </VerticalStackLayout> <!--NameVehicle-->
 
                         <BoxView Style="{DynamicResource BoxViewCustom}"/>
 
-                        <Grid ColumnDefinitions="*, Auto" Padding="15,10">
+                        <Grid ColumnDefinitions="*, Auto" RowDefinitions="auto,auto" Padding="15,10">
                             <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
-                                <Label Text="Год выпуска" Style="{DynamicResource LabelCustom}" FontSize="14"/>
-                                <Label Text="По паспорту ТС" Style="{DynamicResource LabelInfoForEntry}"/>
+                                <Label Text="Год покупки ТС" Style="{DynamicResource LabelInfoForEntry}"/>
                             </VerticalStackLayout>
 
-                            <DatePicker Grid.Column="1" Format="M.yyyy" Date="{Binding YearCreateSelected}" VerticalOptions="Center" />
-                        </Grid> <!--YearCreateVehicle-->
+                            <DatePicker Grid.Column="1" Format="M.yyyy" Date="{Binding YearPurchaseSelected}" VerticalOptions="Center" />
+                            <Label Grid.Row="1" Text="{Binding YearPurchaseError}" Style="{DynamicResource LabelError}" 
+           IsVisible="{Binding IsYearPurchaseError}"/>
+                        </Grid> <!--YearPurchaseVehicle-->
 
                         <BoxView Style="{DynamicResource BoxViewCustom}"/>
 
@@ -62,7 +64,7 @@
 
                         <VerticalStackLayout Padding="15,10">
                             <Label Style="{DynamicResource LabelInfoForEntry}" Text="Выберите тип вашего ТС"/>
-                            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" RadioButtonGroup.GroupName="VehicleType"
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*,auto" RadioButtonGroup.GroupName="VehicleType"
                       RadioButtonGroup.SelectedValue="{Binding SelectedTypeVehicle}">
                                 <RadioButton  Grid.Column="0" Grid.Row="0" Content="Автомобиль" Value="Автомобиль" Margin="15,0,0,0"/>
 
@@ -70,21 +72,9 @@
 
                                 <RadioButton Grid.Column="0" Grid.Row="1"  Content="Другое" Value="Другое" Margin="15,0,0,0"/>
                             </Grid>
-                            <Label Style="{DynamicResource LabelError}" Text="{Binding TypeVehicleError}"
+                            <Label  Style="{DynamicResource LabelError}" Text="{Binding TypeVehicleError}"
                                    IsVisible="{Binding IsTypeVehicleError}"/>
                         </VerticalStackLayout> <!--VehicleType-->
-
-                        <BoxView Style="{DynamicResource BoxViewCustom}"/>
-
-                        <VerticalStackLayout Padding="15,10">
-                            <Label Style="{DynamicResource LabelInfoForEntry}" Text="Выберите тип вашей коробки"/>
-                            <Grid RowDefinitions="auto,auto" HorizontalOptions="Center" RadioButtonGroup.GroupName="Transmission"
-                                      RadioButtonGroup.SelectedValue="{Binding TransmissionType, Mode=TwoWay}">
-                                <RadioButton  Grid.Row="0" Content="Механическая (МКПП)" Value="Механическая"/>
-
-                                <RadioButton Grid.Row="1" Content="Автоматическая(АКПП)" Value="Автоматическая"/>
-                            </Grid>
-                        </VerticalStackLayout> <!--TransmissionType-->
 
                     </VerticalStackLayout>
                 </Border> <!--Карточка основной информации-->
@@ -116,14 +106,8 @@
                             <Border Style="{DynamicResource BorderForEntryCard}">
                                 <VerticalStackLayout Spacing="0">
 
-                                    <Grid ColumnDefinitions="*, Auto" Padding="15,10">
-                                        <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
-                                            <Label Text="Год покупки ТС" Style="{DynamicResource LabelInfoForEntry}"/>
-                                        </VerticalStackLayout>
-
-                                        <DatePicker Grid.Column="1" Format="M.yyyy" Date="{Binding YearPurchaseSelected}" VerticalOptions="Center" />
-                                    </Grid>
-                                    <!--YearPurchaseVehicle-->
+                                    <Label Text="Данная информация поможет автоматически подстроить типы ремонта для вашего авто"
+                                           Style="{DynamicResource LabelSecondaryCustom}" Padding="10"/>
 
                                     <BoxView HeightRequest="1" Color="{DynamicResource BoxViewColor}" Margin="15,0,0,0"/>
 
@@ -140,8 +124,22 @@
                                         <Label Text="Гос номер вашего авто" Style="{DynamicResource LabelInfoForEntry}"/>
                                         <Entry Style="{DynamicResource EntryImput}" Placeholder="номер" 
                                                Text="{Binding StateNumber}" Keyboard="Text"/>
+                                    </VerticalStackLayout> <!--StateNumber-->
+
+                                    <BoxView HeightRequest="1" Color="{DynamicResource BoxViewColor}" Margin="15,0,0,0"/>
+
+                                    <VerticalStackLayout Padding="15,10">
+                                        <Label Style="{DynamicResource LabelInfoForEntry}" Text="Выберите тип вашей коробки"/>
+                                        <Grid RowDefinitions="auto,auto" HorizontalOptions="Center" RadioButtonGroup.GroupName="Transmission"
+                                              RadioButtonGroup.SelectedValue="{Binding TransmissionType, Mode=TwoWay}">
+                                            <RadioButton  Grid.Row="0" Content="Механическая (МКПП)" Value="Механическая"/>
+
+                                            <RadioButton Grid.Row="1" Content="Автоматическая(АКПП)" Value="Автоматическая"/>
+                                        </Grid>
                                     </VerticalStackLayout>
-                                    <!--StateNumber-->
+                                    <!--TransmissionType-->
+
+
                                 </VerticalStackLayout>
                             </Border>
                             <!--Карточка основной информации-->
