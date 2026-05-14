@@ -5,14 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vehicleView="clr-namespace:AutoCareDiray.View.VehicleView"
     xmlns:repairView="clr-namespace:AutoCareDiray.View.RepairView"
+    xmlns:journalView="clr-namespace:AutoCareDiray.View.JournalEventView"
     Title="AutoCareDiray"
     Style="{StaticResource CustomTabBar}">
 
-
-    
-        <!--<ShellContent 
-         Route="AuthorizationPage"
-         ContentTemplate="{DataTemplate local:AuthorizationPage}"/>-->
 
     <TabBar>
 
@@ -24,6 +20,11 @@
         <Tab Title="Ремонт"
              Route="ListRepair">
             <ShellContent ContentTemplate="{DataTemplate repairView:ListRepairView}"/>
+        </Tab>
+
+        <Tab Title="Журнал Событий"
+             Route="ListRepair">
+            <ShellContent ContentTemplate="{DataTemplate journalView:JournalEventView}"/>
         </Tab>
 
     </TabBar>

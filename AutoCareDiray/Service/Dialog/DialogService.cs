@@ -15,7 +15,6 @@ namespace AutoCareDiray.Service.Dialog;
 
 class DialogService : IDialogService
 {
-   
     public async Task ShowMessageAsync(string message)
     {
         await Shell.Current.DisplayAlert("",message,"Ok");
@@ -60,6 +59,19 @@ class DialogService : IDialogService
         return response;
     }  // ActionSheet возврат стринг
 
+    public async Task<string> ShowDisplayAddMenu()
+    {
+        string action = await Shell.Current.DisplayActionSheet(
+            "Что хотите добавить?",
+            null,
+            null,
+            "⛽ Заправку",
+            "🛠 Ремонт",
+            "📝 Заметку",
+            "🧾 Прочий расход");
+
+        return action;
+    }  //actionSheet для отображения меню в журнале события
     public async Task<bool> ShowChoiceDisplayAlertAsync(string title, string question, string text1, string text2)
     {
         var answer = await Shell.Current.DisplayAlert(title, question, text1, text2);

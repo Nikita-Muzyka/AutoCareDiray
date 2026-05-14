@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.View.JournalEventView.JournalEventView"
+             Title="JournalEventView">
+
+    <VerticalStackLayout>
+        <Button Command="{Binding ShowMenuCommand}" Style="{DynamicResource ButtonCreate}"/>
+        <Label Text="{Binding Text}"/>
+    </VerticalStackLayout>
+
+</ContentPage>

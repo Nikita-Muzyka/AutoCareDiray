@@ -122,13 +122,10 @@
 	  <MauiXaml Update="Service\PopUp\InformationPopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Authorization\AuthorizationPage.xaml">
+	  <MauiXaml Update="View\JournalEventView\JournalEventView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\Authorization\RecoverPasswordView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="View\Authorization\RegistrationPage.xaml">
+	  <MauiXaml Update="View\RefillView\CreateRefillView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\RepairView\CardRepairView.xaml">
@@ -149,9 +146,6 @@
 	  <MauiXaml Update="View\VehicleView\ListVehicleView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\MainPage\UserSettingsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -161,10 +155,6 @@
 	  <Compile Update="View\VehicleView\ListVehicleView.xaml.cs">
 	    <DependentUpon>ListVehicleView.xaml</DependentUpon>
 	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Controls\CustomTabBar\" />
 	</ItemGroup>
 
 </Project>

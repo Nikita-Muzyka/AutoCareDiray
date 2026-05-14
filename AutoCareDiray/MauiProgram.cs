@@ -9,6 +9,7 @@ using AutoCareDiray.Shared.Service.Data;
 using AutoCareDiray.Shared.Service.ValidationService;
 using AutoCareDiray.Shared.ViewModels.RepairViewModel;
 using AutoCareDiray.Shared.ViewModels.VehicleViewModel;
+using AutoCareDiray.Shared.ViewModels.JournalEventViewModel;
 using AutoCareDiray.View.RepairView;
 using AutoCareDiray.View.VehicleView;
 using CommunityToolkit.Maui;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Platform;
 using QuestPDF.Infrastructure;
+using AutoCareDiray.View.JournalEventView;
 
 
 namespace AutoCareDiray
@@ -129,19 +131,11 @@ namespace AutoCareDiray
             builder.Services.AddTransient<IPhotoPicker,PhotoPicker>();
             builder.Services.AddTransient<IPdfService,PdfService>();
 
-            //builder.Services.AddTransient<UserValidation>();
-            //builder.Services.AddTransient<RecoverValidation>();
+           
             builder.Services.AddTransient<VehicleValidation>();
             builder.Services.AddTransient<RepairValidation>();
 
-            //builder.Services.AddTransient<AuthorizationPage>();
-            //builder.Services.AddTransient<AuthorizationViewModel>();
-            //builder.Services.AddTransient<RegistrationPage>();
-            //builder.Services.AddTransient<RegistrationViewModel>();
-            //builder.Services.AddTransient<RecoverPasswordView>();
-            //builder.Services.AddTransient<RecoverPasswordViewModels>();
-            //builder.Services.AddTransient<UserSettingsViewModal>();
-            //builder.Services.AddTransient<UserSettingsPage>();
+           
 
             builder.Services.AddTransient<ListVehicleView>();
             builder.Services.AddTransient<ListVehicleViewModel>();
@@ -149,6 +143,12 @@ namespace AutoCareDiray
             builder.Services.AddTransient<CardVehicleViewModel>();
             builder.Services.AddTransient<CreateVehicleView>();
             builder.Services.AddTransient<CreateVehicleViewModel>();
+
+            builder.Services.AddTransient<JournalEventView>();
+            builder.Services.AddTransient<JournalEventViewModel>();
+
+            builder.Services.AddTransient<AutoCareDiray.View.RefillView.CreateRefillView>();
+            builder.Services.AddTransient<AutoCareDiray.Shared.ViewModels.RefillViewModel.CreateRefillViewModel>();
 
 
             builder.Services.AddTransient<ListRepairView>();

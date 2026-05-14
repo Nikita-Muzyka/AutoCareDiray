@@ -12,12 +12,6 @@ namespace AutoCareDiray
             _dataService = dataService;
             InitializeComponent();
             Application.Current.UserAppTheme = AppTheme.Light;
-            // 🔍 Выводим точный путь, куда MAUI сохраняет файлы
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "vehicles.db");
-            Debug.WriteLine($"🗄️ Путь к БД приложения: {dbPath}");
-
-            // Проверка: существует ли файл?
-            Debug.WriteLine($"✅ Файл существует: {File.Exists(dbPath)}");
         }
         
 
