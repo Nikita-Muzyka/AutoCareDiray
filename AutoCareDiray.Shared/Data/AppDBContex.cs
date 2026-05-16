@@ -1,6 +1,7 @@
 ﻿using AutoCareDiray.Shared.Models.Notes;
 using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Models.VehicleModel;
+using AutoCareDiray.Shared.Models.RefillModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -20,6 +21,7 @@ namespace AutoCareDiray.Shared.Data
         public DbSet<Repair> Repairs { get; set; }
         public DbSet<RepairType> RepairTypes { get; set; }
         public DbSet<VehicleNotes> VehicleNotes { get; set; }
+        public DbSet<Refill> Refills { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -31,7 +31,6 @@ namespace AutoCareDiray.Shared.Models.Validation
             }
             else ErrorAdd(propertyMileage, "Пробег не может быть отрицательный");
         }
-
         public void ValidationCost(string Cost)
         {
             ErrorRemove(propertyCost);

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,8 +13,9 @@ namespace AutoCareDiray.Shared.Models.RefillModel
     {
         // Обязательные ключи
         public int Id { get; set; }
-       
+
         // Основные данные заправки
+        public string Title = "Заправка";
         public DateTime DateRefill { get; set; }
         public int Mileage { get; set; } // Пробег на момент заправки
         public double VolumeLiters { get; set; } // Количество залитых литров
@@ -25,7 +27,7 @@ namespace AutoCareDiray.Shared.Models.RefillModel
         public string? GasStationName { get; set; } // Бренд заправки
         public string? Description { get; set; } // Личные заметки
 
-        public string? PhotoPaths { get; set; }
+        public List<string>? Photos { get; set; }
 
 
         [Required]

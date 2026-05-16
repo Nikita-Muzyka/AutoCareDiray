@@ -134,8 +134,9 @@ namespace AutoCareDiray
            
             builder.Services.AddTransient<VehicleValidation>();
             builder.Services.AddTransient<RepairValidation>();
+            builder.Services.AddTransient<RefillValidation>();
 
-           
+
 
             builder.Services.AddTransient<ListVehicleView>();
             builder.Services.AddTransient<ListVehicleViewModel>();

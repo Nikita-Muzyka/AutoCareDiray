@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using AutoCareDiray.Shared.Service.ResultService;
 using AutoCareDiray.Shared.Models.Notes;
+using AutoCareDiray.Shared.Models.RefillModel;
 
 
 namespace AutoCareDiray.Shared.Service.Data
@@ -316,7 +317,7 @@ namespace AutoCareDiray.Shared.Service.Data
                     .FirstOrDefaultAsync(c => c.Id == repairId);
 
                 if(repairDb != null) return Result<Repair>.SuccessCreate(repairDb);
-                else return Result.ErrorCreate("Ремонт не найден");
+                else return Result.ErrorCreate("Данные о ремонт не найдены");
             }
             catch (OperationCanceledException ex)
             {
@@ -324,7 +325,7 @@ namespace AutoCareDiray.Shared.Service.Data
             }
             catch (Exception ex)
             {
-                return Result.ErrorCreate($"Произошла ошибка при получении ремонта: {ex.Message}"); 
+                return Result.ErrorCreate($"Произошла ошибка при получении данных о ремонте: {ex.Message}"); 
             }
         }  // получить ремонт со списком типов ремонтов
         public async Task<Result> CreateRepairAsync(Repair repair, CancellationToken token)
@@ -342,7 +343,7 @@ namespace AutoCareDiray.Shared.Service.Data
             }
             catch (Exception ex)
             {
-                return Result.ErrorCreate($"Произошла ошибка при сохранении ремонта: {ex.Message}");
+                return Result.ErrorCreate($"Произошла ошибка при сохранении данных ремонта: {ex.Message}");
             }
         }  // создание ремонта
         public async Task<Result> DeleteRepairAsync(Repair repair, CancellationToken token)
@@ -366,7 +367,7 @@ namespace AutoCareDiray.Shared.Service.Data
             }
             catch (Exception ex)
             {
-                return Result.ErrorCreate($"Произошла ошибка при удалении ремонта: {ex.Message}");
+                return Result.ErrorCreate($"Произошла ошибка при удалении данных ремонта: {ex.Message}");
             }
         }  // удалить ремонт
         public async Task<Result> UpdateRepairAsync(Repair repair, CancellationToken token)
@@ -391,7 +392,7 @@ namespace AutoCareDiray.Shared.Service.Data
             }
             catch (Exception ex)
             {
-                return Result.ErrorCreate($"Произошла ошибка при обновлении ремонта: {ex.Message}");
+                return Result.ErrorCreate($"Произошла ошибка при обновлении данных ремонта: {ex.Message}");
             }
         }  // обновить ремонта
 
@@ -538,6 +539,95 @@ namespace AutoCareDiray.Shared.Service.Data
             }
         } // обновить заметку
 
+
+        //Refill
+
+        public async Task<Result> GetRefillAsync(int refillId, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var refillDb = await _dbContex.Refills
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(c => c.Id == refillId, token);
+                if (refillDb != null) return Result<Refill>.SuccessCreate(refillDb);
+                else return Result.ErrorCreate("Заправка не найдена");
+            }
+            catch (OperationCanceledException ex)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при получении данных о заправке: {ex.Message}");
+            }
+        } // получить данные о заправке
+        public async Task<Result> UpdateRefillAsync(Refill refill, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var refillDb = await _dbContex.Refills.FindAsync(refill.Id, token);
+
+                if (refillDb == null) return Result.ErrorCreate("Данные о заправке не найдены");
+                else
+                {
+                    _dbContex.Entry(refillDb).CurrentValues.SetValues(refill);
+
+                    await _dbContex.SaveChangesAsync(token);
+                    return Result.SuccessCreate();
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при обновлении данных о заправке: {ex.Message}");
+            }
+        } // обновление данные о заправке
+        public async Task<Result> CreateRefillAsync(Refill refill, CancellationToken token) 
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                await _dbContex.Refills.AddAsync(refill, token);
+                await _dbContex.SaveChangesAsync(token);
+                return Result.SuccessCreate();
+            }
+            catch (OperationCanceledException ex)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при создании данных о заправке: {ex.Message}");
+            }
+        } // Создание данные о заправке
+        public async Task<Result> DeleteRefillAsync(int refillId, CancellationToken token)
+        { 
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var respon = await _dbContex.Refills.FindAsync(refillId);
+                if (respon != null)
+                {
+                    _dbContex.Refills.Remove(respon);
+                    await _dbContex.SaveChangesAsync();
+                    return Result.SuccessCreate();
+                }
+                else return Result.ErrorCreate("Данные о заправке не найдены");
+            }
+            catch (OperationCanceledException ex)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при удалении данных о заправке: {ex.Message}");
+            }
+        } // Создание данные о заправке
 
         public void InitializeDatabase()
         {

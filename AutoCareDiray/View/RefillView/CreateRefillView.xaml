@@ -42,6 +42,7 @@
                                     SelectedItem="{Binding SelectedFuelType}" Style="{DynamicResource PickerStandart}"/>
                             <Label Grid.Column="1" Text="▼" Style="{DynamicResource LabelArrowDown}"/>
                         </Grid>
+                        <Label Text="{Binding FuelTypesError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsFuelTypesError}"/>
                     </VerticalStackLayout>
 
                     <BoxView Style="{DynamicResource BoxViewCustom}"/>
@@ -51,6 +52,12 @@
                         <Label Text="Залито литров" Style="{DynamicResource LabelInfoForEntry}"/>
                         <Entry Text="{Binding VolumeLitersFilled}" Placeholder="Например: 40.5" 
                                Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
+                        <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                            <Label Text="До полного бака?" Style="{DynamicResource LabelInfoForEntry}"/>
+                            <Label Text="Поможет точнее рассчитать расход" Style="{DynamicResource LabelSecondaryCustom}" />
+                            <Switch IsToggled="{Binding IsFullTank}"/>
+                        </VerticalStackLayout>
+                        <Label Text="{Binding VolumeLitersError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsVolumeLitersError}"/>
                     </VerticalStackLayout>
 
                     <BoxView Style="{DynamicResource BoxViewCustom}"/>
@@ -62,17 +69,6 @@
                                Style="{DynamicResource EntryImput}" Keyboard="Numeric"/>
                         <Label Text="{Binding CostError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsCostError}"/>
                     </VerticalStackLayout>
-
-                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
-
-                    <!-- Полный бак? (Важно для статистики) -->
-                    <Grid ColumnDefinitions="*, Auto" Padding="15,10">
-                        <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
-                            <Label Text="До полного бака?" Style="{DynamicResource LabelInfoForEntry}"/>
-                            <Label Text="Поможет точнее рассчитать расход" Style="{DynamicResource LabelSecondaryCustom}" FontSize="11" Margin="0,0,0,5"/>
-                        </VerticalStackLayout>
-                        <Switch Grid.Column="1" IsToggled="{Binding IsFullTank}" VerticalOptions="Center"/>
-                    </Grid>
 
                     <BoxView Style="{DynamicResource BoxViewCustom}"/>
 

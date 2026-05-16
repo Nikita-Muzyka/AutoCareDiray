@@ -21,6 +21,9 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         public string? StateNumber { get; set; } //нормер гос
         public string? TransmissionType { get; set; } //тип трансмиссии
         public string? WarningRepair { get; set; }    //Кол-во предупреждений по машине
+        [Required]
+        public double FuelTank { get; set; }    //бак авто
+        public double VolumeLiters { get; set; } // кол-во литров в баке
 
         [Required]
         public string? VehicleType { get; set; }

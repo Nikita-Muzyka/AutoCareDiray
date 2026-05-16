@@ -18,7 +18,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         public int CurrentMileage { get; set; }
         public DateTime DateRepair { get; set; }
         public string? SpareParts { get; set; }
-        public int Cost { get; set; } = default;
+        public decimal Cost { get; set; } = default;
         public string? Description { get; set; }
         public string? ServiceName { get; set; }
         public string? CommentMechanic { get; set; }

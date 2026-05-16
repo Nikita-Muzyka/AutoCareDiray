@@ -1,4 +1,5 @@
 ﻿using AutoCareDiray.Shared.Models.Notes;
+using AutoCareDiray.Shared.Models.RefillModel;
 using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using AutoCareDiray.Shared.Service.ResultService;
@@ -44,6 +45,11 @@ namespace AutoCareDiray.Shared.Interface
         Task<Result> DeleteVehicleNotesAsync(int id, CancellationToken token); // удалить заметку
         Task<Result> UpdateVehileNoteAsync(VehicleNotes note, CancellationToken token); // обновить заметку
 
+        //Refill
+        Task<Result> GetRefillAsync(int refillId, CancellationToken token); // получить данные о заправке
+        Task<Result> UpdateRefillAsync(Refill refill, CancellationToken token); // обновление данные о заправке
+        Task<Result> CreateRefillAsync(Refill refill, CancellationToken token); // Создание данные о заправке
+        Task<Result> DeleteRefillAsync(int refillId, CancellationToken token); // Создание данные о заправке
 
 
         void InitializeDatabase(); // инициализация БД при запуске Приложения
