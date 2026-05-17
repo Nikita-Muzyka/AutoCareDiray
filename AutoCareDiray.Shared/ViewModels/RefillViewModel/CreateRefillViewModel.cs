@@ -165,15 +165,20 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
         [RelayCommand]
         public async Task ProcessingRefill()
         {
-            _refillValidation.ValidationAll(MileageFilled, CostFilled,SelectedFuelType,VolumeLitersFilled); // изменить
+            ValidationAll();
             if (HasErrors) return;
+
             _refill = CreateRefill();
 
-            var result = await _photoPicker.SavePhotosAsync(AttachedPhotos, _cts.Token);
-            if (result.Success)
+            if(AttachedPhotos == null || AttachedPhotos.Count == 0) { }
+            else
             {
-                var resultPhotos = result as Result<List<string>>;
-                _refill.Photos = resultPhotos.Data;
+                var result = await _photoPicker.SavePhotosAsync(AttachedPhotos, _cts.Token);
+                if (result.Success)
+                {
+                    var resultPhotos = result as Result<List<string>>;
+                    _refill.Photos = resultPhotos.Data;
+                }
             }
 
             if (_isUpdate)
@@ -245,6 +250,13 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
             }
         } //Обновление данных автомобиля после создания или редактирования ремонта
 
+        private void ValidationAll()
+        {
+            IsVolumeLitersError = _refillValidation.ValidationVolumeLiters(VolumeLitersFilled);
+            IsFuelTypesError = _refillValidation.ValidationFuelTypes(SelectedFuelType);
+            IsMileageError = _refillValidation.ValidationMileage(MileageFilled);
+            IsCostError = _refillValidation.ValidationCost(CostFilled);
+        }
 
         partial void OnIsFullTankChanged(bool value)
         {

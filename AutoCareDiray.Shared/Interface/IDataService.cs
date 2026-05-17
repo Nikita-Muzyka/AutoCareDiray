@@ -11,9 +11,10 @@ namespace AutoCareDiray.Shared.Interface
     {
 
         //Vehicle 
+        Task<Result> GetFullVehicleAsync(int vehicleId, CancellationToken token); // получение авто со всеми связными таблицами без заметок и типов ремонта
         Task<Result> CreateVehicleAsync(Vehicle vehicle,CancellationToken token); // Создание авто
         Task<Result> GetListVehicleAsync(CancellationToken token); // список авто вместе с типоми ремонта
-        Task<Result> GetListVehicleForListRepairAsync(CancellationToken token); // список авто только название и ид
+        Task<Result> GetListVehicleNameAsync(CancellationToken token); // список авто только название и ид
         Task<Result> GetVehicleAsync(int Vehicle_Id, CancellationToken token); // получение авто
         Task<Result> GetVehicleMileageAsync(int Vehicle_Id, CancellationToken token); // получение ид и пробега авто
         Task<Result> GetVehicleAndRepairTypesAsync(int Vehicle_Id, CancellationToken token); // получение авто вместе с репаир ид
@@ -29,7 +30,7 @@ namespace AutoCareDiray.Shared.Interface
         Task<Result> GetListRepairForVehicleAsync(int VehicleId, CancellationToken token); // саисок ремонта для машины
         Task<Result> GetRepairAsync(int repairId, CancellationToken token); // получить список ремонта
         Task<Result> CreateRepairAsync(Repair repair, CancellationToken token); // создание ремонта
-        Task<Result> DeleteRepairAsync(Repair repair, CancellationToken token); // удалить ремонт
+        Task<Result> DeleteRepairAsync(int repairId, CancellationToken token); // удалить ремонт
         Task<Result> UpdateRepairAsync(Repair repair, CancellationToken token);  // обновить ремонта
 
 

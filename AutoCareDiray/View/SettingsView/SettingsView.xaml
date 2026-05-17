@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.View.SettingsView.SettingsView"
+             Title="SettingsView">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="25">
+
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Расстояние" FontSize="18" FontAttributes="Bold" TextColor="#B68D40" Margin="5,0"/>
+
+                <Border Padding="10" StrokeShape="RoundRectangle 12" BackgroundColor="#1E1E1E" StrokeThickness="0">
+                    <VerticalStackLayout RadioButtonGroup.GroupName="DistanceGroup" 
+                                         RadioButtonGroup.SelectedValue="{Binding SelectedDistanceUnit, Mode=TwoWay}">
+
+                        <RadioButton Content="Километры (км)" Value="Km" 
+                                     TextColor="White" ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+
+                        <BoxView HeightRequest="1" Color="#333" Margin="10,5"/>
+
+                        <RadioButton Content="Мили (mi)" Value="Miles" 
+                                     TextColor="White" ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Объем топлива" FontSize="18" FontAttributes="Bold" TextColor="#B68D40" Margin="5,0"/>
+
+                <Border Padding="10" StrokeShape="RoundRectangle 12" BackgroundColor="#1E1E1E" StrokeThickness="0">
+                    <VerticalStackLayout RadioButtonGroup.GroupName="VolumeGroup" 
+                                         RadioButtonGroup.SelectedValue="{Binding SelectedVolumeUnit, Mode=TwoWay}">
+
+                        <RadioButton Content="Литры (л)" Value="Liters" 
+                                     TextColor="White" ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+
+                        <BoxView HeightRequest="1" Color="#333" Margin="10,5"/>
+
+                        <RadioButton Content="Галлоны (gal)" Value="Gallons" 
+                                     TextColor="White" ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

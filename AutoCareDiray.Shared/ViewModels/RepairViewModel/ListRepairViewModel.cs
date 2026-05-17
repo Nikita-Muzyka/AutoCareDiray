@@ -38,7 +38,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         {
             Vehicles.Clear();
             Repairs.Clear();
-            var result = await _dataService.GetListVehicleForListRepairAsync(_cts.Token);
+            var result = await _dataService.GetListVehicleNameAsync(_cts.Token);
             if (result.Success)
             {
                 var resultVehicles = result as Result<List<Vehicle>>;
@@ -111,7 +111,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         [RelayCommand]
         public async Task DeleteRepair(Repair repair)
         {
-            await _dataService.DeleteRepairAsync(repair, _cts.Token);
+            await _dataService.DeleteRepairAsync(repair.Id, _cts.Token);
             await LoadRepairs();
         } //удаление ремонта
 

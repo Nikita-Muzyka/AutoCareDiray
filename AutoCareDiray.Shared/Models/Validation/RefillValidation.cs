@@ -16,13 +16,6 @@ namespace AutoCareDiray.Shared.Models.Validation
 
         public RefillValidation() { }
 
-        public void ValidationAll(int Mileage, decimal Cost,string fuelTypes,double volumeLiters)
-        {
-            ValidationMileage(Mileage);
-            ValidationCost(Cost);
-            ValidationFuelTypes(fuelTypes);
-            ValidationVolumeLiters(volumeLiters);
-        }
         public bool ValidationMileage(int Mileage)
         {
             ErrorRemove(propertyMileage);

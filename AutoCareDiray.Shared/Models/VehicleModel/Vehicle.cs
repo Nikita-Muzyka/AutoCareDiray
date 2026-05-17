@@ -1,4 +1,6 @@
 ﻿using AutoCareDiray.Shared.Models.RepairModel;
+using AutoCareDiray.Shared.Models.Notes;
+using AutoCareDiray.Shared.Models.RefillModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -31,6 +33,8 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         public int Mileage { get; set; } = 0;
 
         public List<Repair>? Repairs { get; set; } = new();
+        public List<VehicleNotes>? Notes { get; set; } = new();
+        public List<Refill>? Refills { get; set; } = new();
         public List<RepairType>? RepairTypes { get; set; } = new();
 
 

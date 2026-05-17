@@ -22,34 +22,49 @@ namespace AutoCareDiray.Shared.Models.Validation
             ValidationMileage(Mileage);
             ValidationCost(Cost);
         }
-        public void ValidationMileage(int Mileage)
+        public bool ValidationMileage(int Mileage)
         {
             ErrorRemove(propertyMileage);
             if (Mileage >= 0)
             {
                 OnErrorsChanges(propertyMileage);
+                return false;
             }
-            else ErrorAdd(propertyMileage, "Пробег не может быть отрицательный");
-        }
-        public void ValidationCost(string Cost)
-        {
-            ErrorRemove(propertyCost);
-            if (string.IsNullOrWhiteSpace(Cost) == false)
+            else 
             {
-                if (Cost.Any(char.IsNumber) == true && Cost.Any(char.IsLetter) == false)
-                {
-                    if (int.TryParse(Cost, out int result))
-                    {
-                        if (result >= 0)
-                        {
-                            OnErrorsChanges(propertyCost);
-                        }
-                        else ErrorAdd(propertyCost, "Нельзя вводить орицательные числа");
-                    }
-                }
-                else ErrorAdd(propertyCost, "Поле должно содержать только цифры");
+                ErrorAdd(propertyMileage, "Пробег не может быть отрицательный");
+                return true;
             }
-            else OnErrorsChanges(propertyCost);
+        }
+        public bool ValidationCost(string Cost)
+        {
+            //ErrorRemove(propertyCost);
+            //if (string.IsNullOrWhiteSpace(Cost) == false)
+            //{
+            //    if (Cost.Any(char.IsNumber) == true && Cost.Any(char.IsLetter) == false)
+            //    {
+            //        if (int.TryParse(Cost, out int result))
+            //        {
+            //            if (result >= 0)
+            //            {
+            //                OnErrorsChanges(propertyCost);
+            //                return false;
+            //            }
+            //            else 
+            //            {
+            //                ErrorAdd(propertyCost, "Нельзя вводить орицательные числа");
+            //                return true;
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        ErrorAdd(propertyCost, "Поле должно содержать только цифры");
+            //        return true;
+            //    }
+            //}
+            //else OnErrorsChanges(propertyCost);
+            return true;
         }
     }
 }       

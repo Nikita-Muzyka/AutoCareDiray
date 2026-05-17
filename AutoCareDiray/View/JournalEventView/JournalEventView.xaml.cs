@@ -12,6 +12,11 @@ public partial class JournalEventView : ContentPage
         BindingContext = _viewModel;
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _viewModel.InitilizeCommand.Execute(null);
+    }
     protected override void OnDisappearing()
     {
         base.OnDisappearing();

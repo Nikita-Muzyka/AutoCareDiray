@@ -116,13 +116,16 @@
 	  <MauiXaml Update="Resources\Styles\StylesCustom\VehicleView\VehicleViewStyle.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Service\PopUp\ConfirmationPopUp.xaml">
+	  <MauiXaml Update="Service\Dialog\PopUp\ConfirmationPopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Service\PopUp\InformationPopUp.xaml">
+	  <MauiXaml Update="Service\Dialog\PopUp\InformationPopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\JournalEventView\JournalEventView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="View\RefillView\CardRefillView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\RefillView\CreateRefillView.xaml">
@@ -134,7 +137,7 @@
 	  <MauiXaml Update="View\RepairView\CreateRepairView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\RepairView\ListRepairView.xaml">
+	  <MauiXaml Update="View\SettingsView\SettingsView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="View\VehicleView\CardVehicleView.xaml">

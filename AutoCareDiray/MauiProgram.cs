@@ -130,8 +130,9 @@ namespace AutoCareDiray
             builder.Services.AddSingleton<INavigationService,NavigationService>();
             builder.Services.AddTransient<IPhotoPicker,PhotoPicker>();
             builder.Services.AddTransient<IPdfService,PdfService>();
+            builder.Services.AddTransient<IPreferencesService,AutoCareDiray.Service.PreferencesService.PreferencesService>();
 
-           
+
             builder.Services.AddTransient<VehicleValidation>();
             builder.Services.AddTransient<RepairValidation>();
             builder.Services.AddTransient<RefillValidation>();
@@ -150,9 +151,13 @@ namespace AutoCareDiray
 
             builder.Services.AddTransient<AutoCareDiray.View.RefillView.CreateRefillView>();
             builder.Services.AddTransient<AutoCareDiray.Shared.ViewModels.RefillViewModel.CreateRefillViewModel>();
+            builder.Services.AddTransient<AutoCareDiray.View.RefillView.CardRefillView>();
+            builder.Services.AddTransient<AutoCareDiray.Shared.ViewModels.RefillViewModel.CardRefillViewModel>();
+
+            builder.Services.AddTransient<AutoCareDiray.View.SettingsView.SettingsView>();
+            builder.Services.AddTransient<AutoCareDiray.Shared.ViewModels.SettingsViewModel.SettingsViewModel>();
 
 
-            builder.Services.AddTransient<ListRepairView>();
             builder.Services.AddTransient<ListRepairViewModel>();
             builder.Services.AddTransient<CreateRepairView>();
             builder.Services.AddTransient<CreateRepairViewModel>();
