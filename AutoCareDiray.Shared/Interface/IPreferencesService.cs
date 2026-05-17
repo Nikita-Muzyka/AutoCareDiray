@@ -13,6 +13,7 @@ namespace AutoCareDiray.Shared.Interface
         void SetDefault(string defailtName, string unit);
         string GetDefaultDistance();
         string GetDefaultVolume();
+        string GetDefaultMoney();
 
     }
 }

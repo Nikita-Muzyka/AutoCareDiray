@@ -14,11 +14,15 @@ namespace AutoCareDiray.Shared.ViewModels.SettingsViewModel
         [ObservableProperty]
         private string selectedVolumeUnit;
 
+        [ObservableProperty]
+        private string selectedMoneyUnit;
+
         public SettingsViewModel(IPreferencesService preferences)
         {
             _preferencesService = preferences;
             SelectedDistanceUnit = _preferencesService.GetDefaultDistance();
             SelectedVolumeUnit = _preferencesService.GetDefaultVolume();
+            SelectedMoneyUnit = _preferencesService.GetDefaultMoney();
         }
 
         // Срабатывает автоматически при выборе RadioButton расстояния
@@ -31,6 +35,11 @@ namespace AutoCareDiray.Shared.ViewModels.SettingsViewModel
         partial void OnSelectedVolumeUnitChanged(string value)
         {
             _preferencesService.SetDefault("VolumeUnit", value);
+        }
+
+        partial void OnSelectedMoneyUnitChanged(string value)
+        {
+            _preferencesService.SetDefault("MoneyUnit", value);
         }
     }
 }

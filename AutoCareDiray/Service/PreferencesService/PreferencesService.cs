@@ -28,5 +28,9 @@ namespace AutoCareDiray.Service.PreferencesService
         {
             return Preferences.Default.Get("VolumeUnit", "non");
         }
+        public string GetDefaultMoney()
+        {
+            return Preferences.Default.Get("MoneyUnit", "non");
+        }
     }
 }

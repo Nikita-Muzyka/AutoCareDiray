@@ -158,7 +158,6 @@ namespace AutoCareDiray
             builder.Services.AddTransient<AutoCareDiray.Shared.ViewModels.SettingsViewModel.SettingsViewModel>();
 
 
-            builder.Services.AddTransient<ListRepairViewModel>();
             builder.Services.AddTransient<CreateRepairView>();
             builder.Services.AddTransient<CreateRepairViewModel>();
             builder.Services.AddTransient<CardRepairView>();
