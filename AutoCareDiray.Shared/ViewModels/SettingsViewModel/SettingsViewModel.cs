@@ -17,8 +17,8 @@ namespace AutoCareDiray.Shared.ViewModels.SettingsViewModel
         public SettingsViewModel(IPreferencesService preferences)
         {
             _preferencesService = preferences;
-            SelectedDistanceUnit = _preferencesService.GetDefault("DistanceUnit", "Kilometers");
-            SelectedVolumeUnit = _preferencesService.GetDefault("VolumeUnit", "Liters");
+            SelectedDistanceUnit = _preferencesService.GetDefaultDistance();
+            SelectedVolumeUnit = _preferencesService.GetDefaultVolume();
         }
 
         // Срабатывает автоматически при выборе RadioButton расстояния

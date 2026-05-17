@@ -74,7 +74,7 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
             string stateNumber,
             string transmissionType, 
             string vehicleType,
-            int mileage,
+            int mileage,double fuelTank,
             List<RepairType> repairTypes) 
         {
             NameVehicle = name;
@@ -84,6 +84,7 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
             TransmissionType = transmissionType;
             VehicleType = vehicleType;
             Mileage = mileage;
+            FuelTank = fuelTank;
             RepairTypes = repairTypes;
         }
 

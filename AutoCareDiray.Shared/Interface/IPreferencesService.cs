@@ -9,8 +9,10 @@ namespace AutoCareDiray.Shared.Interface
 {
     public interface IPreferencesService
     {
-        string GetDefault(string defailtName, string unit);
+        string GetDefault(string defailtName);
         void SetDefault(string defailtName, string unit);
-        
+        string GetDefaultDistance();
+        string GetDefaultVolume();
+
     }
 }

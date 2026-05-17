@@ -11,13 +11,22 @@ namespace AutoCareDiray.Service.PreferencesService
 {
     public class PreferencesService : IPreferencesService
     {
-        public string GetDefault(string defailtName,string unit)
+        public string GetDefault(string defailtName)
         {
-            return Preferences.Default.Get(defailtName, unit);
+            return Preferences.Default.Get(defailtName, "non");
         }
         public void SetDefault(string defailtName, string unit)
         {
             Preferences.Default.Set(defailtName, unit);
+        }
+
+        public string GetDefaultDistance()
+        {
+            return Preferences.Default.Get("DistanceUnit", "non");
+        }
+        public string GetDefaultVolume()
+        {
+            return Preferences.Default.Get("VolumeUnit", "non");
         }
     }
 }

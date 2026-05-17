@@ -20,8 +20,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
     {
         #region Основные поля для работы
 
-        private VehicleValidation _vehicleValidation;
-        private IPhotoPicker _photoPicker;
+        private readonly VehicleValidation _vehicleValidation;
+        private readonly IPhotoPicker _photoPicker;
+        private readonly IPreferencesService _preferencesService;
         private CancellationTokenSource _cts;
         private Vehicle _vehicle;
         private List<RepairType> _listRepairType;
@@ -40,23 +41,19 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private RepairGroup selectedGroup;
 
         [ObservableProperty]
-        private bool isNameVehicle = false;
-        [ObservableProperty]
         private bool isYearPurchaseError = false;
         [ObservableProperty]
         private bool isMileageError = false;
         [ObservableProperty]
-        private bool isMileage = false;
-        [ObservableProperty]
         private bool isTypeVehicleError = false;
         [ObservableProperty]
         private bool isNameVehicleError = false;
+        [ObservableProperty]
+        private bool isFuelTankError = false;
 
 
         [ObservableProperty]
         private string nameVehicle = String.Empty;
-        [ObservableProperty]
-        private string mileage = String.Empty;
         [ObservableProperty]
         private string vinCode = String.Empty;
         [ObservableProperty]
@@ -72,6 +69,14 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string statusMessage;
 
+        [ObservableProperty]
+        private int mileage;
+        [ObservableProperty]
+        private double fuelTank;
+
+        public string FuelTankText => "Введите обьем бака " + _preferencesService.GetDefaultVolume();
+        public string MileageText => "Введите текущий пробег авто " + _preferencesService.GetDefaultDistance();
+
 
         [ObservableProperty]
         private DateTime dateNow = DateTime.Today;
@@ -79,41 +84,34 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private DateTime yearPurchaseSelected = new DateTime(1970, 1, 1);
 
         private string _newPhoto;
+
+
        
         #endregion
 
 
         public CreateVehicleViewModel(IDialogService dialogService,IDataService dataService,INavigationService navigation,IPhotoPicker photoPicker,
-            VehicleValidation vehicleValidation) : base(dialogService,dataService,navigation)
+            VehicleValidation vehicleValidation,IPreferencesService preferences) : base(dialogService,dataService,navigation)
         {
             _vehicleValidation = vehicleValidation;
             _photoPicker = photoPicker;
+            _preferencesService = preferences;
             _vehicleValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
             _cts = new CancellationTokenSource();
         }
 
 
         #region Получение текса ошибок
+
         public bool HasErrors => _vehicleValidation.HasErrors;
         public string MileageError => _vehicleValidation.GetErrors(nameof(MileageError)) as string ?? String.Empty;
         public string YearPurchaseError => _vehicleValidation.GetErrors(nameof(YearPurchaseError)) as string ?? String.Empty;
         public string TypeVehicleError => _vehicleValidation.GetErrors(nameof(TypeVehicleError)) as string ?? String.Empty;
         public string NameVehicleError => _vehicleValidation.GetErrors(nameof(NameVehicleError)) as string ?? String.Empty;
+        public string FuelTankError => _vehicleValidation.GetErrors(nameof(FuelTankError)) as string ?? String.Empty;
+
         #endregion
 
-
-
-        /// <summary>
-        /// Конвертация данных для создания авто
-        /// </summary>
-        Func<string, int> ConverFromInt = (property) =>
-        {
-            if (int.TryParse(property, out int result))
-            {
-                return result;
-            }
-            else return 0;
-        };
 
         /// <summary>
         /// Инициализация при обновлении данных авто
@@ -145,9 +143,10 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 if (File.Exists(_vehicle.PhotoVehicle)) PathPhoto = _vehicle.PhotoVehicle;
                 NameVehicle = _vehicle.NameVehicle;
                 YearPurchaseSelected = _vehicle.YearPurchase;
-                Mileage = _vehicle.Mileage.ToString();
+                Mileage = _vehicle.Mileage;
                 SelectedTypeVehicle = _vehicle.VehicleType;
                 VinCode = _vehicle.VinCode;
+                FuelTank = _vehicle.FuelTank;
                 if (string.IsNullOrWhiteSpace(_vehicle.TransmissionType) == false) TransmissionType = _vehicle.TransmissionType;
             }
         }
@@ -175,14 +174,13 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [RelayCommand]
         public async Task ProcessingAsync()
         {
-            _vehicleValidation.ValidationAll(Mileage, YearPurchaseSelected, SelectedTypeVehicle,NameVehicle);
+            ValidationAll();
             if (HasErrors)
             {
                 await _dialogService.ShowToastAsync("Ошибка. Проверте все поля");
                 return;
             }
 
-            int MileageInt = ConverFromInt(Mileage);
             _listRepairType.RemoveAll(c => c.IsRemoveMaintenance == true);
 
 
@@ -190,8 +188,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 (NameVehicle,
                 YearPurchaseSelected, VinCode,
                 StateNumber, TransmissionType,
-                SelectedTypeVehicle, MileageInt,
-                _listRepairType);
+                SelectedTypeVehicle, Mileage,
+                FuelTank,_listRepairType);
 
             if (_newPhoto != null)
             {
@@ -251,10 +249,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 list.IsServiced = !list.IsServiced;
                 if(list.IsServiced == true)
                 {
-                    if (string.IsNullOrWhiteSpace(Mileage)) continue;
-
-                    var mileageInt = ConverFromInt(Mileage);
-                    list.LastServiceMileage = mileageInt;
+                    list.LastServiceMileage = Mileage;
                 }
             }
         }
@@ -287,25 +282,37 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 }
             }
         }
-        partial void OnMileageChanged(string value)
+        partial void OnMileageChanged(int value)
         {
-            _vehicleValidation.ValidationMileage(value);
+            IsMileageError = _vehicleValidation.ValidationMileage(value);
         }
         partial void OnYearPurchaseSelectedChanged(DateTime value)
         {
-            _vehicleValidation.ValidationDate(YearPurchaseSelected);
+           IsYearPurchaseError = _vehicleValidation.ValidationDate(YearPurchaseSelected);
         }
         partial void OnSelectedTypeVehicleChanged(string value)
         {
-            _vehicleValidation.ValidationTypeVehicle(value);
+           IsTypeVehicleError = _vehicleValidation.ValidationTypeVehicle(value);
         }
         partial void OnNameVehicleChanged(string value)
         {
-            _vehicleValidation.ValidationNameVehicle(value);
+           IsNameVehicleError = _vehicleValidation.ValidationNameVehicle(value);
+        }
+        partial void OnFuelTankChanged(double value)
+        {
+            IsFuelTankError = _vehicleValidation.ValidationFuelTank(value);
         }
 
         #endregion
 
+        private void ValidationAll()
+        {
+            IsMileageError = _vehicleValidation.ValidationMileage(Mileage);
+            IsYearPurchaseError =  _vehicleValidation.ValidationDate(YearPurchaseSelected);
+            IsTypeVehicleError = _vehicleValidation.ValidationTypeVehicle(SelectedTypeVehicle);
+            IsNameVehicleError = _vehicleValidation.ValidationNameVehicle(NameVehicle);
+            IsFuelTankError = _vehicleValidation.ValidationFuelTank(FuelTank);
+        }
 
         /// <summary>
         /// Метод которые вызывает event 
@@ -315,27 +322,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         {
             OnPropertyChanged(nameof(HasErrors));
             OnPropertyChanged(e.PropertyName);
-            CheckErrorsChanged();
         }
-
-        /// <summary>
-        /// Переключение bool для текста ошибок
-        /// </summary>
-        private void CheckErrorsChanged()
-        {
-            if(MileageError.Any()) IsMileageError = true;
-            else IsMileageError = false;
-
-            if(YearPurchaseError.Any()) IsYearPurchaseError = true;
-            else IsYearPurchaseError = false;
-
-            if(TypeVehicleError.Any()) IsTypeVehicleError = true;
-            else IsTypeVehicleError = false;
-
-            if (NameVehicleError.Any()) IsNameVehicleError = true;
-            else IsNameVehicleError = false;
-        }
-
+       
         /// <summary>
         /// Удаление токена
         /// </summary>

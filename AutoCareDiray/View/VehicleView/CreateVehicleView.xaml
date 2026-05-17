@@ -16,6 +16,7 @@
                 <!--Общая информация-->
                 
                 <Border Style="{DynamicResource BorderForEntryCard}">
+                    
                     <VerticalStackLayout Spacing="0">
 
                         <VerticalStackLayout Padding="15,10">
@@ -54,11 +55,21 @@
                         <BoxView Style="{DynamicResource BoxViewCustom}"/>
 
                         <VerticalStackLayout Padding="15,10">
-                            <Label Text="Текущий пробег (КМ)" Style="{DynamicResource LabelInfoForEntry}" 
+                            <Label Text="{Binding MileageText}" Style="{DynamicResource LabelInfoForEntry}" 
                                    FontAttributes="Bold" Margin="0,0,0,5"/>
                             <Entry Text="{Binding Mileage}" Placeholder="0" Keyboard="Numeric" FontSize="16" Style="{DynamicResource LabelCustom}"/>
                             <Label Text="{Binding MileageError}" IsVisible="{Binding IsMileageError}" Style="{DynamicResource LabelError}"/>
                         </VerticalStackLayout> <!--MIleage-->
+
+                        <BoxView Style="{DynamicResource BoxViewCustom}"/>
+
+                        <VerticalStackLayout Padding="15,10">
+                            <Label Text="{Binding FuelTankText}" Style="{DynamicResource LabelInfoForEntry}" 
+                                   FontAttributes="Bold" Margin="0,0,0,5"/>
+                            <Entry Text="{Binding FuelTank}" Placeholder="0" Keyboard="Numeric" FontSize="16" Style="{DynamicResource LabelCustom}"/>
+                            <Label Text="{Binding FuelTankError}" IsVisible="{Binding IsFuelTankError}" Style="{DynamicResource LabelError}"/>
+                        </VerticalStackLayout>
+                        <!--FuelTank-->
 
                         <BoxView Style="{DynamicResource BoxViewCustom}"/>
 
@@ -77,6 +88,7 @@
                         </VerticalStackLayout> <!--VehicleType-->
 
                     </VerticalStackLayout>
+                    
                 </Border> <!--Карточка основной информации-->
                 
                 <toolkit:Expander Margin="0,10">
