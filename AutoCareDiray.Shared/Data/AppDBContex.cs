@@ -33,11 +33,30 @@ namespace AutoCareDiray.Shared.Data
 
                 optionsBuilder.UseSqlite($"Data Source={dbPath}");
             }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Vehicle>()
+                        .HasMany(v => v.Refills)
+                        .WithOne(r => r.Vehicle)
+                        .HasForeignKey(r => r.VehicleId)
+                        .OnDelete(DeleteBehavior.Cascade); // 👈 Главная строчка
+
+            // Настраиваем каскадное удаление для Ремонтов
+            modelBuilder.Entity<Vehicle>()
+                        .HasMany(v => v.Repairs)
+                        .WithOne(r => r.Vehicle)
+                        .HasForeignKey(r => r.VehicleId)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Repair>()
+                        .HasMany(r => r.SpareParts) 
+                        .WithOne()                  
+                        .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

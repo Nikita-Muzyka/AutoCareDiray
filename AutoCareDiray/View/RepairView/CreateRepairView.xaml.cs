@@ -1,3 +1,5 @@
+using AutoCareDiray.Extensions;
+using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using AutoCareDiray.Shared.ViewModels.RepairViewModel;
 namespace AutoCareDiray.View.RepairView;
@@ -22,6 +24,7 @@ public partial class CreateRepairView : ContentPage, IQueryAttributable
     protected override void OnAppearing()
     {
         base.OnAppearing();
+
     }
 	protected override void OnDisappearing() 
 	{ 
@@ -30,6 +33,20 @@ public partial class CreateRepairView : ContentPage, IQueryAttributable
         {
             vm.CancelTokenCommand.Execute(null);
             vm.OffEventCommand.Execute(null);
+        }
+    }
+
+    private void CreateNewRepairType(object sender, CheckedChangedEventArgs e)
+    {
+        if (e.Value)
+        {
+            List<string> categories = new List<string>();
+            foreach (RepairCategory cat in Enum.GetValues(typeof(RepairCategory)))
+            {
+                string categoryText = cat.GetDisplay();
+                categories.Add(categoryText);
+            }
+            _viewModel.GetCategoriesRepairTypeCommand.Execute(categories);
         }
     }
 }

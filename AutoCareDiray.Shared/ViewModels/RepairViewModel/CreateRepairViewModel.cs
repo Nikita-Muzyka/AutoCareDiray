@@ -8,6 +8,7 @@ using AutoCareDiray.Shared.Service.ResultService;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 
 namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
@@ -17,16 +18,20 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         #region основные классы и списки
 
         private CancellationTokenSource _cts;
-        private RepairValidation _validationRepair;
-        private IPhotoPicker _photoPicker;
+        private readonly RepairValidation _validationRepair;
+        private readonly IPhotoPicker _photoPicker;
         private readonly IPreferencesService _preferencesService;
 
         private Repair Repair;
+        private Vehicle _vehicle;
+
         private int _vehicleId = -1;
         private int _repairId = -1;
+
         private bool isInitialize = false;
         private bool _isUpdateRepair = false;
-        private Vehicle _vehicle;
+        private bool _isUpdateRepairType = false;
+
         private string _job = String.Empty;
 
         #endregion
@@ -34,11 +39,13 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         #region классы и свойства для работы UI
 
         public ObservableCollection<RepairType> RepairTypes { get; set; } = new ObservableCollection<RepairType>();
+        public ObservableCollection<string> Categories { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> AttachedPhotos { get; set; }
+        public ObservableCollection<SparePart> ListSpareParts { get; set; } = new();
+
 
         [ObservableProperty]
         private RepairType selectedRepairType;
-
-        public ObservableCollection<SparePart> ListSpareParts { get; set; } = new();
 
         [ObservableProperty]
         private int intervalMileageFilled;
@@ -50,6 +57,10 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private decimal costFilled;
         [ObservableProperty]
         private decimal createCostPart;
+        [ObservableProperty]
+        private int intervalMileageNewType;
+        [ObservableProperty]
+        private int intervalMonthNewType;
 
         [ObservableProperty]
         private DateTime dateRepairSelected = DateTime.UtcNow;
@@ -72,6 +83,10 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private string createNamePart;
         [ObservableProperty]
         private string createArticleNumberPart;
+        [ObservableProperty]
+        private string selectedCategory;
+        [ObservableProperty]
+        private string titleNewRepairType;
 
 
 
@@ -81,16 +96,16 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private bool isCostError = false;
         [ObservableProperty]
         private bool isJobError = false;
-        public ObservableCollection<string> AttachedPhotos { get; set; }
 
-        public string IntervalMileageText => "Интервал пробега " + _preferencesService.GetDefaultVolume();
+        public string IntervalMileageText => "Интервал пробега " + _preferencesService.GetDefaultDistance();
+        public string InvervalMileageNewText => "Введите Интервал пробега или оставте 0" + _preferencesService.GetDefaultDistance();
         public string MileageText => "Текущий пробег авто " + _preferencesService.GetDefaultDistance();
         public string CostText => "Общая стоимость " + _preferencesService.GetDefaultMoney();
         public string CostPartText => "Стоимость запчасти " + _preferencesService.GetDefaultMoney();
 
         #endregion
 
-        public CreateRepairViewModel(IDialogService dialog,IDataService data,INavigationService navigate,RepairValidation validation,IPhotoPicker photoPicker,IPreferencesService preferencesService) 
+        public CreateRepairViewModel(IDialogService dialog, IDataService data, INavigationService navigate, RepairValidation validation, IPhotoPicker photoPicker, IPreferencesService preferencesService)
             : base(dialog, data, navigate)
         {
             _cts = new CancellationTokenSource();
@@ -110,19 +125,19 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         #endregion
 
         [RelayCommand]
-        public async Task Initialize(IDictionary<string,object> query)
+        public async Task Initialize(IDictionary<string, object> query)
         {
             if (isInitialize) return;
-            if(query.TryGetValue("VehicleId",out var obj))
+            if (query.TryGetValue("VehicleId", out var obj))
             {
-                if(obj is int value)
+                if (obj is int value)
                 {
                     _vehicleId = value;
                     isInitialize = true;
                     await LoadingCreate();
                 }
             }
-            else if(query.TryGetValue("RepairId", out var objTwo))
+            else if (query.TryGetValue("RepairId", out var objTwo))
             {
                 if (objTwo is int value)
                 {
@@ -151,7 +166,13 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 DescriptionFilled = resultRepair.Data.Description;
                 _vehicleId = resultRepair.Data.VehicleId;
 
-                if(resultRepair.Data.SpareParts != null) ListSpareParts = new ObservableCollection<SparePart>(resultRepair.Data.SpareParts);
+                if (resultRepair.Data.SpareParts != null)
+                {
+                    foreach (var part in resultRepair.Data.SpareParts)
+                    {
+                        ListSpareParts.Add(part);
+                    }
+                }
 
                 if (RepairTypes.Count > 0) RepairTypes.Clear();
                 RepairTypes.Add(resultRepair.Data.RepairType);
@@ -171,7 +192,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
         public async Task LoadingCreate()
         {
-            if(RepairTypes.Count > 0) RepairTypes.Clear();
+            if (RepairTypes.Count > 0) RepairTypes.Clear();
+
             var result = await _dataService.GetVehicleAndRepairTypesAsync(_vehicleId, _cts.Token);
             if (result.Success)
             {
@@ -189,20 +211,69 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             else StatusMessage = result.ErrorMessage;
         } //Загрузка под создания ремонта
 
+        [RelayCommand]
+        public void GetCategoriesRepairType(List<string> categories)
+        {
+            foreach (var category in categories)
+            {
+                Categories.Add(category);
+            }
+        }
 
+        [RelayCommand]
+        public async Task CreateNewRepairType()
+        {
+            if (RepairTypes.Where(c => c.TitleRepair == TitleNewRepairType).Any())
+            {
+                await _dialogService.ShowToastAsync("Данный тип ремонта уже сеществует");
+                return;
+            }
+            var type = new RepairType()
+            {
+                TitleRepair = TitleNewRepairType,
+                IntervalMileage = IntervalMileageNewType,
+                IntervalMonth = IntervalMonthNewType,
+                Category = SelectedCategory,
+                VehicleId = _vehicleId
+            };
+
+            var resultUpdateRepairType = await _dataService.CreateRepairTypeAsync(type, _cts.Token);
+            if (resultUpdateRepairType.Success == false)
+            {
+                if (string.IsNullOrWhiteSpace(StatusMessage) == false)
+                {
+                    StatusMessage += " " + resultUpdateRepairType.ErrorMessage;
+                }
+                else
+                {
+                    StatusMessage = resultUpdateRepairType.ErrorMessage;
+                }
+            }
+            else
+            {
+                var result = await _dataService.GetRepairTypeAsync(type, _cts.Token);
+                var resultRepairType = result as Result<RepairType>;
+                RepairTypes.Add(resultRepairType.Data);
+                SelectedRepairType = resultRepairType.Data;
+            }
+        }
 
         [RelayCommand]
         public async Task ProcessingRepair()
         {
             ValidationAll();
             if (HasErrors) return;
-            Repair = CreateRepai();
 
-            var result = await _photoPicker.SavePhotosAsync(AttachedPhotos, _cts.Token);
-            if (result.Success)
+            Repair = CreateRepair();
+
+            if (AttachedPhotos != null)
             {
-                var resultPhotos = result as Result<List<string>>;
-                Repair.Photos = resultPhotos.Data;
+                var result = await _photoPicker.SavePhotosAsync(AttachedPhotos, _cts.Token);
+                if (result.Success)
+                {
+                    var resultPhotos = result as Result<List<string>>;
+                    Repair.Photos = resultPhotos.Data;
+                }
             }
 
             if (_isUpdateRepair)
@@ -227,7 +298,10 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             }
 
             await UpdateDate();
-            await _navigationService.GoToBack();
+            if (string.IsNullOrWhiteSpace(StatusMessage))
+            {
+                await _navigationService.GoToBack();
+            }
         }  //Создание или редактирование ремонта
 
         [RelayCommand]
@@ -245,9 +319,9 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             AttachedPhotos ??= new();
 
             foreach (var listPhoto in resultPhoto.Data)
-                {
-                    AttachedPhotos.Add(listPhoto);
-                }
+            {
+                AttachedPhotos.Add(listPhoto);
+            }
 
         } //выбор фото
         [RelayCommand]
@@ -256,7 +330,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             AttachedPhotos?.Remove(photo);
         } //удаление фото
 
-        private Repair CreateRepai()
+        private Repair CreateRepair()
         {
 
             Repair repair = new Repair()
@@ -272,9 +346,9 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 Job = SelectedJob,
             };
 
-            if(ListSpareParts != null)
+            if (ListSpareParts.Count > 0)
             {
-                repair.SpareParts = new List<SparePart>(ListSpareParts);
+                repair.SpareParts = ListSpareParts.ToList();
             }
 
             return repair;
@@ -285,7 +359,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             SelectedRepairType.LastServiceMileage = MileageFilled;
             SelectedRepairType.LastServiceDate = DateRepairSelected;
 
-            var result = await _dataService.GetVehicleMileageAsync(_vehicleId,_cts.Token);
+            var result = await _dataService.GetVehicleMileageAsync(_vehicleId, _cts.Token);
             if (result.Success)
             {
                 var resultVeh = result as Result<Vehicle>;
@@ -339,12 +413,22 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         }
 
         [RelayCommand]
-        public void ShowOptions()
+        public async Task ShowOptions(SparePart part)
         {
+            var result = await _dialogService.ShowDisplayAction();
 
+            switch (result)
+            {
+                case "Удалить":
+                    ListSpareParts.Remove(part);
+                    break;
+                case "Редактировать":
+                    CreateNamePart = part.NamePart;
+                    CreateArticleNumberPart = part.ArticleNumberPart;
+                    CreateCostPart = part.CostPart;
+                    break;
+            }
         }
-
-
 
 
         private void ValidationAll()
@@ -355,7 +439,6 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         }
 
 
-
         partial void OnSelectedJobChanged(string value)
         {
             isJobError = _validationRepair.ValidationJob(value);
@@ -363,10 +446,11 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         partial void OnSelectedRepairTypeChanged(RepairType value)
         {
             IntervalMileageFilled = value.IntervalMileage;
+            IntervalMonthsFilled = value.IntervalMonth;
         }
         partial void OnMileageFilledChanged(int value)
         {
-           IsMileageError = _validationRepair.ValidationMileage(value);
+            IsMileageError = _validationRepair.ValidationMileage(value);
         }
         partial void OnCostFilledChanged(decimal value)
         {
@@ -377,7 +461,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             OnPropertyChanged(nameof(HasErrors));
             OnPropertyChanged(e.PropertyName);
         }
-        
+
 
 
         [RelayCommand]

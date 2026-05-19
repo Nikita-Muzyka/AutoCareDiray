@@ -335,7 +335,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 var repairDb = await _dbContex.Repairs
                     .AsNoTracking()
                     .Include(c => c.RepairType)
-                    .Include(c => c.Vehicle)
+                    .Include(a => a.SpareParts)
                     .FirstOrDefaultAsync(c => c.Id == repairId);
 
                 if(repairDb != null) return Result<Repair>.SuccessCreate(repairDb);
@@ -421,6 +421,28 @@ namespace AutoCareDiray.Shared.Service.Data
 
         //RepairType
 
+        public async Task<Result> GetRepairTypeAsync(RepairType repairType, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                var repairDb = await _dbContex.RepairTypes
+                    .AsNoTracking()
+                    .Where(c => c.TitleRepair == repairType.TitleRepair)
+                    .FirstOrDefaultAsync(token);
+
+                if (repairDb != null) return Result<RepairType>.SuccessCreate(repairDb);
+                else return Result.ErrorCreate("Данные о типе ремона не найдены");
+            }
+            catch (OperationCanceledException ex)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при получении данных о типе ремонта: {ex.Message}");
+            }
+        }
         public async Task<Result> GetListRepairTypeAsync(int vehicleId, CancellationToken token)
         {
             try
@@ -443,6 +465,25 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при получении списка типов ремонтов: {ex.Message}");
             }
         } // полуичть тпы ремонта список
+        public async Task<Result> CreateRepairTypeAsync(RepairType repairType, CancellationToken token)
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+                
+                await _dbContex.RepairTypes.AddAsync(repairType, token);
+                await _dbContex.SaveChangesAsync(token);
+                return Result.SuccessCreate();
+            }
+            catch (OperationCanceledException)
+            {
+                return Result.ErrorCreate("Операция была отменена");
+            }
+            catch (Exception ex)
+            {
+                return Result.ErrorCreate($"Произошла ошибка при обновлении типа ремонта: {ex.Message}");
+            }
+        } // добавление RepairType
         public async Task<Result> UpdateRepairTypeAsync(RepairType repaitType, CancellationToken token)
         {
             try

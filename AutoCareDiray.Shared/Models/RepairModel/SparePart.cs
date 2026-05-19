@@ -10,6 +10,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
     {
         public SparePart() { }
 
+        public int id { get; set; }
         public string NamePart {  get; set; }
         public string ArticleNumberPart { get; set; }
         public decimal CostPart { get; set; }

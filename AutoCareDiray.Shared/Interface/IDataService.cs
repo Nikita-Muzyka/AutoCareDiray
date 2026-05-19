@@ -36,9 +36,11 @@ namespace AutoCareDiray.Shared.Interface
 
 
         //RepairType
-        Task<Result> GetListRepairTypeAsync(int vehicleId,CancellationToken token); // полуичть тпы ремонта список
-        Task<Result> UpdateRepairTypeAsync(RepairType repaitType, CancellationToken token); // обновить тип ремонта
 
+        Task<Result> GetRepairTypeAsync(RepairType repaitType, CancellationToken token); // получить тип ремонта
+        Task<Result> GetListRepairTypeAsync(int vehicleId,CancellationToken token); // полуичть тпы ремонта список
+        Task<Result> CreateRepairTypeAsync(RepairType repairType, CancellationToken token); // добавление RepairType
+        Task<Result> UpdateRepairTypeAsync(RepairType repaitType, CancellationToken token); // обновить тип ремонта
 
         //VehicleNote
         Task<Result> GetListVehicleNotesAsync(int Vehicleid, CancellationToken token); // получить список заметок
