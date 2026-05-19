@@ -36,7 +36,7 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
 
         #region для работы UI
 
-        public ObservableCollection<string> AttachedPhotos { get; set; }
+        public ObservableCollection<string> AttachedPhotos { get; set; } = new();
 
 
         [ObservableProperty]
@@ -81,6 +81,7 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
             _cts = new CancellationTokenSource();
             _refillValidation = valid;
             _refillValidation.ErrorsChanged +=  (s,e) => OnErrorsChangedUI(e);
+            _photoPicker = photo;
         }
 
         public bool HasErrors => _refillValidation.HasErrors;
@@ -297,7 +298,6 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
             }
 
             var resultPhoto = result as Result<List<string>>;
-            AttachedPhotos ??= new();
 
             foreach (var listPhoto in resultPhoto.Data)
             {

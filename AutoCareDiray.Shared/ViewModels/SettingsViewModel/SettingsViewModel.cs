@@ -28,18 +28,18 @@ namespace AutoCareDiray.Shared.ViewModels.SettingsViewModel
         // Срабатывает автоматически при выборе RadioButton расстояния
         partial void OnSelectedDistanceUnitChanged(string value)
         {
-            _preferencesService.SetDefault("DistanceUnit", value);
+            _preferencesService.SetDefault("UnitDistance", value);
         }
 
         // Срабатывает автоматически при выборе RadioButton объема
         partial void OnSelectedVolumeUnitChanged(string value)
         {
-            _preferencesService.SetDefault("VolumeUnit", value);
+            _preferencesService.SetDefault("UnitVolume", value);
         }
 
         partial void OnSelectedMoneyUnitChanged(string value)
         {
-            _preferencesService.SetDefault("MoneyUnit", value);
+            _preferencesService.SetDefault("UnitMoney", value);
         }
     }
 }

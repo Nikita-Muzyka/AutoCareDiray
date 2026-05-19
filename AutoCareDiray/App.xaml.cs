@@ -40,18 +40,18 @@ namespace AutoCareDiray
 
             window.Created += async (s, e) =>
             {
+                if(Preferences.Get("firstEntry", true))
+                {
+                    Preferences.Set("UnitDistance", "0");
+                    Preferences.Set("UnitVolume", "0");
+                    Preferences.Set("UnitMoney", "RUB");
 
-                //bool check = Preferences.Get("is_login", false);
-                //if (check)
-                //{
-                //    await Shell.Current.GoToAsync("//Main");
-                //}
-                //else
-                //{
-                //    await Shell.Current.GoToAsync("//AuthorizationPage");
-                //}
+                    Preferences.Set("firstEntry", false);
+                }
+                else
+                {
 
-
+                }
                 _dataService.InitializeDatabase();
                 await Shell.Current.GoToAsync("//ListVehicle");
             };
