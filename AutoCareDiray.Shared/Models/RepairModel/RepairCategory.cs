@@ -8,6 +8,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
 {
     public enum RepairCategory
     {
+        RegularMaintenance,
         Engine,
         Suspension,
         Body,

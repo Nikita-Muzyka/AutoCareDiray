@@ -13,6 +13,7 @@ namespace AutoCareDiray.Extensions
         {
             return category switch
             {
+                RepairCategory.RegularMaintenance => "Регульрное ТО",
                 RepairCategory.Engine => "Двигатель",
                 RepairCategory.Transmission => "Коробка",
                 RepairCategory.Body => "Кузов",

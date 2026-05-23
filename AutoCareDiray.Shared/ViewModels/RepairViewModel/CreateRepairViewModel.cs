@@ -24,13 +24,14 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
         private Repair Repair;
         private Vehicle _vehicle;
+        private RepairType _type;
 
         private int _vehicleId = -1;
         private int _repairId = -1;
 
         private bool isInitialize = false;
         private bool _isUpdateRepair = false;
-        private bool _isUpdateRepairType = false;
+
 
         private string _job = String.Empty;
 
@@ -96,6 +97,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private bool isCostError = false;
         [ObservableProperty]
         private bool isJobError = false;
+        [ObservableProperty]
+        private bool isSelectedRepairTypeError = false;
 
         public string IntervalMileageText => "Интервал пробега " + _preferencesService.GetDefaultDistance();
         public string InvervalMileageNewText => "Введите Интервал пробега или оставте 0" + _preferencesService.GetDefaultDistance();
@@ -121,6 +124,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         public string MileageError => _validationRepair.GetErrors(nameof(MileageError)) as String;
         public string CostError => _validationRepair.GetErrors(nameof(CostError)) as String;
         public string JobError => _validationRepair.GetErrors(nameof(JobError)) as String;
+        public string SelectedRepairTypeError => _validationRepair.GetErrors(nameof(SelectedRepairTypeError)) as String;
 
         #endregion
 
@@ -199,13 +203,16 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             {
                 var resultVehicle = result as Result<Vehicle>;
                 _vehicle = resultVehicle.Data;
-                foreach (var repairs in _vehicle.RepairTypes)
+                if(_vehicle.RepairTypes.Count > 0)
                 {
-                    if (repairs is not null) RepairTypes.Add(repairs);
+                    foreach (var repairs in _vehicle.RepairTypes)
+                    {
+                        if (repairs is not null) RepairTypes.Add(repairs);
+                    }
+                    SelectedRepairType = RepairTypes.First();
+                    IntervalMileageFilled = SelectedRepairType.IntervalMileage;
+                    IntervalMonthsFilled = SelectedRepairType.IntervalMonth;
                 }
-                SelectedRepairType = RepairTypes.FirstOrDefault(new RepairType());
-                IntervalMileageFilled = SelectedRepairType.IntervalMileage;
-                IntervalMonthsFilled = SelectedRepairType.IntervalMonth;
                 MileageFilled = _vehicle.Mileage;
             }
             else StatusMessage = result.ErrorMessage;
@@ -228,7 +235,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 await _dialogService.ShowToastAsync("Данный тип ремонта уже сеществует");
                 return;
             }
-            var type = new RepairType()
+            _type = new RepairType()
             {
                 TitleRepair = TitleNewRepairType,
                 IntervalMileage = IntervalMileageNewType,
@@ -237,25 +244,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 VehicleId = _vehicleId
             };
 
-            var resultUpdateRepairType = await _dataService.CreateRepairTypeAsync(type, _cts.Token);
-            if (resultUpdateRepairType.Success == false)
-            {
-                if (string.IsNullOrWhiteSpace(StatusMessage) == false)
-                {
-                    StatusMessage += " " + resultUpdateRepairType.ErrorMessage;
-                }
-                else
-                {
-                    StatusMessage = resultUpdateRepairType.ErrorMessage;
-                }
-            }
-            else
-            {
-                var result = await _dataService.GetRepairTypeAsync(type, _cts.Token);
-                var resultRepairType = result as Result<RepairType>;
-                RepairTypes.Add(resultRepairType.Data);
-                SelectedRepairType = resultRepairType.Data;
-            }
+            RepairTypes.Add(_type);
+            SelectedRepairType = _type;
         }
 
         [RelayCommand]
@@ -263,6 +253,24 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         {
             ValidationAll();
             if (HasErrors) return;
+
+            if (SelectedRepairType == _type)
+            {
+                var resultUpdateRepairType = await _dataService.CreateRepairTypeAsync(_type, _cts.Token);
+                if (resultUpdateRepairType.Success == false)
+                {
+                    StatusMessage = string.IsNullOrWhiteSpace(StatusMessage) == false
+                       ? StatusMessage += " " + resultUpdateRepairType.ErrorMessage
+                       : StatusMessage = resultUpdateRepairType.ErrorMessage;
+                    return;
+                }
+                else
+                {
+                    var result = await _dataService.GetRepairTypeAsync(_type, _cts.Token);
+                    var resultRepairType = result as Result<RepairType>;
+                    _type = resultRepairType.Data;
+                }
+            }
 
             Repair = CreateRepair();
 
@@ -436,6 +444,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             IsMileageError = _validationRepair.ValidationMileage(MileageFilled);
             IsCostError = _validationRepair.ValidationCost(CostFilled);
             IsJobError = _validationRepair.ValidationJob(SelectedJob);
+            IsSelectedRepairTypeError = _validationRepair.ValidationSelectedRepairType(SelectedRepairType);
         }
 
 

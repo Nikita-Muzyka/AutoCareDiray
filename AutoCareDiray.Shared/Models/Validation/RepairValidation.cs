@@ -1,4 +1,5 @@
 ﻿using AutoCareDiray.Shared.Interface;
+using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Service.ResultService;
 using AutoCareDiray.Shared.Service.ValidationService;
 using System;
@@ -15,6 +16,7 @@ namespace AutoCareDiray.Shared.Models.Validation
         string propertyMileage = "MileageError";
         string propertyCost = "CostError";
         string propertyJob = "JobError";
+        string propertyRepairType = "SelectedRepairTypeError";
 
 
         public RepairValidation() { }
@@ -52,11 +54,25 @@ namespace AutoCareDiray.Shared.Models.Validation
             if (string.IsNullOrEmpty(job) == false)
             {
                 OnErrorsChanges(propertyJob);
-                return true;
+                return false;
             }
             else
             {
                 ErrorAdd(propertyJob, "Обязательно нужно выбрать где выполнялись работы");
+                return true;
+            }
+        }
+        public bool ValidationSelectedRepairType(RepairType type)
+        {
+            ErrorRemove(propertyRepairType);
+            if (type != null )
+            {
+                OnErrorsChanges(propertyRepairType);
+                return false;
+            }
+            else
+            {
+                ErrorAdd(propertyRepairType, "Обязательно нужно выбрать тип ремонта");
                 return true;
             }
         }

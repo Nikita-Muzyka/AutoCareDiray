@@ -29,6 +29,8 @@
 
                         </Grid>
 
+                        <Label Text="{Binding SelectedRepairTypeError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsSelectedRepairTypeError}"/>
+
                     </VerticalStackLayout>
                     <!--Picker выбора категории-->
 

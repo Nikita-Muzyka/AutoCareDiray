@@ -32,10 +32,10 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         [Required]
         public int Mileage { get; set; } = 0;
 
-        public List<Repair>? Repairs { get; set; } = new();
-        public List<VehicleNotes>? Notes { get; set; } = new();
-        public List<Refill>? Refills { get; set; } = new();
-        public List<RepairType>? RepairTypes { get; set; } = new();
+        public List<Repair> Repairs { get; set; } = new();
+        public List<VehicleNotes> Notes { get; set; } = new();
+        public List<Refill> Refills { get; set; } = new();
+        public List<RepairType> RepairTypes { get; set; } = new();
 
 
         private string? _pdfFile;

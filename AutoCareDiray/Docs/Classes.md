@@ -1,95 +1,134 @@
-# Основные Классы AutoCareDiray 
+# Основная логика классов для обновления
 
-> Последнее обновление: 12 февраля 2026  
+        private ObservableCollection<RepairGroup> CreateRepairTypeGroups()
+        {
+            var groups = new ObservableCollection<RepairGroup>
+    {
+        new RepairGroup("Регулярное ТО", new List<RepairType>
+        {
+            // Самое частое. Масло - раз в год или 10к, Фильтры - вместе с ним
+            new("Масло в двигателе и Масляный фильтр", "Регулярное ТО", 10000, 12),
+            new("Воздушный фильтр двигателя", "Регулярное ТО", 20000, 24),
+            new("Салонный фильтр", "Регулярное ТО", 15000, 12),
+            new("Топливный фильтр", "Регулярное ТО", 40000, 48)
+        }),
 
-## Models
-### Vehicle
-| Поле               | Тип         | Обязательное?  | Описание             |
-|--------------------|-------------|----------------|----------------------|
-| Id                 | `int`       | Да (Авто)      | Первичный ключ       |
-| Name               | `string`    | нет            | Название авто        |
-| VehicleType        | `string`    | Нет            | ТИп авто             |
-| Mileage            | `int`       | Да             | Пробег (км)          |
-| VinCode            | `string`    | Нет            | Вин код              |
-| StateNumber        | `string`    | Нет            | Гос номер            |
-| TransmissionType   | `string`    | Нет            | Вин код              |
-| DatePurchase       | `DateOnly`  | default        | Дата покупки         |
-| DateProduction     | `DateOnly`  | default        | Дата производства    |
+        new RepairGroup("Тормозная система", new List<RepairType>
+        {
+            new("Тормозная жидкость", "Тормозная система", 40000, 24),
+            new("Передние тормозные колодки", "Тормозная система", 30000),
+            new("Задние тормозные колодки", "Тормозная система", 50000),
+            new("Передние тормозные диски + колодки", "Тормозная система", 70000),
+            new("Задние тормозные диски + колодки", "Тормозная система", 90000),
+            new("Задние барабаны + колодки + тормозной цилиндр", "Тормозная система", 90000),
+            new("Обслуживание суппортов (смазка)", "Тормозная система", 30000, 24),
+            new("Обслуживание передних тормозов", "Тормозная система", 0),
+            new("Обслуживание задних тормозов", "Тормозная система", 0)
+        }),
 
-**Навигация**
-- public List"Repair" Repait {get;set;} = new()
-- public List'RepairTypes' RepairTypes {get;set;} = new()
+        new RepairGroup("Двигатель", new List<RepairType>
+        {
+            // Обобщаем ремни и цепи
+            new("Свечи зажигания / накаливания", "Двигатель и Зажигание", 40000, 48),
+            new("Привод ГРМ (Ремень / Цепь)", "Двигатель и Зажигание", 90000, 60),
+            new("Ремни навесного оборудования", "Двигатель и Зажигание", 60000, 60),
+        }),
 
-### Repair
-| Поле            | Тип         | Обязательное?  | Описание                         |
-|-----------------|-------------|----------------|----------------------------------|
-| Id              | `int`       | Да (Авто)      | Первичный ключ                   |
-| VehicleId       | `int`       | Да             | Вторичный ключ                   |
-| CurrentMileage  | `int`       | Да             | Пробег на момомент создания      |
-| DateRepair      | `DateOnly`  | Нет            | Дата ремонта                     |
-| RepairTypeId    | `int`       | Да             | Вторичный ключ                   |
-| SpareParts      | `string`    | Нет            | Запчасти                         |
-| Cost            | `int`       | Нет            | Стоимости                        |
-| Description     | `string`    | Нет            | Описание работ                   |
+        new RepairGroup("Охлаждение и Климат", new List<RepairType>
+        {
+            // Разделили помпу и антифриз
+            new("Охлаждающая жидкость", "Охлаждение и Климат", 60000, 36),
+            new("Водяная помпа (Насос)", "Охлаждение и Климат", 90000, 60),
+            new("Промывка радиаторов", "Охлаждение и Климат", 60000, 24),
+            new("Обслуживание кондиционера (фреон)", "Охлаждение и Климат", 40000, 24)
+        }),
 
-**Навигация**
-- public Vehicle Vehicle {get;set;}
-- public RepairType  RepairType {get;set;}
+        new RepairGroup("Трансмиссия (Коробка и Привод)", new List<RepairType>
+        {
+            // Универсальные названия
+            new("Масло в коробке передач", "Трансмиссия", 60000, 48),
+            new("Фильтр коробки передач", "Трансмиссия", 60000, 48,"Автоматическая"),
+            new("Сброс адаптации", "Трансмиссия", 60000, 48,"Автоматическая"),
+            new("Масло в редукторе / мосту", "Трансмиссия", 60000, 48),
+            new("Масло в раздаточной коробке", "Трансмиссия", 60000, 48),
+            new("Сцепление", "Трансмиссия", 100000)
+        }),
 
-### RepairTypes
-| Поле                                | Тип              | Обязательное?  | Описание                      |
-|-------------------------------------|------------------|----------------|-------------------------------|
-| Id                                  | `int`            | Да             | Первичный ключ                |
-| TitleRepair                         | `string`         | Да             | Название ремонта              |
-| Category                            | `string`         | Да             | Категория для группировки     |
-| IntervalMileage                     | `int`            | Да             | Интервал пробега              |
-| LastServiceMileage                  | `int`            | default = 0    | Последний пробег при ремонте  |
-| IntervalDate                        | `DateOnly`       | Нет            | Интервал даты                 |
-| IsServiced                          | `bool`           | false          | Обслужена деталь              |
-| RemoveMaintenance                   | `bool`           | false          | Удалить запись                |
-| VehicleId                           | `int`            | Да             | ID Vehicle                    |
+        new RepairGroup("Подвеска и Рулевое", new List<RepairType>
+        {
+            new("Жидкость ГУР", "Подвеска и Рулевое", 50000, 36),
+            new("Передние амортизаторы", "Подвеска и Рулевое", 80000),
+            new("Задние амортизаторы", "Подвеска и Рулевое", 90000),
+            new("Стойки и втулки стабилизатора", "Подвеска и Рулевое", 40000),
+            new("Сайлентблоки (комплект)", "Подвеска и Рулевое", 80000),
+            new("Шаровые опоры", "Подвеска и Рулевое", 70000),
+            new("Рулевые наконечники и тяги", "Подвеска и Рулевое", 70000)
+        }),
 
-**Навигация**
-- public Vehicle Vehicle {get;set;}
-- public List 'Repair' Repairs {get;set;} = new()
+         new RepairGroup("Электрика", new List<RepairType>
+        {
+            new("Замена/Ремонт ЭБУ", "Электрика", 15000, 12),
+        }),
+
+        new RepairGroup("Шины и Колеса", new List<RepairType>
+        {
+            new("Сход-развал", "Шины и Колеса", 20000, 12),
+            new("Балансировка колес", "Шины и Колеса", 10000, 6),
+            new("Сезонная смена шин", "Шины и Колеса", 0, 6)
+        }),
+
+        new RepairGroup("Кузов и Оптика", new List<RepairType>
+        {
+            new("Щетки стеклоочистителя", "Кузов и Оптика", 15000, 12),
+            new("Обработка кузова (Антикор)", "Кузов и Оптика", 0, 36),
+            new("Замена ламп", "Кузов и Оптика")
+        })
+    };
+
+            return groups;
+        }
 
 
-### RepairGroup : List<RepairType>
-| Поле            | Тип              | Обязательное?  | Описание             |
-|-----------------|------------------|----------------|----------------------|
-| Name            | `string`         | Да             | Имя группы           |
-| IsExpanded      | `bool`           | falsed          | Название ремонта     |
+        _listRepairType.RemoveAll(c => c.IsRemoveMaintenance == true);
 
-- VehicleValidation
-- RepairValidation
+         var groups = _vehicle.RepairTypes
+     .GroupBy(g => g.Category)
+     .Select(g => new RepairGroup(g.Key,g.ToList()))
+     .ToList();
+ RepairGrouped = new ObservableCollection<RepairGroup>(groups);
+ _listRepairType = RepairGrouped.SelectMany(c => c).ToList();
 
 
-## Views
-- ListVehicleView.xaml
-- CreateVehicleView.xaml
-- CardVehicleView.xaml
 
-- ListRepairView.xaml
-- CreateRepairView.xaml
-- CardRepairView.xaml
+ var groups = CreateRepairTypeGroups();
 
-## ViewModels
-- BaseViewModel _Базовый класс для VM_
+RepairGrouped = new ObservableCollection<RepairGroup>(groups);
 
-- ListVehicleViewModel
-- CreateVehicleViewModel
-- CardVehicleViewModel
+_listRepairType = RepairGrouped.SelectMany(c => c).ToList();
+_isInitilized = true;
 
-- ListRepairViewModel
-- CreateRepairViewModel
-- CardRepairViewModel
+ [RelayCommand]
+ public void ChangeIsServiced()
+ {
+     foreach (var list in _listRepairType)
+     {
+         list.IsServiced = !list.IsServiced;
+         if(list.IsServiced == true)
+         {
+             list.LastServiceMileage = Mileage;
+         }
+     }
+ }
 
-## Services
-- IValidationService, ValidationService
-- IApiService,ApiService
-- IDialogService,DialogService
-- IDataService,DataService
-- INavigationService,NavigationService
 
-## Data
-- AppDBContex
+
+  partial void OnTransmissionTypeChanged(string value)
+ {
+     foreach (var item in _listRepairType)
+     {
+         if (item.TransmissionType == "Автоматическая" || item.TransmissionType == "Механическая")
+         {
+             item.IsRemoveMaintenance = item.TransmissionType != value;
+         }
+     }
+ }
