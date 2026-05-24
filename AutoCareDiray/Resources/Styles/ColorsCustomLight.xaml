@@ -5,38 +5,40 @@
                     x:Class="AutoCareDiray.Resources.Styles.ColorsCustomLight">
 
     <!-- ===== ОСНОВНЫЕ ЦВЕТА ===== -->
+    <Color x:Key="PrimaryGreen">#00823f</Color>
+    <Color x:Key="PrimaryGold">#C8A45D</Color>
     <Color x:Key="PrimaryRed">#E53935</Color>
+    <Color x:Key="PrimarySecondary">#757575</Color>
     <Color x:Key="PrimaryWhite">#f0f0f0</Color>
     <Color x:Key="PrimaryBlack">#212121</Color>
 
     <!-- ===== ФОН И ПОВЕРХНОСТИ ===== -->
     <Color x:Key="Background">#FFFFFF</Color>
-    <Color x:Key="ShadowRedLight">#E45752</Color>
-    <Color x:Key="ShadowDisableButton">#383838</Color>
     <Color x:Key="CardBorder">#BABABA</Color>
     <Color x:Key="BorderStroke">#777777</Color>
     <Color x:Key="BackgroundGray">#acb2b0</Color>
-
     <Color x:Key="BoxViewColor">#E0E0E0</Color>
 
+    <!-- ===== Тени ===== -->
+
+    <Color x:Key="ShadowDisableButton">#383838</Color>
+    <Color x:Key="ShadowBlack">#000000</Color>
+    <Color x:Key="ShadowGoldLight">#C8A45D</Color>
+    <Color x:Key="ShadowGreenLight">#00823f</Color>
+    <Color x:Key="ShadowRedLight">#E45752</Color>
+
     <!-- ===== ТЕКСТ ===== -->
-    <Color x:Key="TextPrimary">#212121</Color>
-    <Color x:Key="TextPrimaryRed">#E53935</Color>
-    <Color x:Key="TextSecondary">#757575</Color>
-    <Color x:Key="TextPlaceholder">#757575</Color>
-    <Color x:Key="TextDisabled">#9E9E9E</Color>
+    <Color x:Key="TextBlack">#212121</Color>
     <Color x:Key="TextError">#E53935</Color>
 
     <!-- ===== КНОПКИ ===== -->
-    <Color x:Key="ButtonPrimaryRed">#E53935</Color>
     <Color x:Key="ButtonDisable">#807F7F</Color>
     <Color x:Key="ButtonTextPrimaryWhite">#FFFFFF</Color>
     <Color x:Key="ButtonTextPrimaryBlack">#000000</Color>
     <Color x:Key="ButtonTextDisable">#FFFFFF</Color>
-    <Color x:Key="ButtonPressed">#FF8888</Color>
-    <Color x:Key="ButtonTextPressed">#E53935</Color>
-    
-    
+    <Color x:Key="ButtonPressed">#00be5c</Color>
+
+
     <!-- ===== ПОЛЯ ВВОДА ===== -->
     <Color x:Key="InputBackground">#FFFFFF</Color>
     <Color x:Key="InputBorder">#E0E0E0</Color>

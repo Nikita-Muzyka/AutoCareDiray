@@ -5,5 +5,11 @@
 
     <x:String x:Key="RubikBold">RubikBold</x:String>
     <x:String x:Key="RubikRegular">RubikRegular</x:String>
-    
+
+    <x:String x:Key="MontserratRegular">MontserratRegular</x:String>
+    <x:String x:Key="MontserratMedium">MontserratMedium</x:String>
+    <x:String x:Key="MontserratBold">MontserratBold</x:String>
+    <x:String x:Key="MontserratLight">MontserratLight</x:String>
+    <x:String x:Key="MontserratItalic">MontserratItalic</x:String>
+
 </ResourceDictionary>

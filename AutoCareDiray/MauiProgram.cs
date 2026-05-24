@@ -42,6 +42,12 @@ namespace AutoCareDiray
 
                     fonts.AddFont("Rubik-Regular.ttf", "RubikRegular");
                     fonts.AddFont("Rubik-Bold.ttf", "RubikBold");
+
+                    fonts.AddFont("Montserrat-Regular.ttf", "MontserratRegular");
+                    fonts.AddFont("Montserrat-Medium.ttf", "MontserratMedium");
+                    fonts.AddFont("Montserrat-Bold.ttf", "MontserratBold");
+                    fonts.AddFont("Montserrat-Light.ttf", "MontserratLight");
+                    fonts.AddFont("Montserrat-Italic.ttf", "MontserratItalic");
                 });
 
             QuestPDF.Settings.License = LicenseType.Community;

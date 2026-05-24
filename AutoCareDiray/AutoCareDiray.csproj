@@ -95,12 +95,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiFont Update="Resources\Fonts\Rubik-Black.ttf">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </MauiFont>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <MauiXaml Update="Resources\Styles\ColorsCustomDark.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
