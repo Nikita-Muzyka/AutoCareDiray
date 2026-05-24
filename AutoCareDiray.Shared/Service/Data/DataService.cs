@@ -318,7 +318,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 if(repairs.Count > 0) return Result<List<Repair>>.SuccessCreate(repairs);
                 else return Result.ErrorCreate("Список ремонтов пуст");
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException )
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -341,7 +341,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 if(repairDb != null) return Result<Repair>.SuccessCreate(repairDb);
                 else return Result.ErrorCreate("Данные о ремонт не найдены");
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException )
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -359,7 +359,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 await _dbContex.SaveChangesAsync(token);
                 return Result.SuccessCreate();
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException )
             {
                 return Result.ErrorCreate("Операция была отменена");    
             }
@@ -383,7 +383,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 else return Result.ErrorCreate("Ремонт не найден");
 
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException )
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -434,7 +434,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 if (repairDb != null) return Result<RepairType>.SuccessCreate(repairDb);
                 else return Result.ErrorCreate("Данные о типе ремона не найдены");
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -456,7 +456,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 if(repairTypes != null) return Result<List<RepairType>>.SuccessCreate(repairTypes);
                 else return Result.ErrorCreate("Список типов ремонтов пуст");
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -499,7 +499,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 }
                 else return Result.ErrorCreate("Тип ремонта не найден");
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -526,7 +526,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 if (notes != null) return Result<List<VehicleNotes>>.SuccessCreate(notes);
                 else return Result.ErrorCreate("Список заметок пуст");
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -544,7 +544,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 await _dbContex.SaveChangesAsync(token);
                 return Result.SuccessCreate();
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -568,7 +568,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 else return Result.ErrorCreate("заметка не найдена");
 
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -592,7 +592,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 }
                 else return Result.ErrorCreate("Заметка не найдена");
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -616,7 +616,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 if (refillDb != null) return Result<Refill>.SuccessCreate(refillDb);
                 else return Result.ErrorCreate("Заправка не найдена");
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -659,7 +659,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 await _dbContex.SaveChangesAsync(token);
                 return Result.SuccessCreate();
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException )
             {
                 return Result.ErrorCreate("Операция была отменена");
             }
@@ -682,7 +682,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 }
                 else return Result.ErrorCreate("Данные о заправке не найдены");
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 return Result.ErrorCreate("Операция была отменена");
             }

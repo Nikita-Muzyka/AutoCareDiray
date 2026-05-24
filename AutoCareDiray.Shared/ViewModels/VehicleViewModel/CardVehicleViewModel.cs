@@ -226,10 +226,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             }
             else
             {
-                if(vehicleCard.YearPurchase != null)
-                {
                     _startDate = vehicleCard.YearPurchase;
-                }
             }
         }
 

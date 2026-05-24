@@ -13,8 +13,8 @@ namespace AutoCareDiray.Extensions.SettingsEx
         {
             return unit switch
             {
-                EUnitDistance.Kilometers => "КМ",
-                EUnitDistance.Millie => "Мили"
+                EUnitDistance.Kilometers => "Км",
+                EUnitDistance.Millie => "Ml"
             };
         }
 

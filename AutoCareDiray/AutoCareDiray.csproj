@@ -104,12 +104,6 @@
 	  <MauiXaml Update="Resources\Styles\StylesCustomStandart.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Resources\Styles\StylesCustom\Authorization\AuthorizationStyle.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Resources\Styles\StylesCustom\VehicleView\VehicleViewStyle.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Service\Dialog\PopUp\ConfirmationPopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -152,6 +146,10 @@
 	  <Compile Update="View\VehicleView\ListVehicleView.xaml.cs">
 	    <DependentUpon>ListVehicleView.xaml</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Resources\Styles\StylesCustom\" />
 	</ItemGroup>
 
 </Project>

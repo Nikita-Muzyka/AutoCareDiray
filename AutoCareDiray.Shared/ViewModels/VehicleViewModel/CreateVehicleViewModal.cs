@@ -68,8 +68,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private double fuelTank;
 
-        public string FuelTankText => "Введите обьем бака " + _preferencesService.GetDefaultVolume();
-        public string MileageText => "Введите текущий пробег авто " + _preferencesService.GetDefaultDistance();
+        public string FuelTankText => "Введите обьем бака в ( " + _preferencesService.GetDefaultShortVolume() + " )";
+        public string MileageText => "Введите текущий пробег авто в ( " + _preferencesService.GetDefaultShortDistance() + " )";
 
 
         [ObservableProperty]

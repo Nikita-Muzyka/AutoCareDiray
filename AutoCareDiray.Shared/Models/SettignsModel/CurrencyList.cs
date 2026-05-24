@@ -23,5 +23,16 @@ namespace AutoCareDiray.Shared.Models.SettignsModel
         {
             return GetCurrency().FirstOrDefault(c => c.Code == code) ?? GetCurrency().First();
         }
+        public static string GetMoneyTitle(string code)
+        {
+            var cur = GetCurrency().FirstOrDefault(c => c.Code == code) ?? GetCurrency().First();
+            return cur.Title;
+        }
+
+        public static string GetMoneySign(string code)
+        {
+            var cur = GetCurrency().FirstOrDefault(c => c.Code == code) ?? GetCurrency().First();
+            return cur.Sign;
+        }
     }
 }

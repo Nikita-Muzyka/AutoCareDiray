@@ -100,9 +100,9 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         [ObservableProperty]
         private bool isSelectedRepairTypeError = false;
 
-        public string IntervalMileageText => "Интервал пробега " + _preferencesService.GetDefaultDistance();
-        public string InvervalMileageNewText => "Введите Интервал пробега или оставте 0" + _preferencesService.GetDefaultDistance();
-        public string MileageText => "Текущий пробег авто " + _preferencesService.GetDefaultDistance();
+        public string IntervalMileageText => "Интервал пробега " + _preferencesService.GetDefaultShortDistance();
+        public string InvervalMileageNewText => "Введите Интервал пробега или оставте 0" + _preferencesService.GetDefaultShortDistance();
+        public string MileageText => "Текущий пробег авто " + _preferencesService.GetDefaultShortDistance();
         public string CostText => "Общая стоимость " + _preferencesService.GetDefaultMoney();
         public string CostPartText => "Стоимость запчасти " + _preferencesService.GetDefaultMoney();
 
