@@ -14,9 +14,14 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
     public partial class ListVehicleViewModel : BaseViewModel
     {
-        #region основыне классы и списки
+        #region основыне классы
 
         private CancellationTokenSource _cts;
+        IPreferencesService _preferencesService;
+
+        #endregion
+
+        #region основыне классы для работş UI
 
         [ObservableProperty]
         private ObservableCollection<Vehicle> vehicles = new();
@@ -26,17 +31,19 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private Vehicle selectedVehicle;
         [ObservableProperty]
-        private bool labelWarningRepair = false;
+        private bool isWarningRepair = false;    
+
         #endregion
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="apiService"></param>
-        public ListVehicleViewModel(IDialogService dialog, IDataService data, INavigationService navigate)
+        public ListVehicleViewModel(IDialogService dialog, IDataService data, INavigationService navigate,IPreferencesService prefer)
             : base(dialog, data, navigate)
         {
             _cts = new CancellationTokenSource();
+            _preferencesService = prefer;
         }
 
         [RelayCommand]
@@ -68,6 +75,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
                 foreach (var addcar in cars)
                 {
+                    if (addcar.PhotoVehicle == null) addcar.PhotoVehicle = "car_icon.png";
                     Vehicles.Add(addcar);
                 }
             }
@@ -121,12 +129,12 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 {
                     list.WarningRepair = $"Ко-во узлов требующих осомтра:{warningCount}";
                     list.NeedsService = true;
-                    LabelWarningRepair = true;
+                    IsWarningRepair = true;
                 }
                 else
                 { 
                     list.NeedsService = false;
-                    LabelWarningRepair = false;
+                    IsWarningRepair = false;
                 }
             }
         }  //проверка кол предупреждений о ремонте авто

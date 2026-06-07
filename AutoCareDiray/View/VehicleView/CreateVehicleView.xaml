@@ -4,11 +4,16 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
              xmlns:models="clr-namespace:AutoCareDiray.Shared.Models.RepairModel;assembly=AutoCareDiray.Shared"
              x:Class="AutoCareDiray.View.VehicleView.CreateVehicleView"
-             Title="Создание ТС"
              Style="{StaticResource CustomPage}">
 
+    <Shell.TitleView>
+        <HorizontalStackLayout VerticalOptions="Center">
+            <Label Text="Создание авто" Style="{DynamicResource LabelCustomPage}" />
+        </HorizontalStackLayout>
+    </Shell.TitleView>
 
     <ScrollView >
+
         <VerticalStackLayout Padding="20" Spacing="0">
 
             <VerticalStackLayout Spacing="10" Margin="0,10,0,25">
@@ -16,7 +21,7 @@
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding PickPhotoCommand}"/>
                     </Border.GestureRecognizers>
-                    <Image Source="{Binding PathPhoto}" Aspect="AspectFill" />
+                    <Image Source="{Binding PathPhoto}" Style="{DynamicResource ImageAddPhoto}" />
                 </Border>
                 <Label Text="Нажмите, чтобы добавить фото" Style="{DynamicResource LabelFunctionInfo}"/>
             </VerticalStackLayout>
@@ -31,33 +36,52 @@
                         <Label Text="Название ТС" Style="{StaticResource LabelInfoForEntry}"/>
                         <Entry Text="{Binding NameVehicle}" Placeholder="Например, Моя BMW" Style="{DynamicResource EntryImput}" />
                         <Label Text="{Binding NameVehicleError}" IsVisible="{Binding IsNameVehicleError}" Style="{DynamicResource LabelError}"/>
-                    </VerticalStackLayout> <!--название ТС-->
+                    </VerticalStackLayout>
+                    <!--название ТС-->
 
                     <Grid ColumnDefinitions="*, Auto" RowDefinitions="auto,auto">
                         <Label Grid.Column="0" Text="Год выпуска" Style="{StaticResource LabelInfoForEntry}" VerticalOptions="Center"/>
                         <DatePicker Grid.Column="1" Format="M.yyyy" Date="{Binding YearPurchaseSelected}" VerticalOptions="Center" />
                         <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding YearPurchaseError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsYearPurchaseError}"/>
-                    </Grid> <!--дата--> 
+                    </Grid>
+                    <!--дата-->
 
                 </VerticalStackLayout>
-            </Border> <!--Название ТС дата-->
+            </Border>
+            <!--Название ТС дата-->
 
             <Border Style="{DynamicResource BorderForEntryCard}">
                 <VerticalStackLayout Spacing="15">
 
-                    <Grid ColumnDefinitions="*, *">
-                        <VerticalStackLayout Grid.Column="0" Margin="0,0,10,0">
-                            <Label Text="{Binding MileageText}" Style="{DynamicResource LabelInfoForEntry}"/>
-                            <Entry Text="{Binding Mileage}" Placeholder="0" Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
-                            <Label Text="{Binding MileageError}" IsVisible="{Binding IsMileageError}" Style="{DynamicResource LabelError}"/>
-                        </VerticalStackLayout>
+                    <VerticalStackLayout>
+                        <Label Text="{Binding MileageText}" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Grid ColumnDefinitions="*,*">
+                            
+                            <Entry Grid.Column="0" Text="{Binding Mileage}" Placeholder="0" Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
+                            
+                            <Picker Grid.Column="1" Style="{DynamicResource PickerStandart}" ItemsSource="{Binding UnitDistances}"
+                                     SelectedItem="{Binding SelectedUnitDistance}"
+                                    HorizontalTextAlignment="Center" WidthRequest="150">
+                            </Picker>
+                            
+                        </Grid>
+                        <Label Text="{Binding MileageError}" IsVisible="{Binding IsMileageError}" Style="{DynamicResource LabelError}"/>
+                    </VerticalStackLayout>
 
-                        <VerticalStackLayout Grid.Column="1" Margin="10,0,0,0">
-                            <Label Text="{Binding FuelTankText}" Style="{DynamicResource LabelInfoForEntry}"/>
-                            <Entry Text="{Binding FuelTank}" Placeholder="0" Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
-                            <Label Text="{Binding FuelTankError}" IsVisible="{Binding IsFuelTankError}" Style="{DynamicResource LabelError}"/>
-                        </VerticalStackLayout>
-                    </Grid>
+                    <VerticalStackLayout >
+                        <Label Text="{Binding FuelTankText}" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Grid ColumnDefinitions="*,*">
+
+                            <Entry Grid.Column="0" Text="{Binding FuelTank}" Placeholder="0" Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
+
+                            <Picker Grid.Column="1" Style="{DynamicResource PickerStandart}" ItemsSource="{Binding UnitVolumes}"
+                                    SelectedItem="{Binding SelectedUnitVolume}"
+                                    HorizontalTextAlignment="Center" WidthRequest="150">
+
+                            </Picker>
+                        </Grid>
+                        <Label Text="{Binding FuelTankError}" IsVisible="{Binding IsFuelTankError}" Style="{DynamicResource LabelError}"/>
+                    </VerticalStackLayout>
                     <!--пробег и литры в баке-->
 
                     <VerticalStackLayout>
@@ -72,7 +96,8 @@
                     <!--тип тс-->
 
                 </VerticalStackLayout>
-            </Border> <!--пробег литры и тип ТС-->
+            </Border>
+            <!--пробег литры и тип ТС-->
 
             <toolkit:Expander Margin="0,0,0,25">
                 <toolkit:Expander.Header>
@@ -117,6 +142,8 @@
                     </Border>
                 </toolkit:Expander.Content>
             </toolkit:Expander>
+
+            <Label Text="{Binding StatusMessage}" Style="{DynamicResource LabelError}"/>
 
             <Button Text="{Binding ButtonName}" 
                     Style="{StaticResource ButtonCustomStandart}"

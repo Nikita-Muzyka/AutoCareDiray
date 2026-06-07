@@ -51,7 +51,15 @@ namespace AutoCareDiray.Shared.Service.Data
                 var vehicles = await _dbContex.Vehicles
                     .AsNoTracking()
                     .Include(c => c.RepairTypes)
-                    .Select(c => new Vehicle { Id = c.Id, Mileage = c.Mileage, NameVehicle = c.NameVehicle, RepairTypes = c.RepairTypes })
+                    .Select(c => new Vehicle 
+                    { 
+                        Id = c.Id, 
+                        Mileage = c.Mileage, 
+                        NameVehicle = c.NameVehicle, 
+                        RepairTypes = c.RepairTypes, 
+                        PhotoVehicle = c.PhotoVehicle,
+                        UnitDistance = c.UnitDistance,
+                    })
                     .OrderBy(c => c.Mileage)
                     .ToListAsync(token);
                 if (vehicles.Count > 0) return Result<List<Vehicle>>.SuccessCreate(vehicles);

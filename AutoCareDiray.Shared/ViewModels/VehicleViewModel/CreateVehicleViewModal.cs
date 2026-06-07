@@ -22,7 +22,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
         private readonly VehicleValidation _vehicleValidation;
         private readonly IPhotoPicker _photoPicker;
-        private readonly IPreferencesService _preferencesService;
+        private readonly IUnitService _unitService;
         private CancellationTokenSource _cts;
         private Vehicle _vehicle;
         //Инициализирована ли страница
@@ -33,6 +33,9 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
 
         #region Свойства для работы UI
+
+        public ObservableCollection<string> UnitDistances { get; set; } = new();
+        public ObservableCollection<string> UnitVolumes { get; set; } = new();
 
         [ObservableProperty]
         private bool isYearPurchaseError = false;
@@ -57,19 +60,25 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string transmissionType = String.Empty;
         [ObservableProperty]
-        private string pathPhoto = "car_add_icon.png";
+        private string pathPhoto = "add_photo_image.png";
         [ObservableProperty]
         private string buttonName = "Создать";
         [ObservableProperty]
         private string statusMessage;
+        [ObservableProperty]
+        private string selectedUnitDistance;
+        [ObservableProperty]
+        private string selectedUnitVolume;
+        [ObservableProperty]
+        public string fuelTankText;
+        [ObservableProperty]
+        public string mileageText;
+
 
         [ObservableProperty]
         private int mileage;
         [ObservableProperty]
         private double fuelTank;
-
-        public string FuelTankText => "Введите обьем бака в ( " + _preferencesService.GetDefaultShortVolume() + " )";
-        public string MileageText => "Введите текущий пробег авто в ( " + _preferencesService.GetDefaultShortDistance() + " )";
 
 
         [ObservableProperty]
@@ -85,11 +94,11 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
 
         public CreateVehicleViewModel(IDialogService dialogService,IDataService dataService,INavigationService navigation,IPhotoPicker photoPicker,
-            VehicleValidation vehicleValidation,IPreferencesService preferences) : base(dialogService,dataService,navigation)
+            VehicleValidation vehicleValidation,IUnitService units) : base(dialogService,dataService,navigation)
         {
             _vehicleValidation = vehicleValidation;
             _photoPicker = photoPicker;
-            _preferencesService = preferences;
+            _unitService = units;
             _vehicleValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
             _cts = new CancellationTokenSource();
         }
@@ -136,6 +145,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 VinCode = _vehicle.VinCode;
                 FuelTank = _vehicle.FuelTank;
                 if (string.IsNullOrWhiteSpace(_vehicle.TransmissionType) == false) TransmissionType = _vehicle.TransmissionType;
+                InitilizeUnits();
             }
         }
 
@@ -143,9 +153,28 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         /// Инициализация при создании авто
         /// </summary>
         [RelayCommand]
-        public async Task InitilizeForCreateVeicle()
+        public void InitilizeForCreateVeicle()
         {
             if (_isInitilized) return;
+            InitilizeUnits();
+        }
+
+        private void InitilizeUnits()
+        {
+            var unitsDistance = _unitService.GetListUnitDistances();
+            var unitsVolume = _unitService.GetListUnitVolume();
+
+            UnitDistances.Clear();
+            UnitVolumes.Clear();
+
+            foreach (var unit in unitsDistance) UnitDistances.Add(unit);
+            foreach (var unit in unitsVolume) UnitVolumes.Add(unit);
+
+            SelectedUnitDistance = UnitDistances.First();
+            SelectedUnitVolume = UnitVolumes.First();
+
+            MileageText = $"Введите пробег в  ({SelectedUnitDistance})";
+            FuelTankText = $"Введите объем топливного бака в ({SelectedUnitVolume})";
         }
 
         /// <summary>
@@ -167,7 +196,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 YearPurchaseSelected, VinCode,
                 StateNumber, TransmissionType,
                 SelectedTypeVehicle, Mileage,
-                FuelTank,null);
+                FuelTank, SelectedUnitDistance, SelectedUnitVolume);
+
 
             if (_newPhoto != null)
             {
@@ -253,6 +283,14 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         partial void OnFuelTankChanged(double value)
         {
             IsFuelTankError = _vehicleValidation.ValidationFuelTank(value);
+        }
+        partial void OnSelectedUnitDistanceChanged(string value)
+        {
+            MileageText = $"Введите пробег в  ({value})";
+        }
+        partial void OnSelectedUnitVolumeChanged(string value)
+        {
+            FuelTankText = $"Введите объем топливного бака в ({value})";
         }
 
         #endregion

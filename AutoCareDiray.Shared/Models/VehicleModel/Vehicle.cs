@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
+using AutoCareDiray.Shared.Models.SettignsModel;
 
 
 
@@ -16,19 +17,25 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string? PhotoVehicle { get; set; }
+
         public string? NameVehicle { get; set; }
-        public DateTime YearPurchase { get; set; } = new DateTime(1970, 1, 1);
         public string? VinCode { get; set; } //вин код
         public string? StateNumber { get; set; } //нормер гос
         public string? TransmissionType { get; set; } //тип трансмиссии
         public string? WarningRepair { get; set; }    //Кол-во предупреждений по машине
         [Required]
-        public double FuelTank { get; set; }    //бак авто
-        public double VolumeLiters { get; set; } // кол-во литров в баке
-
+        public string UnitDistance { get; set; } //какая величина растояния у авто
+        [Required]
+        public string UnitVolume { get; set; } //какая величина авто
         [Required]
         public string? VehicleType { get; set; }
+
+        public DateTime YearPurchase { get; set; } = new DateTime(1970, 1, 1);
+
+
+        [Required]
+        public double FuelTank { get; set; }    //бак авто
+        public double VolumeLiters { get; set; } // кол-во литров в баке
         [Required]
         public int Mileage { get; set; } = 0;
 
@@ -37,6 +44,20 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         public List<Refill> Refills { get; set; } = new();
         public List<RepairType> RepairTypes { get; set; } = new();
 
+
+        private string photoVehicle;
+        public string? PhotoVehicle
+        {
+            get => photoVehicle;
+            set
+            {
+                if (photoVehicle != value)
+                {
+                    photoVehicle = value;
+                    OnPropertyChanged();
+                }
+            }
+        } //Путь к фото авто
 
         private string? _pdfFile;
         public string? PdfFile 
@@ -66,6 +87,11 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
             }
         } //по нему выбирается цвет индикатора авто в lIst
 
+
+        [NotMapped]
+        public string DisplayMileage => $"{Mileage:N0} {UnitDistance}";
+
+
         public Vehicle() { }
 
         public Vehicle(string name,
@@ -75,7 +101,7 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
             string transmissionType, 
             string vehicleType,
             int mileage,double fuelTank,
-            List<RepairType> repairTypes) 
+            string uDist,string uVolume) 
         {
             NameVehicle = name;
             YearPurchase = yearPurchase;
@@ -85,7 +111,8 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
             VehicleType = vehicleType;
             Mileage = mileage;
             FuelTank = fuelTank;
-            RepairTypes = repairTypes;
+            UnitDistance = uDist;
+            UnitVolume = uVolume;
         }
 
 

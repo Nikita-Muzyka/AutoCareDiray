@@ -132,3 +132,80 @@ _isInitilized = true;
          }
      }
  }
+
+
+
+
+   <Button Text="Авто обслужено" HorizontalOptions="Center" Style="{DynamicResource ButtonCustomStandartRed}"
+          Command="{Binding ChangeIsServicedCommand}" Margin="0,0,0,10"/>
+  <!--Изменение обслужено авто или нет-->
+
+  <Border Style="{DynamicResource BorderForEntryCard}">
+      <VerticalStackLayout Padding="15,10">
+          <Label Text="КАТЕГОРИЯ ОБСЛУЖИВАНИЯ" Style="{DynamicResource LabelInfoForEntry}"/>
+
+          <Grid>
+              <Picker Title="Выберите категорию..." ItemsSource="{Binding RepairGrouped}" ItemDisplayBinding="{Binding Name}" 
+                      SelectedItem="{Binding SelectedGroup}" Style="{DynamicResource PickerStandart}"/>
+              
+              <Label Text="▼" Style="{DynamicResource LabelArrowDown}"/>
+          </Grid>
+      </VerticalStackLayout>
+  </Border> <!--Picker выбора категории деталей-->
+
+
+    <VerticalStackLayout BindableLayout.ItemsSource="{Binding SelectedGroup}" Spacing="15" Padding="15">
+      <BindableLayout.ItemTemplate>
+          <DataTemplate x:DataType="models:RepairType">
+              <Border Style="{DynamicResource BorderForEntryCard}" >
+                  <VerticalStackLayout Padding="15">
+
+                      <Label Text="{Binding TitleRepair}" Style="{DynamicResource LabelCustom}"/> <!--Название тип ремонта-->
+
+                      <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+
+                          <VerticalStackLayout Grid.Column="0" Spacing="5">
+                              <Label Text="Интервал (км)" Style="{DynamicResource LabelInfoForEntry}"/>
+                              <Border Style="{DynamicResource BorderForEntryImput}">
+                                  <Grid ColumnDefinitions="*, Auto" Padding="5,0">
+                                      <Entry Text="{Binding IntervalMileage}" Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
+                                      <Label Grid.Column="1" Text="км" FontSize="11" VerticalOptions="Center" Margin="0,0,5,0"/>
+                                  </Grid>
+                              </Border>
+                          </VerticalStackLayout> <!--пробег-->
+
+                          <VerticalStackLayout Grid.Column="1" Spacing="5">
+                              <Label Text="Интервал (мес)" Style="{DynamicResource LabelInfoForEntry}"/>
+                              <Border Style="{DynamicResource BorderForEntryImput}">
+                                  <Grid ColumnDefinitions="*, Auto" Padding="5,0">
+                                      <Entry Text="{Binding IntervalMonth}" Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
+                                      <Label Grid.Column="1" Text="мес" FontSize="11" VerticalOptions="Center" Margin="0,0,5,0"/>
+                                  </Grid>
+                              </Border>
+                          </VerticalStackLayout> <!--месяц-->
+                          
+                      </Grid> <!--интервалы пробега и мессяца-->
+
+                      <BoxView Style="{DynamicResource BoxViewCustom}" Margin="0,10,0,0"/>
+
+                      <HorizontalStackLayout Spacing="20">
+                          
+                          <HorizontalStackLayout Spacing="2">
+                              <CheckBox IsChecked="{Binding IsServiced}" Style="{DynamicResource CheckBoxCustom}"/>
+                              <Label Text="Обслужено" Style="{DynamicResource LabelSecondaryCustom}" VerticalOptions="Center"/>
+                          </HorizontalStackLayout>
+
+                          <HorizontalStackLayout Spacing="2">
+                              <CheckBox IsChecked="{Binding IsRemoveMaintenance}" Style="{DynamicResource CheckBoxCustom}"/>
+                              <Label Text="Не нужно" Style="{DynamicResource LabelSecondaryCustom}" VerticalOptions="Center"/>
+                          </HorizontalStackLayout>
+                          
+                      </HorizontalStackLayout> <!--CheckBox-->
+
+                  </VerticalStackLayout>
+              </Border>
+          </DataTemplate>
+      </BindableLayout.ItemTemplate> <!--ВЫбранные категории ремонта-->
+      
+  </VerticalStackLayout> <!--Binable для категории ремонта-->
+
