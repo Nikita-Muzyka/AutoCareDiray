@@ -11,12 +11,12 @@ namespace AutoCareDiray.Shared.Models.PredictionData
     {
         public class RepairData
         {
-            [LoadColumn(0)] public float Mileage { get; set; }     // Пробег
-            [LoadColumn(1)] public float Cost { get; set; }        // Стоимость ремонта
-            [LoadColumn(2)] public float Label { get; set; }       // То, что предсказываем (например, остаток ресурса)
+            public float Mileage { get; set; }
+            public float Cost { get; set; }
+            public string RepairTypeId { get; set; } // <--- Делаем СТРОКОЙ!
+            public float Label { get; set; }
         }
 
-        // То, что нейросеть нам вернет
         public class RepairPrediction
         {
             [ColumnName("Score")]

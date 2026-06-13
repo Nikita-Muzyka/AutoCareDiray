@@ -116,8 +116,11 @@
                                             
                                         <Label Text="{Binding TitleRepair}" Style="{DynamicResource LabelCustom}"/>
 
-                                        <!--<Label Text="{Binding Mileage, StringFormat='{0:N0} км'}" 
-                                               Style="{DynamicResource LabelSecondaryCustom}"/>-->
+                                        <Label Text="{Binding LastServiceMileage, StringFormat='{0:N0} км'}" 
+                                               Style="{DynamicResource LabelSecondaryCustom}"/>
+
+                                        <Label Text="{Binding LastServiceDate, StringFormat='{0:N0} км'}" 
+                                               Style="{DynamicResource LabelSecondaryCustom}"/>
 
                                     </VerticalStackLayout>
                                     <!--Данные авто-->
@@ -199,7 +202,24 @@
                 </Border>
                 
             </VerticalStackLayout> <!--отчет пдф-->
-            
+
+
+            <VerticalStackLayout>
+
+                <Button Text="Сделать полный ИИ-прогноз" 
+Command="{Binding UpdatePredictionCommand}" 
+Margin="0,0,0,10" />
+
+                <Frame BackgroundColor="#F0F4F8" Padding="15" CornerRadius="10" HasShadow="True">
+                    <ScrollView MaximumHeightRequest="300">
+                        <Label Text="{Binding PredictionText}" 
+       FontSize="14" 
+       TextColor="#333333" />
+                    </ScrollView>
+                </Frame>
+
+            </VerticalStackLayout>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

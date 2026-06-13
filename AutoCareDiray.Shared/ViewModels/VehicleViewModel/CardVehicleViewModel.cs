@@ -1,16 +1,20 @@
 ﻿using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.Shared.Models.Notes;
+using AutoCareDiray.Shared.Models.PredictionData;
 using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using AutoCareDiray.Shared.Service.Data;
 using AutoCareDiray.Shared.Service.IntervalCalculator;
 using AutoCareDiray.Shared.Service.ResultService;
+using AutoCareDiray.Shared.Service.PredicateDateService;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using static AutoCareDiray.Shared.Models.PredictionData.PredictionDataModel;
+
 
 namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 {
@@ -33,7 +37,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         #region Классы для UI
 
         [ObservableProperty]
-        private ObservableCollection<RepairType> warningRepairType;
+        private ObservableCollection<RepairType> warningRepairType = new();
         [ObservableProperty]
         private ObservableCollection<VehicleNotes> vehicleNotes = new();
 
@@ -52,6 +56,19 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private string buttonName = "Добавить";
 
+
+        [ObservableProperty]
+        private ObservableCollection<RepairType> allTrackedRepairTypes = new(); // А это для Picker'а нейросети
+
+        [ObservableProperty]
+        private string predictionText = "ИИ: расчет...";
+        [ObservableProperty]
+        private double wearProgress = 0.0;
+        [ObservableProperty]
+        private bool _isBusy;
+        [ObservableProperty]
+        private RepairType selectedRepairTypeForPrediction;
+
         #endregion
 
         public CardVehicleViewModel(IDialogService dialog, IDataService data, INavigationService navigate,IPdfService pdf)
@@ -61,15 +78,134 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _pdfService = pdf;
         }
 
-
         [RelayCommand]
         public async Task InitilizeAsync(int vehicleId)
         {
             if (_isInitilize) return;
             _vehicleId = vehicleId;
+
             await LoadVehicleAsync();
+
+            // Фоновый прогрев ИИ
+            _ = Task.Run(async () =>
+            {
+                var repairsResult = await _dataService.GetListRepairForVehicleAsync(_vehicleId, _cts.Token);
+                if (repairsResult.Success)
+                {
+                    var repairs = (repairsResult as Result<List<Repair>>).Data;
+                    var list = new List<PredictionDataModel.RepairData>();
+
+                    // 1. РЕАЛЬНАЯ ИСТОРИЯ
+                    var validRealRepairs = repairs.Where(r => r.RepairType != null && r.RepairType.IntervalMileage > 0);
+                    foreach (var repair in validRealRepairs)
+                    {
+                        list.Add(new PredictionDataModel.RepairData
+                        {
+                            Mileage = (float)repair.CurrentMileage, // Пробег В МОМЕНТ ремонта
+                            Cost = (float)repair.Cost,
+                            RepairTypeId = repair.RepairTypeId.ToString(),
+                            // УЧИМ ИИ: На каком пробеге наступит СЛЕДУЮЩЕЕ ТО
+                            Label = (float)(repair.CurrentMileage + repair.RepairType.IntervalMileage)
+                        });
+                    }
+
+                    // 2. ВИРТУАЛЬНАЯ ИСТОРИЯ (чтобы ИИ было на чем учиться)
+                    var trackableTypes = AllTrackedRepairTypes.Where(rt => rt.IntervalMileage > 0).ToList();
+                    foreach (var repairType in trackableTypes)
+                    {
+                        for (int i = 1; i <= 4; i++)
+                        {
+                            float simulatedPastMileage = (float)VehicleCard.Mileage - (i * repairType.IntervalMileage);
+                            if (simulatedPastMileage > 0)
+                            {
+                                list.Add(new PredictionDataModel.RepairData
+                                {
+                                    Mileage = simulatedPastMileage, // Виртуальный пробег В МОМЕНТ прошлого ремонта
+                                    Cost = 5000f,
+                                    RepairTypeId = repairType.Id.ToString(),
+                                    // УЧИМ ИИ: Следующее ТО будет через интервал + небольшая погрешность
+                                    Label = simulatedPastMileage + (float)repairType.IntervalMileage + new Random().Next(-200, 200)
+                                });
+                            }
+                        }
+                    }
+
+                    var service = new PredictionService();
+                    service.PrepareAndTrain(list);
+                }
+            });
+
             _isInitilize = true;
-        } // инициализация карточки
+        }
+
+        [RelayCommand]
+        public async Task UpdatePredictionAsync()
+        {
+            if (AllTrackedRepairTypes == null || !AllTrackedRepairTypes.Any())
+            {
+                await _dialogService.ShowToastAsync("Нет данных о типах ремонта.");
+                return;
+            }
+
+            IsBusy = true;
+            PredictionText = "ИИ: анализирую паттерны износа...";
+
+            var predictionResult = await Task.Run(() =>
+            {
+                var service = new PredictionService();
+                var predictions = new List<(string Category, float RemainingKm, float ExpectedMileage)>();
+
+                var validTypesToPredict = AllTrackedRepairTypes
+                    .Where(rt => rt.IntervalMileage > 0)
+                    .DistinctBy(r => r.Category)
+                    .ToList();
+
+                foreach (var repairType in validTypesToPredict)
+                {
+                    // БЕРЕМ ПРОБЕГ ПОСЛЕДНЕЙ ЗАМЕНЫ (если еще не меняли, считаем от 0)
+                    float lastServiceMileage = repairType.LastServiceMileage > 0 ? (float)repairType.LastServiceMileage : 0f;
+
+                    // СПРАШИВАЕМ ИИ: "Мы поменяли деталь на пробеге lastServiceMileage. На каком пробеге менять снова?"
+                    float expectedNextService = service.PredictNext(lastServiceMileage, 0f, repairType.Id.ToString());
+
+                    if (expectedNextService > 0)
+                    {
+                        // ОСТАТОК = Пробег будущего ТО минус ТЕКУЩИЙ пробег машины
+                        float remainingKm = expectedNextService - (float)VehicleCard.Mileage;
+
+                        predictions.Add((repairType.Category, remainingKm, expectedNextService));
+                    }
+                }
+
+                if (!predictions.Any()) return "ИИ: Недостаточно данных для прогноза.";
+
+                // Сортируем: сначала те, что нужно менять срочно (включая просроченные)
+                var sortedPredictions = predictions.OrderBy(p => p.RemainingKm).ToList();
+                var sb = new System.Text.StringBuilder();
+                sb.AppendLine($"📊 Текущий пробег: {VehicleCard.Mileage:N0} км");
+                sb.AppendLine("──────────────────────────────");
+                sb.AppendLine("🔮 ПРОГНОЗ БЛИЖАЙШИХ ТО:");
+                sb.AppendLine();
+
+                foreach (var pred in sortedPredictions)
+                {
+                    // Красивая обработка просроченных ремонтов (если остаток ушел в минус)
+                    string status = pred.RemainingKm < 0 ? "⚠️ ПРОСРОЧЕНО НА:" : "⏳ Через:";
+                    float absRemaining = Math.Abs(pred.RemainingKm); // Берем число по модулю (без минуса)
+
+                    sb.AppendLine($"🔧 {pred.Category}");
+                    sb.AppendLine($"   {status} {absRemaining:N0} км");
+                    sb.AppendLine($"   🚩 Плановый пробег ТО: {pred.ExpectedMileage:N0} км");
+                    sb.AppendLine();
+                }
+
+                return sb.ToString().TrimEnd();
+            });
+
+            PredictionText = predictionResult;
+            IsBusy = false;
+        }
+
         [RelayCommand]
         public async Task interactionNoteAsync()
         {
@@ -162,14 +298,29 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private async Task LoadVehicleAsync()
         {
             var result = await _dataService.GetVehicleAsync(_vehicleId, _cts.Token);
-            if(result.Success)
+            if (result.Success)
             {
                 var resultVehicle = result as Result<Vehicle>;
                 VehicleCard = resultVehicle.Data ?? new Vehicle();
+
+                // 1. Заполняем список просроченных деталей (для красных алертов на UI)
                 var resultWarning = IntervalCalculatroService.CalculatingWarningList(VehicleCard);
-                WarningRepairType = new ObservableCollection<RepairType>(resultWarning);
+                WarningRepairType.Clear();
+                if (resultWarning != null)
+                {
+                    foreach (var item in resultWarning)
+                        WarningRepairType.Add(item);
+                }
+
+                // 2. Заполняем список ВООБЩЕ ВСЕХ деталей (для выпадающего списка ИИ)
+                AllTrackedRepairTypes.Clear();
+                if (VehicleCard.RepairTypes != null)
+                {
+                    foreach (var item in VehicleCard.RepairTypes)
+                        AllTrackedRepairTypes.Add(item);
+                }
             }
-        } // загрузка информации по авто
+        }
 
         async partial void OnSelectedModeChanged(string value)
         {
@@ -238,5 +389,6 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             _cts = new CancellationTokenSource();
         }  //отмена токена
 
+      
     }
 }

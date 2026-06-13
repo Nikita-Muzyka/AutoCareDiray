@@ -366,6 +366,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
             SelectedRepairType.LastServiceMileage = MileageFilled;
             SelectedRepairType.LastServiceDate = DateRepairSelected;
+            SelectedRepairType.IntervalMileage = IntervalMileageFilled;
+            SelectedRepairType.IntervalMonth = IntervalMonthsFilled;
 
             var result = await _dataService.GetVehicleMileageAsync(_vehicleId, _cts.Token);
             if (result.Success)
@@ -383,21 +385,16 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
             }
 
-            if (SelectedRepairType.IntervalMileage != IntervalMileageFilled || SelectedRepairType.IntervalMonth != IntervalMonthsFilled)
+            var resultUpdateTypeRep = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
+            if (resultUpdateTypeRep.Success == false)
             {
-                SelectedRepairType.IntervalMileage = IntervalMileageFilled;
-                SelectedRepairType.IntervalMonth = IntervalMonthsFilled;
-                var resultUpdateTypeRep = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
-                if (resultUpdateTypeRep.Success == false)
+                if (string.IsNullOrWhiteSpace(StatusMessage) == false)
                 {
-                    if (string.IsNullOrWhiteSpace(StatusMessage) == false)
-                    {
-                        StatusMessage += " " + resultUpdateTypeRep.ErrorMessage;
-                    }
-                    else
-                    {
-                        StatusMessage = resultUpdateTypeRep.ErrorMessage;
-                    }
+                    StatusMessage += " " + resultUpdateTypeRep.ErrorMessage;
+                }
+                else
+                {
+                    StatusMessage = resultUpdateTypeRep.ErrorMessage;
                 }
             }
 
