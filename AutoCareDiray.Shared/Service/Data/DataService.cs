@@ -59,6 +59,7 @@ namespace AutoCareDiray.Shared.Service.Data
                         RepairTypes = c.RepairTypes, 
                         PhotoVehicle = c.PhotoVehicle,
                         UnitDistance = c.UnitDistance,
+                        StateNumber = c.StateNumber,
                     })
                     .OrderBy(c => c.Mileage)
                     .ToListAsync(token);

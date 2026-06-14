@@ -206,7 +206,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             var vehicle = new Vehicle
                 (NameVehicle,
                 YearPurchaseSelected, VinCode,
-                StateNumber, TransmissionType,
+                StateNumber.ToUpper(), TransmissionType,
                 SelectedTypeVehicle, Mileage,
                 FuelTank, SelectedUnitDistance, SelectedUnitVolume);
 

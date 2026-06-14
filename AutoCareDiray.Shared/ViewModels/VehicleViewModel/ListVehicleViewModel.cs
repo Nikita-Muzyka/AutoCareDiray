@@ -31,7 +31,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private Vehicle selectedVehicle;
         [ObservableProperty]
-        private bool isWarningRepair = false;    
+        private bool isWarningRepair = false;
 
         #endregion
 

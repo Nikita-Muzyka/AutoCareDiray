@@ -127,7 +127,7 @@
 
                             <VerticalStackLayout>
                                 <Label Text="Гос. номер" Style="{DynamicResource LabelInfoForEntry}"/>
-                                <Entry Text="{Binding StateNumber}" Placeholder="А000АА 00" Keyboard="Text" Style="{DynamicResource EntryImput}"/>
+                                <Entry Text="{Binding StateNumber}" Placeholder="А000АА 00" Keyboard="Text" Style="{DynamicResource EntryImput}" TextTransform="Uppercase"/>
                             </VerticalStackLayout>
 
                             <VerticalStackLayout>
@@ -141,7 +141,7 @@
                         </VerticalStackLayout>
                     </Border>
                 </toolkit:Expander.Content>
-            </toolkit:Expander>
+            </toolkit:Expander> <!--доп информация--> 
 
             <Label Text="{Binding StatusMessage}" Style="{DynamicResource LabelError}"/>
 
