@@ -10,5 +10,7 @@ namespace AutoCareDiray.Shared.Interface
     {
         List<string> GetListUnitDistances();
         List<string> GetListUnitVolume();
+        double GetConvertedMileage(double mileage, string unitDistance, string currentDistance);
+        double GetConvertedVolume(double volume, string unitVolume, string currentVolume);
     }
 }

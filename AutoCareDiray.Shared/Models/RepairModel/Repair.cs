@@ -15,7 +15,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int CurrentMileage { get; set; }
+        public double CurrentMileage { get; set; }
         public DateTime DateRepair { get; set; }
         public List<SparePart>? SpareParts { get; set; }
         public decimal Cost { get; set; } = default;

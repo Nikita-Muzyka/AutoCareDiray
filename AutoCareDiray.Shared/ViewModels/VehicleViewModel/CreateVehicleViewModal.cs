@@ -25,6 +25,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private readonly IUnitService _unitService;
         private CancellationTokenSource _cts;
         private Vehicle _vehicle;
+        private string defaultPhoto = "add_photo_image.png";
         //Инициализирована ли страница
         private bool _isInitilized = false;
         //переключатель с создания авто на обновление данных авто
@@ -76,7 +77,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
 
         [ObservableProperty]
-        private int mileage;
+        private double mileage;
         [ObservableProperty]
         private double fuelTank;
 
@@ -86,7 +87,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         [ObservableProperty]
         private DateTime yearPurchaseSelected = new DateTime(1970, 1, 1);
 
-        private string _newPhoto;
+        private bool _newPhoto;
 
 
        
@@ -134,17 +135,18 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 _vehicle = resultVehicle.Data ?? new Vehicle();
 
                 _isUpdateVehicle = true;
-                _isInitilized = true;
                 ButtonName = "Изменить";
 
                 if (File.Exists(_vehicle.PhotoVehicle)) PathPhoto = _vehicle.PhotoVehicle;
                 NameVehicle = _vehicle.NameVehicle;
                 YearPurchaseSelected = _vehicle.YearPurchase;
                 Mileage = _vehicle.Mileage;
+                StateNumber = _vehicle.StateNumber;
                 SelectedTypeVehicle = _vehicle.VehicleType;
                 VinCode = _vehicle.VinCode;
                 FuelTank = _vehicle.FuelTank;
                 if (string.IsNullOrWhiteSpace(_vehicle.TransmissionType) == false) TransmissionType = _vehicle.TransmissionType;
+                _isInitilized = true;
                 InitilizeUnits();
             }
         }
@@ -170,8 +172,16 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
             foreach (var unit in unitsDistance) UnitDistances.Add(unit);
             foreach (var unit in unitsVolume) UnitVolumes.Add(unit);
 
-            SelectedUnitDistance = UnitDistances.First();
-            SelectedUnitVolume = UnitVolumes.First();
+            if (_isUpdateVehicle)
+            {
+                SelectedUnitDistance = UnitDistances.Where(x => x == _vehicle.UnitDistance).FirstOrDefault() ?? UnitDistances.First();
+                SelectedUnitVolume = UnitVolumes.Where(x => x == _vehicle.UnitVolume).FirstOrDefault() ?? UnitVolumes.First();
+            }
+            else
+            {
+                SelectedUnitDistance = UnitDistances.First();
+                SelectedUnitVolume = UnitVolumes.First();
+            }
 
             MileageText = $"Введите пробег в  ({SelectedUnitDistance})";
             FuelTankText = $"Введите объем топливного бака в ({SelectedUnitVolume})";
@@ -191,6 +201,8 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 return;
             }
 
+            var resultPhoto = await SavePhoto();
+
             var vehicle = new Vehicle
                 (NameVehicle,
                 YearPurchaseSelected, VinCode,
@@ -198,19 +210,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 SelectedTypeVehicle, Mileage,
                 FuelTank, SelectedUnitDistance, SelectedUnitVolume);
 
-
-            if (_newPhoto != null)
-            {
-                var result = await _photoPicker.SavePhotoAsync(_newPhoto, _cts.Token);
-                if (result.Success)
-                {
-                    var resultPhoto = result as Result<string>;
-                    vehicle.PhotoVehicle = resultPhoto.Data;
-
-                    if(_isUpdateVehicle) await _photoPicker.DeletePhoto(_vehicle.PhotoVehicle);
-                }
-                else await _dialogService.ShowToastAsync(result.ErrorMessage);
-            } //save photo
+            vehicle.PhotoVehicle = resultPhoto;
 
             if (_isUpdateVehicle)
             {
@@ -250,21 +250,46 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         /// Добавление фото для авто
         /// </summary>
         [RelayCommand]
-        public async void PickPhoto()
+        public async Task PickPhoto()
         {
             var result = await _photoPicker.PickPhotoAsync();
             if (result.Success)
             {
                 var photoLocation = result as Result<string>;
                 PathPhoto = photoLocation.Data;
-                _newPhoto = PathPhoto;
+                _newPhoto = true;
             }
         }
 
+        private async Task<string> SavePhoto()
+        {
+            if (_newPhoto)
+            {
+                var result = await _photoPicker.SavePhotoAsync(PathPhoto, _cts.Token);
+                if (result.Success)
+                {
+                    var resultPhoto = result as Result<string>;
+
+                    if (File.Exists(_vehicle.PhotoVehicle)) await _photoPicker.DeletePhoto(_vehicle.PhotoVehicle);
+
+                    return resultPhoto.Data;
+                }
+                else
+                {
+
+                    await _dialogService.ShowToastAsync(result.ErrorMessage);
+                    return defaultPhoto;
+                }
+            }
+            else
+            {
+                return PathPhoto;
+            }
+        } //save photo
 
         #region Методы CommunityToolKit
 
-        partial void OnMileageChanged(int value)
+        partial void OnMileageChanged(double value)
         {
             IsMileageError = _vehicleValidation.ValidationMileage(value);
         }
@@ -292,6 +317,19 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         {
             FuelTankText = $"Введите объем топливного бака в ({value})";
         }
+        partial void OnSelectedUnitDistanceChanged(string? oldValue, string newValue)
+        {
+            if(Mileage == 0) return;
+            Mileage = _unitService.GetConvertedMileage(Mileage, newValue,_vehicle.UnitDistance);
+            _vehicle.UnitDistance = newValue;
+        }
+        partial void OnSelectedUnitVolumeChanged(string? oldValue, string newValue)
+        {
+            if (FuelTank == 0) return;
+            FuelTank = _unitService.GetConvertedVolume(FuelTank, newValue, _vehicle.UnitVolume);
+            _vehicle.UnitVolume = newValue;
+        }
+
 
         #endregion
 

@@ -72,8 +72,8 @@ namespace AutoCareDiray.Shared.Migrations
                     b.Property<bool>("IsFullTank")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Mileage")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Mileage")
+                        .HasColumnType("REAL");
 
                     b.PrimitiveCollection<string>("Photos")
                         .HasColumnType("TEXT");
@@ -103,8 +103,8 @@ namespace AutoCareDiray.Shared.Migrations
                     b.Property<decimal>("Cost")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CurrentMileage")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("CurrentMileage")
+                        .HasColumnType("REAL");
 
                     b.Property<DateTime>("DateRepair")
                         .HasColumnType("TEXT");
@@ -161,8 +161,8 @@ namespace AutoCareDiray.Shared.Migrations
                     b.Property<DateTime>("LastServiceDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("LastServiceMileage")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("LastServiceMileage")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("TitleRepair")
                         .IsRequired()
@@ -218,8 +218,8 @@ namespace AutoCareDiray.Shared.Migrations
                     b.Property<double>("FuelTank")
                         .HasColumnType("REAL");
 
-                    b.Property<int>("Mileage")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Mileage")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("NameVehicle")
                         .HasColumnType("TEXT");

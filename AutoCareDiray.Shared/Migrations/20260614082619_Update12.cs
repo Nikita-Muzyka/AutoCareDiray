@@ -10,20 +10,13 @@ namespace AutoCareDiray.Shared.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "UnitVolume",
-                table: "Vehicles",
-                type: "TEXT",
-                nullable: false,
-                defaultValue: "");
+
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "UnitVolume",
-                table: "Vehicles");
+
         }
     }
 }

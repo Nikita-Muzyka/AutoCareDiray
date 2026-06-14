@@ -53,7 +53,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         [ObservableProperty]
         private int intervalMonthsFilled;
         [ObservableProperty]
-        private int mileageFilled;
+        private double mileageFilled;
         [ObservableProperty]
         private decimal costFilled;
         [ObservableProperty]
@@ -454,7 +454,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             IntervalMileageFilled = value.IntervalMileage;
             IntervalMonthsFilled = value.IntervalMonth;
         }
-        partial void OnMileageFilledChanged(int value)
+        partial void OnMileageFilledChanged(double value)
         {
             IsMileageError = _validationRepair.ValidationMileage(value);
         }

@@ -265,7 +265,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 return Result.ErrorCreate($"Произошла ошибка при обновлении машины: {ex.Message}");
             }
         } // обновить авто
-        public async Task<Result> UpdateVehicleMileageAsync(int vehicleId,int mileage, CancellationToken token)
+        public async Task<Result> UpdateVehicleMileageAsync(int vehicleId,double mileage, CancellationToken token)
         {
             try
             {

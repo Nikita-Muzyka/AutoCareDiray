@@ -28,7 +28,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         public int IntervalMonth { get; set; } = 0;
 
         [Required]
-        public int LastServiceMileage { get; set; } = 0;  //Последний пробег ремонта авто
+        public double LastServiceMileage { get; set; } = 0;  //Последний пробег ремонта авто
         public DateTime LastServiceDate { get; set; } = default; //Последняя дата ремонта авто
 
         public string TransmissionType {  get; set; } = string.Empty;

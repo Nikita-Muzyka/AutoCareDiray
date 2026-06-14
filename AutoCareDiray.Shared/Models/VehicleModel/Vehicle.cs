@@ -37,7 +37,7 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
         public double FuelTank { get; set; }    //бак авто
         public double VolumeLiters { get; set; } // кол-во литров в баке
         [Required]
-        public int Mileage { get; set; } = 0;
+        public double Mileage { get; set; } = 0;
 
         public List<Repair> Repairs { get; set; } = new();
         public List<VehicleNotes> Notes { get; set; } = new();
@@ -100,7 +100,7 @@ namespace AutoCareDiray.Shared.Models.VehicleModel
             string stateNumber,
             string transmissionType, 
             string vehicleType,
-            int mileage,double fuelTank,
+            double mileage,double fuelTank,
             string uDist,string uVolume) 
         {
             NameVehicle = name;

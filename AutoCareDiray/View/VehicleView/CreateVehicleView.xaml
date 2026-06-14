@@ -57,7 +57,7 @@
                         <Label Text="{Binding MileageText}" Style="{DynamicResource LabelInfoForEntry}"/>
                         <Grid ColumnDefinitions="*,*">
                             
-                            <Entry Grid.Column="0" Text="{Binding Mileage}" Placeholder="0" Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
+                            <Entry Grid.Column="0" Text="{Binding Mileage , StringFormat='{0:N0}'}" Placeholder="0" Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
                             
                             <Picker Grid.Column="1" Style="{DynamicResource PickerStandart}" ItemsSource="{Binding UnitDistances}"
                                      SelectedItem="{Binding SelectedUnitDistance}"
@@ -66,13 +66,13 @@
                             
                         </Grid>
                         <Label Text="{Binding MileageError}" IsVisible="{Binding IsMileageError}" Style="{DynamicResource LabelError}"/>
-                    </VerticalStackLayout>
+                    </VerticalStackLayout> <!--пробег-->
 
                     <VerticalStackLayout >
                         <Label Text="{Binding FuelTankText}" Style="{DynamicResource LabelInfoForEntry}"/>
                         <Grid ColumnDefinitions="*,*">
 
-                            <Entry Grid.Column="0" Text="{Binding FuelTank}" Placeholder="0" Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
+                            <Entry Grid.Column="0" Text="{Binding FuelTank , StringFormat='{0:N0}'}" Placeholder="0" Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
 
                             <Picker Grid.Column="1" Style="{DynamicResource PickerStandart}" ItemsSource="{Binding UnitVolumes}"
                                     SelectedItem="{Binding SelectedUnitVolume}"
@@ -82,7 +82,7 @@
                         </Grid>
                         <Label Text="{Binding FuelTankError}" IsVisible="{Binding IsFuelTankError}" Style="{DynamicResource LabelError}"/>
                     </VerticalStackLayout>
-                    <!--пробег и литры в баке-->
+                    <!--литры в баке-->
 
                     <VerticalStackLayout>
                         <Label Text="Тип транспортного средства" Style="{DynamicResource LabelInfoForEntry}"/>

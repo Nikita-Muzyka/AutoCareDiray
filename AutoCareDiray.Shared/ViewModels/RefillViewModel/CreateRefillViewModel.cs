@@ -46,7 +46,7 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
         private DateTime dateRefillSelected = DateTime.UtcNow;
 
         [ObservableProperty]
-        private int mileageFilled;
+        private double mileageFilled;
         [ObservableProperty]
         private double volumeLitersFilled;
         [ObservableProperty]
@@ -271,7 +271,7 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
         {
             IsFuelTypesError = _refillValidation.ValidationFuelTypes(value);
         }
-        partial void OnMileageFilledChanged(int value)
+        partial void OnMileageFilledChanged(double value)
         {
             IsMileageError = _refillValidation.ValidationMileage(value);
         }

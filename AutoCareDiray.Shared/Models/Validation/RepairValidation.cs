@@ -20,7 +20,7 @@ namespace AutoCareDiray.Shared.Models.Validation
 
 
         public RepairValidation() { }
-        public bool ValidationMileage(int Mileage)
+        public bool ValidationMileage(double Mileage)
         {
             ErrorRemove(propertyMileage);
             if (Mileage >= 0)

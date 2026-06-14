@@ -17,7 +17,7 @@ namespace AutoCareDiray.Shared.Models.RefillModel
         // Основные данные заправки
         public string Title = "Заправка";
         public DateTime DateRefill { get; set; }
-        public int Mileage { get; set; } // Пробег на момент заправки
+        public double Mileage { get; set; } // Пробег на момент заправки
         public double VolumeLiters { get; set; } // Количество залитых литров
         public decimal Cost { get; set; } // Общая стоимость (лучше decimal для денег)
 

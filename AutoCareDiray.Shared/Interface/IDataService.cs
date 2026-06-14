@@ -24,7 +24,7 @@ namespace AutoCareDiray.Shared.Interface
         Task<Result> DeleteVehicleAsync(Vehicle vehicle, CancellationToken token); // удалить авто
 
         Task<Result> UpdateVehicleAsync(Vehicle vehicle, CancellationToken token); // обновить авто
-        Task<Result> UpdateVehicleMileageAsync(int vehicleId,int Mileage, CancellationToken token); // обновление пробега
+        Task<Result> UpdateVehicleMileageAsync(int vehicleId,double Mileage, CancellationToken token); // обновление пробега
         Task<Result> UpdateVehiclePdfAsync(int vehicleId, string pdfFile, CancellationToken token); // обновление PDF
 
 
