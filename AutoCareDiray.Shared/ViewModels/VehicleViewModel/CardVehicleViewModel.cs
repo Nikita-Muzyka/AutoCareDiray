@@ -52,14 +52,18 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         private string newContentNote;
         [ObservableProperty]
         private string selectedYearReport;
-
         [ObservableProperty]
         private string buttonName = "Добавить";
+        [ObservableProperty]
+        private string mileageConvert;
+        [ObservableProperty]
+        private string fuelTankConvert;
+
+
 
 
         [ObservableProperty]
         private ObservableCollection<RepairType> allTrackedRepairTypes = new(); // А это для Picker'а нейросети
-
         [ObservableProperty]
         private string predictionText = "ИИ: расчет...";
         [ObservableProperty]
@@ -109,32 +113,13 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                         });
                     }
 
-                    // 2. ВИРТУАЛЬНАЯ ИСТОРИЯ (чтобы ИИ было на чем учиться)
-                    var trackableTypes = AllTrackedRepairTypes.Where(rt => rt.IntervalMileage > 0).ToList();
-                    foreach (var repairType in trackableTypes)
-                    {
-                        for (int i = 1; i <= 4; i++)
-                        {
-                            float simulatedPastMileage = (float)VehicleCard.Mileage - (i * repairType.IntervalMileage);
-                            if (simulatedPastMileage > 0)
-                            {
-                                list.Add(new PredictionDataModel.RepairData
-                                {
-                                    Mileage = simulatedPastMileage, // Виртуальный пробег В МОМЕНТ прошлого ремонта
-                                    Cost = 5000f,
-                                    RepairTypeId = repairType.Id.ToString(),
-                                    // УЧИМ ИИ: Следующее ТО будет через интервал + небольшая погрешность
-                                    Label = simulatedPastMileage + (float)repairType.IntervalMileage + new Random().Next(-200, 200)
-                                });
-                            }
-                        }
-                    }
-
                     var service = new PredictionService();
                     service.PrepareAndTrain(list);
                 }
             });
 
+            MileageConvert = VehicleCard.Mileage.ToString() + " " +VehicleCard.UnitDistance;
+            FuelTankConvert = VehicleCard.FuelTank.ToString() + " " + VehicleCard.UnitVolume;
             _isInitilize = true;
         }
 
@@ -173,7 +158,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                         // ОСТАТОК = Пробег будущего ТО минус ТЕКУЩИЙ пробег машины
                         float remainingKm = expectedNextService - (float)VehicleCard.Mileage;
 
-                        predictions.Add((repairType.Category, remainingKm, expectedNextService));
+                        predictions.Add((repairType.CategoryText, remainingKm, expectedNextService));
                     }
                 }
 
@@ -204,7 +189,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
 
             PredictionText = predictionResult;
             IsBusy = false;
-        }
+        } // Работа с моделью формирования отчета
 
         [RelayCommand]
         public async Task interactionNoteAsync()
@@ -266,7 +251,12 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 _pdfService.DeletePdf(VehicleCard.PdfFile);
             }
             var result = await _pdfService.CreatePdfStateAsync(VehicleCard, _startDate, DateTime.UtcNow);
-            if (result.Success == false) await _dialogService.ShowToastAsync(result.ErrorMessage);
+            if (result.Success == false)
+            {
+                await _dialogService.ShowToastAsync(result.ErrorMessage);
+                return;
+            }
+
             var resultFile = result as Result<string>;
             var resultSave = await _dialogService.ShowChoiceDisplayAlertAsync("Сохранение", "Вы хотите сохранить данный PDF ?", "Да", "Нет");
             if (resultSave)
@@ -292,8 +282,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
         public async void OpenPdfFile()
         {
             await _pdfService.OpenPdfAsync(vehicleCard.PdfFile);
-        }
-
+        } // открыть пдф
 
         private async Task LoadVehicleAsync()
         {
@@ -303,7 +292,7 @@ namespace AutoCareDiray.Shared.ViewModels.VehicleViewModel
                 var resultVehicle = result as Result<Vehicle>;
                 VehicleCard = resultVehicle.Data ?? new Vehicle();
 
-                // 1. Заполняем список просроченных деталей (для красных алертов на UI)
+               
                 var resultWarning = IntervalCalculatroService.CalculatingWarningList(VehicleCard);
                 WarningRepairType.Clear();
                 if (resultWarning != null)

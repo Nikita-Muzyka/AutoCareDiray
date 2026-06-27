@@ -127,7 +127,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 var vehicle = await _dbContex.Vehicles
                     .AsNoTracking()
                     .Include(c => c.RepairTypes)
-                    .Include(c => c.Repairs)
+                    .Include(c => c.Repairs).ThenInclude(c => c.RepairType)
                     .FirstOrDefaultAsync(v => v.Id == Vehicle_Id, token);
 
                 if (vehicle != null) return Result<Vehicle>.SuccessCreate(vehicle);

@@ -138,6 +138,7 @@ namespace AutoCareDiray
             builder.Services.AddTransient<IPdfService,PdfService>();
             builder.Services.AddTransient<IPreferencesService,AutoCareDiray.Service.PreferencesService.PreferencesService>();
             builder.Services.AddTransient<IUnitService, AutoCareDiray.Service.UnitService.UnitService>();
+            builder.Services.AddTransient<IRepairTypeCategoryService, AutoCareDiray.Service.RepairTypyCategoryService.RepairTypeCategoryService>();
 
 
             builder.Services.AddTransient<VehicleValidation>();

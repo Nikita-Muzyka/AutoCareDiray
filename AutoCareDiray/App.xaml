@@ -7,12 +7,17 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/Styles/FontsStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+
+                <ResourceDictionary Source="/Resources/Styles/FontsStyle.xaml"/>
+                
                 <ResourceDictionary Source="/Resources/Styles/ColorsCustomLight.xaml"/>
-                <!--<ResourceDictionary Source="/Resources/Styles/ColorsCustomDark.xaml"/>-->
-                <ResourceDictionary Source="/Resources/Styles/StylesCustomStandart.xaml"/>
+                
+                <ResourceDictionary Source="/Resources/Styles/Controls.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/Typography.xaml"/>
+
+                <ResourceDictionary Source="/Resources/Styles/Vehicle/CardVehicle.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

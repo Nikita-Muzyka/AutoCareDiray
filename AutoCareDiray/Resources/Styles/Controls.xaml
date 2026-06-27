@@ -1,51 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    x:Class="AutoCareDiray.Resources.Styles.StylesCustomStandart"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoCareDiray.Resources.Styles.Controls"
                     xmlns:behaviors="clr-namespace:AutoCareDiray.Controls.Behaviors">
 
-
-
-    <Shadow x:Key="ShadowRedLightForGrid" Brush="{DynamicResource ShadowRedLight}" Opacity="0.5" Offset="0,2" Radius="5"/>
-    <Shadow x:Key="ShadowForBorderCardEntry" Brush="{DynamicResource ShadowRedLight}" Opacity="0.15" Offset="0,4" Radius="10"/>
+   
     <Shadow x:Key="ShadowDisableForButton" Brush="{DynamicResource ShadowDisableButton}" Opacity="0.8" Offset="0,3" Radius="10"/>
 
     <Shadow x:Key="ShadowGreenLightForBorder" Brush="{DynamicResource ShadowGreenLight}" Opacity="0.2" Offset="0,1" Radius="7"/>
     <Shadow x:Key="ShadowGreenLightForButton" Brush="{DynamicResource ShadowGreenLight}" Opacity="0.4" Offset="0,4" Radius="10"/>
     <Shadow x:Key="ShadowGoldForBorderPhoto" Brush="{DynamicResource ShadowGoldLight}" Opacity="0.5" Offset="0,4" Radius="10"/>
     <Shadow x:Key="ShadowBlackForBorderCard" Brush="{DynamicResource ShadowBlack}" Opacity="0.05" Offset="0,4" Radius="10"/>
-
-    <!-- Image Лого картинка программы-->
-    <Style TargetType="Image" x:Key="ImageLogoApp">
-        <Setter Property="HeightRequest" Value="300" />
-        <Setter Property="WidthRequest" Value="500" />
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Start" />
-        <Setter Property="Aspect" Value="AspectFill" />
-        <Setter Property="Source" Value="car_side_view.png" />
-    </Style>
-
-    <!--Image Лого картинка для списка авто-->
-    <Style TargetType="Image" x:Key="ImageForList">
-        <Setter Property="Aspect" Value="AspectFill" />
-    </Style>
-
-    <!--Image для картинок на карточке информации -->
-    <Style TargetType="Image" x:Key="ImageForCardInfo">
-        <Setter Property="HeightRequest" Value="30" />
-        <Setter Property="WidthRequest" Value="30" />
-        <Setter Property="HorizontalOptions" Value="Center" />
-        <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="Margin" Value="0,0,5,0" />
-        <Setter Property="Aspect" Value="AspectFill" />
-    </Style>
-    
-    <!--Image для добавления фото  -->
-    <Style TargetType="Image" x:Key="ImageAddPhoto">
-        <Setter Property="Aspect" Value="AspectFill" />
-    </Style>
-
-
 
 
     <!--ImageButton кнопка картинка для списка Кебаб меню (удалить редактировать)-->
@@ -156,7 +121,7 @@
     </Style>
 
     <!-- Button стандартная зеленая маленькая -->
-    <Style TargetType="Button" x:Key="ButtonCustomStandartRedMini">
+    <Style TargetType="Button" x:Key="ButtonCustomStandartMini">
         <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="CornerRadius" Value="20"/>
@@ -175,7 +140,7 @@
                     <VisualState x:Name="Normal">
                         <VisualState.Setters>
                             <Setter Property="TextColor" Value="{DynamicResource ButtonTextPrimaryWhite}"/>
-                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonPrimaryRed}" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ButtonMainColor}" />
                         </VisualState.Setters>
                     </VisualState>
                     <VisualState x:Name="Pressed">
@@ -207,11 +172,11 @@
                 <ControlTemplate>
 
                     <Border x:Name="RootBorder"
-                        StrokeShape="RoundRectangle 16"
-                        StrokeThickness="1"
-                        WidthRequest="80"
-                        HeightRequest="60"
-                        Margin="5">
+                     StrokeShape="RoundRectangle 16"
+                     StrokeThickness="1"
+                     WidthRequest="80"
+                     HeightRequest="60"
+                     Margin="5">
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroupList>
@@ -240,11 +205,11 @@
                         </VisualStateManager.VisualStateGroups>
 
                         <Label x:Name="ContentLabel"
-                           Text="{TemplateBinding Content}" 
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center"
-                           Style="{DynamicResource LabelForRadioButton}"
-                           HorizontalTextAlignment="Center"/>
+                        Text="{TemplateBinding Content}" 
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                        Style="{DynamicResource LabelForRadioButton}"
+                        HorizontalTextAlignment="Center"/>
 
                     </Border>
 
@@ -252,102 +217,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
-    <!--Label лого-->
-    <Style TargetType="Label" x:Key="LabelLogo">
-        <Setter Property="FontSize" Value="38"/>
-        <Setter Property="FormattedText">
-            <FormattedString>
-                <Span Text="AutoCare " 
-                      TextColor="{StaticResource PrimaryRed}" 
-                      FontAttributes="Bold" 
-                      FontFamily="{StaticResource RubikBold}"/>
-                <Span Text="Diary" 
-                      TextColor="{StaticResource TextSecondary}" 
-                      FontAttributes="Bold" 
-                      FontFamily="{StaticResource RubikBold}"/>
-            </FormattedString>
-        </Setter>
-    </Style>
-
-    <!--Label текст для TitlePage-->
-    <Style TargetType="Label" x:Key="LabelCustomPage">
-        <Setter Property="FontFamily" Value="{StaticResource MontserratMedium}"/>
-        <Setter Property="FontSize" Value="20"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="TextColor" Value="{DynamicResource PrimaryGreen}"/>
-    </Style>
-
-    <!--Label обычный текст главный большой-->
-    <Style TargetType="Label" x:Key="LabelCustomMain">
-        <Setter Property="FontFamily" Value="{StaticResource MontserratMedium}"/>
-        <Setter Property="FontSize" Value="16"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="TextColor" Value="{DynamicResource TextBlack}"/>
-    </Style>
-
-    <!--Label обычный текст для второстепенных задач-->
-    <Style TargetType="Label" x:Key="LabelSecondaryCustom">
-        <Setter Property="FontFamily" Value="{StaticResource MontserratMedium}"/>
-        <Setter Property="CharacterSpacing" Value="1.1"/>
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="TextColor" Value="{DynamicResource PrimarySecondary}"/>
-    </Style>
-
-    <!-- Label Для информации под функции italic -->
-    <Style TargetType="Label" x:Key="LabelFunctionInfo">
-        <Setter Property="FontFamily" Value="{StaticResource MontserratItalic}"/>
-        <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="TextColor" Value="{DynamicResource PrimarySecondary}"/>
-        <Setter Property="FontSize" Value="12"/>
-    </Style>
-
-    <!-- Label Для информации под поля ввода -->
-    <Style TargetType="Label" x:Key="LabelInfoForEntry">
-        <Setter Property="FontFamily" Value="{StaticResource MontserratMedium}"/>
-        <Setter Property="TextColor" Value="{DynamicResource PrimarySecondary}"/>
-        <Setter Property="FontSize" Value="13"/>
-    </Style>
-
-    <!-- Label Для информации под поля ввода -->
-    <Style TargetType="Label" x:Key="LabelForRadioButton">
-        <Setter Property="FontFamily" Value="{StaticResource MontserratBold}"/>
-        <Setter Property="FontSize" Value="14"/>
-    </Style>
-
-    <!-- Label Ошибки-->
-    <Style TargetType="Label" x:Key="LabelError">
-        <Setter Property="FontFamily" Value="{StaticResource MontserratItalic}"/>
-        <Setter Property="CharacterSpacing" Value="1.1"/>
-        <Setter Property="HorizontalOptions" Value="Start"/>
-        <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="FontSize" Value="12"/>
-    </Style>
-
-    <!-- Label Для предупреждения -->
-    <Style TargetType="Label" x:Key="LabelWarningForCard">
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-        <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="TextColor" Value="{DynamicResource TextError}"/>
-        <Setter Property="FontSize" Value="12"/>
-        <!--<Setter Property="Shadow" Value="{StaticResource ShadowRedLightForLabel}"/>-->
-    </Style>
-
-    <!--Label для стрелки в низ красной для  picker-->
-    <Style TargetType="Label" x:Key="LabelArrowDown">
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="HorizontalOptions" Value="End"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="Margin" Value="0,0,5,0"/>
-        <Setter Property="TextColor" Value="{DynamicResource PrimaryGreen}"/>
-    </Style>
-
 
 
     <!--Grid для карточки CollectionView, чтобы было отступы между карточками и от краев экрана-->
@@ -375,14 +244,6 @@
         <Setter Property="Padding" Value="20, 15" />
         <Setter Property="Margin" Value="0, 0, 0, 15" />
         <Setter Property="Shadow" Value="{DynamicResource ShadowBlackForBorderCard}"/>
-    </Style>
-
-    <!--Border для главных карточек информации в картах ремонта и авто -->
-    <Style TargetType="Border" x:Key="BorderForCardInfo">
-        <Setter Property="StrokeShape" Value="RoundRectangle 15"/>
-        <Setter Property="Background" Value="{DynamicResource Background}"/>
-        <Setter Property="StrokeThickness" Value="0"/>
-        <Setter Property="Shadow" Value="{StaticResource ShadowForBorderCardEntry}"/>
     </Style>
 
     <!--Border для карточек CollectionView-->
@@ -433,7 +294,6 @@
 
     <!--Border карточка для добавления авто круглая золотая с тенью-->
     <Style TargetType="Border" x:Key="BorderPhotoRound">
-        <Setter Property="BackgroundColor" Value="#F8F9FA" />
         <Setter Property="StrokeShape" Value="RoundRectangle 100" />
         <Setter Property="Stroke" Value="#C8A45D" />
         <Setter Property="StrokeThickness" Value="2" />
@@ -443,51 +303,25 @@
         <Setter Property="Shadow" Value="{StaticResource ShadowGoldForBorderPhoto}"/>
     </Style>
 
-
-
-    <!--Entry для ввода данных стандартный-->
-    <Style TargetType="Entry" x:Key="EntryImput">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={DynamicResource PrimaryBlack}, Dark={DynamicResource PrimaryWhite}}" />
-        <Setter Property="FontSize" Value="15" />
-        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={DynamicResource InputPlaceholder}, Dark={DynamicResource InputPlaceholder}}" />
-        <Setter Property="HorizontalOptions" Value="Start" />
-        <Setter Property="VerticalOptions" Value="Center" />
-        <Setter Property="FontFamily" Value="{StaticResource MontserratRegular}"/>
-        <Setter Property="CharacterSpacing" Value="1.1"/>
-        <Setter Property="VisualStateManager.VisualStateGroups">
-            <VisualStateGroupList>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Disabled">
-                        <VisualState.Setters>
-                            <Setter Property="TextColor" Value="{DynamicResource Gray500}" />
-                        </VisualState.Setters>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateGroupList>
-        </Setter>
+    <!--Border карточка для добавления авто круглая золотая с тенью-->
+    <Style TargetType="Border" x:Key="BorderPhotoCard">
+        <Setter Property="StrokeShape" Value="RoundRectangle 100" />
+        <Setter Property="Stroke" Value="#C8A45D" />
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="HeightRequest" Value="80" />
+        <Setter Property="WidthRequest" Value="80" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Shadow" Value="{StaticResource ShadowGoldForBorderPhoto}"/>
     </Style>
 
-
-
-    <!--Editor для ввода информации обычный-->
-    <Style TargetType="Editor" x:Key="EditorStandart">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBlack}, Dark={StaticResource PrimaryWhite}}" />
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
-        <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="AutoSize" Value="TextChanges"/>
-    </Style>
-
-
+    
 
     <!--BoxView для отступов-->
     <Style TargetType="BoxView" x:Key="BoxViewCustom">
         <Setter Property="Margin" Value="15,0,0,0"/>
-        <Setter Property="Margin" Value="15,0,0,0"/>
         <Setter Property="HeightRequest" Value="1"/>
         <Setter Property="Color" Value="{DynamicResource BoxViewColor}"/>
     </Style>
-
 
 
     <!--CheckBox для отступов-->
@@ -506,7 +340,6 @@
     </Style>
 
 
-
     <!--Shell-->
     <Style TargetType="Shell" x:Key="CustomTabBar">
         <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryWhite}, Dark={StaticResource PrimaryBlack}}" />
@@ -520,7 +353,6 @@
         <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Light={StaticResource PrimaryGold}, Dark={StaticResource PrimaryGold}}" />
         <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource PrimaryGreen}, Dark={StaticResource PrimaryGreen}}" />
     </Style>
-
 
 
     <!-- Page Дизайн для всех страниц-->

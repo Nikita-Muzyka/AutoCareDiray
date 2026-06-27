@@ -21,6 +21,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         private readonly RepairValidation _validationRepair;
         private readonly IPhotoPicker _photoPicker;
         private readonly IPreferencesService _preferencesService;
+        private readonly IRepairTypeCategoryService _repairTypeCategoryService;
 
         private Repair Repair;
         private Vehicle _vehicle;
@@ -108,7 +109,8 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
         #endregion
 
-        public CreateRepairViewModel(IDialogService dialog, IDataService data, INavigationService navigate, RepairValidation validation, IPhotoPicker photoPicker, IPreferencesService preferencesService)
+        public CreateRepairViewModel(IDialogService dialog, IDataService data, INavigationService navigate, RepairValidation validation, 
+            IPhotoPicker photoPicker, IPreferencesService preferencesService,IRepairTypeCategoryService caregory)
             : base(dialog, data, navigate)
         {
             _cts = new CancellationTokenSource();
@@ -116,6 +118,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             _validationRepair.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
             _photoPicker = photoPicker;
             _preferencesService = preferencesService;
+            _repairTypeCategoryService = caregory;
         }
 
         #region свойства для ошибок в реальном времени
@@ -235,12 +238,14 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 await _dialogService.ShowToastAsync("Данный тип ремонта уже сеществует");
                 return;
             }
+
+             var CategoryText = _repairTypeCategoryService.GetCategory(SelectedCategory);
             _type = new RepairType()
             {
                 TitleRepair = TitleNewRepairType,
                 IntervalMileage = IntervalMileageNewType,
                 IntervalMonth = IntervalMonthNewType,
-                Category = SelectedCategory,
+                Category = CategoryText,
                 VehicleId = _vehicleId
             };
 

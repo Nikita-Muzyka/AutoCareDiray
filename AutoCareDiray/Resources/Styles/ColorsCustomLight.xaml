@@ -38,6 +38,7 @@
     <Color x:Key="ButtonTextPrimaryBlack">#000000</Color>
     <Color x:Key="ButtonTextDisable">#FFFFFF</Color>
     <Color x:Key="ButtonPressed">#00be5c</Color>
+    <Color x:Key="ButtonMainColor">#00823f</Color>
 
 
     <!-- ===== ПОЛЯ ВВОДА ===== -->
