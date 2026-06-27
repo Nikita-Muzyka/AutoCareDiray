@@ -20,6 +20,7 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
         #region основные классы
 
         private CancellationTokenSource _cts;
+        private readonly IRepairTypeCategoryService _repairTypeCategoryService;
 
         #endregion
 
@@ -36,9 +37,10 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
 
         #endregion
 
-        public JournalEventViewModel(IDialogService dialog, IDataService data, INavigationService navigate) : base(dialog,data,navigate)
+        public JournalEventViewModel(IDialogService dialog, IDataService data, INavigationService navigate,IRepairTypeCategoryService repairCategory) : base(dialog,data,navigate)
         {
             _cts = new CancellationTokenSource();
+            _repairTypeCategoryService = repairCategory;
         }
 
         async partial void OnSelectedVehicleChanged(Vehicle value)
@@ -58,8 +60,8 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
             {
                 var resultVehicle = result as Result<Vehicle>;
                 ObservableCollection<TimelineEvent> list = new ObservableCollection<TimelineEvent>();
-
-                if (resultVehicle.Data.Repairs == null || resultVehicle.Data.Repairs.Count == 0) { }
+                var vehicle = resultVehicle.Data;
+                if (vehicle.Repairs == null || vehicle.Repairs.Count == 0) { }
                 else
                 {
                     foreach (var repair in resultVehicle.Data.Repairs)
@@ -71,8 +73,9 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
                             Date = repair.DateRepair,
                             Title = repair.RepairType.TitleRepair,
                             Cost = repair.Cost,
-                            Mileage = repair.CurrentMileage + " км. "
-                        });
+                            Mileage = repair.CurrentMileage + " " + vehicle.UnitDistance,
+                            IconSource = _repairTypeCategoryService.GetIconCategory(repair.RepairType.Category)
+                        }); 
                     }
                 }
 
@@ -88,8 +91,9 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
                             Date = refill.DateRefill,
                             Title = refill.Title,
                             Cost = refill.Cost,
-                            Subtitle = refill.VolumeLiters + " л. ",
-                            Mileage = refill.Mileage + " км. "
+                            Subtitle = refill.VolumeLiters + " " + vehicle.UnitVolume,
+                            Mileage = refill.Mileage + " " + vehicle.UnitDistance,
+                            IconSource = "refill_icon.png"
                         });
                     }
                 }
@@ -135,7 +139,7 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
                     // Переходим на страницу расхода (мойка, страховка)
                     break;
             }
-        }
+        }  // Выводит менб создания собятия для журнала
 
         [RelayCommand]
         public async Task ShowEventOptions(TimelineEvent selectedTimeLine)

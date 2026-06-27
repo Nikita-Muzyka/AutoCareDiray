@@ -11,5 +11,7 @@ namespace AutoCareDiray.Shared.Interface
     {
         string GetTitleCategory(RepairCategory category);
         RepairCategory GetCategory(string category);
+
+        string GetIconCategory(RepairCategory category);
     }
 }

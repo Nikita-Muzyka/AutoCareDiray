@@ -67,7 +67,7 @@ class DialogService : IDialogService
             null,
             "⛽ Заправку",
             "🛠 Ремонт",
-            "📝 Заметку",
+            "🧾 Сарховка,счета и тд",
             "🧾 Прочий расход");
 
         return action;

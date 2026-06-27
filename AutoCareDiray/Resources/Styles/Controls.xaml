@@ -331,12 +331,14 @@
 
 
     <!--Picker Custom-->
-    <Style TargetType="Picker" x:Key="PickerStandart">
+    <Style TargetType="Picker" x:Key="PickerChooseVehicle">
         <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="HorizontalOptions" Value="Fill"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontFamily" Value="{StaticResource MontserratMedium}"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
     </Style>
 
 

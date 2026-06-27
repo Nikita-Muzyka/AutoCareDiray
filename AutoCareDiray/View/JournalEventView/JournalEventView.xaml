@@ -3,26 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.JournalEventView.JournalEventView"
              xmlns:models="clr-namespace:AutoCareDiray.Shared.Models.Journal;assembly=AutoCareDiray.Shared"
-             xmlns:vm="clr-namespace:AutoCareDiray.Shared.ViewModels.JournalEventViewModel;assembly=AutoCareDiray.Shared"
-             Title="Журнал событий">
+             xmlns:vm="clr-namespace:AutoCareDiray.Shared.ViewModels.JournalEventViewModel;assembly=AutoCareDiray.Shared">
 
-    <Grid RowDefinitions="auto,*">
+    <Shell.TitleView>
+        <HorizontalStackLayout VerticalOptions="Center">
+            <Label Text="Журнал событий ТС" Style="{DynamicResource LabelCustomPage}" />
+        </HorizontalStackLayout>
+    </Shell.TitleView>
 
-        <VerticalStackLayout Grid.Row="0" Margin="15">
-            <Border Style="{DynamicResource BorderForEntryImput}" Margin="30,0,30,0">
-                <Picker Style="{DynamicResource PickerStandart}" ItemsSource="{Binding Vehicles}"
-                     ItemDisplayBinding="{Binding NameVehicle}" SelectedItem="{Binding SelectedVehicle}"
-                     HorizontalTextAlignment="Center" WidthRequest="250" Title="Выберите авто ... ▼">
-                </Picker>
-            </Border>
-        </VerticalStackLayout>
+    <Grid>
 
         <CollectionView ItemsSource="{Binding JournalEvents}" SelectionMode="None"
-                     Grid.Row="1" Margin="0,15,0,0">
+                        Margin="0,20,0,0">
 
             <CollectionView.EmptyView>
-                <Label Text="🤷‍♂️ Кажется тут пусто." Style="{DynamicResource LabelInfo}" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label Text="🤷‍♂️ Кажется тут пусто." Style="{DynamicResource LabelCustomMain}" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
             </CollectionView.EmptyView>
+
+            <CollectionView.Header>
+                <Picker Style="{DynamicResource PickerChooseVehicle}" ItemsSource="{Binding Vehicles}"
+ItemDisplayBinding="{Binding NameVehicle}" SelectedItem="{Binding SelectedVehicle}"
+Title="Выберите авто ... ▼">
+                </Picker>
+            </CollectionView.Header>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:TimelineEvent">
@@ -41,9 +44,12 @@
                                     HeightRequest="40" WidthRequest="40" VerticalOptions="Center"/>
 
                                 <VerticalStackLayout Grid.Column="1" Padding="15,5,5,5" Spacing="2" VerticalOptions="Center">
-                                    <Label Text="{Binding Title}" Style="{DynamicResource LabelCustom}" FontAttributes="Bold" FontSize="16"/>
+                                    <Label Text="{Binding Title}" Style="{DynamicResource LabelCustomMain}"/>
 
-                                    <Label Text="{Binding Subtitle}" Style="{DynamicResource LabelSecondaryCustom}" FontSize="13"/>
+                                    <HorizontalStackLayout>
+                                        <Label Text= ""  Style="{DynamicResource LabelSecondaryCustom}" FontSize="13"/>
+                                        <Label Text="{Binding Mileage }"  Style="{DynamicResource LabelSecondaryCustom}" FontSize="13"/>
+                                    </HorizontalStackLayout>
 
                                     <Label Text="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}" TextColor="Gray" FontSize="11"/>
                                 </VerticalStackLayout>
@@ -62,11 +68,20 @@
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+
+            <CollectionView.Footer>
+                <BoxView HeightRequest="100" Color="{DynamicResource PrimaryWhite}" />
+            </CollectionView.Footer>
+
         </CollectionView>
 
-        <Grid Grid.Row="1" Style="{StaticResource GridForButtonCreate}">
-            <Button Command="{Binding ShowMenuAddCommand}" Style="{DynamicResource ButtonCreate}" IsEnabled="{Binding IsEnableButtonCreate}"/>
+        <Grid Style="{StaticResource GridForButtonCreate}"
+        VerticalOptions="End" 
+        HorizontalOptions="End" 
+        Margin="0, 0, 20, 30">
+            <Button Command="{Binding ShowMenuAddCommand}" Style="{DynamicResource ButtonCreate}"  IsEnabled="{Binding IsEnableButtonCreate}"/>
         </Grid>
+
     </Grid>
 
 </ContentPage>

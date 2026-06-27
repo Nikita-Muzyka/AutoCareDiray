@@ -18,7 +18,7 @@ namespace AutoCareDiray.Shared.Models.Journal
 
         public string Mileage { get; set; }   
         public decimal Cost { get; set; }      // Чтобы вывести сумму в карточке
-        public string IconSource { get; set; } = "car_icon.png";
+        public string IconSource { get; set; }
 
         // Для красивого вывода суммы в XAML можно сделать готовое свойство:
         public string FormattedCost => Cost > 0 ? $"- {Cost:N0} ₽" : string.Empty;

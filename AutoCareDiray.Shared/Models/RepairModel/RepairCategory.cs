@@ -12,7 +12,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         Engine,
         Suspension,
         Body,
-        Electical,
+        Electrical,
         Transmission,
         Salon
     }

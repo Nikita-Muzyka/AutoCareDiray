@@ -27,9 +27,15 @@ namespace AutoCareDiray.Service.RepairTypyCategoryService
                 "Кузов" => RepairCategory.Body,
                 "Салон авто" => RepairCategory.Salon,
                 "Подвеска" => RepairCategory.Suspension,
-                "Электрика" => RepairCategory.Electical,
+                "Электрика" => RepairCategory.Electrical,
                 _ => throw new NotImplementedException()
             };
+        }
+
+        public string GetIconCategory(RepairCategory category)
+        {
+            var icon = category.GetIconCategory();
+            return icon;
         }
     }
 }

@@ -19,12 +19,14 @@
         </Tab>
 
         <Tab Title="Журнал Событий"
-             Route="JournalEvent">
+             Route="JournalEvent"
+             Icon="journalevent_icon.png">
             <ShellContent ContentTemplate="{DataTemplate journalView:JournalEventView}"/>
         </Tab>
 
         <Tab Title="Настройки"
-             Route="Settings">
+             Route="Settings"
+             Icon="settings_icon.png">
             <ShellContent ContentTemplate="{DataTemplate settings:SettingsView}"/>
         </Tab>
 
