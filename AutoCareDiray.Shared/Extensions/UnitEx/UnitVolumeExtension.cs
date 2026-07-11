@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoCareDiray.Extensions.SettingsEx
+namespace AutoCareDiray.Shared.Extensions.UnitEx
 {
     public static class UnitVolumeExtension
     {

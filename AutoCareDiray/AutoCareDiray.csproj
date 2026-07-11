@@ -104,6 +104,9 @@
 	  <MauiXaml Update="Resources\Styles\Controls.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\Journal\JournalStyle.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\Typography.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

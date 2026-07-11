@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoCareDiray.Extensions
+namespace AutoCareDiray.Shared.Extensions.RepairEx
 {
     public static class RepairCategoryExtension
     {
@@ -20,7 +20,8 @@ namespace AutoCareDiray.Extensions
                 RepairCategory.Salon => "Салон авто",
                 RepairCategory.Suspension => "Подвеска",
                 RepairCategory.Electrical => "Электрика",
-                _ => "non"
+                RepairCategory.AllCategory => "Все категории",
+                _ => "Все категории"
             };
         }
 
@@ -35,7 +36,7 @@ namespace AutoCareDiray.Extensions
                 RepairCategory.Salon => "salon_category.png",
                 RepairCategory.Suspension => "suspension_category.png",
                 RepairCategory.Electrical => "electrical_category.png",
-                _ => "engine_caregory_icon.png"
+                RepairCategory.AllCategory => "",
             };
         }
     }

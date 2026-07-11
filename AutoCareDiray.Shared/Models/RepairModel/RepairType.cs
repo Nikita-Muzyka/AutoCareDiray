@@ -1,4 +1,5 @@
-﻿using AutoCareDiray.Shared.Interface;
+﻿using AutoCareDiray.Shared.Extensions.RepairEx;
+using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,6 @@ namespace AutoCareDiray.Shared.Models.RepairModel
     public class RepairType : INotifyPropertyChanged
     {
 
-        private readonly IRepairTypeCategoryService _repairTypeCategoryService;
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -36,7 +36,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         public RepairCategory Category { get; set; }
         public string CategoryText
         {
-            get { return _repairTypeCategoryService.GetTitleCategory(Category); }
+            get { return Category.GetDisplay();  }
         }
 
         //Выбор обслужена категория или нет

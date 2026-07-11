@@ -31,6 +31,7 @@
     <Color x:Key="TextBlack">#212121</Color>
     <Color x:Key="TextError">#E53935</Color>
     <Color x:Key="TextBaclgroundWarning">#ff6a5b</Color>
+    <Color x:Key="TextCostNegative">#E57373</Color>
 
     <!-- ===== КНОПКИ ===== -->
     <Color x:Key="ButtonDisable">#807F7F</Color>

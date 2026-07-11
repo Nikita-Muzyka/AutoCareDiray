@@ -1,4 +1,4 @@
-using AutoCareDiray.Extensions;
+using AutoCareDiray.Shared.Extensions.RepairEx;
 using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using AutoCareDiray.Shared.ViewModels.RepairViewModel;

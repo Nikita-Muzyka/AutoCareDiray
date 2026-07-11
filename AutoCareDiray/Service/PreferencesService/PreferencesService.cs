@@ -1,5 +1,5 @@
 ﻿
-using AutoCareDiray.Extensions.SettingsEx;
+using AutoCareDiray.Shared.Extensions.UnitEx;
 using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.Shared.Models.SettignsModel;
 using Microsoft.Maui.Storage;
@@ -14,6 +14,13 @@ namespace AutoCareDiray.Service.PreferencesService
 {
     public class PreferencesService : IPreferencesService
     {
+        private readonly IUnitService _unitService;
+
+        public PreferencesService(IUnitService unitService)
+        {
+            _unitService = unitService;
+        }
+
         public string GetDefault(string name)
         {
             return Preferences.Default.Get(name, "0");
@@ -38,13 +45,15 @@ namespace AutoCareDiray.Service.PreferencesService
         {
             var unitResult = Preferences.Default.Get("DistanceUnit", 0);
                 EUnitDistance unit = (EUnitDistance)unitResult;
-                return unit.GetShorNameUnit();
+            var result = unit.GetShorNameUnit();
+            return result;
         }
         public string GetDefaultShortVolume()
         {
             var unitResult = Preferences.Default.Get("VolumeUnit", 0);
             EUnitVolume unit = (EUnitVolume)unitResult;
-            return unit.GetShorNameUnit();
+            var result = unit.GetShorNameUnit();
+            return result;
 
         }
         public string GetDefaultMoney()

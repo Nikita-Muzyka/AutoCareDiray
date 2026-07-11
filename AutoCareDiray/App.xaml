@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="/Resources/Styles/Typography.xaml"/>
 
                 <ResourceDictionary Source="/Resources/Styles/Vehicle/CardVehicle.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/Journal/JournalStyle.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

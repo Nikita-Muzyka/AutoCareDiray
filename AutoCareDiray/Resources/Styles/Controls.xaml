@@ -229,7 +229,7 @@
     <Style TargetType="Grid" x:Key="GridForButtonCreate">
         <Setter Property="Padding" Value="10,10,10,10"/>
         <Setter Property="VerticalOptions" Value="End"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="HorizontalOptions" Value="End"/>
         <Setter Property="Margin" Value="0,0,0,20"/>
     </Style>
 
@@ -314,6 +314,30 @@
         <Setter Property="Shadow" Value="{StaticResource ShadowGoldForBorderPhoto}"/>
     </Style>
 
+    <!--Border для SearchBar главного-->
+    <Style TargetType="Border" x:Key="BorderSearchBarMain">
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource Background}" />
+        <Setter Property="Stroke" Value="{DynamicResource PrimaryGreen}" />
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Shadow" Value="{StaticResource ShadowGreenLightForBorder}"/>
+        <Setter Property="HeightRequest" Value="40"/>
+    </Style>
+
+    <!--Border для Picker главного-->
+    <Style TargetType="Border" x:Key="BorderPickerMain">
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource Background}" />
+        <Setter Property="Stroke" Value="{DynamicResource PrimaryGreen}" />
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="Shadow" Value="{StaticResource ShadowGreenLightForBorder}"/>
+        <Setter Property="HeightRequest" Value="40"/>
+    </Style>
+
+
     
 
     <!--BoxView для отступов-->
@@ -335,6 +359,18 @@
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="CharacterSpacing" Value="1.2"/>
         <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontFamily" Value="{StaticResource MontserratMedium}"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="HeightRequest" Value="10"/>
+    </Style>
+
+    <!--SearchBar главный основной-->
+    <Style TargetType="SearchBar" x:Key="SearchBarMain">
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="FontFamily" Value="{StaticResource MontserratMedium}"/>
         <Setter Property="HorizontalOptions" Value="Center"/>
         <Setter Property="HorizontalOptions" Value="Center"/>

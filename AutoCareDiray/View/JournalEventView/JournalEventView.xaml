@@ -11,21 +11,43 @@
         </HorizontalStackLayout>
     </Shell.TitleView>
 
-    <Grid>
+    <Grid RowDefinitions="Auto, *">
+        <VerticalStackLayout Spacing="12" Padding="5,10" Grid.Row="0">
+
+            <Border Style="{DynamicResource BorderPickerMain}">
+                <Picker Style="{DynamicResource PickerChooseVehicle}" 
+               ItemsSource="{Binding Vehicles}"
+               ItemDisplayBinding="{Binding NameVehicle}" 
+               SelectedItem="{Binding SelectedVehicle}"
+               Title="Выберите авто ... ▼"/>
+            </Border>
+
+            <Border Style="{DynamicResource BorderSearchBarMain}" IsVisible="{Binding IsSearchFilterVisible}">
+                <SearchBar x:Name="MySearch" Placeholder="Поиск по журналу..." Style="{DynamicResource SearchBarMain}" Text="{Binding SearchText}"
+                           SearchButtonPressed="SearchBar_SearchButtonPressed"/>
+            </Border>
+
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+
+                <Border Grid.Column="0" Style="{DynamicResource BorderPickerJournal}" IsVisible="{Binding IsEventTypeFilterVisible}">
+                    <Picker Title="Тип события ▼" Style="{DynamicResource PickerJournal}" ItemsSource="{Binding EventTypes}" SelectedItem="{Binding SelectedEventType}"/>
+                </Border>
+
+                <Border Grid.Column="1" IsVisible="{Binding IsCategoryFilterVisible}" Style="{DynamicResource BorderPickerJournal}">
+                    <Picker Title="Категория ▼" Style="{DynamicResource PickerJournal}" ItemsSource="{Binding RepairCategories}" SelectedItem="{Binding SelectedCategory}"/>
+                </Border>
+
+            </Grid>
+
+
+        </VerticalStackLayout>
 
         <CollectionView ItemsSource="{Binding JournalEvents}" SelectionMode="None"
-                        Margin="0,20,0,0">
+                        Margin="0,20,0,0" ItemsUpdatingScrollMode="KeepScrollOffset" Grid.Row="1">
 
             <CollectionView.EmptyView>
                 <Label Text="🤷‍♂️ Кажется тут пусто." Style="{DynamicResource LabelCustomMain}" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
             </CollectionView.EmptyView>
-
-            <CollectionView.Header>
-                <Picker Style="{DynamicResource PickerChooseVehicle}" ItemsSource="{Binding Vehicles}"
-ItemDisplayBinding="{Binding NameVehicle}" SelectedItem="{Binding SelectedVehicle}"
-Title="Выберите авто ... ▼">
-                </Picker>
-            </CollectionView.Header>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:TimelineEvent">
@@ -46,17 +68,16 @@ Title="Выберите авто ... ▼">
                                 <VerticalStackLayout Grid.Column="1" Padding="15,5,5,5" Spacing="2" VerticalOptions="Center">
                                     <Label Text="{Binding Title}" Style="{DynamicResource LabelCustomMain}"/>
 
-                                    <HorizontalStackLayout>
-                                        <Label Text= ""  Style="{DynamicResource LabelSecondaryCustom}" FontSize="13"/>
-                                        <Label Text="{Binding Mileage }"  Style="{DynamicResource LabelSecondaryCustom}" FontSize="13"/>
-                                    </HorizontalStackLayout>
+                                    <Label Text="{Binding Mileage }"  Style="{DynamicResource LabelSecondaryCustom}" FontSize="13"/>
+
+                                    <Label Text="{Binding Subtitle }"  Style="{DynamicResource LabelSecondaryCustom}" FontSize="13"/>
 
                                     <Label Text="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}" TextColor="Gray" FontSize="11"/>
                                 </VerticalStackLayout>
 
                                 <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End" Spacing="10">
 
-                                    <Label Text="{Binding FormattedCost}" TextColor="#E57373" FontAttributes="Bold" FontSize="14" HorizontalTextAlignment="End"/>
+                                    <Label Text="{Binding FormattedCost}" Style="{StaticResource LabelCostNegative}"/>
 
                                     <ImageButton Style="{DynamicResource ImageKebab}" Source="dots_image.png"  
                                               Command="{Binding Source={RelativeSource AncestorType={x:Type vm:JournalEventViewModel}}, Path=ShowEventOptionsCommand}"
@@ -75,13 +96,11 @@ Title="Выберите авто ... ▼">
 
         </CollectionView>
 
-        <Grid Style="{StaticResource GridForButtonCreate}"
-        VerticalOptions="End" 
-        HorizontalOptions="End" 
-        Margin="0, 0, 20, 30">
+        <Grid Grid.Row="1"
+              Style="{StaticResource GridForButtonCreate}">
             <Button Command="{Binding ShowMenuAddCommand}" Style="{DynamicResource ButtonCreate}"  IsEnabled="{Binding IsEnableButtonCreate}"/>
         </Grid>
 
     </Grid>
-
+    
 </ContentPage>

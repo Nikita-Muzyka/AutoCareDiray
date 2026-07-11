@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoCareDiray.Shared.Models.SettignsModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,6 @@ namespace AutoCareDiray.Shared.Interface
         List<string> GetListUnitVolume();
         double GetConvertedMileage(double mileage, string unitDistance, string currentDistance);
         double GetConvertedVolume(double volume, string unitVolume, string currentVolume);
+
     }
 }

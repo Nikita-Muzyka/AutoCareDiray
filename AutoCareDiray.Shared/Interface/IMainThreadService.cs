@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoCareDiray.Shared.Models.Journal
+namespace AutoCareDiray.Shared.Interface
 {
-    public enum EventType
+    public interface IMainThreadService
     {
-        Repair,
-        Refill,
-        AllEvent
+        void RunUIThread(Action action);
     }
 }

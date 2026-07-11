@@ -163,6 +163,15 @@
         <!--<Setter Property="Shadow" Value="{StaticResource ShadowRedLightForLabel}"/>-->
     </Style>
 
+    <!-- Label Для отрицательного баланса -->
+    <Style TargetType="Label" x:Key="LabelCostNegative">
+        <Setter Property="FontFamily" Value="{StaticResource MontserratBold}"/>
+        <Setter Property="CharacterSpacing" Value="1.2"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextCostNegative}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HorizontalTextAlignment" Value="End"/>
+    </Style>
+
     <!--Label для стрелки в низ красной для  picker-->
     <Style TargetType="Label" x:Key="LabelArrowDown">
         <Setter Property="FontFamily" Value="{StaticResource RubikRegular}"/>

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoCareDiray.Shared.Models.SettignsModel;
 
-namespace AutoCareDiray.Extensions.SettingsEx
+namespace AutoCareDiray.Shared.Extensions.UnitEx
 {
     public static class UnitDistanceExtension
     {

@@ -1,4 +1,7 @@
-﻿using AutoCareDiray.Shared.Interface;
+﻿using AutoCareDiray.Shared.Extensions.EventTypeEx;
+using AutoCareDiray.Shared.Extensions.RepairEx;
+using AutoCareDiray.Shared.Extensions.StringEx;
+using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.Shared.Models.Journal;
 using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Models.VehicleModel;
@@ -20,27 +23,44 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
         #region основные классы
 
         private CancellationTokenSource _cts;
-        private readonly IRepairTypeCategoryService _repairTypeCategoryService;
+        private CancellationTokenSource _searchcts;
+        private readonly IMainThreadService _mainThreadService;
 
         #endregion
 
         #region основные классы для работы UI
 
         public ObservableCollection<Vehicle> Vehicles { get; set; }
+        private List<TimelineEvent> _journalDB;
         public ObservableCollection<TimelineEvent> JournalEvents { get; set; } = new ObservableCollection<TimelineEvent>();
+        public ObservableCollection<string> RepairCategories { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> EventTypes { get; set; } = new ObservableCollection<string>();
 
         [ObservableProperty]
         private Vehicle selectedVehicle;
 
         [ObservableProperty]
         private bool isEnableButtonCreate;
+        [ObservableProperty]
+        private bool isCategoryFilterVisible = false;
+        [ObservableProperty]
+        private bool isEventTypeFilterVisible = false;
+        [ObservableProperty]
+        private bool isSearchFilterVisible = false;
 
+
+        [ObservableProperty]
+        private string selectedEventType;
+        [ObservableProperty]
+        private string selectedCategory;
+        [ObservableProperty]
+        private string searchText;
         #endregion
 
-        public JournalEventViewModel(IDialogService dialog, IDataService data, INavigationService navigate,IRepairTypeCategoryService repairCategory) : base(dialog,data,navigate)
+        public JournalEventViewModel(IDialogService dialog, IDataService data, INavigationService navigate,IMainThreadService mainThread) : base(dialog,data,navigate)
         {
             _cts = new CancellationTokenSource();
-            _repairTypeCategoryService = repairCategory;
+            _mainThreadService = mainThread;
         }
 
         async partial void OnSelectedVehicleChanged(Vehicle value)
@@ -48,33 +68,52 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
             if(value != null)
             {
                 IsEnableButtonCreate = true;
-                await ShowJournal();
+                await InitilizeJournal();
+
+                IsEventTypeFilterVisible = true;
+                IsSearchFilterVisible = true;
             }
             else IsEnableButtonCreate = false;
         }
+        partial void OnSearchTextChanged(string value)
+        {
+            if (string.IsNullOrWhiteSpace(SearchText)) SearchJournal();
+        }
+        partial void OnSelectedCategoryChanged(string value)
+        {
+            if (!IsCategoryFilterVisible && value == null) return;
+            SearchJournal();
+        }
+        partial void OnSelectedEventTypeChanged(string value)
+        {
+            if (value == EventType.Repair.GetTypeName()) IsCategoryFilterVisible = true;
+            else IsCategoryFilterVisible = false;
+            SearchJournal();
+        }
 
-        private async Task ShowJournal()
+        private async Task InitilizeJournal()
         {
             var result = await _dataService.GetFullVehicleAsync(SelectedVehicle.Id, _cts.Token);
             if (result.Success)
             {
                 var resultVehicle = result as Result<Vehicle>;
-                ObservableCollection<TimelineEvent> list = new ObservableCollection<TimelineEvent>();
+                _journalDB = new List<TimelineEvent>();
                 var vehicle = resultVehicle.Data;
                 if (vehicle.Repairs == null || vehicle.Repairs.Count == 0) { }
                 else
                 {
                     foreach (var repair in resultVehicle.Data.Repairs)
                     {
-                        list.Add(new TimelineEvent
+                        _journalDB.Add(new TimelineEvent
                         {
                             RecordId = repair.Id,
                             Type = EventType.Repair,
+                            RepairCategory = repair.RepairType.Category,
                             Date = repair.DateRepair,
                             Title = repair.RepairType.TitleRepair,
                             Cost = repair.Cost,
                             Mileage = repair.CurrentMileage + " " + vehicle.UnitDistance,
-                            IconSource = _repairTypeCategoryService.GetIconCategory(repair.RepairType.Category)
+                            IconSource = repair.RepairType.Category.GetIconCategory(),
                         }); 
                     }
                 }
@@ -84,7 +123,7 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
                 {
                     foreach (var refill in resultVehicle.Data.Refills)
                     {
-                        list.Add(new TimelineEvent
+                        _journalDB.Add(new TimelineEvent
                         {
                             RecordId = refill.Id,
                             Type = EventType.Refill,
@@ -98,7 +137,7 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
                     }
                 }
 
-                JournalEvents = new ObservableCollection<TimelineEvent>(list.OrderByDescending(e => e.Date));
+                JournalEvents = new ObservableCollection<TimelineEvent>(_journalDB.OrderByDescending(e => e.Date));
                 OnPropertyChanged(nameof(JournalEvents));
             }
         }
@@ -112,6 +151,8 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
                 var resultVehicles = result as Result<List<Vehicle>>;
                 Vehicles = new ObservableCollection<Vehicle>(resultVehicles.Data);
                 OnPropertyChanged(nameof(Vehicles));
+
+                SetSearchJournal();
             }
         }
 
@@ -225,5 +266,70 @@ namespace AutoCareDiray.Shared.ViewModels.JournalEventViewModel
             _cts.Dispose();
             _cts = new CancellationTokenSource();
         } //отмена токена при закртие страницы
+
+
+        public void SetSearchJournal()
+        {
+
+            foreach (EventType eventType in Enum.GetValues(typeof(EventType)))
+            {
+                string categoryText = eventType.GetTypeName();
+                EventTypes.Add(categoryText);
+            }
+
+            foreach (RepairCategory category in Enum.GetValues(typeof(RepairCategory)))
+            {
+                string categoryText = category.GetDisplay();
+                RepairCategories.Add(categoryText);
+            }
+        }
+        public void SearchJournal()
+        {
+            // 1. Фоновая работа (Task.Run ВОЗВРАЩАЕМ!)
+            Task.Run(() =>
+            {
+
+                if (_journalDB == null) return;
+
+                var listFiltered = _journalDB.AsEnumerable();
+
+                if (!string.IsNullOrWhiteSpace(SearchText))
+                {
+                    listFiltered = listFiltered.Where(c => c.Title != null && c.Title.ToLower().Contains(SearchText.ToLower()));
+                }
+
+                if (SelectedEventType != EventType.AllEvent.GetTypeName() && SelectedEventType != null)
+                {
+                    EventType type = SelectedEventType.GetEventType();
+                    listFiltered = listFiltered.Where(c => c.Type == type);
+                }
+
+                if (SelectedCategory != RepairCategory.AllCategory.GetDisplay() && SelectedCategory != null && IsCategoryFilterVisible)
+                {
+                    RepairCategory typeCategory = SelectedCategory.GetCategory();
+                    listFiltered = listFiltered.Where(c => c.RepairCategory == typeCategory);
+                }
+
+                var finalList = listFiltered.OrderByDescending(e => e.Date).ToList();
+
+                // 2. Обновление UI (СТРОГО СИНХРОННО, БЕЗ ASYNC/AWAIT!)
+                _mainThreadService.RunUIThread(() =>
+                {
+                    // Просто очищаем и заполняем текущую коллекцию.
+                    // Никаких new ObservableCollection, чтобы UI не сбрасывался!
+                    JournalEvents.Clear();
+
+                    // Если список не пустой - заполняем его
+                    if (finalList.Any())
+                    {
+                        foreach (var item in finalList)
+                        {
+                            JournalEvents.Add(item);
+                        }
+                    }
+                });
+            });
+        }
+
     }
 }

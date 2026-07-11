@@ -14,6 +14,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         Body,
         Electrical,
         Transmission,
-        Salon
+        Salon,
+        AllCategory
     }
 }

@@ -1,4 +1,6 @@
 using AutoCareDiray.Shared.ViewModels.JournalEventViewModel;
+using CommunityToolkit.Maui.Core.Platform;
+using System.Threading.Tasks;
 namespace AutoCareDiray.View.JournalEventView;
 
 public partial class JournalEventView : ContentPage
@@ -21,5 +23,13 @@ public partial class JournalEventView : ContentPage
     {
         base.OnDisappearing();
         _viewModel.CancelTokenCommand.Execute(null);
+    }
+
+    private async void SearchBar_SearchButtonPressed(object sender, EventArgs e)
+    {
+        await MySearch.HideKeyboardAsync(CancellationToken.None);
+        _viewModel.SearchJournal();
+
+        MySearch.Unfocus();
     }
 }
