@@ -2,25 +2,30 @@ using AutoCareDiray.Shared.ViewModels.RepairViewModel;
 
 namespace AutoCareDiray.View.RepairView;
 
-public partial class CardRepairView : ContentPage,IQueryAttributable
+public partial class CardRepairView : ContentPage, IQueryAttributable
 {
-	CardRepairViewModel _viewModel;
+    private readonly CardRepairViewModel _viewModel;
+
     public CardRepairView(CardRepairViewModel vm)
-	{
-		InitializeComponent();
-		_viewModel = vm;
-		BindingContext = _viewModel;
-	}
+    {
+        InitializeComponent();
+        _viewModel = vm;
+        BindingContext = _viewModel;
+    }
 
-	public void ApplyQueryAttributes(IDictionary<string,object> parametr)
-	{
-		if(parametr.TryGetValue("RepairId",out  var obj))
-		{
-			if(obj is int result)
-			{
-				_viewModel.InitilizeCommand.Execute(result);
-			}
-		}
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        // Просто передаем весь словарь параметров во ViewModel.
+        // Метод Initialize сам достанет оттуда RepairId.
+        _viewModel.InitializeCommand.Execute(query);
+    }
 
-	}
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        // Отменяем токен загрузки при закрытии/уходе со страницы, 
+        // чтобы избежать утечек памяти или крашей.
+        _viewModel.CancelTokenCommand.Execute(null);
+    }
 }

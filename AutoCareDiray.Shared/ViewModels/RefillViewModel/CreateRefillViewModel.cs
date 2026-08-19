@@ -1,167 +1,177 @@
 ﻿using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.Shared.Models.RefillModel;
-using AutoCareDiray.Shared.Models.RepairModel;
 using AutoCareDiray.Shared.Models.Validation;
 using AutoCareDiray.Shared.Models.VehicleModel;
 using AutoCareDiray.Shared.Service.ResultService;
+using AutoCareDiray.Shared.Models.SettignsModel; // Для CurrencyList
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
 {
     public partial class CreateRefillViewModel : BaseViewModel
     {
-        #region основные классы
+        #region Поля и приватные данные
 
         private readonly IPhotoPicker _photoPicker;
         private readonly RefillValidation _refillValidation;
+        private readonly IPreferencesService _preferencesService; // Добавили Preferences
 
         private CancellationTokenSource _cts;
-        private bool _isInitilize = false;
+        private bool _isInitialized = false;
         private bool _isUpdate = false;
-        private int _vehicleId;
-        private int _refillId;
+
+        private int _vehicleId = -1;
+        private int _refillId = -1;
+
         private Vehicle _vehicle;
         private Refill _refill;
 
-
         #endregion
 
-        #region для работы UI
+        #region Коллекции для UI
 
         public ObservableCollection<string> AttachedPhotos { get; set; } = new();
-
-
-        [ObservableProperty]
-        private List<string> fuelTypes = new List<string>() { "92", "95", "98", "100", "ДТ" };
-
-        [ObservableProperty]
-        private DateTime dateRefillSelected = DateTime.UtcNow;
-
-        [ObservableProperty]
-        private double mileageFilled;
-        [ObservableProperty]
-        private double volumeLitersFilled;
-        [ObservableProperty]
-        private decimal costFilled;
-
-        [ObservableProperty]
-        private bool isFullTank;
-        [ObservableProperty]
-        private bool isMileageError = false;
-        [ObservableProperty]
-        private bool isVolumeLitersError = false;
-        [ObservableProperty]
-        private bool isCostError = false;
-        [ObservableProperty]
-        private bool isFuelTypesError = false;
-
-        [ObservableProperty]
-        private string buttonName = "Добавить";
-        [ObservableProperty]
-        private string selectedFuelType;
-        [ObservableProperty]
-        private string gasStationName;
-        [ObservableProperty]
-        private string descriptionFilled;
-        [ObservableProperty]
-        private string statusMessage;
-
+        public ObservableCollection<string> FuelTypes { get; set; } = new(new[] { "92", "95", "98", "100", "ДТ", "Газ", "Электричество" });
+        public ObservableCollection<string> CurrencyPicker { get; set; } = new(); // Список валют
 
         #endregion
-        public CreateRefillViewModel(IDialogService dialog, IDataService data, INavigationService navigate,IPhotoPicker photo,RefillValidation valid) :base(dialog,data,navigate)
+
+        #region Observable-свойства (данные формы)
+
+        [ObservableProperty] private DateTime dateRefillSelected = DateTime.UtcNow;
+        [ObservableProperty] private double mileageFilled;
+        [ObservableProperty] private double volumeLitersFilled;
+        [ObservableProperty] private decimal costFilled;
+        [ObservableProperty] private bool isFullTank;
+
+        [ObservableProperty] private string selectedFuelType;
+        [ObservableProperty] private string gasStationName;
+        [ObservableProperty] private string descriptionFilled;
+        [ObservableProperty] private string statusMessage;
+        [ObservableProperty] private string buttonName = "Добавить заправку";
+
+        [ObservableProperty] private string selectedCurrencySign; // Знак валюты
+        [ObservableProperty] private string mileageUnit = "км"; // Единицы измерения
+
+        #endregion
+
+        #region Observable-свойства (флаги ошибок)
+
+        [ObservableProperty] private bool isMileageError = false;
+        [ObservableProperty] private bool isVolumeLitersError = false;
+        [ObservableProperty] private bool isCostError = false;
+        [ObservableProperty] private bool isFuelTypesError = false;
+
+        #endregion
+
+        public CreateRefillViewModel(
+            IDialogService dialog,
+            IDataService data,
+            INavigationService navigate,
+            IPhotoPicker photo,
+            RefillValidation valid,
+            IPreferencesService preferencesService) // Внедряем сервис настроек
+            : base(dialog, data, navigate)
         {
             _cts = new CancellationTokenSource();
             _refillValidation = valid;
-            _refillValidation.ErrorsChanged +=  (s,e) => OnErrorsChangedUI(e);
+            _refillValidation.ErrorsChanged += (s, e) => OnErrorsChangedUI(e);
             _photoPicker = photo;
+            _preferencesService = preferencesService;
         }
 
-        public bool HasErrors => _refillValidation.HasErrors;
-        public string MileageError => _refillValidation.GetErrors(nameof(MileageError)) as String;
-        public string CostError => _refillValidation.GetErrors(nameof(CostError)) as String;
-        public string VolumeLitersError => _refillValidation.GetErrors(nameof(VolumeLitersError)) as String;
-        public string FuelTypesError => _refillValidation.GetErrors(nameof(FuelTypesError)) as String;
+        #region Свойства ошибок валидации
 
+        public bool HasErrors => _refillValidation.HasErrors;
+        public string MileageError => _refillValidation.GetErrors(nameof(MileageError)) as string;
+        public string CostError => _refillValidation.GetErrors(nameof(CostError)) as string;
+        public string VolumeLitersError => _refillValidation.GetErrors(nameof(VolumeLitersError)) as string;
+        public string FuelTypesError => _refillValidation.GetErrors(nameof(FuelTypesError)) as string;
+
+        #endregion
+
+        #region Инициализация и загрузка данных
 
         [RelayCommand]
         public async Task Initialize(IDictionary<string, object> query)
         {
-            if (_isInitilize) return;
-            if (query.TryGetValue("VehicleId", out var obj))
+            if (_isInitialized) return;
+
+            // Загружаем список валют
+            CurrencyPicker = new ObservableCollection<string>(CurrencyList.GetListMoneySign());
+            SelectedCurrencySign = _preferencesService.GetDefaultMoneySign() ?? "₽";
+
+            if (query.TryGetValue("VehicleId", out var vehicleIdObj) && vehicleIdObj is int vehicleId)
             {
-                if (obj is int value)
-                {
-                    _vehicleId = value;
-                    _isInitilize = true;
-                    await LoadingCreate();
-                }
+                _vehicleId = vehicleId;
+                _isInitialized = true;
+                await LoadingCreate();
             }
-            else if (query.TryGetValue("RefillId", out var objTwo))
+            else if (query.TryGetValue("RefillId", out var refillIdObj) && refillIdObj is int refillId)
             {
-                if (objTwo is int value)
-                {
-                    _refillId = value;
-                    _isInitilize = true;
-                    await LoadingUpdate();
-                }
+                _refillId = refillId;
+                _isInitialized = true;
+                await LoadingUpdate();
             }
-        } //Инициализация и определения редактирования или обновления данных
-
-        public async Task LoadingUpdate()
-        {
-            var result = await _dataService.GetRefillAsync(_refillId, _cts.Token); // изменить
-            if (result.Success)
-            {
-                var resultRefill = result as Result<Refill>;
-                _isUpdate = true;
-                ButtonName = " Редактировать";
-
-                DateRefillSelected = resultRefill.Data.DateRefill;
-                MileageFilled = resultRefill.Data.Mileage;
-                VolumeLitersFilled = resultRefill.Data.VolumeLiters;
-                CostFilled = resultRefill.Data.Cost;
-                IsFullTank = resultRefill.Data.IsFullTank;
-                SelectedFuelType = resultRefill.Data.FuelType;
-                GasStationName = resultRefill.Data.GasStationName;
-                DescriptionFilled = resultRefill.Data.Description;
-
-                _vehicleId = resultRefill.Data.VehicleId;
-
-
-                if (resultRefill.Data.Photos != null)
-                {
-                    AttachedPhotos ??= new ObservableCollection<string>();
-
-                    foreach (var photo in resultRefill.Data.Photos)
-                    {
-                        if (File.Exists(photo)) AttachedPhotos.Add(photo);
-                    }
-                }
-            }
-            else StatusMessage = result.ErrorMessage;
-        } //Загрузка ресурсов под редактирования 
+        }
 
         public async Task LoadingCreate()
         {
-            
-            var result = await _dataService.GetVehicleAsync(_vehicleId, _cts.Token); // изменить
-            if (result.Success)
+            var result = await _dataService.GetVehicleAsync(_vehicleId, _cts.Token);
+
+            if (result is not Result<Vehicle> vehicleResult)
             {
-                var resultVehicle = result as Result<Vehicle>;
-                _vehicle = resultVehicle.Data;
-                _vehicleId = resultVehicle.Data.Id;
-                MileageFilled = _vehicle.Mileage;
+                StatusMessage = result.ErrorMessage;
+                return;
             }
-            else StatusMessage = result.ErrorMessage;
-        } //Загрузка под создания ремонта
+
+            _vehicle = vehicleResult.Data;
+            _vehicleId = _vehicle.Id;
+            MileageFilled = _vehicle.Mileage;
+            MileageUnit = _vehicle.UnitDistance ?? "км"; // Берем единицы измерения у авто
+        }
+
+        public async Task LoadingUpdate()
+        {
+            var result = await _dataService.GetRefillAsync(_refillId, _cts.Token);
+
+            if (result is not Result<Refill> refillResult)
+            {
+                StatusMessage = result.ErrorMessage;
+                return;
+            }
+
+            _isUpdate = true;
+            ButtonName = "Сохранить изменения";
+            var data = refillResult.Data;
+
+            DateRefillSelected = data.DateRefill;
+            MileageFilled = data.Mileage;
+            VolumeLitersFilled = data.VolumeLiters;
+            CostFilled = data.Cost;
+            IsFullTank = data.IsFullTank;
+            SelectedFuelType = data.FuelType;
+            GasStationName = data.GasStationName;
+            DescriptionFilled = data.Description;
+            _vehicleId = data.VehicleId;
+
+            if (data.Photos != null)
+            {
+                AttachedPhotos.Clear();
+                foreach (var photo in data.Photos)
+                {
+                    if (File.Exists(photo))
+                        AttachedPhotos.Add(photo);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Главная команда: Сохранение
 
         [RelayCommand]
         public async Task ProcessingRefill()
@@ -169,53 +179,46 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
             ValidationAll();
             if (HasErrors) return;
 
-            _refill = CreateRefill();
+            _refill = CreateRefillEntity();
 
-            if(AttachedPhotos == null || AttachedPhotos.Count == 0) { }
-            else
+            if (AttachedPhotos?.Any() == true)
             {
-                var result = await _photoPicker.SavePhotosAsync(AttachedPhotos, _cts.Token);
-                if (result.Success)
+                var photoResult = await _photoPicker.SavePhotosAsync(AttachedPhotos, _cts.Token);
+                if (photoResult is Result<List<string>> typedPhotoResult)
                 {
-                    var resultPhotos = result as Result<List<string>>;
-                    _refill.Photos = resultPhotos.Data;
+                    _refill.Photos = typedPhotoResult.Data;
                 }
             }
 
+            Result resultSave;
             if (_isUpdate)
             {
                 _refill.Id = _refillId;
-                _refill.VehicleId = _vehicleId;
-                var resultUdateRepair = await _dataService.UpdateRefillAsync(_refill, _cts.Token); // изменить
-                if (resultUdateRepair.Success == false)
-                {
-                    StatusMessage = resultUdateRepair.ErrorMessage;
-                    return;
-                }
-                _isUpdate = false;
-                ButtonName = "Добавить";
+                resultSave = await _dataService.UpdateRefillAsync(_refill, _cts.Token);
             }
             else
             {
-                _refill.VehicleId = _vehicleId;
-                var resultCreateRepair = await _dataService.CreateRefillAsync(_refill, _cts.Token);
-                if (resultCreateRepair.Success == false)
-                {
-                    StatusMessage = resultCreateRepair.ErrorMessage;
-                    return;
-                }
+                resultSave = await _dataService.CreateRefillAsync(_refill, _cts.Token);
             }
 
-            await UpdateDate();
-            string message = _isUpdate ? "Заправка отредактирована" : "Заправка добавлена"; 
+            if (!resultSave.Success)
+            {
+                StatusMessage = resultSave.ErrorMessage;
+                return;
+            }
+
+            await TryUpdateVehicleDataAsync();
+
+            string message = _isUpdate ? "Заправка отредактирована" : "Заправка добавлена";
             await _dialogService.ShowToastAsync(message);
             await _navigationService.GoToBack();
-        }  //Создание или редактирование ремонта
+        }
 
-        private Refill CreateRefill()
+        private Refill CreateRefillEntity()
         {
             return new Refill
             {
+                VehicleId = _vehicleId,
                 DateRefill = DateRefillSelected,
                 Mileage = MileageFilled,
                 VolumeLiters = VolumeLitersFilled,
@@ -225,31 +228,33 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
                 GasStationName = GasStationName,
                 Description = DescriptionFilled,
             };
-        } //Создание объекта ремонта для отправки на сервер
+        }
 
-        private async Task UpdateDate()
+        private async Task TryUpdateVehicleDataAsync()
         {
             var result = await _dataService.GetVehicleMileageAsync(_vehicleId, _cts.Token);
-            if (result.Success)
+            if (result is Result<Vehicle> vehResult)
             {
-                var resultVeh = result as Result<Vehicle>;
-                _vehicle = resultVeh.Data;
+                _vehicle = vehResult.Data;
             }
-            if (MileageFilled > _vehicle.Mileage)
+
+            // Обновляем пробег, если ввели больше
+            if (_vehicle != null && MileageFilled > _vehicle.Mileage)
             {
                 var resultMileage = await _dataService.UpdateVehicleMileageAsync(_vehicleId, MileageFilled, _cts.Token);
-                if (resultMileage.Success == false)
-                {
+                if (!resultMileage.Success)
                     StatusMessage = resultMileage.ErrorMessage;
-                }
-
             }
 
             if (IsFullTank)
             {
-               //изменить
+                // Логика расчета полного бака
             }
-        } //Обновление данных автомобиля после создания или редактирования ремонта
+        }
+
+        #endregion
+
+        #region Частичные методы (Ошибки и Триггеры)
 
         private void ValidationAll()
         {
@@ -261,56 +266,63 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
 
         partial void OnIsFullTankChanged(bool value)
         {
-            if (value) VolumeLitersFilled = _vehicle.FuelTank;
-        }
-        partial void OnVolumeLitersFilledChanged(double value)
-        {
-            IsVolumeLitersError = _refillValidation.ValidationVolumeLiters(value);
-        }
-        partial void OnSelectedFuelTypeChanged(string value)
-        {
-            IsFuelTypesError = _refillValidation.ValidationFuelTypes(value);
-        }
-        partial void OnMileageFilledChanged(double value)
-        {
-            IsMileageError = _refillValidation.ValidationMileage(value);
-        }
-        partial void OnCostFilledChanged(decimal value)
-        {
-            IsCostError = _refillValidation.ValidationCost(value);
+            if (value)
+            {
+                // Если ВКЛЮЧИЛИ полный бак -> ставим объем бака авто
+                if (_vehicle != null)
+                {
+                    VolumeLitersFilled = _vehicle.FuelTank;
+                }
+            }
+            else
+            {
+                // Если ВЫКЛЮЧИЛИ -> сбрасываем значение в 0, чтобы можно было ввести вручную
+                VolumeLitersFilled = 0;
+            }
         }
 
-        void OnErrorsChangedUI(DataErrorsChangedEventArgs e)
+        partial void OnVolumeLitersFilledChanged(double value) => IsVolumeLitersError = _refillValidation.ValidationVolumeLiters(value);
+        partial void OnSelectedFuelTypeChanged(string value) => IsFuelTypesError = _refillValidation.ValidationFuelTypes(value);
+        partial void OnMileageFilledChanged(double value) => IsMileageError = _refillValidation.ValidationMileage(value);
+        partial void OnCostFilledChanged(decimal value) => IsCostError = _refillValidation.ValidationCost(value);
+
+        private void OnErrorsChangedUI(DataErrorsChangedEventArgs e)
         {
             OnPropertyChanged(nameof(HasErrors));
             OnPropertyChanged(e.PropertyName);
         }
+
+        #endregion
+
+        #region Работа с Фотографиями
 
         [RelayCommand]
         public async Task AttachPhoto()
         {
             var result = await _photoPicker.PickPhotosAsync();
 
-            if (result.Success == false)
+            if (!result.Success)
             {
                 await _dialogService.ShowToastAsync(result.ErrorMessage);
                 return;
             }
 
-            var resultPhoto = result as Result<List<string>>;
-
-            foreach (var listPhoto in resultPhoto.Data)
+            if (result is Result<List<string>> typedResult)
             {
-                AttachedPhotos.Add(listPhoto);
+                foreach (var photo in typedResult.Data)
+                    AttachedPhotos.Add(photo);
             }
-
-        } //выбор фото
+        }
 
         [RelayCommand]
-        public async Task DeleteAttachPhoto(string photo)
+        public void DeleteAttachPhoto(string photo)
         {
             AttachedPhotos?.Remove(photo);
-        } //удаление фото
+        }
+
+        #endregion
+
+        #region Токен отмены и Отписка
 
         [RelayCommand]
         public void CancelToken()
@@ -325,5 +337,7 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
         {
             _refillValidation.ErrorsChanged -= (s, e) => OnErrorsChangedUI(e);
         }
+
+        #endregion
     }
 }

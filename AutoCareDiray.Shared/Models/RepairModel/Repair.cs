@@ -29,7 +29,7 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         {
             get
             {
-                return $"Износ по пробегу {Math.Round(ProgressMileage,1) * 100} %";
+                return $"Износ по пробегу {Math.Round(ProgressMileage, 1) * 100} %";
             }
         }
         public string? ProgressPercentMonth

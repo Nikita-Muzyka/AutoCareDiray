@@ -6,121 +6,185 @@
              Style="{StaticResource CustomPage}">
 
     <ScrollView>
-        <VerticalStackLayout Spacing="15" Padding="15">
+        <VerticalStackLayout Spacing="15" Padding="15,20,15,40">
 
-            <Label Text="Информация о заправке" FontSize="18" Margin="0,10,0,0" Style="{DynamicResource LabelCustom}" HorizontalOptions="Center"/>
+            <Label Text="Добавление заправки" FontSize="22" Margin="0,0,0,5" Style="{DynamicResource LabelCustomMain}" HorizontalOptions="Center"/>
 
-            <Border Style="{DynamicResource BorderForEntryCard}">
+            <!-- ОСНОВНЫЕ ПАРАМЕТРЫ (Карточка 1) -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15,5">
                 <VerticalStackLayout Spacing="0">
 
                     <!-- Дата заправки -->
-                    <Grid ColumnDefinitions="*, Auto" Padding="15,10">
-                        <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
-                            <Label Text="Дата заправки" Style="{DynamicResource LabelInfoForEntry}"/>
-                        </VerticalStackLayout>
-                        <DatePicker Grid.Column="1" Format="d" Date="{Binding DateRefillSelected}" 
+                    <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                        <Label Grid.Column="0" Text="📅" FontSize="18" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Дата заправки" Style="{DynamicResource LabelInfoForEntry}" VerticalOptions="Center"/>
+                        <DatePicker Grid.Column="2" Format="d" Date="{Binding DateRefillSelected}" 
                                     MaximumDate="{Binding DateNow}" VerticalOptions="Center" />
                     </Grid>
+                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="35,0,0,0"/>
 
-                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
-
-                    <!-- Текущий пробег (Обязательно для расчета расхода) -->
-                    <VerticalStackLayout Padding="15,10">
-                        <Label Text="Текущий пробег (КМ)" Style="{DynamicResource LabelInfoForEntry}"/>
-                        <Entry Text="{Binding MileageFilled}" Placeholder="Например: 155000" 
-                               Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
-                        <Label Text="{Binding MileageError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsMileageError}"/>
-                    </VerticalStackLayout>
-
-                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
-
-                    <!-- Тип топлива -->
-                    <VerticalStackLayout Padding="15,10">
-                        <Label Text="Вид топлива" Style="{DynamicResource LabelInfoForEntry}"/>
-                        <Grid ColumnDefinitions="*,auto">
-                            <Picker Grid.Column="0" Title="Выберите топливо..." ItemsSource="{Binding FuelTypes}" 
-                                    SelectedItem="{Binding SelectedFuelType}" Style="{DynamicResource PickerStandart}"/>
-                            <Label Grid.Column="1" Text="▼" Style="{DynamicResource LabelArrowDown}"/>
-                        </Grid>
-                        <Label Text="{Binding FuelTypesError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsFuelTypesError}"/>
-                    </VerticalStackLayout>
-
-                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
-
-                    <!-- Количество литров -->
-                    <VerticalStackLayout Padding="15,10">
-                        <Label Text="Залито литров" Style="{DynamicResource LabelInfoForEntry}"/>
-                        <Entry Text="{Binding VolumeLitersFilled}" Placeholder="Например: 40.5" 
-                               Keyboard="Numeric" Style="{DynamicResource EntryImput}"/>
-                        <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
-                            <Label Text="До полного бака?" Style="{DynamicResource LabelInfoForEntry}"/>
-                            <Label Text="Поможет точнее рассчитать расход" Style="{DynamicResource LabelSecondaryCustom}" />
-                            <Switch IsToggled="{Binding IsFullTank}"/>
+                    <!-- Пробег -->
+                    <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                        <Label Grid.Column="0" Text="🚗" FontSize="18" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                            <Label Text="Текущий пробег" Style="{DynamicResource LabelInfoForEntry}"/>
+                            <!-- Динамическая единица измерения из ViewModel -->
+                            <Label Text="{Binding MileageUnit, StringFormat='(в {0})'}" Style="{DynamicResource LabelInfoMini}"/>
                         </VerticalStackLayout>
-                        <Label Text="{Binding VolumeLitersError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsVolumeLitersError}"/>
-                    </VerticalStackLayout>
 
-                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
+                        <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
+                            <Entry Text="{Binding MileageFilled}" Placeholder="155000" Keyboard="Numeric" 
+                                   Style="{DynamicResource EntryImput}" WidthRequest="100" HorizontalTextAlignment="End"/>
+                            <Label Text="{Binding MileageError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsMileageError}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+
+            <!-- ДАННЫЕ О ТОПЛИВЕ (Карточка 2) -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15,5">
+                <VerticalStackLayout Spacing="0">
+
+                    <!-- Вид топлива -->
+                    <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                        <Label Grid.Column="0" Text="⛽" FontSize="18" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Вид топлива" Style="{DynamicResource LabelInfoForEntry}" VerticalOptions="Center"/>
+
+                        <VerticalStackLayout Grid.Column="2">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Picker Grid.Column="0" Title="Выбрать..." ItemsSource="{Binding FuelTypes}" 
+                                        SelectedItem="{Binding SelectedFuelType}" Style="{DynamicResource PickerStandart}"/>
+                                <Label Grid.Column="1" Text="▼" Style="{DynamicResource LabelArrowDown}"/>
+                            </Grid>
+                            <Label Text="{Binding FuelTypesError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsFuelTypesError}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="35,0,0,0"/>
+
+                    <!-- Количество литров и Полный бак -->
+                    <Grid ColumnDefinitions="30, *, Auto" RowDefinitions="Auto, Auto" Padding="0,12">
+
+                        <!-- СТРОКА 0: Иконка, Переключатель и Поле ввода -->
+                        <Label Grid.Row="0" Grid.Column="0" Text="💧" FontSize="18" VerticalOptions="Center"/>
+
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <Label Text="Залито литров" Style="{DynamicResource LabelInfoForEntry}"/>
+                            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                <Switch IsToggled="{Binding IsFullTank}" Scale="0.8"/>
+                                <Label Text="Полный бак" Style="{DynamicResource LabelInfoMini}" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+
+                        <!-- Поле ввода (теперь без лишних VerticalStackLayout) -->
+                        <Entry Grid.Row="0" Grid.Column="2" Text="{Binding VolumeLitersFilled}" Placeholder="40.5" Keyboard="Numeric" 
+           Style="{DynamicResource EntryImput}" WidthRequest="100" HorizontalTextAlignment="End" VerticalOptions="Center">
+                            <Entry.Triggers>
+                                <DataTrigger TargetType="Entry" Binding="{Binding IsFullTank}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Opacity" Value="0.6" />
+                                </DataTrigger>
+                            </Entry.Triggers>
+                        </Entry>
+
+                        <!-- СТРОКА 1: Текст ошибки -->
+                        <!-- Grid.ColumnSpan="2" позволяет тексту занять всю ширину от текста "Залито литров" до правого края -->
+                        <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding VolumeLitersError}" Style="{DynamicResource LabelError}" 
+                               IsVisible="{Binding IsVolumeLitersError}" HorizontalOptions="End" Margin="0,5,0,0"/>
+                    </Grid>
+
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="35,0,0,0"/>
 
                     <!-- Общая стоимость -->
-                    <VerticalStackLayout Padding="15,10">
-                        <Label Text="Итоговая стоимость (Руб)" Style="{DynamicResource LabelInfoForEntry}"/>
-                        <Entry Text="{Binding CostFilled}" Placeholder="Например: 2100" 
-                               Style="{DynamicResource EntryImput}" Keyboard="Numeric"/>
-                        <Label Text="{Binding CostError}" Style="{DynamicResource LabelError}" IsVisible="{Binding IsCostError}"/>
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="30, *, Auto" RowDefinitions="Auto, Auto" Padding="0,12">
 
-                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
+                        <!-- СТРОКА 0: Иконка, Заголовок и Поля ввода -->
+                        <Label Grid.Row="0" Grid.Column="0" Text="💰" FontSize="18" VerticalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Итоговая стоимость" Style="{DynamicResource LabelInfoForEntry}" VerticalOptions="Center"/>
 
-                    <!-- Название АЗС -->
-                    <VerticalStackLayout Padding="15,10">
+                        <!-- Блок с Entry и Picker теперь лежит напрямую в сетке -->
+                        <HorizontalStackLayout Grid.Row="0" Grid.Column="2" Spacing="5" VerticalOptions="Center" HorizontalOptions="End">
+                            <Entry Text="{Binding CostFilled}" Placeholder="2100" Keyboard="Numeric" 
+               Style="{DynamicResource EntryImput}" WidthRequest="100" HorizontalTextAlignment="End"/>
+
+                            <Picker ItemsSource="{Binding CurrencyPicker}" 
+                SelectedItem="{Binding SelectedCurrencySign}" 
+                Style="{DynamicResource PickerStandart}" 
+                WidthRequest="50" HorizontalTextAlignment="Center"/>
+                        </HorizontalStackLayout>
+
+                        <!-- СТРОКА 1: Текст ошибки -->
+                        <!-- Grid.ColumnSpan="2" спасает от сдвига элементов -->
+                        <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" 
+           Text="{Binding CostError}" 
+           Style="{DynamicResource LabelError}" 
+           IsVisible="{Binding IsCostError}"
+           HorizontalOptions="End" Margin="0,5,0,0"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ОПИСАНИЕ И АЗС (Карточка 3) -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15">
+                <VerticalStackLayout Spacing="15">
+
+                    <VerticalStackLayout Spacing="5">
                         <Label Text="Название АЗС" Style="{DynamicResource LabelInfoForEntry}"/>
                         <Entry Text="{Binding GasStationName}" Placeholder="Например: Лукойл, Газпром..." Style="{DynamicResource EntryImput}"/>
                     </VerticalStackLayout>
 
-                    <BoxView Style="{DynamicResource BoxViewCustom}"/>
+                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="0"/>
 
-                    <!-- Заметки/Описание -->
-                    <VerticalStackLayout Padding="15,10">
+                    <VerticalStackLayout Spacing="5">
                         <Label Text="Заметки" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <!-- Исправлено зависание: убрали AutoSize="TextChanges" -->
                         <Editor Text="{Binding DescriptionFilled}" Placeholder="Качество бензина, кофе..." 
-                                AutoSize="TextChanges" Style="{DynamicResource EditorStandart}"/>
-                    </VerticalStackLayout>
-
-                    <!-- Фотография чека -->
-                    <VerticalStackLayout Padding="15,10">
-                        <Label Text="Фотография чека" Style="{DynamicResource LabelInfoForEntry}"/>
-                        <Button Text="Прикрепить" Style="{DynamicResource ButtonCustomStandartRedMini}"
-                                Command="{Binding AttachPhotoCommand}" Margin="0,10,0,30"/>
-
-                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-                            <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AttachedPhotos}">
-                                <BindableLayout.ItemTemplate>
-                                    <DataTemplate x:DataType="x:String">
-                                        <Border Padding="0" Margin="0,0,5,0" Style="{DynamicResource BorderForCardImage}">
-                                            <Grid ColumnDefinitions="auto,auto">
-                                                <Image Source="{Binding .}" Aspect="AspectFill" HeightRequest="100" WidthRequest="100"/>
-                                                <Button Text="X" TextColor="{DynamicResource ButtonPrimaryRed}" 
-                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CreateRefillViewModel}}, Path=DeleteAttachPhotoCommand}"
-                                                        CommandParameter="{Binding .}" Background="Transparent"/>
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </HorizontalStackLayout>
-                        </ScrollView>
+                                HeightRequest="80" Style="{DynamicResource EditorStandart}"/>
                     </VerticalStackLayout>
 
                 </VerticalStackLayout>
             </Border>
 
+            <!-- ФОТОГРАФИЯ ЧЕКА (Карточка 4) -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Grid.Column="0" Text="Фотография чека" Style="{DynamicResource LabelInfoForEntry}" VerticalOptions="Center"/>
+                        <Button Grid.Column="1" Text="Прикрепить" Style="{DynamicResource ButtonCustomStandartMini}" Command="{Binding AttachPhotoCommand}"/>
+                    </Grid>
+
+                    <!-- Горизонтальный скролл с жесткой высотой -->
+                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" HeightRequest="110" Margin="0,10,0,0">
+                        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AttachedPhotos}" Spacing="10">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Border WidthRequest="100" HeightRequest="100" Padding="0" Style="{DynamicResource BorderForCardImage}">
+                                        <Grid>
+                                            <Image Source="{Binding .}" Aspect="AspectFill"/>
+                                            <!-- Кнопка крестик в углу -->
+                                            <Button Text="✕" TextColor="White" BackgroundColor="#80000000" 
+                                                    WidthRequest="30" HeightRequest="30" Padding="0" CornerRadius="15" 
+                                                    HorizontalOptions="End" VerticalOptions="Start" Margin="5"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CreateRefillViewModel}}, Path=DeleteAttachPhotoCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </HorizontalStackLayout>
+                    </ScrollView>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ФИНАЛЬНАЯ КНОПКА -->
             <Label Text="{Binding StatusMessage}" Style="{DynamicResource LabelError}" HorizontalOptions="Center"/>
 
-            <!-- Кнопка сохранения -->
-            <VerticalStackLayout Padding="20,10,20,40">
-                <Button Text="{Binding ButtonName}" 
-                        Style="{StaticResource ButtonCustomStandartRed}"
-                        Command="{Binding ProcessingRefillCommand}"/>
+            <VerticalStackLayout Padding="0,10,0,40">
+                <Button Text="{Binding ButtonName}" Style="{StaticResource ButtonCustomStandart}" Command="{Binding ProcessingRefillCommand}"/>
             </VerticalStackLayout>
 
         </VerticalStackLayout>

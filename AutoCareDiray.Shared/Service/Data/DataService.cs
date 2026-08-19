@@ -354,6 +354,7 @@ namespace AutoCareDiray.Shared.Service.Data
                 var repairDb = await _dbContex.Repairs
                     .AsNoTracking()
                     .Include(c => c.RepairType)
+                    .Include(c => c.Vehicle)
                     .Include(a => a.SpareParts)
                     .FirstOrDefaultAsync(c => c.Id == repairId);
 

@@ -71,6 +71,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         [ObservableProperty] private string titleNewRepairType;
         [ObservableProperty] private string selectedCurrencySignPart;
         [ObservableProperty] private string selectedCurrencySignAllCost;
+        [ObservableProperty] private string mileageUnit = "км"; // По умолчанию ставим "км"
 
         #endregion
 
@@ -163,6 +164,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             CostFilled = data.Cost;
             DescriptionFilled = data.Description;
             _vehicleId = data.VehicleId;
+            MileageUnit = data.Vehicle.UnitDistance ?? "км";
 
             if (data.SpareParts != null)
             {
@@ -209,6 +211,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                 }
             }
 
+            MileageUnit = _vehicle?.UnitDistance ?? "км";
             MileageFilled = _vehicle?.Mileage ?? 0;
         }
 
@@ -217,7 +220,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         #region Команды управления типами ремонта
 
         [RelayCommand]
-        public void ShowMenuCreateRepairType()
+        public void ShowMenuCreateNewRepairType()
         {
             IsCreateNewType = true;
             IsButtonCreateRepairType = false;
@@ -234,7 +237,7 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
         [RelayCommand]
         public async Task CreateNewRepairType()
         {
-            // Используем LINQ Any() вместо Where().Any() — быстрее
+            
             if (RepairTypes.Any(c => c.TitleRepair == TitleNewRepairType))
             {
                 await _dialogService.ShowToastAsync("Данный тип ремонта уже существует");
@@ -252,10 +255,11 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 
             RepairTypes.Add(_newRepairType);
             SelectedRepairType = _newRepairType;
+            IsCancelCreateRepairType = false;
         }
 
         [RelayCommand]
-        public void CancelCreateTypeRepair()
+        public void CancelCreateNewTypeRepair()
         {
             IsCreateNewType = false;
             IsButtonCreateRepairType = true;

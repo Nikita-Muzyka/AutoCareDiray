@@ -5,123 +5,207 @@
              xmlns:modelsRepair="clr-namespace:AutoCareDiray.Shared.Models.RepairModel;assembly=AutoCareDiray.Shared"
              Style="{DynamicResource CustomPage}">
 
+    <Shell.TitleView>
+        <HorizontalStackLayout VerticalOptions="Center">
+            <Label Text="Карточка Ремонта" Style="{DynamicResource LabelCustomPage}" />
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+
     <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="10">
+        <VerticalStackLayout Spacing="15" Padding="15,20,15,40">
 
-            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" VerticalOptions="Center">
+            <!-- ========================================== -->
+            <!-- 1. HERO БЛОК: ЗАГОЛОВОК И ИТОГОВАЯ СТОИМОСТЬ -->
+            <!-- ========================================== -->
+            <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto" RowSpacing="8" Margin="0,0,0,10">
 
-                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                    <Label Text="{Binding RepairType.Category}" Style="{DynamicResource LabelSecondaryCustom}"/>
-                    <Label Text="{Binding RepairType.TitleRepair}" FontSize="18" Style="{DynamicResource LabelCustom}"/>
+                <!-- Бейдж категории -->
+                <Border Grid.Row="0" Grid.Column="0" Stroke="{DynamicResource PrimaryGold}" StrokeShape="RoundRectangle 8" 
+                        StrokeThickness="1" BackgroundColor="Transparent" HorizontalOptions="Start" Padding="8,4">
+                    <Label Text="{Binding RepairType.CategoryText}" TextColor="{DynamicResource PrimaryGold}" 
+                           FontSize="11" FontFamily="{StaticResource MontserratBold}"/>
+                </Border>
+
+                <!-- Название ремонта -->
+                <Label Grid.Row="1" Grid.Column="0" Text="{Binding RepairType.TitleRepair}" 
+                       FontSize="22" Style="{DynamicResource LabelCustomMain}" VerticalOptions="Center"/>
+
+                <!-- Итоговая стоимость -->
+                <VerticalStackLayout Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End">
+                    <Label Text="Итого" Style="{DynamicResource LabelSecondaryCustom}" HorizontalOptions="End" FontSize="12"/>
+                    <Label Text="{Binding Repair.Cost, StringFormat='{}{0} ₽'}" 
+                           FontSize="22" FontFamily="{StaticResource MontserratBold}" TextColor="{DynamicResource PrimaryGreen}" HorizontalOptions="End"/>
                 </VerticalStackLayout>
-            </Grid> <!--Название ремоната и категория-->
+            </Grid>
 
-            <Border Style="{DynamicResource BorderForCardInfo}" Padding="10">
+
+            <!-- ========================================== -->
+            <!-- 2. БЛОК ПРОГРЕССА (ИЗНОС)                  -->
+            <!-- ========================================== -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Износ детали" Style="{DynamicResource LabelCustomMain}" FontSize="15" Margin="0,0,0,5"/>
+
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Grid.Column="0" Text="По пробегу" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Grid.Column="1" Text="{Binding Repair.ProgressPercentMileage}" Style="{DynamicResource LabelCustomMain}" FontSize="13"/>
+                    </Grid>
+                    <ProgressBar Progress="{Binding Repair.ProgressMileage}" ProgressColor="{DynamicResource PrimaryGreen}" HeightRequest="6"/>
+
+                    <Grid ColumnDefinitions="*, Auto" Margin="0,5,0,0">
+                        <Label Grid.Column="0" Text="По времени" Style="{DynamicResource LabelSecondaryCustom}"/>
+                        <Label Grid.Column="1" Text="{Binding Repair.ProgressPercentMonth}" Style="{DynamicResource LabelCustomMain}" FontSize="13"/>
+                    </Grid>
+                    <ProgressBar Progress="{Binding Repair.ProgressMonth}" ProgressColor="{DynamicResource PrimaryGreen}" HeightRequest="6"/>
+                </VerticalStackLayout>
+            </Border>
+
+
+            <!-- ========================================== -->
+            <!-- 3. ОСНОВНАЯ ИНФОРМАЦИЯ (СТИЛЬ НАСТРОЕК iOS)-->
+            <!-- ========================================== -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15,5">
+                <VerticalStackLayout Spacing="0">
+
+                    <!-- Дата проведения -->
+                    <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                        <Label Grid.Column="0" Text="📅" FontSize="16" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Дата проведения" Style="{DynamicResource LabelSecondaryCustom}" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="{Binding Repair.DateRepair, StringFormat='{}{0:dd.MM.yyyy}'}" Style="{DynamicResource LabelCustomMain}" FontSize="14" VerticalOptions="Center"/>
+                    </Grid>
+                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="35,0,0,0"/>
+
+                    <!-- Текущий пробег -->
+                    <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                        <Label Grid.Column="0" Text="🚗" FontSize="16" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Пробег при замене" Style="{DynamicResource LabelSecondaryCustom}" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="{Binding Repair.CurrentMileage, StringFormat='{}{0} км'}" Style="{DynamicResource LabelCustomMain}" FontSize="14" VerticalOptions="Center"/>
+                    </Grid>
+                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="35,0,0,0"/>
+
+                    <!-- Кто выполнял -->
+                    <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                        <Label Grid.Column="0" Text="🛠️" FontSize="16" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Тип работ" Style="{DynamicResource LabelSecondaryCustom}" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="{Binding Repair.Job}" Style="{DynamicResource LabelCustomMain}" FontSize="14" VerticalOptions="Center"/>
+                    </Grid>
+
+                    <!-- Название сервиса (Скрыто, если делал сам) -->
+                    <VerticalStackLayout IsVisible="{Binding IsServiceJob}" Spacing="0">
+                        <BoxView Style="{DynamicResource BoxViewCustom}" Margin="35,0,0,0"/>
+                        <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                            <Label Grid.Column="0" Text="🏢" FontSize="16" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Text="Сервис" Style="{DynamicResource LabelSecondaryCustom}" VerticalOptions="Center"/>
+                            <Label Grid.Column="2" Text="{Binding Repair.ServiceName}" Style="{DynamicResource LabelCustomMain}" FontSize="14" VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+
+            <!-- ========================================== -->
+            <!-- 4. РЕГЛАМЕНТ ТО И ИНТЕРВАЛЫ                -->
+            <!-- ========================================== -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Регламент обслуживания" Style="{DynamicResource LabelCustomMain}" FontSize="15"/>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Замена (пробег)" Style="{DynamicResource LabelInfoMini}"/>
+                            <Label Text="{Binding RepairType.IntervalMileage, StringFormat='{}{0} км'}" 
+                                   Style="{DynamicResource LabelCustomMain}" FontSize="15" TextColor="{DynamicResource PrimaryGreen}"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Замена (время)" Style="{DynamicResource LabelInfoMini}"/>
+                            <Label Text="{Binding RepairType.IntervalMonth, StringFormat='{}{0} мес'}" 
+                                   Style="{DynamicResource LabelCustomMain}" FontSize="15" TextColor="{DynamicResource PrimaryGreen}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="0"/>
+
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Пробег при прошлой замене" Style="{DynamicResource LabelInfoMini}"/>
+                        <Label Text="{Binding RepairType.LastServiceMileage, StringFormat='{}{0} км'}" 
+                               Style="{DynamicResource LabelCustomMain}" FontSize="14"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+
+            <!-- ========================================== -->
+            <!-- 5. ЗАМЕНЕННЫЕ ЗАПЧАСТИ                     -->
+            <!-- ========================================== -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15,10" IsVisible="{Binding HasSpareParts}">
                 <VerticalStackLayout Spacing="5">
+                    <Label Text="Запчасти и расходники" Style="{DynamicResource LabelCustomMain}" FontSize="15" Margin="0,5,0,10"/>
 
-                    <Label Text="{Binding Repair.ProgressPercentMileage}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    <ProgressBar Progress="{Binding Repair.ProgressMileage}" ProgressColor="Red"/>
-
-                    <Label Text="{Binding Repair.ProgressPercentMonth}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    <ProgressBar Progress="{Binding Repair.ProgressMonth}" ProgressColor="Red"/>
-
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding SpareParts}" Spacing="0">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout>
+                                    <Grid ColumnDefinitions="*, Auto" Padding="0,10">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                            <Label Text="{Binding NamePart}" Style="{DynamicResource LabelCustomMain}" FontSize="14"/>
+                                            <Label Text="{Binding ArticleNumberPart}" Style="{DynamicResource LabelSecondaryCustom}" FontSize="12"/>
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="1" Text="{Binding CostPart, StringFormat='{}{0} ₽'}" 
+                                               VerticalOptions="Center" Style="{DynamicResource LabelCustomMain}" FontSize="15"/>
+                                    </Grid>
+                                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="0"/>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
-            </Border> <!--прогресс бар-->
-
-            <Border Style="{DynamicResource BorderForCardInfo}" Padding="10">
-                <Grid RowDefinitions="Auto, Auto, auto, auto, auto" ColumnDefinitions="*, *" RowSpacing="15" ColumnSpacing="15">
-
-                    <VerticalStackLayout Grid.Row="0" Grid.Column="0">
-                        <Label Text="Дата проведения" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding Repair.DateRepair, StringFormat='{}{0:dd.MM.yyyy}'}" 
-                               Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    </VerticalStackLayout> <!--дата проведения то-->
-
-                    <VerticalStackLayout Grid.Row="0" Grid.Column="1">
-                        <Label Text="Пробег авто на момент ремонта" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding Repair.CurrentMileage, StringFormat='{}{0} км'}" 
-                               Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    </VerticalStackLayout> <!--пробег авто-->
-                    
-                    <VerticalStackLayout Grid.Row="1" Grid.Column="0">
-                        <Label Text="Интервал замены по месяцам" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding RepairType.IntervalMonth, StringFormat='{}{0} км'}" 
-           Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    </VerticalStackLayout> <!--интервал замены месяц-->
-
-                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
-                        <Label Text="Интервал замены по пробегу" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding RepairType.IntervalMileage}" Style="{DynamicResource LabelCustom}" 
-                               FontSize="15"/>
-                    </VerticalStackLayout> <!--интервал замены пробега-->
-
-                    <VerticalStackLayout Grid.Row="2" Grid.Column="0">
-                        <Label Text="Пробег при последнем ремонте" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding RepairType.LastServiceMileage}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    </VerticalStackLayout> <!--последний ремонт-->
-
-                    <VerticalStackLayout Grid.Row="2" Grid.Column="1">
-                        <Label Text="Стоимость" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding Repair.Cost, StringFormat='{}{0} ₽'}" Style="{DynamicResource LabelCustom}" 
-                               FontSize="15"/>
-                    </VerticalStackLayout> <!--Стоимость-->
-
-                    <VerticalStackLayout Grid.Row="3" Grid.Column="0">
-                        <Label Text="Замененные запчасти" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding Repair.SpareParts, StringFormat='{}{0:dd.MM.yyyy}'}" 
-                               Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    </VerticalStackLayout> <!--запчасти-->
-
-                    <VerticalStackLayout Grid.Row="3" Grid.Column="1">
-                        <Label Text="Где ыполнялись работы" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding Repair.Job, StringFormat='{}{0:dd.MM.yyyy}'}" 
-           Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    </VerticalStackLayout> <!--Выполнение работ-->
-
-                    <VerticalStackLayout Grid.Row="4" Grid.Column="0">
-                        <Label Text="Название сервиса выполнение работ" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding Repair.Job, StringFormat='{}{0:dd.MM.yyyy}'}" 
-                               Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    </VerticalStackLayout> <!--название сервиса-->
+            </Border>
 
 
-                </Grid>
-            </Border> <!--осовные колонки информации ремонта-->
+            <!-- ========================================== -->
+            <!-- 6. ФОТОГРАФИИ ЧЕКОВ                        -->
+            <!-- ========================================== -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15" IsVisible="{Binding HasPhotos}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Чеки и заказ-наряды" Style="{DynamicResource LabelCustomMain}" FontSize="15"/>
 
-            <Border Style="{DynamicResource BorderForCardInfo}" Padding="10">
-                <VerticalStackLayout>
-
-                    <Label Style="{DynamicResource LabelSecondaryCustom}" Text="Фотографии чеков и заказ нарядов" Margin="0,0,0,10"/>
-
-                    <ScrollView>
-                        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding Repair.Photos}">
+                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" HeightRequest="100">
+                        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AttachedPhotos}" Spacing="10">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate x:DataType="x:String">
-                                    <VerticalStackLayout>
-                                        <Border Style="{DynamicResource BorderForCardImage}" Padding="0" Margin="0,0,5,0">
-                                            <Image Source="{Binding .}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill"/>
-                                        </Border>
-                                    </VerticalStackLayout>
+                                    <Border Style="{DynamicResource BorderForCardImage}" WidthRequest="100" HeightRequest="100" Padding="0">
+                                        <Image Source="{Binding .}" Aspect="AspectFill"/>
+                                    </Border>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
                         </HorizontalStackLayout>
                     </ScrollView>
                 </VerticalStackLayout>
-            </Border> <!--фото чеков и заказ нарядов-->
+            </Border>
 
-            <Border Style="{DynamicResource BorderForCardInfo}" Padding="10">
 
-                <VerticalStackLayout Grid.Row="1" Grid.Column="1">
-                    <Label Text="Описание работы" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
-                    <Label Text="{Binding Repair.Description}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    
-                    <Label Text="Комментарии механика" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
-                    <Label Text="{Binding Repair.CommentMechanic}" Style="{DynamicResource LabelCustom}" FontSize="15"/>
+            <!-- ========================================== -->
+            <!-- 7. ОПИСАНИЕ И КОММЕНТАРИИ                  -->
+            <!-- ========================================== -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15">
+                <VerticalStackLayout Spacing="15">
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Описание работы" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <Label Text="{Binding Repair.Description}" Style="{DynamicResource LabelCustomMain}" FontSize="14"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5" IsVisible="{Binding IsServiceJob}">
+                        <BoxView Style="{DynamicResource BoxViewCustom}" Margin="0,0,0,10"/>
+                        <Label Text="Комментарий мастера" Style="{DynamicResource LabelInfoForEntry}"/>
+                        <!-- Использовал твой стиль Italic для комментария мастера, это смотрится очень профессионально -->
+                        <Label Text="{Binding Repair.CommentMechanic}" FontFamily="{StaticResource MontserratItalic}" 
+                               TextColor="{DynamicResource TextBlack}" FontSize="14"/>
+                    </VerticalStackLayout>
+
                 </VerticalStackLayout>
-                <!--описание работы-->
-
-            </Border> <!--описание работы-->
-
+            </Border>
 
         </VerticalStackLayout>
     </ScrollView>
