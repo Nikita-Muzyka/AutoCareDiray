@@ -12,6 +12,7 @@
     </Shell.TitleView>
 
     <Grid RowDefinitions="Auto, *">
+        
         <VerticalStackLayout Spacing="12" Padding="5,10" Grid.Row="0">
 
             <Border Style="{DynamicResource BorderPickerMain}">
@@ -40,7 +41,7 @@
             </Grid>
 
 
-        </VerticalStackLayout>
+        </VerticalStackLayout> <!--выбрать авто-->
 
         <CollectionView ItemsSource="{Binding JournalEvents}" SelectionMode="None"
                         Margin="0,20,0,0" ItemsUpdatingScrollMode="KeepScrollOffset" Grid.Row="1">
@@ -94,12 +95,12 @@
                 <BoxView HeightRequest="100" Color="{DynamicResource PrimaryWhite}" />
             </CollectionView.Footer>
 
-        </CollectionView>
+        </CollectionView> <!--список авто-->
 
         <Grid Grid.Row="1"
               Style="{StaticResource GridForButtonCreate}">
             <Button Command="{Binding ShowMenuAddCommand}" Style="{DynamicResource ButtonCreate}"  IsEnabled="{Binding IsEnableButtonCreate}"/>
-        </Grid>
+        </Grid> <!--кнопка добавть запись-->
 
     </Grid>
     

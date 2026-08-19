@@ -17,6 +17,7 @@ namespace AutoCareDiray.Shared.Interface
         string GetDefaultShortDistance();
         string GetDefaultShortVolume();
         string GetDefaultMoney();
+        string GetDefaultMoneySign();
 
     }
 }

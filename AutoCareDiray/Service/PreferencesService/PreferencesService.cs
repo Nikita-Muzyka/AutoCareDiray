@@ -60,5 +60,11 @@ namespace AutoCareDiray.Service.PreferencesService
         {
             return Preferences.Default.Get("MoneyUnit", "RUB");
         }
+
+        public string GetDefaultMoneySign()
+        {
+            var money = Preferences.Default.Get("MoneyUnit", "RUB");
+            return CurrencyList.GetMoneySign(money);
+        }
     }
 }

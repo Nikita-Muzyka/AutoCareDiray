@@ -34,5 +34,17 @@ namespace AutoCareDiray.Shared.Models.SettignsModel
             var cur = GetCurrency().FirstOrDefault(c => c.Code == code) ?? GetCurrency().First();
             return cur.Sign;
         }
+
+        public static List<string> GetListMoneySign()
+        {
+            var cur = GetCurrency();
+
+            var listSign = new List<string>();
+            foreach (var c in cur)
+            {
+                listSign.Add(c.Sign);
+            }
+            return listSign;
+        }
     }
 }

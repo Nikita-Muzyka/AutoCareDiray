@@ -36,17 +36,4 @@ public partial class CreateRepairView : ContentPage, IQueryAttributable
         }
     }
 
-    private void CreateNewRepairType(object sender, CheckedChangedEventArgs e)
-    {
-        if (e.Value)
-        {
-            List<string> categories = new List<string>();
-            foreach (RepairCategory cat in Enum.GetValues(typeof(RepairCategory)))
-            {
-                string categoryText = cat.GetDisplay();
-                categories.Add(categoryText);
-            }
-            _viewModel.GetCategoriesRepairTypeCommand.Execute(categories);
-        }
-    }
 }

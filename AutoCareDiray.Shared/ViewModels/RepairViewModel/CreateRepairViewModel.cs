@@ -1,116 +1,99 @@
-﻿using AutoCareDiray.Shared.Interface;
+﻿using AutoCareDiray.Shared.Extensions.RepairEx;
+using AutoCareDiray.Shared.Extensions.StringEx;
+using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.Shared.Models.RepairModel;
+using AutoCareDiray.Shared.Models.SettignsModel;
 using AutoCareDiray.Shared.Models.Validation;
 using AutoCareDiray.Shared.Models.VehicleModel;
+using AutoCareDiray.Shared.Service.ResultService;
 using AutoCareDiray.Shared.Service.ValidationService;
 using CommunityToolkit.Mvvm.ComponentModel;
-using AutoCareDiray.Shared.Service.ResultService;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using AutoCareDiray.Shared.Extensions.StringEx;
 
 
 namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
 {
     public partial class CreateRepairViewModel : BaseViewModel
     {
-        #region основные классы и списки
+        #region Поля и приватные данные
 
         private CancellationTokenSource _cts;
         private readonly RepairValidation _validationRepair;
         private readonly IPhotoPicker _photoPicker;
         private readonly IPreferencesService _preferencesService;
 
-        private Repair Repair;
+        private Repair _repair;
         private Vehicle _vehicle;
-        private RepairType _type;
+        private RepairType _newRepairType; // Переименовал: понятнее, что это новый тип
 
         private int _vehicleId = -1;
         private int _repairId = -1;
 
-        private bool isInitialize = false;
+        private bool _isInitialized = false;
         private bool _isUpdateRepair = false;
 
-
-        private string _job = String.Empty;
-
         #endregion
 
-        #region классы и свойства для работы UI
+        #region Коллекции для UI
 
-        public ObservableCollection<RepairType> RepairTypes { get; set; } = new ObservableCollection<RepairType>();
-        public ObservableCollection<string> Categories { get; set; } = new ObservableCollection<string>();
-        public ObservableCollection<string> AttachedPhotos { get; set; }
+        public ObservableCollection<RepairType> RepairTypes { get; set; } = new();
+        public ObservableCollection<string> Categories { get; set; } = new();
+        public ObservableCollection<string> AttachedPhotos { get; set; } = new();
         public ObservableCollection<SparePart> ListSpareParts { get; set; } = new();
-
-
-        [ObservableProperty]
-        private RepairType selectedRepairType;
-
-        [ObservableProperty]
-        private int intervalMileageFilled;
-        [ObservableProperty]
-        private int intervalMonthsFilled;
-        [ObservableProperty]
-        private double mileageFilled;
-        [ObservableProperty]
-        private decimal costFilled;
-        [ObservableProperty]
-        private decimal createCostPart;
-        [ObservableProperty]
-        private int intervalMileageNewType;
-        [ObservableProperty]
-        private int intervalMonthNewType;
-
-        [ObservableProperty]
-        private DateTime dateRepairSelected = DateTime.UtcNow;
-
-        [ObservableProperty]
-        private string selectedSparePart;
-        [ObservableProperty]
-        private string descriptionFilled;
-        [ObservableProperty]
-        private string statusMessage;
-        [ObservableProperty]
-        private string buttonName = "Создать";
-        [ObservableProperty]
-        private string selectedJob;
-        [ObservableProperty]
-        private string serviceName;
-        [ObservableProperty]
-        private string commentMechanic;
-        [ObservableProperty]
-        private string createNamePart;
-        [ObservableProperty]
-        private string createArticleNumberPart;
-        [ObservableProperty]
-        private string selectedCategory;
-        [ObservableProperty]
-        private string titleNewRepairType;
-
-
-
-        [ObservableProperty]
-        private bool isMileageError = false;
-        [ObservableProperty]
-        private bool isCostError = false;
-        [ObservableProperty]
-        private bool isJobError = false;
-        [ObservableProperty]
-        private bool isSelectedRepairTypeError = false;
-
-        public string IntervalMileageText => "Интервал пробега " + _preferencesService.GetDefaultShortDistance();
-        public string InvervalMileageNewText => "Введите Интервал пробега или оставте 0" + _preferencesService.GetDefaultShortDistance();
-        public string MileageText => "Текущий пробег авто " + _preferencesService.GetDefaultShortDistance();
-        public string CostText => "Общая стоимость " + _preferencesService.GetDefaultMoney();
-        public string CostPartText => "Стоимость запчасти " + _preferencesService.GetDefaultMoney();
+        public ObservableCollection<string> CurrencyPicker { get; set; } = new();
 
         #endregion
 
-        public CreateRepairViewModel(IDialogService dialog, IDataService data, INavigationService navigate, RepairValidation validation, 
-            IPhotoPicker photoPicker, IPreferencesService preferencesService)
+        #region Observable-свойства (данные формы)
+
+        [ObservableProperty] private RepairType selectedRepairType;
+        [ObservableProperty] private int intervalMileageFilled;
+        [ObservableProperty] private int intervalMonthsFilled;
+        [ObservableProperty] private double mileageFilled;
+        [ObservableProperty] private decimal costFilled;
+        [ObservableProperty] private decimal createCostPart;
+        [ObservableProperty] private int intervalMileageNewType;
+        [ObservableProperty] private int intervalMonthNewType;
+        [ObservableProperty] private DateTime dateRepairSelected = DateTime.UtcNow;
+        [ObservableProperty] private string selectedSparePart;
+        [ObservableProperty] private string descriptionFilled;
+        [ObservableProperty] private string statusMessage;
+        [ObservableProperty] private string buttonName = "Создать";
+        [ObservableProperty] private string selectedJob;
+        [ObservableProperty] private string serviceName;
+        [ObservableProperty] private string commentMechanic;
+        [ObservableProperty] private string createNamePart;
+        [ObservableProperty] private string createArticleNumberPart;
+        [ObservableProperty] private string selectedCategory;
+        [ObservableProperty] private string titleNewRepairType;
+        [ObservableProperty] private string selectedCurrencySignPart;
+        [ObservableProperty] private string selectedCurrencySignAllCost;
+
+        #endregion
+
+        #region Observable-свойства (флаги UI)
+
+        [ObservableProperty] private bool isMileageError = false;
+        [ObservableProperty] private bool isCostError = false;
+        [ObservableProperty] private bool isJobError = false;
+        [ObservableProperty] private bool isSelectedRepairTypeError = false;
+        [ObservableProperty] private bool isCreateNewType = false;
+        [ObservableProperty] private bool isButtonCreateRepairType = true;
+        [ObservableProperty] private bool isCurrentRepairType = false;
+        [ObservableProperty] private bool isCancelCreateRepairType = false;
+
+        #endregion
+
+        public CreateRepairViewModel(
+            IDialogService dialog,
+            IDataService data,
+            INavigationService navigate,
+            RepairValidation validation,
+            IPhotoPicker photoPicker,
+            IPreferencesService preferencesService)
             : base(dialog, data, navigate)
         {
             _cts = new CancellationTokenSource();
@@ -120,137 +103,168 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             _preferencesService = preferencesService;
         }
 
-        #region свойства для ошибок в реальном времени
+        #region Свойства ошибок валидации
 
         public bool HasErrors => _validationRepair.HasErrors;
-        public string MileageError => _validationRepair.GetErrors(nameof(MileageError)) as String;
-        public string CostError => _validationRepair.GetErrors(nameof(CostError)) as String;
-        public string JobError => _validationRepair.GetErrors(nameof(JobError)) as String;
-        public string SelectedRepairTypeError => _validationRepair.GetErrors(nameof(SelectedRepairTypeError)) as String;
+        public string MileageError => _validationRepair.GetErrors(nameof(MileageError)) as string;
+        public string CostError => _validationRepair.GetErrors(nameof(CostError)) as string;
+        public string JobError => _validationRepair.GetErrors(nameof(JobError)) as string;
+        public string SelectedRepairTypeError => _validationRepair.GetErrors(nameof(SelectedRepairTypeError)) as string;
 
         #endregion
+
+        #region Инициализация и загрузка данных
 
         [RelayCommand]
         public async Task Initialize(IDictionary<string, object> query)
         {
-            if (isInitialize) return;
-            if (query.TryGetValue("VehicleId", out var obj))
+            if (_isInitialized) return;
+
+            if (query.TryGetValue("VehicleId", out var vehicleIdObj) && vehicleIdObj is int vehicleId)
             {
-                if (obj is int value)
-                {
-                    _vehicleId = value;
-                    isInitialize = true;
-                    await LoadingCreate();
-                }
+                _vehicleId = vehicleId;
+                _isInitialized = true;
+                await LoadingCreate();
             }
-            else if (query.TryGetValue("RepairId", out var objTwo))
+            else if (query.TryGetValue("RepairId", out var repairIdObj) && repairIdObj is int repairId)
             {
-                if (objTwo is int value)
-                {
-                    _repairId = value;
-                    isInitialize = true;
-                    await LoadingUpdate();
-                }
+                _repairId = repairId;
+                _isInitialized = true;
+                await LoadingUpdate();
             }
-        } //Инициализация и определения редактирования или обновления данных
+
+            CurrencyPicker = new ObservableCollection<string>(CurrencyList.GetListMoneySign());
+            OnPropertyChanged(nameof(CurrencyPicker));
+
+            SelectedCurrencySignPart = _preferencesService.GetDefaultMoneySign();
+            SelectedCurrencySignAllCost = SelectedCurrencySignPart;
+        }
 
         public async Task LoadingUpdate()
         {
             var result = await _dataService.GetRepairAsync(_repairId, _cts.Token);
-            if (result.Success)
+
+            // Pattern matching: безопасный кастинг и проверка в одной строке
+            if (result is not Result<Repair> repairResult)
             {
-                var resultRepair = result as Result<Repair>;
-                _isUpdateRepair = true;
-                ButtonName = " Редактировать";
-
-                SelectedRepairType = resultRepair.Data.RepairType;
-                IntervalMileageFilled = resultRepair.Data.RepairType.IntervalMileage;
-                IntervalMonthsFilled = resultRepair.Data.RepairType.IntervalMonth;
-                DateRepairSelected = resultRepair.Data.DateRepair;
-                MileageFilled = resultRepair.Data.CurrentMileage;
-                CostFilled = resultRepair.Data.Cost;
-                DescriptionFilled = resultRepair.Data.Description;
-                _vehicleId = resultRepair.Data.VehicleId;
-
-                if (resultRepair.Data.SpareParts != null)
-                {
-                    foreach (var part in resultRepair.Data.SpareParts)
-                    {
-                        ListSpareParts.Add(part);
-                    }
-                }
-
-                if (RepairTypes.Count > 0) RepairTypes.Clear();
-                RepairTypes.Add(resultRepair.Data.RepairType);
-
-                if (resultRepair.Data.Photos != null)
-                {
-                    AttachedPhotos ??= new ObservableCollection<string>();
-                    foreach (var photo in resultRepair.Data.Photos)
-                    {
-                        if (File.Exists(photo)) AttachedPhotos.Add(photo);
-                    }
-                }
-                SelectedRepairType = RepairTypes.FirstOrDefault();
+                StatusMessage = result.ErrorMessage;
+                return;
             }
-            else StatusMessage = result.ErrorMessage;
-        } //Загрузка ресурсов под редактирования 
+
+            _isUpdateRepair = true;
+            ButtonName = "Редактировать";
+
+            var data = repairResult.Data;
+            SelectedRepairType = data.RepairType;
+            IntervalMileageFilled = data.RepairType.IntervalMileage;
+            IntervalMonthsFilled = data.RepairType.IntervalMonth;
+            DateRepairSelected = data.DateRepair;
+            MileageFilled = data.CurrentMileage;
+            CostFilled = data.Cost;
+            DescriptionFilled = data.Description;
+            _vehicleId = data.VehicleId;
+
+            if (data.SpareParts != null)
+            {
+                ListSpareParts.Clear();
+                foreach (var part in data.SpareParts)
+                    ListSpareParts.Add(part);
+            }
+
+            RepairTypes.Clear();
+            RepairTypes.Add(data.RepairType);
+
+            if (data.Photos != null)
+            {
+                AttachedPhotos.Clear();
+                foreach (var photo in data.Photos)
+                {
+                    if (File.Exists(photo))
+                        AttachedPhotos.Add(photo);
+                }
+            }
+
+            SelectedRepairType = RepairTypes.FirstOrDefault();
+        }
 
         public async Task LoadingCreate()
         {
-            if (RepairTypes.Count > 0) RepairTypes.Clear();
+            RepairTypes.Clear();
 
             var result = await _dataService.GetVehicleAndRepairTypesAsync(_vehicleId, _cts.Token);
-            if (result.Success)
+
+            if (result is not Result<Vehicle> vehicleResult)
             {
-                var resultVehicle = result as Result<Vehicle>;
-                _vehicle = resultVehicle.Data;
-                if(_vehicle.RepairTypes.Count > 0)
-                {
-                    foreach (var repairs in _vehicle.RepairTypes)
-                    {
-                        if (repairs is not null) RepairTypes.Add(repairs);
-                    }
-                    SelectedRepairType = RepairTypes.First();
-                    IntervalMileageFilled = SelectedRepairType.IntervalMileage;
-                    IntervalMonthsFilled = SelectedRepairType.IntervalMonth;
-                }
-                MileageFilled = _vehicle.Mileage;
+                StatusMessage = result.ErrorMessage;
+                return;
             }
-            else StatusMessage = result.ErrorMessage;
-        } //Загрузка под создания ремонта
+
+            _vehicle = vehicleResult.Data;
+            if (_vehicle?.RepairTypes != null)
+            {
+                foreach (var repairType in _vehicle.RepairTypes)
+                {
+                    if (repairType is not null)
+                        RepairTypes.Add(repairType);
+                }
+            }
+
+            MileageFilled = _vehicle?.Mileage ?? 0;
+        }
+
+        #endregion
+
+        #region Команды управления типами ремонта
 
         [RelayCommand]
-        public void GetCategoriesRepairType(List<string> categories)
+        public void ShowMenuCreateRepairType()
         {
-            foreach (var category in categories)
+            IsCreateNewType = true;
+            IsButtonCreateRepairType = false;
+            IsCancelCreateRepairType = true;
+            SelectedRepairType = null;
+
+            Categories.Clear(); // Важно: очищать перед добавлением, чтобы избежать дублирования
+            foreach (RepairCategory cat in Enum.GetValues(typeof(RepairCategory)))
             {
-                Categories.Add(category);
+                Categories.Add(cat.GetDisplay());
             }
         }
 
         [RelayCommand]
         public async Task CreateNewRepairType()
         {
-            if (RepairTypes.Where(c => c.TitleRepair == TitleNewRepairType).Any())
+            // Используем LINQ Any() вместо Where().Any() — быстрее
+            if (RepairTypes.Any(c => c.TitleRepair == TitleNewRepairType))
             {
-                await _dialogService.ShowToastAsync("Данный тип ремонта уже сеществует");
+                await _dialogService.ShowToastAsync("Данный тип ремонта уже существует");
                 return;
             }
 
-            var CategoryText = SelectedCategory.GetCategory();
-            _type = new RepairType()
+            _newRepairType = new RepairType()
             {
                 TitleRepair = TitleNewRepairType,
                 IntervalMileage = IntervalMileageNewType,
                 IntervalMonth = IntervalMonthNewType,
-                Category = CategoryText,
+                Category = SelectedCategory.GetCategory(),
                 VehicleId = _vehicleId
             };
 
-            RepairTypes.Add(_type);
-            SelectedRepairType = _type;
+            RepairTypes.Add(_newRepairType);
+            SelectedRepairType = _newRepairType;
         }
+
+        [RelayCommand]
+        public void CancelCreateTypeRepair()
+        {
+            IsCreateNewType = false;
+            IsButtonCreateRepairType = true;
+            IsCancelCreateRepairType = false;
+        }
+
+        #endregion
+
+        #region Главная команда: создание/редактирование ремонта
 
         [RelayCommand]
         public async Task ProcessingRepair()
@@ -258,151 +272,67 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             ValidationAll();
             if (HasErrors) return;
 
-            if (SelectedRepairType == _type)
+            // Шаг 1: Создаём новый тип ремонта, если он был создан пользователем
+            if (SelectedRepairType == _newRepairType)
             {
-                var resultUpdateRepairType = await _dataService.CreateRepairTypeAsync(_type, _cts.Token);
-                if (resultUpdateRepairType.Success == false)
-                {
-                    StatusMessage = string.IsNullOrWhiteSpace(StatusMessage) == false
-                       ? StatusMessage += " " + resultUpdateRepairType.ErrorMessage
-                       : StatusMessage = resultUpdateRepairType.ErrorMessage;
+                if (!await TryCreateNewRepairTypeAsync())
                     return;
-                }
-                else
-                {
-                    var result = await _dataService.GetRepairTypeAsync(_type, _cts.Token);
-                    var resultRepairType = result as Result<RepairType>;
-                    _type = resultRepairType.Data;
-                }
             }
 
-            Repair = CreateRepair();
+            // Шаг 2: Создаём объект ремонта
+            _repair = BuildRepairEntity();
 
-            if (AttachedPhotos != null)
+            // Шаг 3: Сохраняем фото, если они есть
+            if (AttachedPhotos?.Any() == true)
             {
-                var result = await _photoPicker.SavePhotosAsync(AttachedPhotos, _cts.Token);
-                if (result.Success)
-                {
-                    var resultPhotos = result as Result<List<string>>;
-                    Repair.Photos = resultPhotos.Data;
-                }
+                await TrySavePhotosAsync(_repair);
             }
 
-            if (_isUpdateRepair)
-            {
-                Repair.Id = _repairId;
-                var resultUdateRepair = await _dataService.UpdateRepairAsync(Repair, _cts.Token);
-                if (resultUdateRepair.Success == false)
-                {
-                    StatusMessage = resultUdateRepair.ErrorMessage;
-                    return;
-                }
-                _isUpdateRepair = false;
-            }
-            else
-            {
-                var resultCreateRepair = await _dataService.CreateRepairAsync(Repair, _cts.Token);
-                if (resultCreateRepair.Success == false)
-                {
-                    StatusMessage = resultCreateRepair.ErrorMessage;
-                    return;
-                }
-            }
+            // Шаг 4: Создаём или обновляем ремонт в базе
+            if (!await TrySaveRepairAsync(_repair))
+                return;
 
-            await UpdateDate();
+            // Шаг 5: Обновляем пробег авто и интервалы обслуживания
+            if (!await TryUpdateRepairRelatedDataAsync())
+                return;
+
+            // Шаг 6: Возвращаемся назад, если всё успешно
             if (string.IsNullOrWhiteSpace(StatusMessage))
             {
                 await _navigationService.GoToBack();
             }
-        }  //Создание или редактирование ремонта
+        }
+
+        #endregion
+
+        #region Команды работы с фото
 
         [RelayCommand]
         public async Task AttachPhoto()
         {
             var result = await _photoPicker.PickPhotosAsync();
-
-            if (result.Success == false)
+            if (!result.Success)
             {
                 await _dialogService.ShowToastAsync(result.ErrorMessage);
                 return;
             }
 
-            var resultPhoto = result as Result<List<string>>;
-            AttachedPhotos ??= new();
-
-            foreach (var listPhoto in resultPhoto.Data)
+            if (result is Result<List<string>> typedResult)
             {
-                AttachedPhotos.Add(listPhoto);
+                foreach (var photo in typedResult.Data)
+                    AttachedPhotos.Add(photo);
             }
+        }
 
-        } //выбор фото
         [RelayCommand]
         public void DeleteAttachPhoto(string photo)
         {
             AttachedPhotos?.Remove(photo);
-        } //удаление фото
+        }
 
-        private Repair CreateRepair()
-        {
+        #endregion
 
-            Repair repair = new Repair()
-            {
-                DateRepair = DateRepairSelected,
-                Cost = CostFilled,
-                Description = DescriptionFilled,
-                VehicleId = _vehicleId,
-                RepairTypeId = SelectedRepairType.Id,
-                CurrentMileage = MileageFilled,
-                CommentMechanic = CommentMechanic,
-                ServiceName = ServiceName,
-                Job = SelectedJob,
-            };
-
-            if (ListSpareParts.Count > 0)
-            {
-                repair.SpareParts = ListSpareParts.ToList();
-            }
-
-            return repair;
-        } // создание ремонита
-        private async Task UpdateDate()
-        {
-
-            SelectedRepairType.LastServiceMileage = MileageFilled;
-            SelectedRepairType.LastServiceDate = DateRepairSelected;
-            SelectedRepairType.IntervalMileage = IntervalMileageFilled;
-            SelectedRepairType.IntervalMonth = IntervalMonthsFilled;
-
-            var result = await _dataService.GetVehicleMileageAsync(_vehicleId, _cts.Token);
-            if (result.Success)
-            {
-                var resultVeh = result as Result<Vehicle>;
-                _vehicle = resultVeh.Data;
-            }
-            if (MileageFilled > _vehicle.Mileage)
-            {
-                var resultMileage = await _dataService.UpdateVehicleMileageAsync(_vehicleId, MileageFilled, _cts.Token);
-                if (resultMileage.Success == false)
-                {
-                    StatusMessage = resultMileage.ErrorMessage;
-                }
-
-            }
-
-            var resultUpdateTypeRep = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
-            if (resultUpdateTypeRep.Success == false)
-            {
-                if (string.IsNullOrWhiteSpace(StatusMessage) == false)
-                {
-                    StatusMessage += " " + resultUpdateTypeRep.ErrorMessage;
-                }
-                else
-                {
-                    StatusMessage = resultUpdateTypeRep.ErrorMessage;
-                }
-            }
-
-        } // Обновление пробега у авто и интервала пробега
+        #region Команды работы с запчастями
 
         [RelayCommand]
         public void CreateSparePart()
@@ -411,14 +341,16 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             {
                 NamePart = CreateNamePart,
                 ArticleNumberPart = CreateArticleNumberPart,
-                CostPart = CreateCostPart
+                CostPart = CreateCostPart,
+                CurrentCurrencySing = SelectedCurrencySignPart
             };
 
             ListSpareParts.Add(sparePart);
-            CreateNamePart = "";
-            CreateArticleNumberPart = "";
-            CreateCostPart = 0;
 
+            // Очищаем поля ввода
+            CreateNamePart = string.Empty;
+            CreateArticleNumberPart = string.Empty;
+            CreateCostPart = 0;
         }
 
         [RelayCommand]
@@ -435,10 +367,14 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
                     CreateNamePart = part.NamePart;
                     CreateArticleNumberPart = part.ArticleNumberPart;
                     CreateCostPart = part.CostPart;
+                    ListSpareParts.Remove(part);
                     break;
             }
         }
 
+        #endregion
+
+        #region Приватные методы бизнес-логики
 
         private void ValidationAll()
         {
@@ -448,31 +384,193 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             IsSelectedRepairTypeError = _validationRepair.ValidationSelectedRepairType(SelectedRepairType);
         }
 
+        /// <summary>
+        /// Добавляет сообщение об ошибке к StatusMessage, избегая дублирования разделителей.
+        /// Применяется везде, где возвращается ошибка от сервисов.
+        /// </summary>
+        private void AppendError(string errorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(errorMessage))
+                return;
+
+            if (string.IsNullOrWhiteSpace(StatusMessage))
+                StatusMessage = errorMessage;
+            else
+                StatusMessage += " " + errorMessage;
+        }
+
+        /// <summary>
+        /// Пытается создать новый тип ремонта в базе.
+        /// Возвращает true при успехе, false при ошибке.
+        /// </summary>
+        private async Task<bool> TryCreateNewRepairTypeAsync()
+        {
+            var result = await _dataService.CreateRepairTypeAsync(_newRepairType, _cts.Token);
+            if (!result.Success)
+            {
+                AppendError(result.ErrorMessage);
+                return false;
+            }
+
+            // Получаем созданный тип с актуальным Id
+            var getResult = await _dataService.GetRepairTypeAsync(_newRepairType, _cts.Token);
+            if (getResult is Result<RepairType> typedResult)
+            {
+                _newRepairType = typedResult.Data;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Сохраняет фото и присваивает пути к объекту ремонта.
+        /// </summary>
+        private async Task TrySavePhotosAsync(Repair repair)
+        {
+            var result = await _photoPicker.SavePhotosAsync(AttachedPhotos, _cts.Token);
+            if (result.Success && result is Result<List<string>> typedResult)
+            {
+                repair.Photos = typedResult.Data;
+            }
+        }
+
+        /// <summary>
+        /// Создаёт или обновляет ремонт в базе в зависимости от режима.
+        /// Возвращает true при успехе, false при ошибке.
+        /// </summary>
+        private async Task<bool> TrySaveRepairAsync(Repair repair)
+        {
+            Result result;
+
+            if (_isUpdateRepair)
+            {
+                repair.Id = _repairId;
+                result = await _dataService.UpdateRepairAsync(repair, _cts.Token);
+            }
+            else
+            {
+                result = await _dataService.CreateRepairAsync(repair, _cts.Token);
+            }
+
+            if (!result.Success)
+            {
+                AppendError(result.ErrorMessage);
+                return false;
+            }
+
+            if (_isUpdateRepair)
+                _isUpdateRepair = false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Обновляет пробег автомобиля и интервалы обслуживания типа ремонта.
+        /// Возвращает false при критических ошибках (например, не удалось сохранить тип).
+        /// </summary>
+        private async Task<bool> TryUpdateRepairRelatedDataAsync()
+        {
+            if (SelectedRepairType is null)
+                return false;
+
+            SelectedRepairType.LastServiceMileage = MileageFilled;
+            SelectedRepairType.LastServiceDate = DateRepairSelected;
+            SelectedRepairType.IntervalMileage = IntervalMileageFilled;
+            SelectedRepairType.IntervalMonth = IntervalMonthsFilled;
+
+            var vehicleResult = await _dataService.GetVehicleMileageAsync(_vehicleId, _cts.Token);
+            if (vehicleResult is Result<Vehicle> vehicleTypedResult && vehicleTypedResult.Data is not null)
+            {
+                _vehicle = vehicleTypedResult.Data;
+
+                // ✅ ТЕПЕРЬ БЕЗОПАСНО: _vehicle точно не null
+                if (MileageFilled > _vehicle.Mileage)
+                {
+                    var mileageResult = await _dataService.UpdateVehicleMileageAsync(_vehicleId, MileageFilled, _cts.Token);
+                    if (!mileageResult.Success)
+                        AppendError(mileageResult.ErrorMessage);
+                }
+            }
+
+            var typeResult = await _dataService.UpdateRepairTypeAsync(SelectedRepairType, _cts.Token);
+            if (!typeResult.Success)
+            {
+                AppendError(typeResult.ErrorMessage);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Создаёт объект Repair на основе текущих данных формы.
+        /// </summary>
+        private Repair BuildRepairEntity()
+        {
+            var repair = new Repair()
+            {
+                DateRepair = DateRepairSelected,
+                Cost = CostFilled,
+                Description = DescriptionFilled,
+                VehicleId = _vehicleId,
+                RepairTypeId = SelectedRepairType.Id,
+                CurrentMileage = MileageFilled,
+                CommentMechanic = CommentMechanic,
+                ServiceName = ServiceName,
+                Job = SelectedJob,
+            };
+
+            if (ListSpareParts.Any())
+                repair.SpareParts = ListSpareParts.ToList();
+
+            return repair;
+        }
+
+        #endregion
+
+        #region Частичные методы для ObservableProperty (генерируются Source Generator'ом)
 
         partial void OnSelectedJobChanged(string value)
         {
             isJobError = _validationRepair.ValidationJob(value);
         }
+
         partial void OnSelectedRepairTypeChanged(RepairType value)
         {
+            if (value == null)
+            {
+                IsCurrentRepairType = false;
+                IsButtonCreateRepairType = false;
+                IsCreateNewType = true;
+                return;
+            }
+
+            IsCurrentRepairType = true;
+            IsButtonCreateRepairType = true;
+            IsCreateNewType = false;
             IntervalMileageFilled = value.IntervalMileage;
             IntervalMonthsFilled = value.IntervalMonth;
         }
+
         partial void OnMileageFilledChanged(double value)
         {
             IsMileageError = _validationRepair.ValidationMileage(value);
         }
+
         partial void OnCostFilledChanged(decimal value)
         {
             IsCostError = _validationRepair.ValidationCost(value);
         }
+
         void OnErrorsChangedUI(DataErrorsChangedEventArgs e)
         {
             OnPropertyChanged(nameof(HasErrors));
             OnPropertyChanged(e.PropertyName);
         }
 
+        #endregion
 
+        #region Управление токеном отмены и событиями
 
         [RelayCommand]
         public void CancelToken()
@@ -480,12 +578,16 @@ namespace AutoCareDiray.Shared.ViewModels.RepairViewModel
             _cts.Cancel();
             _cts.Dispose();
             _cts = new CancellationTokenSource();
-        }  //отмена токена
+        }
 
         [RelayCommand]
         public void OffEvent()
         {
+            // TODO: Эта отписка не работает из-за нового анонимного делегата.
+            // Нужно сохранить EventHandler в поле, чтобы можно было отписаться корректно.
             _validationRepair.ErrorsChanged -= (s, e) => OnErrorsChangedUI(e);
-        }  //отмена подписки на событие
+        }
+
+        #endregion
     }
 }

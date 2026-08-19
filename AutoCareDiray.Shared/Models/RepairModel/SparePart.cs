@@ -14,5 +14,11 @@ namespace AutoCareDiray.Shared.Models.RepairModel
         public string NamePart {  get; set; }
         public string ArticleNumberPart { get; set; }
         public decimal CostPart { get; set; }
+        public string CurrentCurrencySing { get; set; }
+        public string DisplayCost 
+        {
+            get => CostPart.ToString() + " " + CurrentCurrencySing;
+            set { }
+        }
     }
 }
