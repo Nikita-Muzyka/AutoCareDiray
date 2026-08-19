@@ -2,78 +2,117 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.RefillView.CardRefillView"
-             Title="CardRefillView"
+             Title="Информация о заправке"
              Style="{DynamicResource CustomPage}">
-    
-    <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="10">
 
-            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="15" VerticalOptions="Center">
-                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                    <Label Text="{Binding RefillCard.GasStationName, TargetNullValue='АЗС не указана'}" Style="{DynamicResource LabelSecondaryCustom}"/>
-                    <HorizontalStackLayout Spacing="5">
-                        <Label Text="{Binding RefillCard.Title}" FontSize="18" Style="{DynamicResource LabelCustom}"/>
-                        <Label Text="{Binding RefillCard.FuelType}" FontSize="18" Style="{DynamicResource LabelCustom}" FontAttributes="Bold"/>
-                    </HorizontalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="15,20,15,40">
+
+            <!-- ========================================== -->
+            <!-- 1. HERO БЛОК: ЗАГОЛОВОК И ИТОГОВАЯ СТОИМОСТЬ -->
+            <!-- ========================================== -->
+            <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto" RowSpacing="8" Margin="0,0,0,10">
+
+                <!-- Бейдж типа топлива (золотой) -->
+                <Border Grid.Row="0" Grid.Column="0" Stroke="{DynamicResource PrimaryGold}" StrokeShape="RoundRectangle 8" 
+                        StrokeThickness="1" BackgroundColor="Transparent" HorizontalOptions="Start" Padding="8,4">
+                    <Label Text="{Binding RefillCard.FuelType, TargetNullValue='Топливо'}" TextColor="{DynamicResource PrimaryGold}" 
+                           FontSize="12" FontFamily="{StaticResource MontserratBold}"/>
+                </Border>
+
+                <!-- Название АЗС -->
+                <Label Grid.Row="1" Grid.Column="0" Text="{Binding RefillCard.GasStationName, TargetNullValue='АЗС не указана'}" 
+                       FontSize="22" Style="{DynamicResource LabelCustomMain}" VerticalOptions="Center"/>
+
+                <!-- Итоговая стоимость (зеленая) -->
+                <VerticalStackLayout Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End">
+                    <Label Text="Итого" Style="{DynamicResource LabelSecondaryCustom}" HorizontalOptions="End" FontSize="12"/>
+                    <Label Text="{Binding RefillCard.Cost, StringFormat='{}{0} ₽'}" 
+                           FontSize="22" FontFamily="{StaticResource MontserratBold}" TextColor="{DynamicResource PrimaryGreen}" HorizontalOptions="End"/>
                 </VerticalStackLayout>
             </Grid>
 
-            <Border Style="{DynamicResource BorderForCardInfo}" Padding="10">
-                <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="*, *" RowSpacing="15" ColumnSpacing="15">
+            <!-- ========================================== -->
+            <!-- 2. ОСНОВНАЯ ИНФОРМАЦИЯ (СТИЛЬ НАСТРОЕК iOS)-->
+            <!-- ========================================== -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15,5">
+                <VerticalStackLayout Spacing="0">
 
-                    <VerticalStackLayout Grid.Row="0" Grid.Column="0">
-                        <Label Text="Дата заправки" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding RefillCard.DateRefill, StringFormat='{}{0:dd.MM.yyyy}'}" 
-                           Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    </VerticalStackLayout>
+                    <!-- Дата -->
+                    <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                        <Label Grid.Column="0" Text="📅" FontSize="16" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Дата заправки" Style="{DynamicResource LabelSecondaryCustom}" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Text="{Binding RefillCard.DateRefill, StringFormat='{}{0:dd.MM.yyyy}'}" Style="{DynamicResource LabelCustomMain}" FontSize="14" VerticalOptions="Center"/>
+                    </Grid>
+                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="35,0,0,0"/>
 
-                    <VerticalStackLayout Grid.Row="0" Grid.Column="1">
-                        <Label Text="Пробег авто" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding RefillCard.Mileage, StringFormat='{}{0} км'}" 
-                           Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    </VerticalStackLayout>
+                    <!-- Пробег с динамической единицей измерения -->
+                    <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                        <Label Grid.Column="0" Text="🚗" FontSize="16" VerticalOptions="Center"/>
+                        <HorizontalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <Label Text="Пробег авто" Style="{DynamicResource LabelSecondaryCustom}"/>
+                            <Label Text="{Binding MileageUnit, StringFormat='(в {0})'}" Style="{DynamicResource LabelInfoMini}" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                        <Label Grid.Column="2" Text="{Binding RefillCard.Mileage}" Style="{DynamicResource LabelCustomMain}" FontSize="14" VerticalOptions="Center"/>
+                    </Grid>
+                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="35,0,0,0"/>
 
-                    <VerticalStackLayout Grid.Row="1" Grid.Column="0">
-                        <Label Text="Залито литров" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding RefillCard.VolumeLiters, StringFormat='{}{0} л'}" 
-                           Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                    </VerticalStackLayout>
+                    <!-- Залито литров -->
+                    <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                        <Label Grid.Column="0" Text="💧" FontSize="16" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Залито топлива" Style="{DynamicResource LabelSecondaryCustom}" VerticalOptions="Center"/>
+                        <HorizontalStackLayout Grid.Column="2" Spacing="2" VerticalOptions="Center">
+                            <Label Text="{Binding RefillCard.VolumeLiters}" Style="{DynamicResource LabelCustomMain}" FontSize="14" VerticalOptions="Center"/>
+                            <Label Text="л" Style="{DynamicResource LabelSecondaryCustom}" FontSize="14" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <BoxView Style="{DynamicResource BoxViewCustom}" Margin="35,0,0,0"/>
 
-                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
-                        <Label Text="Итоговая стоимость" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Text="{Binding RefillCard.Cost, StringFormat='{}{0} ₽'}" 
-                           Style="{DynamicResource LabelCustom}" FontSize="15" TextColor="#E57373" FontAttributes="Bold"/>
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
-                        <Label Text="Заправлено до полного бака?" FontSize="11" Style="{DynamicResource LabelForCardInfoCategory}"/>
-                        <Label Style="{DynamicResource LabelCustom}" FontSize="15">
+                    <!-- Полный бак (С красивым зеленым Да) -->
+                    <Grid ColumnDefinitions="30, *, Auto" Padding="0,12">
+                        <Label Grid.Column="0" Text="⛽" FontSize="16" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="Полный бак?" Style="{DynamicResource LabelSecondaryCustom}" VerticalOptions="Center"/>
+                        <Label Grid.Column="2" Style="{DynamicResource LabelCustomMain}" FontSize="14" VerticalOptions="Center">
                             <Label.Triggers>
-                                <DataTrigger TargetType="Label" Binding="{Binding Refill.IsFullTank}" Value="True">
+                                <DataTrigger TargetType="Label" Binding="{Binding RefillCard.IsFullTank}" Value="True">
                                     <Setter Property="Text" Value="Да" />
+                                    <!-- Если бак полный, подсвечиваем акцентным цветом -->
+                                    <Setter Property="TextColor" Value="{DynamicResource PrimaryGreen}" />
                                 </DataTrigger>
-                                <DataTrigger TargetType="Label" Binding="{Binding Refill.IsFullTank}" Value="False">
+                                <DataTrigger TargetType="Label" Binding="{Binding RefillCard.IsFullTank}" Value="False">
                                     <Setter Property="Text" Value="Нет" />
                                 </DataTrigger>
                             </Label.Triggers>
                         </Label>
-                    </VerticalStackLayout>
+                    </Grid>
 
-                </Grid>
+                </VerticalStackLayout>
             </Border>
 
-            <Border Style="{DynamicResource BorderForCardInfo}" Padding="10">
-                <VerticalStackLayout>
-                    <Label Style="{DynamicResource LabelSecondaryCustom}" Text="Фотографии чеков" Margin="0,0,0,10"/>
-                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-                        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding RefillCard.Photos}">
-                            <BindableLayout.EmptyView>
-                                <Label Text="Нет прикрепленных фото" FontSize="12" TextColor="Gray" Margin="0,10,0,10"/>
-                            </BindableLayout.EmptyView>
+            <!-- ========================================== -->
+            <!-- 3. ЗАМЕТКИ (Скрывается, если пусто)        -->
+            <!-- ========================================== -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15" IsVisible="{Binding HasDescription}">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="📝 Заметки" Style="{DynamicResource LabelInfoForEntry}"/>
+                    <Label Text="{Binding RefillCard.Description}" Style="{DynamicResource LabelCustomMain}" FontSize="14"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ========================================== -->
+            <!-- 4. ФОТОГРАФИИ ЧЕКОВ (Скрывается, если нет) -->
+            <!-- ========================================== -->
+            <Border Style="{DynamicResource BorderForEntryCard}" Padding="15" IsVisible="{Binding HasPhotos}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="📸 Фотографии чеков" Style="{DynamicResource LabelCustomMain}" FontSize="15"/>
+
+                    <!-- Ограничиваем высоту, чтобы ScrollView не крашил Android -->
+                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" HeightRequest="100">
+                        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AttachedPhotos}" Spacing="10">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate x:DataType="x:String">
-                                    <Border Style="{DynamicResource BorderForCardImage}" Padding="0" Margin="0,0,5,0">
-                                        <Image Source="{Binding .}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill"/>
+                                    <Border WidthRequest="100" HeightRequest="100" Padding="0" Style="{DynamicResource BorderForCardImage}">
+                                        <Image Source="{Binding .}" Aspect="AspectFill"/>
                                     </Border>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -82,13 +121,7 @@
                 </VerticalStackLayout>
             </Border>
 
-            <Border Style="{DynamicResource BorderForCardInfo}" Padding="10">
-                <VerticalStackLayout>
-                    <Label Text="Заметки" FontSize="11" Style="{DynamicResource LabelSecondaryCustom}"/>
-                    <Label Text="{Binding RefillCard.Description, TargetNullValue='Нет заметок'}" 
-                       Style="{DynamicResource LabelCustom}" FontSize="15"/>
-                </VerticalStackLayout>
-            </Border>
+            <Label Text="{Binding StatusMessage}" Style="{DynamicResource LabelError}" HorizontalOptions="Center"/>
 
         </VerticalStackLayout>
     </ScrollView>

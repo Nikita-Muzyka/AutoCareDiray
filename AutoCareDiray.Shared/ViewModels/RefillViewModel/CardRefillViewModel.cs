@@ -2,44 +2,132 @@
 using CommunityToolkit.Mvvm.Input;
 using AutoCareDiray.Shared.Service.ResultService;
 using AutoCareDiray.Shared.Models.RefillModel;
-using System;
+using AutoCareDiray.Shared.Models.VehicleModel;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.IO;
 
 namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
 {
     public partial class CardRefillViewModel : BaseViewModel
     {
-        #region основные классы
+        #region Поля и приватные данные
 
-        CancellationTokenSource _cts;
-
-        #endregion
-
-        #region основные классы
-
-        [ObservableProperty]
-        private Refill refillCard;
+        private CancellationTokenSource _cts;
+        private bool _isInitialized = false;
+        private int _refillId = -1;
 
         #endregion
 
-        public CardRefillViewModel(IDialogService dialog, IDataService data, INavigationService navigate) : base(dialog, data, navigate)
+        #region Коллекции для UI
+
+        // Выделяем фото в отдельную коллекцию для безопасного биндинга
+        public ObservableCollection<string> AttachedPhotos { get; set; } = new();
+
+        #endregion
+
+        #region Observable-свойства (данные)
+
+        [ObservableProperty] private Refill refillCard = new();
+        [ObservableProperty] private string statusMessage;
+        [ObservableProperty] private string mileageUnit = "км"; // Единицы измерения по умолчанию
+
+        #endregion
+
+        #region Observable-свойства (флаги UI)
+
+        [ObservableProperty] private bool hasPhotos;
+        [ObservableProperty] private bool hasDescription;
+
+        #endregion
+
+        public CardRefillViewModel(IDialogService dialog, IDataService data, INavigationService navigate)
+            : base(dialog, data, navigate)
         {
             _cts = new CancellationTokenSource();
         }
 
+        #region Инициализация и загрузка данных
+
         [RelayCommand]
-        public async Task Initilize(int id)
+        public async Task Initialize(IDictionary<string, object> query)
         {
-          var result = await _dataService.GetRefillAsync(id, _cts.Token);
-            if (result.Success)
+            if (_isInitialized) return;
+
+            // Даем странице 300мс на плавное открытие без фризов
+            await Task.Delay(300);
+
+            if (query.TryGetValue("RefillId", out var refillIdObj) && refillIdObj is int refillId)
             {
-                var resultRefill = result as Result<Refill>;
-                RefillCard = resultRefill.Data;
+                _refillId = refillId;
+                await LoadRefillDataAsync();
             }
+            else
+            {
+                StatusMessage = "Ошибка: ID заправки не найден.";
+            }
+        }
+
+        private async Task LoadRefillDataAsync()
+        {
+            var result = await _dataService.GetRefillAsync(_refillId, _cts.Token);
+
+            if (result is not Result<Refill> refillResult)
+            {
+                StatusMessage = result.ErrorMessage ?? "Не удалось загрузить данные о заправке.";
+                return;
+            }
+
+            RefillCard = refillResult.Data;
+
+            // Запрашиваем авто, чтобы получить единицы измерения пробега (км или мили)
+            var vehicleResult = await _dataService.GetVehicleAsync(RefillCard.VehicleId, _cts.Token);
+            if (vehicleResult is Result<Vehicle> vehResult && vehResult.Data != null)
+            {
+                MileageUnit = vehResult.Data.UnitDistance ?? "км";
+            }
+
+            // Устанавливаем флаги для скрытия пустых блоков в XAML
+            HasDescription = !string.IsNullOrWhiteSpace(RefillCard.Description);
+            PopulatePhotos();
+
+            _isInitialized = true;
+        }
+
+        private void PopulatePhotos()
+        {
+            AttachedPhotos.Clear();
+            if (RefillCard.Photos != null && RefillCard.Photos.Any())
+            {
+                foreach (var photo in RefillCard.Photos)
+                {
+                    if (File.Exists(photo))
+                        AttachedPhotos.Add(photo);
+                }
+                HasPhotos = AttachedPhotos.Any();
+            }
+            else
+            {
+                HasPhotos = false;
+            }
+        }
+
+        #endregion
+
+        #region Команды управления
+
+        [RelayCommand]
+        public async Task EditRefill()
+        {
+            var navigationParameter = new Dictionary<string, object>
+            {
+                { "RefillId", _refillId }
+            };
+            await _navigationService.GoNavigation("CreateRefillView", navigationParameter);
         }
 
         [RelayCommand]
@@ -48,6 +136,8 @@ namespace AutoCareDiray.Shared.ViewModels.RefillViewModel
             _cts.Cancel();
             _cts.Dispose();
             _cts = new CancellationTokenSource();
-        } //отмена токена при закртие страницы
+        }
+
+        #endregion
     }
 }
