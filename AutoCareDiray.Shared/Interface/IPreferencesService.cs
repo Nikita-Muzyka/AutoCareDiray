@@ -10,10 +10,12 @@ namespace AutoCareDiray.Shared.Interface
 {
     public interface IPreferencesService
     {
-        string GetDefault(string defailtName);
+        int GetDefault(string defailtName);
         void SetDefault(string defailtName, string unit);
         void SetUnitDistanse(EUnitDistance unit);
         void SetUnitVolume(EUnitVolume unit);
+        int GetUnitDistanseNumber();
+        int GetUnitVolumeNumber();
         string GetDefaultShortDistance();
         string GetDefaultShortVolume();
         string GetDefaultMoney();

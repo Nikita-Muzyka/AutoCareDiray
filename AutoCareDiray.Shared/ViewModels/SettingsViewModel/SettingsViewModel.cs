@@ -2,7 +2,6 @@
 using AutoCareDiray.Shared.Interface;
 using AutoCareDiray.Shared.Models.SettignsModel;
 
-
 namespace AutoCareDiray.Shared.ViewModels.SettingsViewModel
 {
     public partial class SettingsViewModel : ObservableObject
@@ -21,33 +20,46 @@ namespace AutoCareDiray.Shared.ViewModels.SettingsViewModel
         public SettingsViewModel(IPreferencesService preferences)
         {
             _preferencesService = preferences;
-            SelectedDistanceUnit = _preferencesService.GetDefaultShortDistance();
-            SelectedVolumeUnit = _preferencesService.GetDefaultShortVolume();
+
+            // Просто вызываем наш метод при создании ViewModel
+            InitializeAsync();
+        }
+
+        // async void отлично подходит для "fire-and-forget" инициализации из конструктора
+        private async void InitializeAsync()
+        {
+            await Task.Delay(50); // Ждем отрисовку UI
+
+            // ОБЯЗАТЕЛЬНО добавляем .ToString(), так как свойства ждут строку
+            SelectedDistanceUnit = _preferencesService.GetUnitDistanseNumber().ToString();
+            SelectedVolumeUnit = _preferencesService.GetUnitVolumeNumber().ToString();
             SelectedMoneyUnit = _preferencesService.GetDefaultMoney();
         }
 
-        // Срабатывает автоматически при выборе RadioButton расстояния
         partial void OnSelectedDistanceUnitChanged(string value)
         {
-            if(int.TryParse(value, out var distanceUnit)) 
+            if (string.IsNullOrEmpty(value)) return;
+
+            if (int.TryParse(value, out var distanceUnit))
             {
-                EUnitDistance setUnit = (EUnitDistance)distanceUnit;
-                _preferencesService.SetUnitDistanse(setUnit);
+                _preferencesService.SetUnitDistanse((EUnitDistance)distanceUnit);
             }
         }
 
-        // Срабатывает автоматически при выборе RadioButton объема
         partial void OnSelectedVolumeUnitChanged(string value)
         {
+            if (string.IsNullOrEmpty(value)) return;
+
             if (int.TryParse(value, out var volumeUnit))
             {
-                EUnitVolume setUnit = (EUnitVolume)volumeUnit;
-                _preferencesService.SetUnitVolume(setUnit);
+                _preferencesService.SetUnitVolume((EUnitVolume)volumeUnit);
             }
         }
 
         partial void OnSelectedMoneyUnitChanged(string value)
         {
+            if (string.IsNullOrEmpty(value)) return;
+
             _preferencesService.SetDefault("UnitMoney", value);
         }
     }

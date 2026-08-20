@@ -21,9 +21,10 @@ namespace AutoCareDiray.Service.PreferencesService
             _unitService = unitService;
         }
 
-        public string GetDefault(string name)
+        public int GetDefault(string name)
         {
-            return Preferences.Default.Get(name, "0");
+            var defUnit = Preferences.Default.Get(name, "0");
+            return int.Parse(defUnit);
         }
         public void SetDefault(string name, string unit)
         {
@@ -39,6 +40,15 @@ namespace AutoCareDiray.Service.PreferencesService
         {
             var unitDist = (int)unit;
             Preferences.Default.Set("VolumeUnit", unitDist);
+        }
+
+        public int GetUnitDistanseNumber()
+        {
+            return Preferences.Default.Get("DistanceUnit", 0);
+        }
+        public int GetUnitVolumeNumber()
+        {
+            return Preferences.Default.Get("VolumeUnit", 0);
         }
 
         public string GetDefaultShortDistance()
@@ -58,12 +68,11 @@ namespace AutoCareDiray.Service.PreferencesService
         }
         public string GetDefaultMoney()
         {
-            return Preferences.Default.Get("MoneyUnit", "RUB");
+            return Preferences.Default.Get("UnitMoney", "RUB");
         }
-
         public string GetDefaultMoneySign()
         {
-            var money = Preferences.Default.Get("MoneyUnit", "RUB");
+            var money = Preferences.Default.Get("UnitMoney", "RUB");
             return CurrencyList.GetMoneySign(money);
         }
     }

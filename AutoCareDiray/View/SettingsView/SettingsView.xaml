@@ -2,68 +2,84 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AutoCareDiray.View.SettingsView.SettingsView"
-             Title="SettingsView">
+             Title="Настройки"
+             Style="{DynamicResource CustomPage}">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="25">
+        <VerticalStackLayout Spacing="25" Padding="15,20,15,40">
 
-            <VerticalStackLayout Spacing="10">
-                <Label Text="Расстояние" FontSize="18" FontAttributes="Bold" TextColor="#B68D40" Margin="5,0"/>
+            <Label Text="Настройки приложения" FontSize="22" Margin="0,0,10,5" Style="{DynamicResource LabelCustomMain}" HorizontalOptions="Center"/>
 
-                <Border Style="{DynamicResource BorderForCardInfo}">
+            <!-- ========================================== -->
+            <!-- КАРТОЧКА 1: РАССТОЯНИЕ                     -->
+            <!-- ========================================== -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="📏 Единицы расстояния" Style="{DynamicResource LabelInfoForEntry}" Margin="5,0"/>
+
+                <Border Style="{DynamicResource BorderForEntryCard}" Padding="10,5">
                     <VerticalStackLayout RadioButtonGroup.GroupName="DistanceGroup" 
-                                         RadioButtonGroup.SelectedValue="{Binding SelectedDistanceUnit, Mode=TwoWay}">
+                                         RadioButtonGroup.SelectedValue="{Binding SelectedDistanceUnit, Mode=TwoWay}" Spacing="0">
 
                         <RadioButton Content="Километры (км)" Value="0" 
-                                      ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+                                     ControlTemplate="{StaticResource CustomRadioTemplate}" Margin="0,5"/>
 
-                        <BoxView HeightRequest="1" Color="#333" Margin="10,5"/>
+                        <BoxView Style="{DynamicResource BoxViewCustom}" Margin="10,0"/>
 
                         <RadioButton Content="Мили (mi)" Value="1" 
-                                     ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+                                     ControlTemplate="{StaticResource CustomRadioTemplate}" Margin="0,5"/>
                     </VerticalStackLayout>
                 </Border>
             </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="10">
-                <Label Text="Объем топлива" FontSize="18" FontAttributes="Bold" TextColor="#B68D40" Margin="5,0"/>
+            <!-- ========================================== -->
+            <!-- КАРТОЧКА 2: ОБЪЕМ ТОПЛИВА                  -->
+            <!-- ========================================== -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="💧 Объем топлива" Style="{DynamicResource LabelInfoForEntry}" Margin="5,0"/>
 
-                <Border Style="{DynamicResource BorderForCardInfo}">
+                <Border Style="{DynamicResource BorderForEntryCard}" Padding="10,5">
                     <VerticalStackLayout RadioButtonGroup.GroupName="VolumeGroup" 
-                                         RadioButtonGroup.SelectedValue="{Binding SelectedVolumeUnit, Mode=TwoWay}">
+                                         RadioButtonGroup.SelectedValue="{Binding SelectedVolumeUnit, Mode=TwoWay}" Spacing="0">
 
                         <RadioButton Content="Литры (л)" Value="0" 
-                                      ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+                                     ControlTemplate="{StaticResource CustomRadioTemplate}" Margin="0,5"/>
 
-                        <BoxView HeightRequest="1" Color="#333" Margin="10,5"/>
+                        <BoxView Style="{DynamicResource BoxViewCustom}" Margin="10,0"/>
 
                         <RadioButton Content="Галлоны (gal)" Value="1" 
-                                      ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+                                     ControlTemplate="{StaticResource CustomRadioTemplate}" Margin="0,5"/>
                     </VerticalStackLayout>
                 </Border>
             </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="10">
-                <Label Text="Валюта" FontSize="18" FontAttributes="Bold" TextColor="#B68D40" Margin="5,0"/>
+            <!-- ========================================== -->
+            <!-- КАРТОЧКА 3: ВАЛЮТА                         -->
+            <!-- ========================================== -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="💵 Валюта по умолчанию" Style="{DynamicResource LabelInfoForEntry}" Margin="5,0"/>
 
-                <Border Style="{DynamicResource BorderForCardInfo}">
+                <Border Style="{DynamicResource BorderForEntryCard}" Padding="10,5">
                     <VerticalStackLayout RadioButtonGroup.GroupName="MoneyGroup" 
-                              RadioButtonGroup.SelectedValue="{Binding SelectedMoneyUnit, Mode=TwoWay}">
+                                         RadioButtonGroup.SelectedValue="{Binding SelectedMoneyUnit, Mode=TwoWay}" Spacing="0">
 
-                        <RadioButton Content="Рубли" Value="RUB" 
-                           ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+                        <RadioButton Content="Рубли (₽)" Value="RUB" 
+                                     ControlTemplate="{StaticResource CustomRadioTemplate}" Margin="0,5"/>
 
-                        <BoxView HeightRequest="1" Color="#333" Margin="10,5"/>
+                        <BoxView Style="{DynamicResource BoxViewCustom}" Margin="10,0"/>
 
-                        <RadioButton Content="Долары" Value="USD" 
-                           ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+                        <RadioButton Content="Доллары ($)" Value="USD" 
+                                     ControlTemplate="{StaticResource CustomRadioTemplate}" Margin="0,5"/>
 
-                        <RadioButton Content="Белорусский рубль" Value="BYR" 
-                                     ControlTemplate="{StaticResource CustomRadioTemplate}"/>
+                        <BoxView Style="{DynamicResource BoxViewCustom}" Margin="10,0"/>
 
-                        <RadioButton Content="Евро" Value="EUR" 
-                                     ControlTemplate="{StaticResource CustomRadioTemplate}"/>
-                        
+                        <RadioButton Content="Белорусский рубль (Br)" Value="BYR" 
+                                     ControlTemplate="{StaticResource CustomRadioTemplate}" Margin="0,5"/>
+
+                        <BoxView Style="{DynamicResource BoxViewCustom}" Margin="10,0"/>
+
+                        <RadioButton Content="Евро (€)" Value="EUR" 
+                                     ControlTemplate="{StaticResource CustomRadioTemplate}" Margin="0,5"/>
+
                     </VerticalStackLayout>
                 </Border>
             </VerticalStackLayout>
